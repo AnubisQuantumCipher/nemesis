@@ -8,6 +8,7 @@ mod adapters;
 mod context;
 mod evidence;
 mod extensions;
+mod git_workflows;
 mod scheduler;
 
 pub use adapters::{
@@ -29,6 +30,10 @@ pub use extensions::{
     ExtensionError, McpGateway, McpInvocation, McpToolDefinition, PluginCapabilities, PluginKind,
     PluginRegistry, SignedPluginManifest, SkillRecord, SkillStatus, UiPluginBroker,
     UnsignedPluginManifest, WasiPluginHost,
+};
+pub use git_workflows::{
+    CiCheckReceipt, CommitReceipt, GitAuthority, GitDecision, GitOperation, GitPolicy, GitWorkflow,
+    GitWorkflowError,
 };
 pub use scheduler::{
     Assignment, LaneId, PatchCandidate, PatchConflict, SchedulePlan, SchedulerDecision,
