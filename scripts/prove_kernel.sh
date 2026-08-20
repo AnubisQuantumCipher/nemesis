@@ -9,6 +9,11 @@ alr exec -- env -u LIBRARY_PATH gnatprove \
   -u nemesis-kernel-types.adb \
      nemesis-kernel-transitions.adb \
      nemesis-kernel-missions.adb \
+     nemesis-kernel-capabilities.adb \
+     nemesis-kernel-budgets.adb \
+     nemesis-kernel-approvals.adb \
+     nemesis-kernel-evidence.adb \
+     nemesis-kernel-completion.adb \
   --mode=all \
   --level=2 \
   --checks-as-errors=on \

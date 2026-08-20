@@ -1,6 +1,10 @@
 package Nemesis.Kernel.Types with SPARK_Mode => On is
 
    subtype Mission_Id is String (1 .. 26);
+   subtype Worker_Id is String (1 .. 26);
+   subtype Capability_Id is String (1 .. 26);
+   subtype Approval_Id is String (1 .. 26);
+   subtype Digest_256 is String (1 .. 64);
 
    type Mission_State is
      (Draft,

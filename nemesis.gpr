@@ -9,12 +9,17 @@ project Nemesis is
    for Exec_Dir use "build/bin";
    for Main use
      ("nemesis_kernel_tests.adb",
+      "nemesis_authority_tests.adb",
+      "nemesis_path_tests.adb",
       "nemesis_ledger_tests.adb",
       "nemesis_storage_tests.adb",
       "nemesis_index_tests.adb");
 
    package Builder is
       for Executable ("nemesis_kernel_tests.adb") use "nemesis_kernel_tests";
+      for Executable ("nemesis_authority_tests.adb") use
+        "nemesis_authority_tests";
+      for Executable ("nemesis_path_tests.adb") use "nemesis_path_tests";
       for Executable ("nemesis_ledger_tests.adb") use "nemesis_ledger_tests";
       for Executable ("nemesis_storage_tests.adb") use "nemesis_storage_tests";
       for Executable ("nemesis_index_tests.adb") use "nemesis_index_tests";
