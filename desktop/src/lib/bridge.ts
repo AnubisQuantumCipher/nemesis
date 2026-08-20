@@ -27,6 +27,26 @@ export interface MissionRunResult {
   tamperVerdict: "REJECTED";
 }
 
+export interface ReplayEvent {
+  sequence: number;
+  kindCode: number;
+  stateCode: number;
+  eventHash: string;
+}
+
+export interface ReplayResult {
+  verdict: "VERIFIED";
+  finalStateCode: number;
+  head: string;
+  exactStateReconstruction: boolean;
+  exactModelReexecution: boolean;
+  events: ReplayEvent[];
+}
+
+export async function getReplay(): Promise<ReplayResult> {
+  return invoke<ReplayResult>("load_replay");
+}
+
 export async function getSystemStatus(): Promise<SystemStatus> {
   return invoke<SystemStatus>("system_status");
 }

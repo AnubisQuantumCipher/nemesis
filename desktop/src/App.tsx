@@ -5,9 +5,11 @@ import { MissionCockpit } from "./components/MissionCockpit";
 import { Sidebar } from "./components/Sidebar";
 import type { NavigationName } from "./data/navigation";
 import {
+  getReplay,
   getSystemStatus,
   runWitnessedMission,
   type MissionRunResult,
+  type ReplayResult,
   type SystemStatus,
 } from "./lib/bridge";
 import "./styles.css";
@@ -18,6 +20,8 @@ export default function App() {
   const [reviewing, setReviewing] = useState(false);
   const [running, setRunning] = useState(false);
   const [result, setResult] = useState<MissionRunResult | null>(null);
+  const [replay, setReplay] = useState<ReplayResult | null>(null);
+  const [replayLoading, setReplayLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -37,6 +41,34 @@ export default function App() {
       current = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (selected !== "Replay") {
+      return;
+    }
+    let current = true;
+    setReplayLoading(true);
+    getReplay()
+      .then((loaded) => {
+        if (current) {
+          setReplay(loaded);
+        }
+      })
+      .catch((cause) => {
+        if (current) {
+          const message = cause instanceof Error ? cause.message : String(cause);
+          setError(`Replay unavailable: ${message}`);
+        }
+      })
+      .finally(() => {
+        if (current) {
+          setReplayLoading(false);
+        }
+      });
+    return () => {
+      current = false;
+    };
+  }, [selected]);
 
   async function authorizeAndRun() {
     setRunning(true);
@@ -85,6 +117,8 @@ export default function App() {
               selected={selected}
               system={system}
               result={result}
+              replay={replay}
+              replayLoading={replayLoading}
               running={running}
               error={error}
               onReview={() => setReviewing(true)}

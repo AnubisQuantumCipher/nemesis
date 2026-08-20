@@ -6,6 +6,7 @@ use std::process::{Child, Command, Output, Stdio};
 use thiserror::Error;
 mod adapters;
 mod context;
+mod evidence;
 mod scheduler;
 
 pub use adapters::{
@@ -17,6 +18,11 @@ pub use context::{
     ContextCapsule, ContextCompiler, ContextError, ContextRequest, IndexedFile, KnowledgeBase,
     KnowledgeEntry, KnowledgeStatus, SignedContextCapsule, index_repository,
     verify_context_capsule,
+};
+pub use evidence::{
+    AdaReplay, CausalGraph, EvidenceClass, EvidenceError, EvidenceRecord, EvidenceStore,
+    EvidenceVerdict, GraphError, GraphNodeKind, LedgerEvent, MissionFork, ReplayError,
+    VerifierRegistry, fork_replay,
 };
 pub use scheduler::{
     Assignment, LaneId, PatchCandidate, PatchConflict, SchedulePlan, SchedulerDecision,

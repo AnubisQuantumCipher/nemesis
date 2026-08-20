@@ -40,6 +40,110 @@ struct MissionRunResult {
     tamper_verdict: String,
 }
 
+#[derive(Clone, Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct ReplayEventView {
+    sequence: u64,
+    kind_code: u8,
+    state_code: u8,
+    event_hash: String,
+}
+
+#[derive(Clone, Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+struct ReplayView {
+    verdict: String,
+    final_state_code: u8,
+    head: String,
+    exact_state_reconstruction: bool,
+    exact_model_reexecution: bool,
+    events: Vec<ReplayEventView>,
+}
+
+fn replay_from_value(value: &Value) -> Result<ReplayView, String> {
+    if value.get("verdict").and_then(Value::as_str) != Some("VERIFIED")
+        || value
+            .get("exact_state_reconstruction")
+            .and_then(Value::as_bool)
+            != Some(true)
+        || value
+            .get("exact_model_reexecution")
+            .and_then(Value::as_bool)
+            != Some(false)
+    {
+        return Err("replay assurance fields are invalid".to_owned());
+    }
+    let final_state = value
+        .get("final_state_code")
+        .and_then(Value::as_u64)
+        .and_then(|state| u8::try_from(state).ok())
+        .filter(|state| *state <= 10)
+        .ok_or_else(|| "replay final state is invalid".to_owned())?;
+    let head = value
+        .get("head")
+        .and_then(Value::as_str)
+        .filter(|digest| lowercase_digest(digest))
+        .ok_or_else(|| "replay head is invalid".to_owned())?;
+    let values = value
+        .get("events")
+        .and_then(Value::as_array)
+        .ok_or_else(|| "replay events are missing".to_owned())?;
+    let mut events = Vec::with_capacity(values.len());
+    for event in values {
+        let sequence = event
+            .get("sequence")
+            .and_then(Value::as_u64)
+            .ok_or_else(|| "replay event sequence is invalid".to_owned())?;
+        let kind_code = event
+            .get("kind_code")
+            .and_then(Value::as_u64)
+            .and_then(|kind| u8::try_from(kind).ok())
+            .filter(|kind| *kind <= 9)
+            .ok_or_else(|| "replay event kind is invalid".to_owned())?;
+        let state_code = event
+            .get("state_code")
+            .and_then(Value::as_u64)
+            .and_then(|state| u8::try_from(state).ok())
+            .filter(|state| *state <= 10)
+            .ok_or_else(|| "replay event state is invalid".to_owned())?;
+        let event_hash = event
+            .get("event_hash")
+            .and_then(Value::as_str)
+            .filter(|digest| lowercase_digest(digest))
+            .ok_or_else(|| "replay event hash is invalid".to_owned())?;
+        events.push(ReplayEventView {
+            sequence,
+            kind_code,
+            state_code,
+            event_hash: event_hash.to_owned(),
+        });
+    }
+    if events.is_empty() {
+        return Err("replay contains no events".to_owned());
+    }
+    Ok(ReplayView {
+        verdict: "VERIFIED".to_owned(),
+        final_state_code: final_state,
+        head: head.to_owned(),
+        exact_state_reconstruction: true,
+        exact_model_reexecution: false,
+        events,
+    })
+}
+
+#[tauri::command]
+fn load_replay() -> Result<ReplayView, String> {
+    let path = project_root()?.join("receipts/phase-11/replay.json");
+    let metadata = fs::metadata(&path).map_err(|error| error.to_string())?;
+    if metadata.len() == 0 || metadata.len() > 64 * 1024 * 1024 {
+        return Err("replay artifact is empty or oversized".to_owned());
+    }
+    let value: Value =
+        serde_json::from_slice(&fs::read(path).map_err(|error| error.to_string())?)
+            .map_err(|error| error.to_string())?;
+    replay_from_value(&value)
+}
+
 fn project_root() -> Result<PathBuf, String> {
     Path::new(env!("CARGO_MANIFEST_DIR"))
         .join("../..")
@@ -221,6 +325,7 @@ pub fn run() {
     tauri::Builder::default()
         .invoke_handler(tauri::generate_handler![
             system_status,
+            load_replay,
             run_witnessed_mission
         ])
         .run(tauri::generate_context!())
@@ -233,7 +338,7 @@ mod tests {
 
     use serde_json::json;
 
-    use super::run_result_from_values;
+    use super::{replay_from_value, run_result_from_values};
 
     #[test]
     fn maps_verified_backend_evidence_without_inventing_status() {
@@ -257,5 +362,25 @@ mod tests {
         assert_eq!(result.status, "VERIFIED");
         assert_eq!(result.claims.len(), 2);
         assert_eq!(result.tamper_verdict, "REJECTED");
+    }
+
+    #[test]
+    fn maps_only_exact_verified_replay() {
+        let value = json!({
+            "verdict": "VERIFIED",
+            "final_state_code": 8,
+            "head": "aa".repeat(32),
+            "exact_state_reconstruction": true,
+            "exact_model_reexecution": false,
+            "events": [{
+                "sequence": 1,
+                "kind_code": 0,
+                "state_code": 1,
+                "event_hash": "bb".repeat(32)
+            }]
+        });
+        let replay = replay_from_value(&value).unwrap();
+        assert_eq!(replay.events.len(), 1);
+        assert!(!replay.exact_model_reexecution);
     }
 }

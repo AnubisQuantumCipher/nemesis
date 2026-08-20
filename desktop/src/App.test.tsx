@@ -3,15 +3,17 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import App from "./App";
-import { getSystemStatus, runWitnessedMission } from "./lib/bridge";
+import { getReplay, getSystemStatus, runWitnessedMission } from "./lib/bridge";
 
 vi.mock("./lib/bridge", () => ({
+  getReplay: vi.fn(),
   getSystemStatus: vi.fn(),
   runWitnessedMission: vi.fn(),
 }));
 
 const mockedStatus = vi.mocked(getSystemStatus);
 const mockedRun = vi.mocked(runWitnessedMission);
+const mockedReplay = vi.mocked(getReplay);
 
 beforeEach(() => {
   mockedStatus.mockResolvedValue({
@@ -34,6 +36,27 @@ beforeEach(() => {
       { id: "tests", status: "VERIFIED", evidenceDigest: "77".repeat(32) },
     ],
     tamperVerdict: "REJECTED",
+  });
+  mockedReplay.mockResolvedValue({
+    verdict: "VERIFIED",
+    finalStateCode: 8,
+    head: "aa".repeat(32),
+    exactStateReconstruction: true,
+    exactModelReexecution: false,
+    events: [
+      {
+        sequence: 1,
+        kindCode: 0,
+        stateCode: 1,
+        eventHash: "bb".repeat(32),
+      },
+      {
+        sequence: 2,
+        kindCode: 3,
+        stateCode: 4,
+        eventHash: "cc".repeat(32),
+      },
+    ],
   });
 });
 
@@ -98,5 +121,17 @@ describe("NEMESIS Desktop", () => {
     expect(screen.getByRole("heading", { name: "Completion court" })).toBeInTheDocument();
     expect(screen.getByText("Final source binding")).toBeInTheDocument();
     expect(screen.getByText("Kernel decision")).toBeInTheDocument();
+  });
+
+  it("renders exact replay while labeling model reruns comparative", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(screen.getByRole("button", { name: "Replay" }));
+    await waitFor(() =>
+      expect(screen.getByRole("heading", { name: "Mission replay" })).toBeInTheDocument(),
+    );
+    expect(screen.getByText("Exact state reconstruction")).toBeInTheDocument();
+    expect(screen.getByText("Model re-execution is comparative")).toBeInTheDocument();
+    expect(screen.getByText("EVENT 0002")).toBeInTheDocument();
   });
 });

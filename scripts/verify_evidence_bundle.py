@@ -23,7 +23,11 @@ ARTIFACTS = (
 
 def manifest(directory: Path) -> dict[str, object]:
     artifacts: list[dict[str, object]] = []
-    for name in ARTIFACTS:
+    names = list(ARTIFACTS)
+    for optional in ("events.ledger", "replay.json"):
+        if (directory / optional).is_file():
+            names.append(optional)
+    for name in names:
         path = directory / name
         data = path.read_bytes()
         artifacts.append(

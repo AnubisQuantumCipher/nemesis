@@ -1,12 +1,15 @@
 import type { NavigationName } from "../data/navigation";
-import type { MissionRunResult, SystemStatus } from "../lib/bridge";
+import type { MissionRunResult, ReplayResult, SystemStatus } from "../lib/bridge";
 import { EvidencePanel } from "./EvidencePanel";
+import { ReplayPanel } from "./ReplayPanel";
 import { StatusMarker } from "./StatusMarker";
 
 interface MissionCockpitProps {
   selected: NavigationName;
   system: SystemStatus | null;
   result: MissionRunResult | null;
+  replay: ReplayResult | null;
+  replayLoading: boolean;
   running: boolean;
   error: string | null;
   onReview: () => void;
@@ -38,12 +41,17 @@ export function MissionCockpit({
   selected,
   system,
   result,
+  replay,
+  replayLoading,
   running,
   error,
   onReview,
 }: MissionCockpitProps) {
   if (selected === "Evidence") {
     return <EvidencePanel result={result} />;
+  }
+  if (selected === "Replay") {
+    return <ReplayPanel replay={replay} loading={replayLoading} />;
   }
 
   const isMissionSurface = selected === "Missions" || selected === "Home";

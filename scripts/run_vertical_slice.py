@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import socket
+import shutil
 import subprocess
 import tempfile
 import time
@@ -413,6 +414,10 @@ def main() -> int:
             if (repo / "value.txt").read_text(encoding="utf-8") != "before\n":
                 raise RuntimeError("canonical repository file changed")
 
+            shutil.copy2(
+                core.home / "missions" / MISSION_ID / "events.ledger",
+                output / "events.ledger",
+            )
             (output / "contract.json").write_bytes(canonical(contract) + b"\n")
             (output / "verification.json").write_bytes(canonical(verification) + b"\n")
             (output / "daemon-final.json").write_bytes(canonical(final) + b"\n")
