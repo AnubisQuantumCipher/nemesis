@@ -1,0 +1,11 @@
+NEMESIS Desktop architect mission contract
+source=/Users/sicarii/Desktop/Docs/Handoffs-and-Prompts/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md
+archived=docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md
+sha256=ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e0d8beebee532779
+bytes=77321
+lines=2188
+verified_at=2026-08-20
+identity=NEMESIS
+surface=desktop-only
+push=false
+publish=false
