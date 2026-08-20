@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.nemesis.invalid/schemas/nemesis.worker.v1.schema.json",
+  "title": "NEMESIS Worker Message v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["jsonrpc", "id", "protocol", "mission_id", "worker_id", "method", "params"],
+  "properties": {
+    "jsonrpc": { "const": "2.0" },
+    "id": { "type": "integer", "minimum": 0 },
+    "protocol": { "const": "nemesis.worker/v1" },
+    "mission_id": { "$ref": "#/$defs/missionId" },
+    "worker_id": { "$ref": "#/$defs/workerId" },
+    "method": {
+      "enum": [
+        "heartbeat",
+        "propose_action",
+        "emit_claim",
+        "return_artifact",
+        "report_blocker",
+        "propose_completion"
+      ]
+    },
+    "params": { "type": "object" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "method": { "const": "heartbeat" } } },
+      "then": { "properties": { "params": { "$ref": "#/$defs/empty" } } }
+    },
+    {
+      "if": { "properties": { "method": { "const": "propose_action" } } },
+      "then": { "properties": { "params": { "$ref": "#/$defs/action" } } }
+    },
+    {
+      "if": { "properties": { "method": { "const": "emit_claim" } } },
+      "then": { "properties": { "params": { "$ref": "#/$defs/claim" } } }
+    },
+    {
+      "if": { "properties": { "method": { "const": "return_artifact" } } },
+      "then": { "properties": { "params": { "$ref": "#/$defs/artifact" } } }
+    },
+    {
+      "if": { "properties": { "method": { "const": "report_blocker" } } },
+      "then": { "properties": { "params": { "$ref": "#/$defs/blocker" } } }
+    },
+    {
+      "if": { "properties": { "method": { "const": "propose_completion" } } },
+      "then": { "properties": { "params": { "$ref": "#/$defs/completion" } } }
+    }
+  ],
+  "$defs": {
+    "empty": { "type": "object", "maxProperties": 0 },
+    "missionId": { "type": "string", "pattern": "^mis_[a-z0-9]{22}$" },
+    "workerId": { "type": "string", "pattern": "^wrk_[a-z0-9]{22}$" },
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "label": { "type": "string", "pattern": "^[a-z0-9_-]{1,64}$" },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "not": { "pattern": "(^/)|(^|/)\\.{1,2}(/|$)|\\u0000" }
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action_kind", "relative_path", "content_digest", "purpose"],
+      "properties": {
+        "action_kind": { "enum": ["filesystem.modify", "process.execute"] },
+        "relative_path": { "$ref": "#/$defs/relativePath" },
+        "content_digest": { "$ref": "#/$defs/digest" },
+        "purpose": { "type": "string", "minLength": 1, "maxLength": 1024 }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim_id", "statement"],
+      "properties": {
+        "claim_id": { "$ref": "#/$defs/label" },
+        "statement": { "type": "string", "minLength": 1 }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["relative_path", "digest"],
+      "properties": {
+        "relative_path": { "$ref": "#/$defs/relativePath" },
+        "digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "blocker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "evidence_digest"],
+      "properties": {
+        "code": { "$ref": "#/$defs/label" },
+        "evidence_digest": { "$ref": "#/$defs/digest" }
+      }
+    },
+    "completion": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["claim_ids"],
+      "properties": {
+        "claim_ids": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/label" }
+        }
+      }
+    }
+  }
+}

@@ -1,9 +1,9 @@
 .worktrees/
 .alire/
 alire/
-obj/
-build/
-bin/
+/obj/
+/build/
+/bin/
 *.ali
 *.o
 runtime/target/
