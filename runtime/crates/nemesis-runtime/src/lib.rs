@@ -7,6 +7,7 @@ use thiserror::Error;
 mod adapters;
 mod context;
 mod evidence;
+mod extensions;
 mod scheduler;
 
 pub use adapters::{
@@ -23,6 +24,11 @@ pub use evidence::{
     AdaReplay, CausalGraph, EvidenceClass, EvidenceError, EvidenceRecord, EvidenceStore,
     EvidenceVerdict, GraphError, GraphNodeKind, LedgerEvent, MissionFork, ReplayError,
     VerifierRegistry, fork_replay,
+};
+pub use extensions::{
+    ExtensionError, McpGateway, McpInvocation, McpToolDefinition, PluginCapabilities, PluginKind,
+    PluginRegistry, SignedPluginManifest, SkillRecord, SkillStatus, UiPluginBroker,
+    UnsignedPluginManifest, WasiPluginHost,
 };
 pub use scheduler::{
     Assignment, LaneId, PatchCandidate, PatchConflict, SchedulePlan, SchedulerDecision,
