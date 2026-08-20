@@ -4,12 +4,15 @@ alire/
 /obj/
 /build/
 /bin/
+/dist/
 *.ali
 *.o
 runtime/target/
 desktop/node_modules/
 desktop/dist/
 desktop/src-tauri/target/
+desktop/src-tauri/gen/
+desktop/*.tsbuildinfo
 .DS_Store
 *.log
 *.tmp
@@ -18,6 +21,7 @@ desktop/src-tauri/target/
 !*.env.example
 nemesis-home/
 receipts/raw/
+receipts/desktop-latest/
 __pycache__/
 *.pyc
 config/nemesis_config.ads
