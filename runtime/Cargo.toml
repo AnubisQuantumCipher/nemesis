@@ -4,6 +4,9 @@ members = [
   "crates/nemesis-protocol",
   "crates/nemesis-runtime",
   "crates/nemesis-deterministic-worker",
+  "crates/nemesis-receipt",
+  "crates/nemesis-signer",
+  "crates/nemesis-verify",
 ]
 
 [workspace.package]
@@ -18,3 +21,8 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 thiserror = "2.0"
 tempfile = "3.20"
+ed25519-dalek = "2.1"
+hex = "0.4"
+minicbor = { version = "0.25", features = ["std"] }
+getrandom = "0.3"
+zeroize = "1.8"

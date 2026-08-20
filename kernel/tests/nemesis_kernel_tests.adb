@@ -34,6 +34,7 @@ procedure Nemesis_Kernel_Tests is
          when Complete | Blocked_With_Evidence | Cancelled => False);
 
    Mission  : Mission_Record := Create;
+   Restored : constant Mission_Record := Restore (Verifying, 42);
    Decision : Transition_Decision;
    Before   : Sequence_Number;
 
@@ -49,6 +50,9 @@ begin
            (Allowed (Source, Target) = Expected_Allowed (Source, Target));
       end loop;
    end loop;
+
+   pragma Assert (State_Of (Restored) = Verifying);
+   pragma Assert (Sequence_Of (Restored) = 42);
 
    pragma Assert (Next (Sequence_Number'First) = Sequence_Number'First + 1);
    pragma Assert (Mission_Id'Length = 26);
@@ -71,6 +75,11 @@ begin
    Apply (Mission, Awaiting_Authorization, Decision);
    Apply (Mission, Planning, Decision);
    Apply (Mission, Running, Decision);
+   Before := Sequence_Of (Mission);
+   Commit_Event (Mission, Decision);
+   pragma Assert (Decision = Accepted);
+   pragma Assert (State_Of (Mission) = Running);
+   pragma Assert (Sequence_Of (Mission) = Before + 1);
    Apply (Mission, Cancelled, Decision);
    pragma Assert (Decision = Accepted);
 

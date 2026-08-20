@@ -194,6 +194,8 @@ begin
    pragma Assert (Recovered.Sequence = 2);
    pragma Assert (Recovered.State = Running);
    pragma Assert (Recovered.Head = Second_Hash);
+   pragma Assert (Recovered.First_Payload = Digest ("mission-created"));
+   pragma Assert (Recovered.Last_Payload = Digest ("running"));
 
    Copy_File (Valid_Path, Corrupt_Path);
    Mutate_Byte (Corrupt_Path, 100);
@@ -205,6 +207,8 @@ begin
    pragma Assert (Recovered.Status = Truncated_Tail);
    pragma Assert (Recovered.Sequence = 1);
    pragma Assert (Recovered.Head = First_Hash);
+   pragma Assert (Recovered.First_Payload = Digest ("mission-created"));
+   pragma Assert (Recovered.Last_Payload = Digest ("mission-created"));
 
    Reorder_Two_Lines (Valid_Path, Reordered_Path);
    Recover (Reordered_Path, Recovered);

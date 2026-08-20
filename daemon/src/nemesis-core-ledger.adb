@@ -91,10 +91,12 @@ package body Nemesis.Core.Ledger with SPARK_Mode => Off is
       Input : SIO.File_Type;
    begin
       Result :=
-        (Status   => Empty,
-         Sequence => Sequence_Number'First,
-         State    => Draft,
-         Head     => Zero_Digest);
+        (Status        => Empty,
+         Sequence      => Sequence_Number'First,
+         State         => Draft,
+         Head          => Zero_Digest,
+         First_Payload => Zero_Digest,
+         Last_Payload  => Zero_Digest);
 
       if not Ada.Directories.Exists (Path) then
          return;
@@ -215,6 +217,10 @@ package body Nemesis.Core.Ledger with SPARK_Mode => Off is
                   Result.Sequence := Sequence;
                   Result.State := State_Value;
                   Result.Head := Stored_Hash;
+                  if Record_Index = 0 then
+                     Result.First_Payload := Payload_Value;
+                  end if;
+                  Result.Last_Payload := Payload_Value;
                   Expected_Previous := Stored_Hash;
                exception
                   when Constraint_Error =>

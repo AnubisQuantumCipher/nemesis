@@ -8,7 +8,8 @@ project Nemesis is
    for Object_Dir use "build/obj/" & Mode;
    for Exec_Dir use "build/bin";
    for Main use
-     ("nemesis_kernel_tests.adb",
+     ("nemesis_core_daemon.adb",
+      "nemesis_kernel_tests.adb",
       "nemesis_authority_tests.adb",
       "nemesis_path_tests.adb",
       "nemesis_ledger_tests.adb",
@@ -16,6 +17,7 @@ project Nemesis is
       "nemesis_index_tests.adb");
 
    package Builder is
+      for Executable ("nemesis_core_daemon.adb") use "nemesis_core_daemon";
       for Executable ("nemesis_kernel_tests.adb") use "nemesis_kernel_tests";
       for Executable ("nemesis_authority_tests.adb") use
         "nemesis_authority_tests";

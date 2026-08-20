@@ -1,5 +1,5 @@
 [package]
-name = "nemesis-runtime"
+name = "nemesis-signer"
 version.workspace = true
 edition.workspace = true
 license.workspace = true
@@ -7,9 +7,11 @@ authors.workspace = true
 rust-version.workspace = true
 
 [dependencies]
-nemesis-protocol = { path = "../nemesis-protocol" }
+ed25519-dalek.workspace = true
+getrandom.workspace = true
+hex.workspace = true
+nemesis-receipt = { path = "../nemesis-receipt" }
+serde.workspace = true
 serde_json.workspace = true
 thiserror.workspace = true
-
-[dev-dependencies]
-tempfile.workspace = true
+zeroize.workspace = true

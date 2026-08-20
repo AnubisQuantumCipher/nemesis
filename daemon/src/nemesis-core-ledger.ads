@@ -40,6 +40,8 @@ package Nemesis.Core.Ledger with SPARK_Mode => Off is
       Sequence : Sequence_Number := Sequence_Number'First;
       State    : Mission_State := Draft;
       Head     : Digest_Hex := Zero_Digest;
+      First_Payload : Digest_Hex := Zero_Digest;
+      Last_Payload  : Digest_Hex := Zero_Digest;
    end record;
 
    function Digest (Value : String) return Digest_Hex;
