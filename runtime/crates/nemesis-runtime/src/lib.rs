@@ -4,6 +4,13 @@ use std::path::{Path, PathBuf};
 use std::process::{Child, Command, Output, Stdio};
 
 use thiserror::Error;
+mod adapters;
+
+pub use adapters::{
+    AdapterAvailability, AdapterError, AdapterProfile, AuthorityFingerprint, ConsequenceCeiling,
+    GenericSubprocessAdapter, ProviderKind, SelectedAdapter, UsageBudget, UsageExceeded,
+    UsageLedger, UsageRecord, WorkerRole, choose_fallback,
+};
 
 const GIT: &str = "/usr/bin/git";
 const SANDBOX_EXEC: &str = "/usr/bin/sandbox-exec";
