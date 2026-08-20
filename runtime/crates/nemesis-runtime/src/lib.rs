@@ -5,6 +5,7 @@ use std::process::{Child, Command, Output, Stdio};
 
 use thiserror::Error;
 mod adapters;
+mod automation;
 mod context;
 mod evidence;
 mod extensions;
@@ -15,6 +16,11 @@ pub use adapters::{
     AdapterAvailability, AdapterError, AdapterProfile, AuthorityFingerprint, ConsequenceCeiling,
     GenericSubprocessAdapter, ProviderKind, SelectedAdapter, UsageBudget, UsageExceeded,
     UsageLedger, UsageRecord, WorkerRole, choose_fallback,
+};
+pub use automation::{
+    AutomationCheckpoint, AutomationDecision, AutomationError, AutomationOperation,
+    AutomationPolicy, AutomationQueue, AutomationRequest, AutomationStatus, DispatchResult,
+    TriggerKind,
 };
 pub use context::{
     ContextCapsule, ContextCompiler, ContextError, ContextRequest, IndexedFile, KnowledgeBase,
