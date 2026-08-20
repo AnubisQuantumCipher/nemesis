@@ -1,0 +1,127 @@
+{
+  "schema": "nemesis.checkpoint/v1",
+  "verdict": "PARTIAL",
+  "architect_contract": {
+    "path": "docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md",
+    "sha256": "ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e0d8beebee532779",
+    "bytes": 77321,
+    "lines": 2188
+  },
+  "identity": {
+    "name": "NEMESIS",
+    "descriptor": "The Provable Agent Operating System",
+    "tagline": "Autonomy under control.",
+    "doctrine": "Intelligence proposes. NEMESIS governs. Evidence decides."
+  },
+  "repository": {
+    "root": "/Users/sicarii/Desktop/Projects/nemesis",
+    "worktree": "/Users/sicarii/Desktop/Projects/nemesis/.worktrees/desktop-local",
+    "branch": "build/desktop-local",
+    "implementation_commit": "74b39ec6b242b3b495a5cea345836bdbdcb193df"
+  },
+  "completed_phases": [
+    {
+      "phase": 0,
+      "name": "Constitution and threat model",
+      "commit": "6876bfb9381b8e0588d6e7fb27323bd513f78f82",
+      "gate": "./scripts/verify_phase0.sh",
+      "observed": "PASS_PHASE0"
+    },
+    {
+      "phase": 1,
+      "name": "Toolchain and proof baseline",
+      "commit": "f795b52205f07b456a6371a77e2085240d63635d",
+      "gate": "./scripts/prove_kernel.sh",
+      "observed": "PASS_KERNEL_PROOF_BASELINE"
+    },
+    {
+      "phase": 2,
+      "name": "Mission state kernel",
+      "commit": "6c18def2fd3ec616a1ae83489f6a3401c44b0aec",
+      "gate": "./build/bin/nemesis_kernel_tests",
+      "observed": "PASS_MISSION_TRANSITIONS"
+    },
+    {
+      "phase": 3,
+      "name": "Durable ledger and storage",
+      "commit": "3d2d87cf6cf37785aaeb3e2cbf069aec60b3ad36",
+      "gate": "./scripts/test_storage.sh",
+      "observed": "PASS_PHASE3_DURABLE_STORAGE"
+    },
+    {
+      "phase": 4,
+      "name": "Capability and policy kernel",
+      "commit": "c24ea2c0468ec3d1bdd4b63e933ace83bb78457a",
+      "gate": "./scripts/test_authority.sh",
+      "observed": "PASS_PHASE4_CAPABILITY_POLICY",
+      "tcb_measurement": {
+        "instrument_validation_tests": 2,
+        "sloc": 562,
+        "budget": 2500,
+        "files": 17
+      }
+    },
+    {
+      "phase": 5,
+      "name": "Worker protocol and sandbox host",
+      "commit": "bd823497e3de05f41eb7155f012dffc4a992c8c6",
+      "gate": "./scripts/test_worker_boundary.sh",
+      "observed": "PASS_PHASE5_WORKER_BOUNDARY"
+    },
+    {
+      "phase": 6,
+      "name": "Witnessed backend vertical slice",
+      "commit": "25acf4f802b40b3cf62c0f273527628ee5359e69",
+      "gate": "./scripts/run_vertical_slice.sh --output receipts/phase-6",
+      "observed": "PASS_NEMESIS_BACKEND_VERTICAL_SLICE",
+      "evidence": "receipts/phase-6/MANIFEST.json"
+    },
+    {
+      "phase": 7,
+      "name": "NEMESIS Desktop alpha",
+      "commit": "74b39ec6b242b3b495a5cea345836bdbdcb193df",
+      "gate": "./scripts/verify_desktop.sh",
+      "observed": "PASS_NEMESIS_DESKTOP_VERTICAL_SLICE",
+      "evidence": "receipts/phase-7-desktop/MANIFEST.json",
+      "visual_qa": "receipts/phase-7-desktop/DESKTOP_QA.json"
+    }
+  ],
+  "open_phases": [
+    { "phase": 8, "name": "Desktop-required worker adapters" },
+    { "phase": 9, "name": "Deterministic multi-worker scheduler" },
+    { "phase": 10, "name": "Context and provenance knowledge" },
+    { "phase": 11, "name": "Complete evidence graph and replay" },
+    { "phase": 12, "name": "Bounded skills and plugin security" },
+    { "phase": 13, "name": "Local Git workflow controls" },
+    { "phase": 14, "name": "Local automation denial boundaries" },
+    { "phase": 16, "name": "Bounded security hardening" },
+    { "phase": "seal", "name": "Complete desktop acceptance and local seal" }
+  ],
+  "deferred_phases": [
+    { "phase": 15, "name": "Remote daemon and mobile cockpit", "status": "DEFERRED" },
+    { "phase": 17, "name": "Public beta", "status": "DEFERRED" },
+    { "phase": 18, "name": "Release candidate", "status": "DEFERRED" },
+    { "phase": 19, "name": "Public release", "status": "DEFERRED" }
+  ],
+  "verified_properties": [
+    "Architect contract bytes match the authorized SHA-256, byte count, and line count.",
+    "Illegal and terminal mission transitions refuse; accepted events increment sequence exactly once.",
+    "Capability, budget, approval, evidence freshness, and completion contracts pass selected SPARK proofs.",
+    "Ledger corruption, truncation, reordering, duplication, object tamper, checkpoint tamper, and unsupported index schema fail closed in exercised gates.",
+    "Untrusted worker protocol rejects authoritative fields and COMPLETE; macOS Workspace Safe denies outside read/write and reachable loopback access in exercised gates.",
+    "Ada Core state survives restart; stale evidence cannot complete; final evidence binds to final source.",
+    "Keychain-backed Ed25519 COSE receipt verifies independently; one-byte mutations reject.",
+    "The actual local Tauri app was built, launched, and used to authorize the witnessed mission that produced the Phase 7 evidence bundle."
+  ],
+  "residuals": [
+    "GNAT 14.2.1 emits retained macOS deployment-target override warnings on this macOS 26 host.",
+    "SPARK evidence applies only to explicitly listed kernel packages and contracts; ordinary Ada, Rust, libraries, SQLite, Keychain, sandbox-exec, Git, and macOS remain assumptions.",
+    "Terminal screen capture permission was not granted; compiled React browser renders and native process/window/app-operated evidence were verified separately.",
+    "No external security review or formal proof audit has been performed.",
+    "No push, publish, public signing, notarization, package registration, or public-name clearance was performed."
+  ],
+  "next_dependency": {
+    "phase": 8,
+    "task": "Implement typed generic-subprocess and configured provider adapters without changing mission authority semantics."
+  }
+}
