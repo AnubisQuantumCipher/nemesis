@@ -1,5 +1,4 @@
 package Nemesis.Kernel.Types with SPARK_Mode => On is
-   pragma Pure;
 
    subtype Mission_Id is String (1 .. 26);
 

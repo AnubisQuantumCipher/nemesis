@@ -1,7 +1,6 @@
 with Nemesis.Kernel.Types;
 
 package Nemesis.Kernel.Transitions with SPARK_Mode => On is
-   pragma Pure;
 
    use Nemesis.Kernel.Types;
 

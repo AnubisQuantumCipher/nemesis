@@ -2,7 +2,6 @@ with Nemesis.Kernel.Transitions;
 with Nemesis.Kernel.Types;
 
 package Nemesis.Kernel.Missions with SPARK_Mode => On is
-   pragma Pure;
 
    use Nemesis.Kernel.Transitions;
    use Nemesis.Kernel.Types;
