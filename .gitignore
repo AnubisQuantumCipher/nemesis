@@ -20,3 +20,6 @@ nemesis-home/
 receipts/raw/
 __pycache__/
 *.pyc
+config/nemesis_config.ads
+config/nemesis_config.gpr
+config/nemesis_config.h
