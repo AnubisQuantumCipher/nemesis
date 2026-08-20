@@ -18,3 +18,5 @@ desktop/src-tauri/target/
 !*.env.example
 nemesis-home/
 receipts/raw/
+__pycache__/
+*.pyc

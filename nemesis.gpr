@@ -1,0 +1,33 @@
+project Nemesis is
+   type Build_Mode is ("debug", "release");
+   Mode : Build_Mode := external ("NEMESIS_BUILD", "debug");
+
+   for Languages use ("Ada");
+   for Source_Dirs use ("kernel/src", "kernel/tests");
+   for Object_Dir use "build/obj/" & Mode;
+   for Exec_Dir use "build/bin";
+   for Main use ("nemesis_kernel_tests.adb");
+
+   package Builder is
+      for Executable ("nemesis_kernel_tests.adb") use "nemesis_kernel_tests";
+      for Global_Configuration_Pragmas use "config/gnat.adc";
+   end Builder;
+
+   package Compiler is
+      case Mode is
+         when "debug" =>
+            for Default_Switches ("Ada") use
+              ("-O0", "-g", "-gnat2022", "-gnata", "-gnatwae", "-gnatf");
+         when "release" =>
+            for Default_Switches ("Ada") use
+              ("-O2", "-gnat2022", "-gnata", "-gnatwae", "-gnatf");
+      end case;
+   end Compiler;
+
+   package Prove is
+      for Proof_Dir use "build/proof";
+      for Proof_Switches ("Ada") use
+        ("--mode=all", "--level=2", "--checks-as-errors=on",
+         "--warnings=error", "--report=statistics");
+   end Prove;
+end Nemesis;
