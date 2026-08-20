@@ -5,11 +5,17 @@ use std::process::{Child, Command, Output, Stdio};
 
 use thiserror::Error;
 mod adapters;
+mod scheduler;
 
 pub use adapters::{
     AdapterAvailability, AdapterError, AdapterProfile, AuthorityFingerprint, ConsequenceCeiling,
     GenericSubprocessAdapter, ProviderKind, SelectedAdapter, UsageBudget, UsageExceeded,
     UsageLedger, UsageRecord, WorkerRole, choose_fallback,
+};
+pub use scheduler::{
+    Assignment, LaneId, PatchCandidate, PatchConflict, SchedulePlan, SchedulerDecision,
+    SchedulerError, SchedulerLimits, TaskId, TaskSpec, WorkerCandidate, WorkerId,
+    detect_patch_conflicts, evidence_is_independent, schedule,
 };
 
 const GIT: &str = "/usr/bin/git";
