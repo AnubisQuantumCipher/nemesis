@@ -1,8 +1,8 @@
-# NEMESIS Local Build Governance
+# NEMESIS Project Governance
 
 ## Authority
 
-The architect-authorized mission contract archived under `docs/mission/` is the governing requirements source. Its desktop amendment supersedes conflicting inherited identity, platform, release, and sequence statements. Implementation notes, plans, worker output, UI text, and receipts may clarify execution but may not override it.
+The architect-authorized contracts archived under `docs/mission/` are the governing requirements sources. The desktop amendment supersedes conflicting inherited identity and platform statements; the 2026-08-20 GitHub release contract supersedes the former prohibition on creating and publishing `AnubisQuantumCipher/nemesis`. Implementation notes, plans, worker output, UI text, and receipts may clarify execution but may not override those contracts.
 
 ## Roles
 
@@ -11,7 +11,7 @@ The architect-authorized mission contract archived under `docs/mission/` is the 
 - **Builder:** implements against the contract and cannot accept its own elevated evidence.
 - **Reviewer/verifier:** independently evaluates the bounded property assigned to it. Its authority is limited by verifier registry and consequence class.
 - **Recorder:** renders authoritative state and evidence without inventing status.
-- **Human operator:** performs consequential external communication and any future public action after explicit authorization.
+- **Human operator:** ratifies consequential communication to external parties. Explicit actions on the operator's own repository, tags, releases, and metadata may be automated only when the current architect contract authorizes them.
 
 ## Decision records
 
@@ -25,11 +25,11 @@ The following require an RFC and architect acceptance:
 - changing canonical event, evidence, context, or receipt formats;
 - changing evidence acceptance or completion predicates;
 - replacing or weakening a deterministic or proof gate;
-- enabling remote/public transport, public release, or permanent ecosystem registration.
+- enabling remote/public product transport, broadening distribution beyond the authorized macOS alpha, or registering a permanent package/domain identity.
 
 ## Checkpoints and receipts
 
-Development occurs on a local isolated branch with visible non-final checkpoint commits. No push or publish occurs. Each phase exit records:
+Development uses scoped branches or isolated worktrees with visible evidence-bearing commits. Public integration uses pull requests and required hosted checks where the repository plan supports them. No contributor may force-push published history, bypass a red/pending check, or publish an artifact without exact authorization. Each phase exit records:
 
 - architect contract digest;
 - source revision or dirty-source digest when a pre-commit gate is intentionally run;
@@ -51,4 +51,8 @@ A change to what `PASS` means is a finding, not ordinary cleanup. It must preser
 
 ## Contribution and publication posture
 
-This local repository uses Apache-2.0 code licensing and a DCO-style contribution intent for future work. No public contribution process, issue tracker, maintainer roster, release channel, or repository policy is active in this mission. Future public governance is `DEFERRED` and requires fresh architect authorization.
+NEMESIS is published under Apache-2.0 with DCO sign-off intent. Contributions use issues and pull requests under [CONTRIBUTING.md](CONTRIBUTING.md); suspected vulnerabilities use the private channel in [SECURITY.md](SECURITY.md).
+
+The current maintainer is `@AnubisQuantumCipher`. One-person maintenance means the repository cannot honestly require two human reviewers today. Critical authority and security changes still require deterministic hostile coverage, explicit architect acceptance, and an independent review artifact before merge. Review requirements may tighten when additional qualified maintainers exist.
+
+The active public channel is the source-visible macOS `v0.1.x` alpha on GitHub. Developer ID signing, notarization, App Store distribution, package registries, domains, mobile/web/remote-public products, and broader platform releases remain outside this authorization.

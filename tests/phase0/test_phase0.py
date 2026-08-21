@@ -72,10 +72,21 @@ class PhaseZeroContractTests(unittest.TestCase):
             "windows",
             "linux",
             "notarization",
-            "public release",
         ):
             with self.subTest(surface=surface):
                 self.assertRegex(boundaries, rf"(?s){surface}.*deferred|deferred.*{surface}")
+    def test_publication_is_bounded_to_the_authorized_alpha(self) -> None:
+        boundaries = (ROOT / "TRUST_BOUNDARIES.md").read_text(encoding="utf-8").lower()
+        for statement in (
+            "public github source repository",
+            "`v0.1.0` macos arm64 alpha",
+            "not developer id signed or notarized",
+            "package-registry publication",
+            "legal-clearance review",
+        ):
+            with self.subTest(statement=statement):
+                self.assertIn(statement, boundaries)
+
 
     def test_no_inherited_product_identifier_leaks_into_governance(self) -> None:
         offenders = []

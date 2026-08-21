@@ -1,7 +1,7 @@
 # NEMESIS Desktop Threat Model
 
-**Version:** 2026-08-20 local alpha baseline  
-**Scope:** macOS-first local desktop application, Core daemon, Kernel, Runtime, CLI, protocols, evidence, replay, and receipt verifier
+**Version:** 2026-08-20 `v0.1.0` macOS alpha boundary  
+**Scope:** macOS-first local desktop application, Core daemon, Kernel, Runtime, CLI, protocols, evidence, replay, receipt verifier, public source repository, and ad-hoc macOS release
 
 ## Security objective
 
@@ -17,6 +17,7 @@ Probabilistic or compromised components may propose work but cannot silently obt
 - Local secrets, provider tokens, SSH material, Keychain items, and environment values.
 - Exact worker context, failed approaches, blockers, and causal replay.
 - Availability of the local daemon without accepting ambiguous or corrupted state.
+- Hosted check identity, release tag/target, release manifests, checksums, and published asset bytes.
 
 ## Trust assumptions
 
@@ -52,6 +53,10 @@ All models, workers, repository contents, generated code, plugins, MCP servers, 
 | Compromised frontend | Renderer sends arbitrary IPC, displays different approval, or claims green | Narrow Tauri commands, digest-bound authorization, Core schema validation, status text plus digest | Refusal; UI is not authority |
 | Malicious plugin or MCP | Attempts full daemon authority or runtime schema mutation | Separate process/webview, capabilities, CSP, fixed active schema, egress and secret filters | Plugin disabled/refused |
 | Dependency compromise | Build or runtime dependency acts maliciously | Pin/review dependencies, isolate build/runtime, dependency receipts, small TCB assumptions | Build blocked or risk marked `UNKNOWN` |
+| Hosted check/source mismatch | A green run for another commit is cited for the release | Require terminal checks on the exact PR/merge commit and record workflow/check URLs | Release blocked |
+| Release asset substitution | Uploaded/downloaded bytes differ from the final-commit artifact | Annotated tag binding, byte-derived manifest/checksums, API read-back, independent re-download and rehash | Release blocked or withdrawn |
+| Private build-path or credential leak | Executables expose operator paths, token signatures, or private key material | Path remapping, Mach-O RPATH sanitization, symbol stripping, credential/path leak gate before signing | Packaging fails |
+| Ad-hoc distribution confusion | A user mistakes an ad-hoc signature or local launch for Developer ID/notarization evidence | Explicit release/install warnings, `codesign` inspection, and retained Gatekeeper non-claim | Installation remains a deliberate local trust decision |
 | Resource exhaustion | Worker floods output, processes, disk, time, tokens, or cost | Bounded messages/streams, process/storage/time/cost budgets, cancellation and backpressure | `REFUSED_BUDGET` |
 | Provider fallback drift | Fallback silently gets more authority or different evidence status | Authority is mission-owned, not provider-owned; role and consequence ceilings checked | Fallback refused |
 | Context omission | New worker misses mission invariant, blocker, revoked fact, or failed approach | Signed bounded context capsule with mandatory obligations and provenance | Assignment refused |
@@ -71,6 +76,6 @@ Failure to establish the requested profile does not silently fall back to a weak
 
 A valid receipt proves that the included bytes verify under the named key and that the standalone verifier accepted the encoded bounded predicates. It does not prove model correctness, universal software safety, external-library correctness, real-world truth beyond verifier scope, legal clearance, or deterministic replay of future model tokens.
 
-## Residual risks at Phase 0
+## Residual risks at `v0.1.0`
 
-Implementation has not yet established any runtime control. Until a phase gate is source-bound and accepted, its controls are design requirements with status `UNKNOWN`, not operational guarantees. External security review and formal proof audit are later desktop hardening gates and cannot be self-certified.
+Independent external security review remains `[NEEDS-HUMAN]`. The Phase 16 review and final gates are source-bound but are not independent third-party certification. SPARK evidence remains limited to the named kernel units and explicit assumptions. The VZ result depends on the recorded local host, Tart base image, SSH transport, and toolchain. The macOS artifact is ad-hoc signed and not notarized; package registries, App Store distribution, other platforms, and legal clearance remain outside the release.

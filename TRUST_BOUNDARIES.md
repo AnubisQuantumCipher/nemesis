@@ -67,21 +67,24 @@ Core starts workers with a fixed environment allowlist. Long-lived credentials a
 
 Desktop is replaceable and untrusted. Tauri exposes named commands only; it does not expose arbitrary shell, filesystem, Keychain, network, or native-object access to the renderer. Approval views include the exact normalized action and digest. Status uses text and shape in addition to color. Core remains authoritative if the UI closes, crashes, reconnects, or displays stale data.
 
-## Explicit desktop-only amendment
+## Public source and release boundary
 
-The following remain outside this mission and are marked `DEFERRED`:
+The 2026-08-20 release contract authorizes the public GitHub source repository and a bounded `v0.1.0` macOS arm64 alpha. Repository publication does not grant the NEMESIS product, renderer, workers, plugins, or MCP servers any GitHub credential or push/merge/release authority. Mission-owned GitHub operations remain external operator actions governed by their exact contract.
 
-- iPhone application: `DEFERRED`.
-- iPad application and Apple Pencil flows: `DEFERRED`.
-- Hosted or self-hosted web application/dashboard: `DEFERRED`.
-- Public cloud, public webhook, and public messaging service: `DEFERRED`.
-- Remote mobile approvals, device enrollment, push notifications, and lost-device revocation: `DEFERRED`.
-- Windows application/installer: `DEFERRED`.
-- Linux application/installer: `DEFERRED`.
-- Public signing and notarization: `DEFERRED`.
-- TestFlight and App Store distribution: `DEFERRED`.
-- Public repository creation, push, package registration, release, and artifact publication: `DEFERRED`.
-- Public release: `DEFERRED`.
-- Public-name collision reconnaissance and legal-clearance review: `DEFERRED` until a separately authorized public-release gate; no legal clearance is claimed.
+The distributed app embeds only the local witnessed-mission backend, source contracts, replay fixture, and license. Release executables pass a private-path/credential-signature leak gate, Mach-O dependency/RPATH inspection, and an ad-hoc code-signature verification. The release is not Developer ID signed or notarized; Gatekeeper and App Store trust are not implied.
 
-These deferrals do not count as desktop completion predicates. They also must not appear in receipts or UI as implemented capabilities.
+The following remain `DEFERRED`:
+
+- iPhone application.
+- iPad application and Apple Pencil flows.
+- Hosted or self-hosted web application/dashboard.
+- Public cloud, public webhook, and public messaging service.
+- Remote mobile approvals, device enrollment, push notifications, and lost-device revocation.
+- Windows application/installer.
+- Linux application/installer.
+- Developer ID signing and notarization.
+- TestFlight and App Store distribution.
+- Package-registry publication, domain acquisition, and permanent ecosystem registration.
+- Legal-clearance review; bounded name-collision reconnaissance is recorded, but it is not legal advice or clearance.
+
+These deferrals do not count as bounded macOS alpha completion predicates. They also must not appear in receipts or UI as implemented capabilities.
