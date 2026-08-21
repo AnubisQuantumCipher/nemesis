@@ -1,5 +1,5 @@
 use std::collections::BTreeSet;
-use std::path::{Component, Path};
+use std::path::Path;
 
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
@@ -144,20 +144,19 @@ fn valid_label(value: &str) -> bool {
         })
 }
 
-fn validate_relative_path(value: &str) -> Result<(), ProtocolError> {
-    if value.is_empty() || value.len() > MAX_PATH_BYTES || value.as_bytes().contains(&0) {
-        return Err(ProtocolError::InvalidAction(
-            "path is empty, oversized, or contains NUL".to_owned(),
-        ));
-    }
-    let path = Path::new(value);
-    if path.is_absolute()
-        || path
-            .components()
-            .any(|component| !matches!(component, Component::Normal(_)))
+pub fn validate_repository_relative_path(value: &str) -> Result<(), ProtocolError> {
+    if value.is_empty()
+        || value.len() > MAX_PATH_BYTES
+        || value
+            .bytes()
+            .any(|byte| byte == 0 || byte == b'%' || byte == b'\\' || byte.is_ascii_control())
+        || Path::new(value).is_absolute()
+        || value
+            .split('/')
+            .any(|component| component.is_empty() || matches!(component, "." | ".." | ".git"))
     {
         return Err(ProtocolError::InvalidAction(
-            "path must contain only relative normal components".to_owned(),
+            "path must be a bounded, unencoded relative repository path".to_owned(),
         ));
     }
     Ok(())
@@ -224,7 +223,7 @@ pub fn parse_worker_message(bytes: &[u8]) -> Result<WorkerEnvelope, ProtocolErro
         }
         "propose_action" => {
             let action: ActionProposal = deserialize_params(params)?;
-            validate_relative_path(&action.relative_path)?;
+            validate_repository_relative_path(&action.relative_path)?;
             if !valid_digest(&action.content_digest) {
                 return Err(ProtocolError::InvalidAction(
                     "content_digest must be lowercase SHA-256 hex".to_owned(),
@@ -248,7 +247,7 @@ pub fn parse_worker_message(bytes: &[u8]) -> Result<WorkerEnvelope, ProtocolErro
         }
         "return_artifact" => {
             let artifact: ArtifactProposal = deserialize_params(params)?;
-            validate_relative_path(&artifact.relative_path)?;
+            validate_repository_relative_path(&artifact.relative_path)?;
             if !valid_digest(&artifact.digest) {
                 return Err(ProtocolError::InvalidParams(
                     "artifact digest must be lowercase SHA-256 hex".to_owned(),

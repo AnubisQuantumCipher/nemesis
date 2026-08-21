@@ -1,8 +1,9 @@
 use std::collections::{BTreeMap, BTreeSet};
 use std::fs;
-use std::path::{Component, Path};
+use std::path::Path;
 
 use ed25519_dalek::{Signature, Signer, SigningKey, VerifyingKey};
+use nemesis_protocol::validate_repository_relative_path;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
 use thiserror::Error;
@@ -308,12 +309,7 @@ pub fn index_repository(
         .map_err(|error| ContextError::RepositoryIo(error.to_string()))?;
     let mut requested = BTreeSet::new();
     for relative in relative_paths {
-        let path = Path::new(relative);
-        if relative.is_empty()
-            || path.is_absolute()
-            || path
-                .components()
-                .any(|component| !matches!(component, Component::Normal(_)))
+        if validate_repository_relative_path(relative).is_err()
             || !requested.insert(relative.clone())
         {
             return Err(ContextError::RepositoryBoundary);

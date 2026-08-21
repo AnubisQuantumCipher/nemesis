@@ -124,5 +124,14 @@ fn repository_index_binds_relative_files_and_rejects_traversal() {
     assert_eq!(indexed.len(), 1);
     assert_eq!(indexed[0].relative_path, "source.txt");
     assert_eq!(indexed[0].byte_length, 6);
-    assert!(index_repository(temp.path(), &["../escape".to_owned()], 1_024).is_err());
+    for path in [
+        "../escape",
+        ".git/config",
+        "..%2fescape",
+        "src\\..\\escape",
+        "src//escape",
+        "src/\nescape",
+    ] {
+        assert!(index_repository(temp.path(), &[path.to_owned()], 1_024).is_err());
+    }
 }

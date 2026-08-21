@@ -1,5 +1,6 @@
+use nemesis_protocol::validate_repository_relative_path;
 use std::collections::BTreeSet;
-use std::path::{Component, Path, PathBuf};
+use std::path::{Path, PathBuf};
 use std::process::{Command, Output};
 
 use sha2::{Digest, Sha256};
@@ -170,17 +171,7 @@ impl GitWorkflow {
         }
         let mut normalized = BTreeSet::new();
         for path in paths {
-            let candidate = Path::new(path);
-            if path.is_empty()
-                || candidate.is_absolute()
-                || candidate
-                    .components()
-                    .any(|component| !matches!(component, Component::Normal(_)))
-                || candidate
-                    .components()
-                    .next()
-                    .is_some_and(|component| component.as_os_str() == ".git")
-                || !normalized.insert(path.clone())
+            if validate_repository_relative_path(path).is_err() || !normalized.insert(path.clone())
             {
                 return Err(GitWorkflowError::InvalidBoundary);
             }

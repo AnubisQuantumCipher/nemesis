@@ -97,7 +97,15 @@ fn exact_lane_commit_leaves_default_branch_unchanged() {
 fn path_traversal_and_git_metadata_staging_refuse() {
     let repo = fixture();
     let workflow = GitWorkflow::new(repo.path(), "main").unwrap();
-    for path in ["../escape", ".git/config", "/tmp/absolute"] {
+    for path in [
+        "../escape",
+        ".git/config",
+        "/tmp/absolute",
+        "..%2fescape",
+        "src\\..\\escape",
+        "src//escape",
+        "src/\nescape",
+    ] {
         assert!(workflow.validate_commit_paths(&[path.to_owned()]).is_err());
     }
 }

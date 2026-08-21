@@ -9,7 +9,7 @@ use nemesis_runtime::{GitWorktreeManager, SandboxProfile, SandboxedCommand};
 use tempfile::TempDir;
 
 fn git(repo: &Path, args: &[&str]) -> String {
-    let output = Command::new("/opt/homebrew/bin/git")
+    let output = Command::new("/usr/bin/git")
         .current_dir(repo)
         .args(args)
         .output()

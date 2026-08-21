@@ -144,11 +144,14 @@ fn find_keychain_password() -> Result<Option<Vec<u8>>, SignerError> {
         .output()
         .map_err(|error| SignerError::Keychain(error.to_string()))?;
     if output.status.success() {
-        let encoded = String::from_utf8(output.stdout)
-            .map_err(|error| SignerError::Keychain(error.to_string()))?;
-        let password = hex::decode(encoded.trim())
-            .map_err(|error| SignerError::Keychain(error.to_string()))?;
-        return Ok(Some(password));
+        let mut encoded = output.stdout;
+        let password = std::str::from_utf8(&encoded)
+            .map_err(|error| SignerError::Keychain(error.to_string()))
+            .and_then(|value| {
+                hex::decode(value.trim()).map_err(|error| SignerError::Keychain(error.to_string()))
+            });
+        encoded.zeroize();
+        return password.map(Some);
     }
     if output.status.code() == Some(44) {
         return Ok(None);
