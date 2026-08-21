@@ -1,0 +1,147 @@
+PASS_RELEASE_CONTRACT sha256=8f62d762c30849ec6841b0fbde87004ced41365b456c98c79f6f1bf53c347ccc bytes=12735 lines=137
+Compile
+   [Ada]          nemesis_core_daemon.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis_kernel_tests.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis_authority_tests.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis_path_tests.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis_ledger_tests.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis_storage_tests.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis_index_tests.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis.ads
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-core.ads
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-core-json.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-core-ledger.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-core-mission_store.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-kernel.ads
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-kernel-capabilities.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-kernel-completion.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-kernel-missions.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-kernel-types.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-kernel-transitions.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-kernel-approvals.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-kernel-budgets.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-kernel-evidence.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-core-paths.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-core-checkpoints.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-core-objects.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-core-index.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+Bind
+   [gprbind]      nemesis_core_daemon.bexch
+   [Ada]          nemesis_core_daemon.ali
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [gprbind]      nemesis_kernel_tests.bexch
+   [Ada]          nemesis_kernel_tests.ali
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [gprbind]      nemesis_authority_tests.bexch
+   [Ada]          nemesis_authority_tests.ali
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [gprbind]      nemesis_path_tests.bexch
+   [Ada]          nemesis_path_tests.ali
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [gprbind]      nemesis_ledger_tests.bexch
+   [Ada]          nemesis_ledger_tests.ali
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [gprbind]      nemesis_storage_tests.bexch
+   [Ada]          nemesis_storage_tests.ali
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [gprbind]      nemesis_index_tests.bexch
+   [Ada]          nemesis_index_tests.ali
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+Link
+   [link]         nemesis_core_daemon.adb
+   [link]         nemesis_kernel_tests.adb
+   [link]         nemesis_authority_tests.adb
+   [link]         nemesis_path_tests.adb
+   [link]         nemesis_ledger_tests.adb
+   [link]         nemesis_storage_tests.adb
+   [link]         nemesis_index_tests.adb
+    Finished `release` profile [optimized] target(s) in 0.08s
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+
+added 164 packages in 1s
+npm warn install-scripts 2 packages had install scripts blocked because they are not covered by allowScripts:
+npm warn install-scripts   esbuild@0.28.2 (postinstall: node install.js)
+npm warn install-scripts   fsevents@2.3.3 (install: (install scripts present))
+npm warn install-scripts
+npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+PASS_THIRD_PARTY_NOTICES output=/Users/sicarii/Desktop/Projects/nemesis/.worktrees/release-v0.1.0/build/release/THIRD_PARTY_NOTICES.txt bytes=489096
+npm notice run nemesis-desktop@0.1.0 test
+npm notice run vitest run --configLoader=runner
+
+ RUN  v3.2.7 /Users/sicarii/Desktop/Projects/nemesis/.worktrees/release-v0.1.0/desktop
+
+ ✓ src/App.test.tsx (4 tests) 227ms
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  00:32:56
+   Duration  620ms (transform 46ms, setup 50ms, collect 71ms, tests 227ms, environment 138ms, prepare 25ms)
+
+npm notice run nemesis-desktop@0.1.0 build
+npm notice run tsc -b && vite build --configLoader native
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 39 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.45 kB │ gzip:  0.29 kB
+dist/assets/index-CaSf_PWc.css   18.31 kB │ gzip:  4.16 kB
+dist/assets/index-D3nWFPxG.js   208.80 kB │ gzip: 65.31 kB │ map: 959.17 kB
+✓ built in 350ms
+npm notice run nemesis-desktop@0.1.0 tauri
+npm notice run tauri build --config src-tauri/tauri.release.conf.json --bundles app
+        Info Looking up installed tauri packages to check mismatched versions...
+     Running beforeBuildCommand `npm run build`
+npm notice run nemesis-desktop@0.1.0 build
+npm notice run tsc -b && vite build --configLoader native
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 39 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.45 kB │ gzip:  0.29 kB
+dist/assets/index-CaSf_PWc.css   18.31 kB │ gzip:  4.16 kB
+dist/assets/index-D3nWFPxG.js   208.80 kB │ gzip: 65.31 kB │ map: 959.17 kB
+✓ built in 364ms
+   Compiling nemesis-desktop v0.1.0 (/Users/sicarii/Desktop/Projects/nemesis/.worktrees/release-v0.1.0/desktop/src-tauri)
+    Finished `release` profile [optimized] target(s) in 9.27s
+       Built application at: /Users/sicarii/Desktop/Projects/nemesis/.worktrees/release-v0.1.0/desktop/src-tauri/target/release/nemesis-desktop
+    Bundling NEMESIS Desktop.app (/Users/sicarii/Desktop/Projects/nemesis/.worktrees/release-v0.1.0/desktop/src-tauri/target/release/bundle/macos/NEMESIS Desktop.app)
+    Finished 1 bundle at:
+        /Users/sicarii/Desktop/Projects/nemesis/.worktrees/release-v0.1.0/desktop/src-tauri/target/release/bundle/macos/NEMESIS Desktop.app
+
+PASS_MACHO_SANITIZE files=7 private_rpaths_removed=3
+PASS_RELEASE_LEAK_SCAN files=7
+/Users/sicarii/Desktop/Projects/nemesis/.worktrees/release-v0.1.0/desktop/src-tauri/target/release/bundle/macos/NEMESIS Desktop.app/Contents/Info.plist: OK
+/Users/sicarii/Desktop/Projects/nemesis/.worktrees/release-v0.1.0/desktop/src-tauri/target/release/bundle/macos/NEMESIS Desktop.app: replacing existing signature
+/Users/sicarii/Desktop/Projects/nemesis/.worktrees/release-v0.1.0/desktop/src-tauri/target/release/bundle/macos/NEMESIS Desktop.app: valid on disk
+/Users/sicarii/Desktop/Projects/nemesis/.worktrees/release-v0.1.0/desktop/src-tauri/target/release/bundle/macos/NEMESIS Desktop.app: satisfies its Designated Requirement
+PASS_RELEASE_MANIFEST asset=NEMESIS-Desktop-v0.1.0-macos-arm64.zip bytes=4330327 sha256=6496b646043face3c0e907dcc7a01ca4a2b049a637b3b62743545bc674f22753
+NEMESIS-Desktop-v0.1.0-macos-arm64.zip: OK
+release-manifest.json: OK
+PASS_RELEASE_PACKAGE version=0.1.0 commit=4e10cfcfeb3adf20ced7a01309ac0b2fb028373b asset=NEMESIS-Desktop-v0.1.0-macos-arm64.zip signing=ad-hoc notarized=false
