@@ -71,6 +71,7 @@ RELEASE_BINARIES=(
   "$APP/Contents/Resources/bin/nemesis-verify"
   "$APP/Contents/Resources/bin/nemesis-worker-runner"
 )
+python3 scripts/sanitize_macho.py "${RELEASE_BINARIES[@]}"
 for release_binary in "${RELEASE_BINARIES[@]}"; do
   strip -x "$release_binary"
 done
