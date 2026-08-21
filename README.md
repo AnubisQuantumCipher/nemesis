@@ -132,6 +132,8 @@ A pass establishes only the properties named by the sub-gates. The SPARK proof a
 | [`receipts/phase-7-desktop/`](receipts/phase-7-desktop/) | desktop QA plus exact bundle manifest |
 | [`receipts/phase-11/`](receipts/phase-11/) | evidence graph and exact authoritative replay |
 | [`receipts/phase-16/PHASE16.json`](receipts/phase-16/PHASE16.json) | historical bounded hardening receipt and accepted findings |
+| [`receipts/phase-16-release/`](receipts/phase-16-release/) | release-candidate host/VZ hardening log and source-bound receipt |
+| [`receipts/release-v0.1.0/LOCAL_ACCEPTANCE.json`](receipts/release-v0.1.0/LOCAL_ACCEPTANCE.json) | final pre-hosting local roster, exact log identity, tool log, and reconciled test execution counts |
 | [`receipts/CHECKPOINT.json`](receipts/CHECKPOINT.json) | sealed pre-release `PARTIAL` checkpoint |
 | [`receipts/acceptance-20260820/`](receipts/acceptance-20260820/) | preserved pre-release full-gate log and capture metadata |
 
