@@ -1,0 +1,11 @@
+* @AnubisQuantumCipher
+
+/kernel/ @AnubisQuantumCipher
+/policy/ @AnubisQuantumCipher
+/specs/capability/ @AnubisQuantumCipher
+/specs/receipt/ @AnubisQuantumCipher
+/daemon/ @AnubisQuantumCipher
+/runtime/crates/nemesis-signer/ @AnubisQuantumCipher
+/runtime/crates/nemesis-receipt/ @AnubisQuantumCipher
+/runtime/crates/nemesis-verify/ @AnubisQuantumCipher
+/.github/workflows/ @AnubisQuantumCipher

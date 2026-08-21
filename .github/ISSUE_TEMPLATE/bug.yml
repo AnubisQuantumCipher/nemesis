@@ -1,0 +1,60 @@
+name: Bug report
+description: Report a reproducible non-security defect
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not disclose suspected vulnerabilities here. Use GitHub private vulnerability reporting from SECURITY.md.
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      description: Exact release tag or commit SHA.
+      placeholder: v0.1.0 or 40-character commit
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Observed behavior
+      description: What happened, including the exact error or refusal.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Exact ordered steps and bounded fixture inputs.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: The observable contract you expected.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: macOS, architecture, tool versions, and relevant sandbox/profile details.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Exit status, terminal sentinel, receipt/log hashes, and non-sensitive excerpts.
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety checks
+      options:
+        - label: This report contains no credentials, private signing material, or unrelated user data.
+          required: true
+        - label: This is not a suspected security vulnerability.
+          required: true

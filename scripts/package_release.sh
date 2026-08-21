@@ -29,12 +29,39 @@ fi
 
 export CARGO_INCREMENTAL=0
 export RUSTFLAGS="${RUSTFLAGS:+$RUSTFLAGS }--remap-path-prefix=$ROOT=/build/nemesis --remap-path-prefix=$HOME=/build/home"
+if [[ "$(cargo about --version)" != "cargo-about 0.9.2" ]]; then
+  printf '%s\n' 'REFUSED_RELEASE_CARGO_ABOUT requires=0.9.2' >&2
+  exit 2
+fi
+
 
 python3 scripts/verify_release_contract.py
 NEMESIS_BUILD=release ./scripts/build_ada.sh
 cargo fmt --manifest-path runtime/Cargo.toml --all -- --check
 cargo build --manifest-path runtime/Cargo.toml --workspace --release
 npm --prefix desktop ci
+LICENSE_DIR="$ROOT/build/release"
+mkdir -p "$LICENSE_DIR"
+cargo about generate \
+  --manifest-path runtime/Cargo.toml \
+  --workspace \
+  --config runtime/about.toml \
+  --format json \
+  --output-file "$LICENSE_DIR/runtime-licenses.json" \
+  --locked \
+  --fail
+cargo about generate \
+  --manifest-path desktop/src-tauri/Cargo.toml \
+  --config runtime/about.toml \
+  --format json \
+  --output-file "$LICENSE_DIR/desktop-licenses.json" \
+  --locked \
+  --fail
+python3 scripts/generate_third_party_notices.py \
+  --cargo-json "$LICENSE_DIR/runtime-licenses.json" \
+  --cargo-json "$LICENSE_DIR/desktop-licenses.json" \
+  --desktop desktop \
+  --output "$LICENSE_DIR/THIRD_PARTY_NOTICES.txt"
 npm --prefix desktop test
 npm --prefix desktop run build
 npm --prefix desktop run tauri -- \

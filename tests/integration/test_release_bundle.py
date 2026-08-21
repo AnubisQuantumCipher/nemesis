@@ -22,6 +22,7 @@ EXPECTED_RESOURCES = {
     "../../docs/mission/NEMESIS_FULL_AUTONOMOUS_GITHUB_RELEASE_MISSION_2026-08-20.md": "docs/mission/NEMESIS_FULL_AUTONOMOUS_GITHUB_RELEASE_MISSION_2026-08-20.md",
     "../../receipts/phase-11/replay.json": "receipts/phase-11/replay.json",
     "../../LICENSE": "LICENSE",
+    "../../build/release/THIRD_PARTY_NOTICES.txt": "THIRD_PARTY_NOTICES.txt",
 }
 
 

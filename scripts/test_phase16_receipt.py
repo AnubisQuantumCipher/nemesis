@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import json
 import subprocess
 import tempfile
@@ -25,12 +26,16 @@ def verify(path: Path) -> subprocess.CompletedProcess[str]:
 
 
 def main() -> int:
-    valid = verify(RECEIPT)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("receipt", nargs="?", type=Path, default=RECEIPT)
+    arguments = parser.parse_args()
+    receipt = arguments.receipt.resolve()
+    valid = verify(receipt)
     if valid.returncode != 0 or "PASS_PHASE16_RECEIPT" not in valid.stdout:
         print(f"FAIL_PHASE16_RECEIPT_VALID\n{valid.stdout}{valid.stderr}")
         return 1
 
-    data = json.loads(RECEIPT.read_text(encoding="utf-8"))
+    data = json.loads(receipt.read_text(encoding="utf-8"))
     data["artifact_sha256"][TAMPERED_ARTIFACT] = "00" * 32
     with tempfile.TemporaryDirectory(prefix=".phase16-receipt-", dir=ROOT / "receipts") as temp:
         tampered = Path(temp) / "PHASE16.json"
