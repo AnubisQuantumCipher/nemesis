@@ -1,0 +1,13 @@
+[package]
+name = "nemesis-receipt"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+ed25519-dalek.workspace = true
+hex.workspace = true
+minicbor.workspace = true
+thiserror.workspace = true

@@ -1,0 +1,118 @@
+{
+  "accepted_findings": [
+    {
+      "id": "H16-01",
+      "regression": "runtime/crates/nemesis-runtime/tests/security_mutation.rs",
+      "resolution": "One strict relative-repository-path policy now rejects encoded separators, backslashes, control bytes, empty/dot components, and .git metadata across worker parsing, context indexing, and local Git staging."
+    },
+    {
+      "id": "H16-02",
+      "regression": "runtime/crates/nemesis-runtime/tests/extensions.rs",
+      "resolution": "Wasmtime and wasmtime-wasi were upgraded and exactly pinned to 47.0.3; the updated RustSec audit exited zero."
+    },
+    {
+      "id": "H16-03",
+      "regression": "runtime/crates/nemesis-signer/src/lib.rs",
+      "resolution": "Keychain hexadecimal seed stdout is explicitly zeroized after decoding on both success and failure paths."
+    },
+    {
+      "id": "H16-04",
+      "regression": "runtime/crates/nemesis-runtime/tests/isolation.rs",
+      "resolution": "The isolation fixture uses the stable production /usr/bin/git path and passes in the clean VZ guest."
+    }
+  ],
+  "architect_contract": {
+    "bytes": 77321,
+    "lines": 2188,
+    "path": "docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md",
+    "sha256": "ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e0d8beebee532779"
+  },
+  "artifact_sha256": {
+    "docs/verification/PHASE16_SECURITY_REVIEW.md": "d6fad2d6be2a120ac5d5006adc663f7d85041821ee115228f293b57b8a9a9da1",
+    "runtime/Cargo.lock": "a6c8fd40d64f4f751f23c1e982d915c690f8fa8d282198131b4c4dd82e7f3d57",
+    "runtime/Cargo.toml": "e112c3904ce2c50f6e06b25f259272a890720398b2d7715d756f6f81e44f04ea",
+    "runtime/crates/nemesis-protocol/src/lib.rs": "6e4d2c26aa1391caab8b2135befdde3550a13185af6342b15705ebfc20d1026f",
+    "runtime/crates/nemesis-runtime/src/context.rs": "0c5a3da13685694106cbee28f200d4b150782e266771edcb588b44d3c5b0b86c",
+    "runtime/crates/nemesis-runtime/src/git_workflows.rs": "f77dfaa9eefaf75d3265b39e6f9a0d4595170a3f4ae8b087ef074405d74b7b31",
+    "runtime/crates/nemesis-runtime/tests/context.rs": "3667e660b8a64f45a2bc340ddee785bff6b08c178079486405628edaa36ba2a4",
+    "runtime/crates/nemesis-runtime/tests/git_workflows.rs": "1599887fed2ada130e7143ddbb56523efe05f4b3c57740977cc499a301243233",
+    "runtime/crates/nemesis-runtime/tests/isolation.rs": "fe6f74146ff4da0b78c5c75e1870ed0e1af3a127c2356ffcd1b52dc8ff362519",
+    "runtime/crates/nemesis-runtime/tests/security_mutation.rs": "4e808725352d85ddd51f17dbac1fc633fe664ab8b10a40ef4ad3ffa63421e5d8",
+    "runtime/crates/nemesis-signer/src/lib.rs": "22720d2e0bbbe4cd05fd0a4e23a1a8a8a40965ead58dfd91bf23256abdf59d21",
+    "scripts/run_security_hardening.sh": "de288e91da5ded4708eec1c409de64883e5bcee9fcad0e09584df6a161f5d83a",
+    "scripts/security_hardening_guest.sh": "abc8b62cf70acda898e0e57d281e9e4e5c51c59ae7b340ec0d1ca2b5108a4875",
+    "scripts/test_phase16_receipt.py": "2590a673c265030f41b4f7466d7fb1c17943c7e736fe91262e454c48bb0913fa",
+    "scripts/test_security_hardening.sh": "60f37b8e0c070e83299c8c1ae285f0dd1aafc67e258ee08048f40d98c176ac1d",
+    "scripts/verify_phase16_receipt.py": "8a569735be184bf206ead5949d13ff55c74e6cf8dcc9d2c5f83153c1b8bef34b"
+  },
+  "dependency_review": {
+    "cargo_audit": "PASS",
+    "npm_audit": "PASS",
+    "wasmtime": "47.0.3",
+    "wasmtime_wasi": "47.0.3"
+  },
+  "epoch": "v0.1.0-release-candidate",
+  "gate": {
+    "command": "./scripts/test_security_hardening.sh",
+    "guest": {
+      "base_image": "anubis-xcode",
+      "deleted_after_run": true,
+      "primary_crash_mutation_evidence": true,
+      "transport": "Tart over Apple Virtualization.framework"
+    },
+    "log": {
+      "bytes": 35133,
+      "file": "receipts/phase-16-public/security-hardening.txt",
+      "line_count": 726,
+      "sha256": "63200915d61af19d8b1e1fab48b2d176d6acd6280fd52b450ef2a7ba66c1b004"
+    },
+    "observed_at": "2026-08-21T03:56:54Z",
+    "observed_warnings": [
+      "Ada link steps reported a deployment-target override from 16.0 to the host target 26.0; every build, test, and bounded proof command still exited zero."
+    ],
+    "recovery_run_failures": [],
+    "sentinels": [
+      "PASS_PHASE16_VZ_SECURITY_HARDENING",
+      "PASS_PHASE16_VZ_SECURITY_HARDENING_ORCHESTRATOR",
+      "PASS_PHASE16_SECURITY_HARDENING"
+    ],
+    "status": "PASS"
+  },
+  "phase": 16,
+  "proof_review": {
+    "bounded_kernel": "PASS",
+    "command": "./scripts/prove_kernel.sh",
+    "scope": "Eight named SPARK kernel units only; not a proof of the Rust runtime, renderer, dependencies, operating system, or complete Ada daemon/storage stack."
+  },
+  "release_contract": {
+    "bytes": 12735,
+    "lines": 137,
+    "path": "docs/mission/NEMESIS_FULL_AUTONOMOUS_GITHUB_RELEASE_MISSION_2026-08-20.md",
+    "sha256": "8f62d762c30849ec6841b0fbde87004ced41365b456c98c79f6f1bf53c347ccc"
+  },
+  "repository": {
+    "branch": "build/desktop-local",
+    "subject_commit": "443258079b996ad4c6bff209b93df51c59b23a3d",
+    "subject_tree": "b056224168006041affc029cd5cfef815f5628c1"
+  },
+  "residuals": [
+    {
+      "id": "independent_external_security_review",
+      "status": "NEEDS-HUMAN"
+    },
+    {
+      "id": "developer_id_signing_and_notarization",
+      "status": "UNAVAILABLE"
+    },
+    {
+      "id": "legal_clearance",
+      "status": "NOT_CLAIMED"
+    },
+    {
+      "id": "mobile_web_remote_and_other_platforms",
+      "status": "DEFERRED"
+    }
+  ],
+  "schema": "nemesis.phase16-hardening/v1",
+  "status": "VERIFIED"
+}

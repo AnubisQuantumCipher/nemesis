@@ -1,0 +1,64 @@
+{
+  "attempts": [
+    {
+      "diagnosis": "An ignored prior-run duplicate artifact made exact manifest coverage fail. The file was hash-preserved outside the repository and removed from the generated desktop-latest directory; no verifier condition changed.",
+      "log": {
+        "bytes": 46723,
+        "file": "receipts/release-v0.1.0/public-acceptance-attempt-1.txt",
+        "line_count": 788,
+        "sha256": "b690e912363f088dcd365dac8a7a65d30c59716242a067ad2164f35322df63bf"
+      },
+      "stale_artifact": {
+        "bytes": 3050,
+        "name": "events 2.ledger",
+        "sha256": "301aab0d369b190381d86ccd5f58840e85bdc8b0b5991b8980154ed3a9c8f97b"
+      },
+      "status": "FAIL",
+      "terminal_marker": "FAIL_EVIDENCE_BUNDLE unexpected_artifacts=['events 2.ledger']"
+    },
+    {
+      "log": {
+        "bytes": 83930,
+        "file": "receipts/release-v0.1.0/public-acceptance.txt",
+        "line_count": 1562,
+        "sha256": "32e53d079ba76232620b9013c92be4abfd3a84b22928a57db026d5a3f8f8f963"
+      },
+      "status": "PASS",
+      "terminal_marker": "PASS_NEMESIS_DESKTOP_COMPLETE"
+    }
+  ],
+  "cleanup": {
+    "desktop_process": "NOT_RUNNING",
+    "tart_local_vms": [
+      {
+        "name": "anubis-xcode",
+        "state": "stopped"
+      }
+    ]
+  },
+  "command": "./scripts/verify_complete.sh",
+  "phase16_receipt": "receipts/phase-16-public/PHASE16.json",
+  "residuals": [
+    "Independent external security review remains NEEDS-HUMAN.",
+    "SPARK evidence is bounded to eight named kernel units and recorded assumptions.",
+    "The VZ result depends on the local host, Tart base image, and SSH transport.",
+    "Developer ID signing and notarization are unavailable.",
+    "Mobile, web, remote-public, Windows, Linux, App Store, package-registry, and legal-clearance work are not claimed."
+  ],
+  "schema": "nemesis.public-clone-acceptance/v1",
+  "status": "PASS",
+  "subject": {
+    "commit": "efb73e92d12833e2912c28c437ee62002832f835",
+    "tree": "541fe070768303ef326e395ecfafc6d4486f833a"
+  },
+  "terminal_marker": "PASS_NEMESIS_DESKTOP_COMPLETE",
+  "test_case_executions": {
+    "counting_note": "Execution counts include repeated suites across host sub-gates and the VZ guest; Rust/Python summaries reconciled with individual ok lines.",
+    "python": 21,
+    "rust": 171,
+    "total": 200,
+    "vitest": 8
+  },
+  "tool_versions": "receipts/release-v0.1.0/tool-versions.txt",
+  "version": "0.1.0"
+}

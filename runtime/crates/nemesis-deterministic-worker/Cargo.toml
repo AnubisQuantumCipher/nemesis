@@ -1,0 +1,11 @@
+[package]
+name = "nemesis-deterministic-worker"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+nemesis-protocol = { path = "../nemesis-protocol" }
+serde_json.workspace = true

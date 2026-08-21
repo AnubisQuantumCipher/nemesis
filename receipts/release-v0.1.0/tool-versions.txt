@@ -1,0 +1,115 @@
+ProductName:		macOS
+ProductVersion:		26.6
+BuildVersion:		25G70
+arm64
+git version 2.52.0
+gh version 2.83.2 (2025-12-10)
+https://github.com/cli/cli/releases/tag/v2.83.2
+Python 3.10.13
+v22.23.1
+12.0.2
+rustc 1.97.0-nightly (82bee9650 2026-05-09)
+cargo 1.97.0-nightly (a343accce 2026-05-08)
+cargo-audit-audit 0.22.1
+cargo-about 0.9.2
+APPLICATION
+alr version:               2.1.0
+libalire version:          2.1.0
+source commit:             2681b313d08224014fa3f5e4f76e9c75347213d2
+source changes:            clean
+compilation date:          2025-03-04 10:20:08
+compiled with version:     14.2.0
+
+CONFIGURATION
+home folder:               /Users/sicarii
+settings folder:           /Users/sicarii/.config/alire
+cache folder:              /Users/sicarii/.local/share/alire
+vault folder:              /Users/sicarii/.local/share/alire/releases
+build folder:              /Users/sicarii/.local/share/alire/builds
+temp folder:               /private/var/folders/bg/pt9l6y1j47q642kp3z5blrmh0000gn/T
+force flag:                FALSE
+non-interactive flag:      FALSE
+community index branch:    stable-1.4.0
+compatible index versions: ^1.1 & <=1.4.0
+indexes folder:            /Users/sicarii/.config/alire/indexes
+indexes metadata:          OK
+index #1:                  (community) git+https://github.com/alire-project/alire-index#stable-1.3.0
+toolchain folder:          /Users/sicarii/.local/share/alire/toolchains
+toolchain assistant:       disabled
+tool #1 gnat:              gnat_native=14.2.1
+tool #2 gprbuild:          gprbuild=24.0.1
+system package manager:    /opt/homebrew/bin/brew
+distro detection disabled: FALSE
+
+WORKSPACE
+root status:               VALID
+root release:              nemesis=0.1.0-dev
+root load error:           none
+root folder:               /Users/sicarii/Desktop/Projects/nemesis/.worktrees/desktop-local
+current folder:            /Users/sicarii/Desktop/Projects/nemesis/.worktrees/desktop-local
+
+SYSTEM
+distribution:              HOMEBREW
+host-arch:                 AARCH64
+os:                        MACOS
+target:                    NATIVE
+toolchain:                 USER
+word-size:                 BITS_64
+GPRBUILD 24.0.0 (2024-03-14) (aarch64-apple-darwin21)
+Copyright (C) 2004-2024, AdaCore
+This is free software; see the source for copying conditions.
+There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+0.0w
+Why3 for gnatprove version 1.6.0+git
+/Users/sicarii/.alire/libexec/spark/bin/alt-ergo: Alt-Ergo version 2.4.0
+/Users/sicarii/.alire/libexec/spark/bin/cvc5: This is cvc5 version 1.1.2 [git tag 1.1.2 branch HEAD]
+compiled with GCC version Apple LLVM 13.0.0 (clang-1300.0.29.30)
+on Mar  1 2024 17:31:47
+
+Copyright (c) 2009-2023 by the authors and their institutional
+affiliations listed at https://cvc5.github.io/people.html
+
+cvc5 is open-source and is covered by the BSD license (modified).
+
+THIS SOFTWARE IS PROVIDED AS-IS, WITHOUT ANY WARRANTIES.
+USE AT YOUR OWN RISK.
+
+This version of cvc5 is linked against the following non-(L)GPL'ed
+third party libraries.
+
+  CaDiCaL - Simplified Satisfiability Solver
+  See https://github.com/arminbiere/cadical for copyright information.
+
+  Editline Library
+  See https://thrysoee.dk/editline
+  for copyright information.
+
+  SymFPU - The Symbolic Floating Point Unit
+  See https://github.com/martin-cs/symfpu/tree/CVC4 for copyright information.
+
+This version of cvc5 is linked against the following third party
+libraries covered by the LGPLv3 license.
+See licenses/lgpl-3.0.txt for more information.
+
+  GMP - Gnu Multi Precision Arithmetic Library
+  See http://gmplib.org for copyright information.
+
+  LibPoly polynomial library
+  See https://github.com/SRI-CSL/libpoly for copyright and
+  licensing information.
+
+cvc5 is statically linked against these libraries. To recompile
+this version of cvc5 with different versions of these libraries
+follow the instructions on https://github.com/cvc5/cvc5/blob/main/INSTALL.md
+
+See the file COPYING (distributed with the source code, and with
+all binaries) for the full cvc5 copyright, licensing, and (lack of)
+warranty information.
+
+/Users/sicarii/.alire/libexec/spark/bin/z3: Z3 version 4.13.0 - 64 bit
+
+2.32.1
+npm notice run nemesis-desktop@0.1.0 npx
+npm notice run 'tauri' --version
+tauri-cli 2.11.4

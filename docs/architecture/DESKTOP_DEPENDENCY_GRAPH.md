@@ -1,6 +1,6 @@
 # NEMESIS Desktop Dependency Graph
 
-This graph compiles the architect-authorized mission contract into the macOS-first desktop scope. The archived contract at `docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md` remains authoritative. This file orders work; it does not broaden the amendment.
+This graph compiles the architect-authorized contracts into the macOS-first desktop scope. The desktop contract at `docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md` governs the product boundary; the GitHub release contract at `docs/mission/NEMESIS_FULL_AUTONOMOUS_GITHUB_RELEASE_MISSION_2026-08-20.md` authorizes the source-visible macOS alpha release. This file orders work; it does not broaden either contract.
 
 ## Locked identity
 
@@ -31,11 +31,12 @@ graph TD
   P13 --> P14[Phase 14: Local automation]
   P14 --> P16[Phase 16: Bounded security hardening]
   P16 --> DONE[Desktop acceptance and local seal]
+  DONE --> R0[v0.1.0 source-visible macOS alpha]
 
   P15[Phase 15: Remote daemon and mobile cockpit — DEFERRED]
-  P17[Phase 17: Public beta — DEFERRED]
-  P18[Phase 18: Release candidate — DEFERRED]
-  P19[Phase 19: Public release — DEFERRED]
+  P17[Inherited public beta milestone — DEFERRED]
+  P18[Inherited release-candidate milestone — DEFERRED]
+  P19[Inherited multi-platform v1.0 release — DEFERRED]
 ```
 
 ## Phase contracts
@@ -59,6 +60,7 @@ graph TD
 | 14 | Local schedules/triggers/offline queue with denial at unattended approval boundaries | Unattended work refuses instead of widening authority or waiting indefinitely | 13 |
 | 16 | Protocol mutation and malicious-fixture gates in an approved Apple Virtualization guest; dependency/threat/proof review | Every accepted finding has a regression fixture; host is not used for crash/fuzz/exploit evidence | 14 |
 | Seal | Reproducible local desktop acceptance battery, phase receipts, restart-safe checkpoint | `scripts/verify_complete.sh` validates current source and every mandatory desktop predicate | 16 |
+| Release | Public source repository, hosted CI, ad-hoc macOS arm64 app, checksums, manifest, release notes, and final receipts | Required hosted checks succeed; final-commit app passes package/leak/signature/smoke gates; published assets re-download with identical SHA-256 values | Seal + release contract |
 
 ## Explicitly deferred requirements
 
@@ -67,9 +69,10 @@ The following are outside the bounded mission and are not counted as complete:
 - iPhone and iPad applications, SwiftUI mobile cockpit, Apple Pencil directives, mobile notifications, device enrollment, remote mobile approval, and lost-device revocation.
 - Hosted web application or dashboard, public cloud service, public messaging gateway, public webhook endpoint, and remote public daemon deployment.
 - Windows and Linux applications, installers, and build matrices.
-- Public repository creation, issue tracker, branch protection, release channels, GitHub Actions release infrastructure, public signing, notarization, TestFlight, App Store, artifact attestations, SBOM publication, package registration, and public release.
-- Public-name collision reconnaissance and legal review. Those are mandatory before public release, must report evidence and limits, and must not claim legal clearance.
-- The inherited public beta, release-candidate, and GitHub v1.0 milestones.
+- Developer ID signing, notarization, TestFlight, App Store, immutable release attestations, and SBOM publication.
+- Package registration, domain acquisition, and permanent ecosystem registration.
+- Legal clearance. Bounded public-name reconnaissance is recorded with limitations; no uniqueness or legal conclusion is claimed.
+- The inherited broad public-beta, release-candidate, and multi-platform GitHub `1.0` milestones. The authorized source-visible macOS `v0.1.0` alpha does not satisfy or claim those milestones.
 
 ## Fail-closed sequencing
 

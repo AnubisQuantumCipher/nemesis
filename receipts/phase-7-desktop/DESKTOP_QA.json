@@ -1,0 +1,36 @@
+{
+  "schema": "nemesis.desktop-qa/v1",
+  "surface": "NEMESIS Desktop",
+  "browser": {
+    "method": "local built frontend through browser automation",
+    "viewports": [
+      { "width": 1440, "height": 900 },
+      { "width": 1024, "height": 700 }
+    ],
+    "states_inspected": [
+      "mission cockpit",
+      "authority review",
+      "completion court"
+    ],
+    "checks": [
+      "locked identity and doctrine visible",
+      "desktop navigation complete and operable",
+      "authority limits visually distinct from evidence state",
+      "VERIFIED, BELIEVED, and UNKNOWN use text and shape",
+      "compact layout hides inspector without clipping mission controls"
+    ]
+  },
+  "native": {
+    "build_command": "./script/build_and_run.sh --verify",
+    "observed_process_sentinel": "PASS_NEMESIS_DESKTOP_PROCESS",
+    "window_title": "NEMESIS — The Provable Agent Operating System",
+    "window_width": 1440,
+    "window_height": 900,
+    "app_operated_mission": true,
+    "evidence_bundle": "receipts/phase-7-desktop/MANIFEST.json"
+  },
+  "limitations": [
+    "Screen-capture privacy access was not granted to Terminal.",
+    "Browser screenshots verify the same compiled React surface; native process, window, and app-triggered evidence were verified separately."
+  ]
+}

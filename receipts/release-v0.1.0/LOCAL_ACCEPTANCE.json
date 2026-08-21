@@ -1,0 +1,47 @@
+{
+  "cleanup": {
+    "desktop_process": "NOT_RUNNING",
+    "tart_local_vms": [
+      {
+        "name": "anubis-xcode",
+        "state": "stopped"
+      }
+    ]
+  },
+  "command": "./scripts/verify_complete.sh",
+  "log": {
+    "bytes": 83667,
+    "file": "receipts/release-v0.1.0/local-acceptance.txt",
+    "line_count": 1560,
+    "sha256": "d04e0fea4970cf5a7c96219daccf78d6a84c4e20198a05a72ff1b2f04cb80f25"
+  },
+  "phase16_receipt": "receipts/phase-16-release/PHASE16.json",
+  "residuals": [
+    "Independent external security review remains NEEDS-HUMAN.",
+    "SPARK evidence is bounded to eight named kernel units and recorded assumptions.",
+    "The VZ result depends on the local host, Tart base image, and SSH transport.",
+    "Developer ID signing and notarization are unavailable.",
+    "Mobile, web, remote-public, Windows, Linux, App Store, package-registry, and legal-clearance work are not claimed."
+  ],
+  "schema": "nemesis.local-release-acceptance/v1",
+  "status": "PASS",
+  "subject": {
+    "commit": "c09ca87dc0c0f4c2961de915e00c3ba0b075b122",
+    "tree": "4e4329f0f10d9865180078d5e030b3740a300bad"
+  },
+  "terminal_marker": "PASS_NEMESIS_DESKTOP_COMPLETE",
+  "test_case_executions": {
+    "counting_note": "Execution counts include repeated suites across host sub-gates and the VZ guest; summary totals reconciled with individual ok lines.",
+    "python": 19,
+    "rust": 171,
+    "total": 198,
+    "vitest": 8
+  },
+  "tool_versions": {
+    "bytes": 4255,
+    "file": "receipts/release-v0.1.0/tool-versions.txt",
+    "line_count": 115,
+    "sha256": "61af995f1fafc0d6b6480ca58412a06f0de0accd9a7fc754d325a1b38d48e2a0"
+  },
+  "version": "0.1.0"
+}

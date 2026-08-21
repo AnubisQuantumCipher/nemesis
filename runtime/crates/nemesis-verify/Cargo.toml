@@ -1,0 +1,16 @@
+[package]
+name = "nemesis-verify"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+ed25519-dalek.workspace = true
+hex.workspace = true
+nemesis-receipt = { path = "../nemesis-receipt" }
+serde_json.workspace = true
+
+[dev-dependencies]
+tempfile.workspace = true

@@ -1,0 +1,22 @@
+{
+  "boundary": "This output was captured before release-track byte changes and remote configuration. The historical verifier intentionally rejects later epochs; current release state is verified by the release receipts.",
+  "command": "python3 scripts/verify_checkpoint.py",
+  "output": {
+    "bytes": 88,
+    "file": "receipts/release-v0.1.0/prechange-checkpoint.txt",
+    "line_count": 1,
+    "sha256": "ce8e252351f1b9f6cd45d11c9756da1ddf099c440db7cec72399c92e683bd96f"
+  },
+  "release_contract": {
+    "bytes": 12735,
+    "sha256": "8f62d762c30849ec6841b0fbde87004ced41365b456c98c79f6f1bf53c347ccc"
+  },
+  "schema": "nemesis.prechange-checkpoint/v1",
+  "status": "PASS",
+  "subject": {
+    "branch": "build/desktop-local",
+    "commit": "4bab66cd617e430cfd8dec4e16de7ffd6433f0b2"
+  },
+  "terminal_marker": "PASS_CHECKPOINT completed=0-14,16 acceptance=PASS next=terminal-verdict verdict=PARTIAL",
+  "verifier_sha256": "134b8a0743ea3fd98eb6507428b8b4d2280a03690af22d026230bde101262c9c"
+}

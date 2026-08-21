@@ -1,0 +1,8 @@
+name = "nemesis"
+description = "NEMESIS Desktop local authority core"
+version = "0.1.0-dev"
+authors = ["AnubisQuantumCipher"]
+maintainers = ["AnubisQuantumCipher <sic.tau@pm.me>"]
+maintainers-logins = ["AnubisQuantumCipher"]
+licenses = "Apache-2.0"
+tags = ["agent-os", "spark", "desktop", "local-first"]
