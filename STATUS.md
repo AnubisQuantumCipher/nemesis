@@ -22,24 +22,27 @@ PASS_NEMESIS_DESKTOP_COMPLETE
 
 Receipt subject:
 
-- Commit: `c09ca87dc0c0f4c2961de915e00c3ba0b075b122`
-- Tree: `4e4329f0f10d9865180078d5e030b3740a300bad`
-- Log: `receipts/release-v0.1.0/local-acceptance.txt`
-- Log SHA-256: `d04e0fea4970cf5a7c96219daccf78d6a84c4e20198a05a72ff1b2f04cb80f25`
-- Log bytes: `83667`
-- Log lines: `1560`
-- Reconciled test-case executions: `198` (`19` Python, `171` Rust, `8` Vitest), including repeated host/VZ suites
+- Commit: `efb73e92d12833e2912c28c437ee62002832f835`
+- Tree: `541fe070768303ef326e395ecfafc6d4486f833a`
+- Receipt: `receipts/release-v0.1.0/PUBLIC_ACCEPTANCE.json`
+- Log: `receipts/release-v0.1.0/public-acceptance.txt`
+- Log SHA-256: `32e53d079ba76232620b9013c92be4abfd3a84b22928a57db026d5a3f8f8f963`
+- Log bytes: `83930`
+- Log lines: `1562`
+- Reconciled test-case executions: `200` (`21` Python, `171` Rust, `8` Vitest), including repeated host/VZ suites
 - Tool identities: `receipts/release-v0.1.0/tool-versions.txt`
 
 The test execution totals were reconciled against individual `ok` lines and Vitest file summaries before publication. Ada executable sentinels and GNATprove obligations are recorded separately in the same log; they are not folded into the test-case count.
 
+The first public-clone attempt correctly stopped at `FAIL_EVIDENCE_BUNDLE` because a stale ignored duplicate artifact was not represented by the exact manifest. Its complete log and diagnosis are preserved in `PUBLIC_ACCEPTANCE.json`; the verifier was not weakened.
+
 ## Release-candidate hardening
 
-- Subject commit: `e74e5e15a8aaed027300c0df6cbdda104a0e6380`
-- Subject tree: `abc7bfb8132fe573dcd6aef029e5c11fe604ae10`
-- Receipt: `receipts/phase-16-release/PHASE16.json`
-- Complete gate log: `receipts/phase-16-release/security-hardening.txt`
-- Gate log SHA-256: `f0e8331f7e9deb11c2f6e41125e1e62f43c5463887d1d425cd25a6925b694d55`
+- Subject commit: `443258079b996ad4c6bff209b93df51c59b23a3d`
+- Subject tree: `b056224168006041affc029cd5cfef815f5628c1`
+- Receipt: `receipts/phase-16-public/PHASE16.json`
+- Complete gate log: `receipts/phase-16-public/security-hardening.txt`
+- Gate log SHA-256: `63200915d61af19d8b1e1fab48b2d176d6acd6280fd52b450ef2a7ba66c1b004`
 - Observed: `PASS_PHASE16_SECURITY_HARDENING`
 - Receipt verifier: `PASS_PHASE16_RECEIPT`
 - Tamper regression: `PASS_PHASE16_RECEIPT_TAMPER_REJECTION`

@@ -135,6 +135,7 @@ A pass establishes only the properties named by the sub-gates. The SPARK proof a
 | [`receipts/phase-16-release/`](receipts/phase-16-release/) | pre-review release-candidate hardening epoch |
 | [`receipts/phase-16-public/`](receipts/phase-16-public/) | current public-clone-compatible host/VZ hardening log and source-bound receipt |
 | [`receipts/release-v0.1.0/LOCAL_ACCEPTANCE.json`](receipts/release-v0.1.0/LOCAL_ACCEPTANCE.json) | final pre-hosting local roster, exact log identity, tool log, and reconciled test execution counts |
+| [`receipts/release-v0.1.0/PUBLIC_ACCEPTANCE.json`](receipts/release-v0.1.0/PUBLIC_ACCEPTANCE.json) | current full roster with `origin` configured, preserved failed attempt, exact successful log, cleanup, and reconciled counts |
 | [`receipts/release-v0.1.0/PRECHANGE_CHECKPOINT.json`](receipts/release-v0.1.0/PRECHANGE_CHECKPOINT.json) | exact output and verifier identity captured before release-track byte changes |
 | [`receipts/CHECKPOINT.json`](receipts/CHECKPOINT.json) | sealed pre-release `PARTIAL` checkpoint |
 | [`receipts/acceptance-20260820/`](receipts/acceptance-20260820/) | preserved pre-release full-gate log and capture metadata |
