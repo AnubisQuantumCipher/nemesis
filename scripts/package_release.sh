@@ -31,7 +31,7 @@ export CARGO_INCREMENTAL=0
 export RUSTFLAGS="${RUSTFLAGS:+$RUSTFLAGS }--remap-path-prefix=$ROOT=/build/nemesis --remap-path-prefix=$HOME=/build/home"
 
 python3 scripts/verify_release_contract.py
-./scripts/build_ada.sh
+NEMESIS_BUILD=release ./scripts/build_ada.sh
 cargo fmt --manifest-path runtime/Cargo.toml --all -- --check
 cargo build --manifest-path runtime/Cargo.toml --workspace --release
 npm --prefix desktop ci

@@ -160,12 +160,37 @@ fn select_support_root(resource_root: &Path, source_root: &Path) -> Result<PathB
         .map_err(|error| error.to_string())
 }
 
+fn find_development_source_root(start: &Path) -> Result<PathBuf, String> {
+    for ancestor in start.ancestors() {
+        let contract =
+            ancestor.join("docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md");
+        if contract.is_file() {
+            let bytes = fs::read(contract).map_err(|error| error.to_string())?;
+            if hex::encode(Sha256::digest(bytes)) != CONTRACT_SHA256 {
+                return Err("development architect contract digest is invalid".to_owned());
+            }
+            return ancestor.canonicalize().map_err(|error| error.to_string());
+        }
+    }
+    Err("development source root is unavailable".to_owned())
+}
+
 fn project_root(handle: &tauri::AppHandle) -> Result<PathBuf, String> {
     let resource_root = handle
         .path()
         .resource_dir()
         .map_err(|error| error.to_string())?;
-    let source_root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
+    if resource_root
+        .join("docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md")
+        .is_file()
+    {
+        return select_support_root(&resource_root, &resource_root);
+    }
+    let executable = std::env::current_exe().map_err(|error| error.to_string())?;
+    let start = executable
+        .parent()
+        .ok_or_else(|| "desktop executable has no parent directory".to_owned())?;
+    let source_root = find_development_source_root(start)?;
     select_support_root(&resource_root, &source_root)
 }
 fn runtime_binary_directory(root: &Path) -> PathBuf {
@@ -382,7 +407,8 @@ mod tests {
     use serde_json::json;
 
     use super::{
-        replay_from_value, run_result_from_values, runtime_binary_directory, select_support_root,
+        find_development_source_root, replay_from_value, run_result_from_values,
+        runtime_binary_directory, select_support_root,
     };
 
     #[test]
@@ -482,5 +508,51 @@ mod tests {
 
         assert_eq!(selected, resource_root.join("bin"));
         fs::remove_dir_all(resource_root).unwrap();
+    }
+    #[test]
+    fn discovers_development_source_root_from_runtime_ancestors() {
+        let source_root = Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("../..")
+            .canonicalize()
+            .unwrap();
+        let fixture_root =
+            std::env::temp_dir().join(format!("nemesis-source-root-{}", std::process::id()));
+        let _ = fs::remove_dir_all(&fixture_root);
+        let mission_dir = fixture_root.join("docs/mission");
+        let nested = fixture_root.join("desktop/src-tauri/target/debug");
+        fs::create_dir_all(&mission_dir).unwrap();
+        fs::create_dir_all(&nested).unwrap();
+        fs::copy(
+            source_root.join("docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md"),
+            mission_dir.join("NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md"),
+        )
+        .unwrap();
+
+        let discovered = find_development_source_root(&nested).unwrap();
+
+        assert_eq!(discovered, fixture_root.canonicalize().unwrap());
+        fs::remove_dir_all(fixture_root).unwrap();
+    }
+    #[test]
+    fn rejects_development_source_root_with_wrong_contract() {
+        let fixture_root = std::env::temp_dir().join(format!(
+            "nemesis-source-root-invalid-{}",
+            std::process::id()
+        ));
+        let _ = fs::remove_dir_all(&fixture_root);
+        let mission_dir = fixture_root.join("docs/mission");
+        let nested = fixture_root.join("desktop/src-tauri/target/debug");
+        fs::create_dir_all(&mission_dir).unwrap();
+        fs::create_dir_all(&nested).unwrap();
+        fs::write(
+            mission_dir.join("NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md"),
+            b"tampered contract",
+        )
+        .unwrap();
+
+        let rejected = find_development_source_root(&nested).unwrap_err();
+
+        assert_eq!(rejected, "development architect contract digest is invalid");
+        fs::remove_dir_all(fixture_root).unwrap();
     }
 }
