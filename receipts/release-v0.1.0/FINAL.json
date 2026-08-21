@@ -1,0 +1,215 @@
+{
+  "cleanup": {
+    "desktop_process": "NOT_RUNNING",
+    "tart_local_vms": [
+      {
+        "name": "anubis-xcode",
+        "state": "stopped"
+      }
+    ]
+  },
+  "contracts": {
+    "desktop": {
+      "bytes": 77321,
+      "path": "docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md",
+      "sha256": "ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e0d8beebee532779"
+    },
+    "release": {
+      "bytes": 12735,
+      "path": "docs/mission/NEMESIS_FULL_AUTONOMOUS_GITHUB_RELEASE_MISSION_2026-08-20.md",
+      "sha256": "8f62d762c30849ec6841b0fbde87004ced41365b456c98c79f6f1bf53c347ccc"
+    }
+  },
+  "evidence_followup": {
+    "branch": "release/v0.1.0-evidence",
+    "note": "This receipt is a documented post-tag evidence commit; the published tag remains immutably bound to the release commit."
+  },
+  "hosted": {
+    "jobs": [
+      {
+        "conclusion": "success",
+        "name": "Contract and evidence",
+        "url": "https://github.com/AnubisQuantumCipher/nemesis/actions/runs/32447296563/job/96669144974"
+      },
+      {
+        "conclusion": "success",
+        "name": "Rust and Desktop (macos-14)",
+        "url": "https://github.com/AnubisQuantumCipher/nemesis/actions/runs/32447296563/job/96669145165"
+      },
+      {
+        "conclusion": "success",
+        "name": "Rust and Desktop (macos-15)",
+        "url": "https://github.com/AnubisQuantumCipher/nemesis/actions/runs/32447296563/job/96669145210"
+      },
+      {
+        "conclusion": "success",
+        "name": "Dependency audit",
+        "url": "https://github.com/AnubisQuantumCipher/nemesis/actions/runs/32447296563/job/96669145215"
+      }
+    ],
+    "workflow_run": {
+      "conclusion": "success",
+      "event": "push",
+      "head_sha": "4e10cfcfeb3adf20ced7a01309ac0b2fb028373b",
+      "id": 32447296563,
+      "url": "https://github.com/AnubisQuantumCipher/nemesis/actions/runs/32447296563"
+    }
+  },
+  "local_acceptance": {
+    "command": "./scripts/verify_complete.sh",
+    "log": {
+      "bytes": 99377,
+      "file": "receipts/release-v0.1.0/tagged-tree-acceptance.txt",
+      "line_count": 1992,
+      "sha256": "c4dcfb60d2f8b6294d7d639517f7877a1c4a38d58e309dc3ac02a38bb58bcecc"
+    },
+    "phase16_receipt": "receipts/phase-16-public/PHASE16.json",
+    "subject_commit": "4e10cfcfeb3adf20ced7a01309ac0b2fb028373b",
+    "subject_tree": "e6a3a6f2aeac1eea53dc2ec089f6156e174c5746",
+    "terminal_marker": "PASS_NEMESIS_DESKTOP_COMPLETE",
+    "test_case_executions": {
+      "counting_note": "Repeated suites across host sub-gates and VZ are counted as executions; Rust/Python totals reconciled with individual ok lines.",
+      "python": 21,
+      "rust": 171,
+      "total": 200,
+      "vitest": 8
+    }
+  },
+  "nonclaims": [
+    "Developer ID signing, notarization, Gatekeeper approval, and App Store distribution are not claimed.",
+    "Mobile, web, remote-public, Windows, Linux, and package-registry artifacts are not shipped.",
+    "Name uniqueness, domain ownership, trademark clearance, and legal clearance are not claimed.",
+    "Model-token replay, universal correctness, perfect sandboxing, and correctness of third-party dependencies are not claimed."
+  ],
+  "package": {
+    "architecture": "arm64",
+    "attempts": [
+      {
+        "failure": "codesign rejected resource fork/Finder metadata",
+        "log": {
+          "bytes": 22955,
+          "file": "receipts/release-v0.1.0/package-attempt-1.txt",
+          "line_count": 554,
+          "sha256": "fe24caf0ce274f923b10e90efd462f08fbb5724562835b90c7de95e5d360c0e0"
+        },
+        "status": "FAIL",
+        "subject_commit": "4c02cab64f54a540b44bc603c10c499228ef8fdf"
+      },
+      {
+        "log": {
+          "bytes": 9508,
+          "file": "receipts/release-v0.1.0/package-final.txt",
+          "line_count": 147,
+          "sha256": "fa4e08c3befa4b2e5f6b009a77149b02d19b6e858bce3dae3994676578ad5516"
+        },
+        "status": "PASS",
+        "subject_commit": "4e10cfcfeb3adf20ced7a01309ac0b2fb028373b",
+        "terminal_marker": "PASS_RELEASE_PACKAGE"
+      }
+    ],
+    "command": "./scripts/package_release.sh 0.1.0",
+    "gatekeeper_assessment": "REJECTED_EXPECTED",
+    "minimum_macos": "14.0",
+    "notarized": false,
+    "platform": "macOS",
+    "signing": "ad-hoc",
+    "standalone_smoke": [
+      "PASS_RELEASE_RESOURCE_PRIVACY",
+      "PASS_NEMESIS_BACKEND_VERTICAL_SLICE",
+      "PASS_EVIDENCE_BUNDLE",
+      "valid receipt verdict VERIFIED",
+      "tampered receipt verdict REJECTED",
+      "strict codesign verification",
+      "window title and 1440x900 bounds observed through CoreGraphics"
+    ]
+  },
+  "pull_requests": [
+    {
+      "merge_commit": "4c02cab64f54a540b44bc603c10c499228ef8fdf",
+      "number": 1,
+      "purpose": "initial source and release integration",
+      "url": "https://github.com/AnubisQuantumCipher/nemesis/pull/1"
+    },
+    {
+      "merge_commit": "4e10cfcfeb3adf20ced7a01309ac0b2fb028373b",
+      "number": 2,
+      "purpose": "bundle metadata cleanup before signing",
+      "url": "https://github.com/AnubisQuantumCipher/nemesis/pull/2"
+    }
+  ],
+  "readback": {
+    "all_assets_byte_identical": true,
+    "download_directory": "temporary, not committed",
+    "method": "fresh gh release download followed by SHA256SUMS verification, independent SHA-256, and cmp against local assets",
+    "status": "PASS"
+  },
+  "release": {
+    "assets": [
+      {
+        "name": "NEMESIS-Desktop-v0.1.0-macos-arm64.zip",
+        "sha256": "6496b646043face3c0e907dcc7a01ca4a2b049a637b3b62743545bc674f22753",
+        "size": 4330327,
+        "url": "https://github.com/AnubisQuantumCipher/nemesis/releases/download/v0.1.0/NEMESIS-Desktop-v0.1.0-macos-arm64.zip"
+      },
+      {
+        "name": "release-manifest.json",
+        "sha256": "dda0e7ea4261a8400f1d986ffbb62a1ef0a25907363471c983508596ade3c08e",
+        "size": 1067,
+        "url": "https://github.com/AnubisQuantumCipher/nemesis/releases/download/v0.1.0/release-manifest.json"
+      },
+      {
+        "name": "SHA256SUMS",
+        "sha256": "cfa14179a19ed33fbc4504af1a72b4e709431d0eb0ccfc4c515c7e92ba487db1",
+        "size": 193,
+        "url": "https://github.com/AnubisQuantumCipher/nemesis/releases/download/v0.1.0/SHA256SUMS"
+      }
+    ],
+    "draft": false,
+    "id": 374173225,
+    "prerelease": true,
+    "published_at": "2026-08-21T04:40:53Z",
+    "tag": "v0.1.0",
+    "target_commit": "4e10cfcfeb3adf20ced7a01309ac0b2fb028373b",
+    "url": "https://github.com/AnubisQuantumCipher/nemesis/releases/tag/v0.1.0"
+  },
+  "repository_controls": {
+    "branch_deletion_allowed": false,
+    "conversation_resolution_required": true,
+    "force_pushes_allowed": false,
+    "homepage": null,
+    "issues_enabled": true,
+    "private_vulnerability_reporting": true,
+    "pull_request_required": true,
+    "required_approvals": 0,
+    "required_checks": [
+      "Contract and evidence",
+      "Dependency audit",
+      "Rust and Desktop (macos-14)",
+      "Rust and Desktop (macos-15)"
+    ],
+    "required_checks_strict": true
+  },
+  "residuals": [
+    "Independent external security review remains NEEDS-HUMAN.",
+    "SPARK verification is bounded to eight named kernel units and explicit assumptions.",
+    "The VZ evidence depends on the recorded local macOS host, Tart base image, SSH transport, and toolchain.",
+    "GNAT 14.2.1 deployment-target override warnings remain visible."
+  ],
+  "schema": "nemesis.final-release/v1",
+  "source": {
+    "default_branch": "main",
+    "license": "Apache-2.0",
+    "release_commit": "4e10cfcfeb3adf20ced7a01309ac0b2fb028373b",
+    "release_tree": "e6a3a6f2aeac1eea53dc2ec089f6156e174c5746",
+    "repository": "https://github.com/AnubisQuantumCipher/nemesis",
+    "visibility": "public"
+  },
+  "tag": {
+    "kind": "annotated",
+    "name": "v0.1.0",
+    "tag_object": "616c78508b754081bb77fab63e6665d16f47d84d",
+    "target_commit": "4e10cfcfeb3adf20ced7a01309ac0b2fb028373b"
+  },
+  "verdict": "COMPLETE",
+  "version": "0.1.0"
+}
