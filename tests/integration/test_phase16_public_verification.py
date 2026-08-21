@@ -7,7 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 VERIFIER = ROOT / "scripts/verify_phase16_receipt.py"
-RECEIPT = ROOT / "receipts/phase-16-release/PHASE16.json"
+RECEIPT = ROOT / "receipts/phase-16-public/PHASE16.json"
 
 
 class Phase16PublicVerificationTests(unittest.TestCase):
