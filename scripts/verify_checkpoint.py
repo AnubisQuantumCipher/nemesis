@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Verify the restart-safe NEMESIS Desktop PARTIAL checkpoint."""
+"""Verify only the sealed pre-release NEMESIS Desktop PARTIAL checkpoint.
+
+The gate intentionally rejects release-track source changes and configured remotes.
+Its pre-change output is preserved under receipts/release-v0.1.0/.
+"""
 
 from __future__ import annotations
 

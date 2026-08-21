@@ -10,6 +10,7 @@ python3 -m unittest \
   tests.integration.test_evidence_bundle \
   tests.integration.test_macho_sanitizer \
   tests.integration.test_phase16_receipt_generation \
+  tests.integration.test_phase16_public_verification \
   tests.integration.test_release_bundle \
   tests.integration.test_release_leaks \
   tests.integration.test_release_manifest \

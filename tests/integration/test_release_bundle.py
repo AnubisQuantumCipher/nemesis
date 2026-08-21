@@ -19,7 +19,6 @@ EXPECTED_RESOURCES = {
     "../../scripts/verify_contract.py": "scripts/verify_contract.py",
     "../../scripts/verify_evidence_bundle.py": "scripts/verify_evidence_bundle.py",
     "../../docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md": "docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md",
-    "../../docs/mission/NEMESIS_FULL_AUTONOMOUS_GITHUB_RELEASE_MISSION_2026-08-20.md": "docs/mission/NEMESIS_FULL_AUTONOMOUS_GITHUB_RELEASE_MISSION_2026-08-20.md",
     "../../receipts/phase-11/replay.json": "receipts/phase-11/replay.json",
     "../../LICENSE": "LICENSE",
     "../../build/release/THIRD_PARTY_NOTICES.txt": "THIRD_PARTY_NOTICES.txt",
@@ -34,6 +33,14 @@ class ReleaseBundleTests(unittest.TestCase):
         self.assertTrue(config["bundle"]["active"])
         self.assertEqual(config["bundle"]["targets"], ["app"])
         self.assertEqual(config["bundle"]["resources"], EXPECTED_RESOURCES)
+
+    def test_release_contract_with_private_paths_is_not_bundled(self) -> None:
+        config = json.loads(RELEASE_CONFIG.read_text(encoding="utf-8"))
+
+        self.assertNotIn(
+            "../../docs/mission/NEMESIS_FULL_AUTONOMOUS_GITHUB_RELEASE_MISSION_2026-08-20.md",
+            config["bundle"]["resources"],
+        )
 
 
 if __name__ == "__main__":

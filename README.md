@@ -134,10 +134,13 @@ A pass establishes only the properties named by the sub-gates. The SPARK proof a
 | [`receipts/phase-16/PHASE16.json`](receipts/phase-16/PHASE16.json) | historical bounded hardening receipt and accepted findings |
 | [`receipts/phase-16-release/`](receipts/phase-16-release/) | release-candidate host/VZ hardening log and source-bound receipt |
 | [`receipts/release-v0.1.0/LOCAL_ACCEPTANCE.json`](receipts/release-v0.1.0/LOCAL_ACCEPTANCE.json) | final pre-hosting local roster, exact log identity, tool log, and reconciled test execution counts |
+| [`receipts/release-v0.1.0/PRECHANGE_CHECKPOINT.json`](receipts/release-v0.1.0/PRECHANGE_CHECKPOINT.json) | exact output and verifier identity captured before release-track byte changes |
 | [`receipts/CHECKPOINT.json`](receipts/CHECKPOINT.json) | sealed pre-release `PARTIAL` checkpoint |
 | [`receipts/acceptance-20260820/`](receipts/acceptance-20260820/) | preserved pre-release full-gate log and capture metadata |
 
 Historical machine receipts intentionally retain observed local tool paths because changing them would invalidate their hashes. They are scoped evidence artifacts, not portable configuration; the release binary leak gate rejects private build paths and credential signatures from distributable executables.
+
+`scripts/verify_checkpoint.py` is intentionally scoped to that sealed pre-release epoch and rejects later release-track changes or configured remotes. Use the current release receipts and gates above for the public tree.
 
 ## Build a release archive
 

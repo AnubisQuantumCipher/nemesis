@@ -216,8 +216,6 @@ def main() -> int:
         for residual in residuals
     ):
         return fail("external_review_residual")
-    if git("remote").stdout.strip():
-        return fail("unexpected_remote")
     dirty_covered = git(
         "status",
         "--porcelain",
