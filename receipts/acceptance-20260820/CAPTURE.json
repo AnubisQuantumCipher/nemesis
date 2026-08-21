@@ -1,0 +1,13 @@
+{
+  "bytes": 81785,
+  "capture_method": "reconstructed from exact first and last 1000-line hub windows with a 461-line exact overlap",
+  "command": "./scripts/verify_complete.sh",
+  "first_line": "PASS_CONTRACT_INTEGRITY sha256=ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e0d8beebee532779 bytes=77321 lines=2188",
+  "hub_cursor": 81787,
+  "last_line": "PASS_NEMESIS_DESKTOP_COMPLETE",
+  "line_count": 1538,
+  "process": "nemesis-desktop-complete-r2",
+  "process_exit": 0,
+  "schema": "nemesis.acceptance-log/v1",
+  "sha256": "766a440b133eb34db560bd6772cf225a380f73db8439574123aa101bb5392a51"
+}

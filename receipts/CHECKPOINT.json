@@ -1,127 +1,217 @@
 {
-  "schema": "nemesis.checkpoint/v1",
-  "verdict": "PARTIAL",
+  "acceptance_battery": {
+    "capture": {
+      "bytes": 81785,
+      "file": "receipts/acceptance-20260820/verify-complete.log",
+      "line_count": 1538,
+      "metadata": "receipts/acceptance-20260820/CAPTURE.json",
+      "sha256": "766a440b133eb34db560bd6772cf225a380f73db8439574123aa101bb5392a51"
+    },
+    "command": "./scripts/verify_complete.sh",
+    "corrected_script_sha256": "d9b647214dc86ebbf33cbed1e0d61b28c1e07ecda097a131858faeb301700ff7",
+    "observed_at": "2026-08-21T00:15:08Z",
+    "sentinel": "PASS_NEMESIS_DESKTOP_COMPLETE",
+    "status": "PASS",
+    "cleanup": {
+      "desktop_process": "NOT_RUNNING",
+      "tart_local_vms": [
+        {
+          "name": "anubis-xcode",
+          "state": "stopped"
+        }
+      ]
+    },
+    "attempts": [
+      {
+        "process": "nemesis-desktop-complete",
+        "exit": 1,
+        "diagnosis": "The backend slice rewrote receipts/desktop-latest artifacts but the battery verified the stale manifest without regenerating it; verification correctly stopped at FAIL_EVIDENCE_BUNDLE."
+      },
+      {
+        "process": "nemesis-desktop-complete-r2",
+        "exit": 0,
+        "diagnosis": "The corrected battery generated the evidence manifest, independently verified it, completed the native Desktop launch gate, completed the disposable VZ hardening gate, and verified valid/tampered Phase 16 receipts."
+      }
+    ]
+  },
   "architect_contract": {
-    "path": "docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md",
-    "sha256": "ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e0d8beebee532779",
     "bytes": 77321,
-    "lines": 2188
-  },
-  "identity": {
-    "name": "NEMESIS",
-    "descriptor": "The Provable Agent Operating System",
-    "tagline": "Autonomy under control.",
-    "doctrine": "Intelligence proposes. NEMESIS governs. Evidence decides."
-  },
-  "repository": {
-    "root": "/Users/sicarii/Desktop/Projects/nemesis",
-    "worktree": "/Users/sicarii/Desktop/Projects/nemesis/.worktrees/desktop-local",
-    "branch": "build/desktop-local",
-    "implementation_commit": "74b39ec6b242b3b495a5cea345836bdbdcb193df"
+    "lines": 2188,
+    "path": "docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md",
+    "sha256": "ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e0d8beebee532779"
   },
   "completed_phases": [
     {
-      "phase": 0,
-      "name": "Constitution and threat model",
       "commit": "6876bfb9381b8e0588d6e7fb27323bd513f78f82",
       "gate": "./scripts/verify_phase0.sh",
-      "observed": "PASS_PHASE0"
+      "name": "Constitution and threat model",
+      "observed": "PASS_PHASE0",
+      "phase": 0
     },
     {
-      "phase": 1,
-      "name": "Toolchain and proof baseline",
       "commit": "f795b52205f07b456a6371a77e2085240d63635d",
       "gate": "./scripts/prove_kernel.sh",
-      "observed": "PASS_KERNEL_PROOF_BASELINE"
+      "name": "Toolchain and bounded proof baseline",
+      "observed": "PASS_KERNEL_PROOF_BASELINE",
+      "phase": 1
     },
     {
-      "phase": 2,
-      "name": "Mission state kernel",
       "commit": "6c18def2fd3ec616a1ae83489f6a3401c44b0aec",
       "gate": "./build/bin/nemesis_kernel_tests",
-      "observed": "PASS_MISSION_TRANSITIONS"
+      "name": "Mission state kernel",
+      "observed": "PASS_MISSION_TRANSITIONS",
+      "phase": 2
     },
     {
-      "phase": 3,
-      "name": "Durable ledger and storage",
       "commit": "3d2d87cf6cf37785aaeb3e2cbf069aec60b3ad36",
       "gate": "./scripts/test_storage.sh",
-      "observed": "PASS_PHASE3_DURABLE_STORAGE"
+      "name": "Durable ledger and storage",
+      "observed": "PASS_PHASE3_DURABLE_STORAGE",
+      "phase": 3
     },
     {
-      "phase": 4,
-      "name": "Capability and policy kernel",
       "commit": "c24ea2c0468ec3d1bdd4b63e933ace83bb78457a",
       "gate": "./scripts/test_authority.sh",
+      "name": "Capability and policy kernel",
       "observed": "PASS_PHASE4_CAPABILITY_POLICY",
-      "tcb_measurement": {
-        "instrument_validation_tests": 2,
-        "sloc": 562,
-        "budget": 2500,
-        "files": 17
-      }
+      "phase": 4
     },
     {
-      "phase": 5,
-      "name": "Worker protocol and sandbox host",
       "commit": "bd823497e3de05f41eb7155f012dffc4a992c8c6",
       "gate": "./scripts/test_worker_boundary.sh",
-      "observed": "PASS_PHASE5_WORKER_BOUNDARY"
+      "name": "Worker protocol and sandbox host",
+      "observed": "PASS_PHASE5_WORKER_BOUNDARY",
+      "phase": 5
     },
     {
-      "phase": 6,
-      "name": "Witnessed backend vertical slice",
       "commit": "25acf4f802b40b3cf62c0f273527628ee5359e69",
+      "evidence": "receipts/phase-6/MANIFEST.json",
       "gate": "./scripts/run_vertical_slice.sh --output receipts/phase-6",
+      "name": "Witnessed backend vertical slice",
       "observed": "PASS_NEMESIS_BACKEND_VERTICAL_SLICE",
-      "evidence": "receipts/phase-6/MANIFEST.json"
+      "phase": 6
     },
     {
-      "phase": 7,
-      "name": "NEMESIS Desktop alpha",
       "commit": "74b39ec6b242b3b495a5cea345836bdbdcb193df",
-      "gate": "./scripts/verify_desktop.sh",
-      "observed": "PASS_NEMESIS_DESKTOP_VERTICAL_SLICE",
       "evidence": "receipts/phase-7-desktop/MANIFEST.json",
-      "visual_qa": "receipts/phase-7-desktop/DESKTOP_QA.json"
+      "gate": "./scripts/verify_desktop.sh",
+      "name": "NEMESIS Desktop alpha",
+      "observed": "PASS_NEMESIS_DESKTOP_VERTICAL_SLICE",
+      "phase": 7
+    },
+    {
+      "commit": "cec653a3b191ec873097796901aa424157d78178",
+      "gate": "./scripts/test_adapters.sh",
+      "name": "Typed worker adapters",
+      "observed": "PASS_PHASE8_WORKER_ADAPTERS",
+      "phase": 8
+    },
+    {
+      "commit": "826988645f10d011521bf0a073f08ae798b08512",
+      "gate": "./scripts/test_scheduler.sh",
+      "name": "Deterministic multi-worker scheduler",
+      "observed": "PASS_PHASE9_DETERMINISTIC_SCHEDULER",
+      "phase": 9
+    },
+    {
+      "commit": "52f9c8debcb293d4d50fe69a3e3cd59f3d8e3528",
+      "gate": "./scripts/test_context.sh",
+      "name": "Provenance context capsules",
+      "observed": "PASS_PHASE10_CONTEXT_KNOWLEDGE",
+      "phase": 10
+    },
+    {
+      "commit": "a5ef32d3197ca05bc2154a7ced0305504dd52905",
+      "evidence": "receipts/phase-11/MANIFEST.json",
+      "gate": "./scripts/test_evidence_replay.sh",
+      "name": "Evidence graph and causal replay",
+      "observed": "PASS_PHASE11_EVIDENCE_REPLAY",
+      "phase": 11
+    },
+    {
+      "commit": "73d2e0d188e3299ac47da61dca13d46ca3ba9a7a",
+      "gate": "./scripts/test_extensions.sh",
+      "name": "Bounded skills, plugins, WASI, and MCP",
+      "observed": "PASS_PHASE12_EXTENSION_SECURITY",
+      "phase": 12
+    },
+    {
+      "commit": "399ed265b8cac54ae59d2c845d3c9dd1456c5297",
+      "gate": "./scripts/test_git_workflows.sh",
+      "name": "Local Git workflow controls",
+      "observed": "PASS_PHASE13_LOCAL_GIT_WORKFLOWS",
+      "phase": 13
+    },
+    {
+      "commit": "4df58ee1ed6d392da5e1025384c4c1e8cb89ef95",
+      "gate": "./scripts/test_automation.sh",
+      "name": "Local automation denial boundaries",
+      "observed": "PASS_PHASE14_LOCAL_AUTOMATION",
+      "phase": 14
+    },
+    {
+      "commit": "9bd9fd4a04bfbb6a5ab4f45799ee388d41e84296",
+      "evidence": "receipts/phase-16/PHASE16.json",
+      "gate": "./scripts/test_security_hardening.sh",
+      "name": "Bounded security hardening",
+      "observed": "PASS_PHASE16_SECURITY_HARDENING",
+      "phase": 16
     }
   ],
-  "open_phases": [
-    { "phase": 8, "name": "Desktop-required worker adapters" },
-    { "phase": 9, "name": "Deterministic multi-worker scheduler" },
-    { "phase": 10, "name": "Context and provenance knowledge" },
-    { "phase": 11, "name": "Complete evidence graph and replay" },
-    { "phase": 12, "name": "Bounded skills and plugin security" },
-    { "phase": 13, "name": "Local Git workflow controls" },
-    { "phase": 14, "name": "Local automation denial boundaries" },
-    { "phase": 16, "name": "Bounded security hardening" },
-    { "phase": "seal", "name": "Complete desktop acceptance and local seal" }
-  ],
   "deferred_phases": [
-    { "phase": 15, "name": "Remote daemon and mobile cockpit", "status": "DEFERRED" },
-    { "phase": 17, "name": "Public beta", "status": "DEFERRED" },
-    { "phase": 18, "name": "Release candidate", "status": "DEFERRED" },
-    { "phase": 19, "name": "Public release", "status": "DEFERRED" }
+    {
+      "name": "Remote daemon and mobile cockpit",
+      "phase": 15,
+      "status": "DEFERRED"
+    },
+    {
+      "name": "Public beta",
+      "phase": 17,
+      "status": "DEFERRED"
+    },
+    {
+      "name": "Release candidate",
+      "phase": 18,
+      "status": "DEFERRED"
+    },
+    {
+      "name": "Public release",
+      "phase": 19,
+      "status": "DEFERRED"
+    }
   ],
-  "verified_properties": [
-    "Architect contract bytes match the authorized SHA-256, byte count, and line count.",
-    "Illegal and terminal mission transitions refuse; accepted events increment sequence exactly once.",
-    "Capability, budget, approval, evidence freshness, and completion contracts pass selected SPARK proofs.",
-    "Ledger corruption, truncation, reordering, duplication, object tamper, checkpoint tamper, and unsupported index schema fail closed in exercised gates.",
-    "Untrusted worker protocol rejects authoritative fields and COMPLETE; macOS Workspace Safe denies outside read/write and reachable loopback access in exercised gates.",
-    "Ada Core state survives restart; stale evidence cannot complete; final evidence binds to final source.",
-    "Keychain-backed Ed25519 COSE receipt verifies independently; one-byte mutations reject.",
-    "The actual local Tauri app was built, launched, and used to authorize the witnessed mission that produced the Phase 7 evidence bundle."
-  ],
-  "residuals": [
-    "GNAT 14.2.1 emits retained macOS deployment-target override warnings on this macOS 26 host.",
-    "SPARK evidence applies only to explicitly listed kernel packages and contracts; ordinary Ada, Rust, libraries, SQLite, Keychain, sandbox-exec, Git, and macOS remain assumptions.",
-    "Terminal screen capture permission was not granted; compiled React browser renders and native process/window/app-operated evidence were verified separately.",
-    "No external security review or formal proof audit has been performed.",
-    "No push, publish, public signing, notarization, package registration, or public-name clearance was performed."
-  ],
+  "identity": {
+    "descriptor": "The Provable Agent Operating System",
+    "doctrine": "Intelligence proposes. NEMESIS governs. Evidence decides.",
+    "name": "NEMESIS",
+    "tagline": "Autonomy under control."
+  },
   "next_dependency": {
-    "phase": 8,
-    "task": "Implement typed generic-subprocess and configured provider adapters without changing mission authority semantics."
-  }
+    "reason": "Architect routing correction requires a fresh OMP session after this restart-safe checkpoint.",
+    "status": "ROUTED_TO_FRESH_SESSION",
+    "task": "Read and verify this checkpoint, then receive the architect's next prompt before issuing any terminal product verdict."
+  },
+  "open_phases": [
+    {
+      "name": "Terminal product verdict",
+      "phase": "terminal-verdict",
+      "status": "ROUTED_TO_FRESH_SESSION"
+    }
+  ],
+  "repository": {
+    "branch": "build/desktop-local",
+    "implementation_commit": "9bd9fd4a04bfbb6a5ab4f45799ee388d41e84296",
+    "root": "/Users/sicarii/Desktop/Projects/nemesis",
+    "worktree": "/Users/sicarii/Desktop/Projects/nemesis/.worktrees/desktop-local"
+  },
+  "residuals": [
+    "The corrected Desktop acceptance battery passed, but the architect explicitly deferred the terminal product verdict to a fresh OMP session.",
+    "Independent external security review remains NEEDS-HUMAN.",
+    "SPARK evidence applies only to the eight explicitly listed kernel units; ordinary Ada, Rust, libraries, SQLite, Keychain, sandbox-exec, Git, and macOS remain assumptions.",
+    "GNAT 14.2.1 emits retained macOS deployment-target override warnings on this macOS 26 host.",
+    "No push, publish, public signing, notarization, package registration, public-name collision research, or legal clearance was performed."
+  ],
+  "schema": "nemesis.checkpoint/v2",
+  "terminal_product_verdict": "NOT_RUN_ARCHITECT_ROUTED",
+  "verdict": "PARTIAL"
 }
