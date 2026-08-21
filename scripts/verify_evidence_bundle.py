@@ -19,12 +19,14 @@ ARTIFACTS = (
     "source-digest.txt",
     "verification.json",
 )
+OPTIONAL_ARTIFACTS = ("events.ledger", "replay.json", "DESKTOP_QA.json")
+
 
 
 def manifest(directory: Path) -> dict[str, object]:
     artifacts: list[dict[str, object]] = []
     names = list(ARTIFACTS)
-    for optional in ("events.ledger", "replay.json"):
+    for optional in OPTIONAL_ARTIFACTS:
         if (directory / optional).is_file():
             names.append(optional)
     for name in names:
@@ -55,6 +57,15 @@ def main() -> int:
     parser.add_argument("--write", action="store_true")
     arguments = parser.parse_args()
     directory = arguments.directory.resolve()
+    allowed = set(ARTIFACTS) | set(OPTIONAL_ARTIFACTS) | {"MANIFEST.json"}
+    unexpected = sorted(
+        path.name
+        for path in directory.iterdir()
+        if path.is_file() and path.name not in allowed
+    )
+    if unexpected:
+        print(f"FAIL_EVIDENCE_BUNDLE unexpected_artifacts={unexpected}")
+        return 1
     expected = manifest(directory)
     path = directory / "MANIFEST.json"
     encoded = json.dumps(expected, sort_keys=True, separators=(",", ":")) + "\n"

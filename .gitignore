@@ -5,6 +5,7 @@ alire/
 /build/
 /bin/
 /dist/
+/release/
 *.ali
 *.o
 runtime/target/

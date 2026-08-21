@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import socket
+import os
 import shutil
 import subprocess
 import tempfile
@@ -16,12 +17,37 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DAEMON = ROOT / "build/bin/nemesis_core_daemon"
-LANE_CREATE = ROOT / "runtime/target/debug/nemesis-lane-create"
-WORKER_RUNNER = ROOT / "runtime/target/debug/nemesis-worker-runner"
-WORKER = ROOT / "runtime/target/debug/nemesis-deterministic-worker"
-SIGNER = ROOT / "runtime/target/debug/nemesis-signer"
-VERIFIER = ROOT / "runtime/target/debug/nemesis-verify"
+
+
+def executable_paths(root: Path, prebuilt: Path | None) -> dict[str, Path]:
+    if prebuilt is not None:
+        return {
+            "daemon": prebuilt / "nemesis_core_daemon",
+            "lane_create": prebuilt / "nemesis-lane-create",
+            "worker_runner": prebuilt / "nemesis-worker-runner",
+            "worker": prebuilt / "nemesis-deterministic-worker",
+            "signer": prebuilt / "nemesis-signer",
+            "verifier": prebuilt / "nemesis-verify",
+        }
+    runtime = root / "runtime/target/debug"
+    return {
+        "daemon": root / "build/bin/nemesis_core_daemon",
+        "lane_create": runtime / "nemesis-lane-create",
+        "worker_runner": runtime / "nemesis-worker-runner",
+        "worker": runtime / "nemesis-deterministic-worker",
+        "signer": runtime / "nemesis-signer",
+        "verifier": runtime / "nemesis-verify",
+    }
+
+
+prebuilt_value = os.environ.get("NEMESIS_PREBUILT_BIN_DIR")
+paths = executable_paths(ROOT, Path(prebuilt_value) if prebuilt_value else None)
+DAEMON = paths["daemon"]
+LANE_CREATE = paths["lane_create"]
+WORKER_RUNNER = paths["worker_runner"]
+WORKER = paths["worker"]
+SIGNER = paths["signer"]
+VERIFIER = paths["verifier"]
 GIT = Path("/usr/bin/git")
 
 MISSION_ID = "mis_0000000000000000000000"
