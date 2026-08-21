@@ -27,6 +27,9 @@ if [[ "$VERSION" != "$PACKAGE_VERSION" || "$VERSION" != "$TAURI_VERSION" || "$VE
   exit 2
 fi
 
+export CARGO_INCREMENTAL=0
+export RUSTFLAGS="${RUSTFLAGS:+$RUSTFLAGS }--remap-path-prefix=$ROOT=/build/nemesis --remap-path-prefix=$HOME=/build/home"
+
 python3 scripts/verify_release_contract.py
 ./scripts/build_ada.sh
 cargo fmt --manifest-path runtime/Cargo.toml --all -- --check
@@ -59,6 +62,20 @@ do
     exit 1
   fi
 done
+RELEASE_BINARIES=(
+  "$BINARY"
+  "$APP/Contents/Resources/bin/nemesis_core_daemon"
+  "$APP/Contents/Resources/bin/nemesis-deterministic-worker"
+  "$APP/Contents/Resources/bin/nemesis-lane-create"
+  "$APP/Contents/Resources/bin/nemesis-signer"
+  "$APP/Contents/Resources/bin/nemesis-verify"
+  "$APP/Contents/Resources/bin/nemesis-worker-runner"
+)
+for release_binary in "${RELEASE_BINARIES[@]}"; do
+  strip -x "$release_binary"
+done
+python3 scripts/check_release_leaks.py "${RELEASE_BINARIES[@]}"
+
 
 plutil -lint "$INFO_PLIST"
 codesign --force --deep --sign - "$APP"
