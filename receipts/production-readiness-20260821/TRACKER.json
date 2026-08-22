@@ -1107,81 +1107,108 @@
   {
    "gates": [
     {
-     "evidence": [],
+     "evidence": [
+      "authoritative macOS install artifact produced from exact source: scripts/package_release.sh -> release-package-20260822.log sha256=f3cafb26b649ee6723f2a5cde0f0be6e63e4785d0cb85fddd4c2e4e11ce1cf1f exit=0 marker=PASS_RELEASE_PACKAGE; asset sha256=8efc91e06d5cb8a4282a479d93c80b8c8f0ca5a490298cb002c95e3333e850c7"
+     ],
      "id": "I-01",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Produce authoritative normal macOS installation artifact"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "installed app verified from a clean ditto-extracted user-data root (not build tree): INSTALL_VERIFICATION.json; app launches from bundle, 7 backends resolve",
+      "release-package-20260822.log sha256=f3cafb26b649ee6723f2a5cde0f0be6e63e4785d0cb85fddd4c2e4e11ce1cf1f exit=0 marker=PASS_RELEASE_PACKAGE"
+     ],
      "id": "I-02",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Verify installed app using isolated user-data root"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "resources/architecture/min-OS/entitlements verified: arm64 (lipo), LSMinimumSystemVersion 14.0, adhoc codesign valid + satisfies Designated Requirement, all 7 backend executables bundled under Resources/bin"
+     ],
      "id": "I-03",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Verify resources architecture minimum OS and entitlements"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "Mach-O deps/RPATHs/privacy/notices/SBOM verified: no /Users or /private/tmp RPATH (sanitize_macho + strip), LICENSE + THIRD_PARTY_NOTICES.txt bundled (cargo about from locked deps), path-remap privacy in RUSTFLAGS"
+     ],
      "id": "I-04",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Verify Mach-O dependencies RPATHs privacy notices SBOM"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "automatic updates EXPLICITLY EXCLUDED: no updater plugin/endpoints/pubkey in tauri.conf.json or tauri.release.conf.json; system_status updates=DISABLED_NO_AUTHENTICATED_UPDATER; never ships an unauthenticated updater"
+     ],
      "id": "I-05",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Implement secure updater or explicitly exclude updates"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "updater negative control satisfied by absence: ReleaseIntegrity2 confirmed no updater artifacts/endpoints; no signed-metadata/rollback/channel surface exists to attack"
+     ],
      "id": "I-06",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Test signed metadata rollback replay and channel controls"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "predecessor upgrade/rollback/uninstall verified: reliability.rs install_uninstall_reinstall_cycle_is_clean + future_schema_home_is_refused_as_downgrade_guard; v0.1.0 shipped no local home so successor first-run is a clean install; uninstall = delete app home (docs/operations/PRIVACY.md)"
+     ],
      "id": "I-07",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Verify predecessor upgrade migration rollback and uninstall"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "Developer ID signing capability UNAVAILABLE: SIGNING_CAPABILITY.json (developer_id_application_count=0; notarization UNAVAILABLE); external account/credential prerequisite (no account mutation permitted)"
+     ],
      "id": "I-08",
-     "status": "PENDING",
+     "status": "BLOCKED",
      "title": "Probe Developer ID signing capability without secrets"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "Notarization capability UNAVAILABLE: requires active paid Apple Developer Program membership + notarytool credentials; external prerequisite"
+     ],
      "id": "I-09",
-     "status": "PENDING",
+     "status": "BLOCKED",
      "title": "Probe notarization capability without account mutation"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "Hardened-runtime Developer ID signature UNAVAILABLE: requires a Developer ID certificate (absent); external prerequisite"
+     ],
      "id": "I-10",
-     "status": "PENDING",
+     "status": "BLOCKED",
      "title": "Verify hardened runtime signature when capability exists"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "Gatekeeper acceptance on freshly downloaded bytes UNAVAILABLE: ad-hoc signature is rejected by Gatekeeper without notarization; blocked on I-09"
+     ],
      "id": "I-11",
-     "status": "PENDING",
+     "status": "BLOCKED",
      "title": "Verify Gatekeeper on freshly downloaded exact bytes"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "ad-hoc signing treated as LOCAL validation only: Signature=adhoc, TeamIdentifier not set; cannot satisfy public production distribution (marker records signing=ad-hoc notarized=false)"
+     ],
      "id": "I-12",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Treat ad-hoc signing as local validation only"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "Anonymous successor-asset readback N/A: no successor production release published (production-final gated on Developer ID/notarization); immutable predecessor v0.1.0 assets untouched"
+     ],
      "id": "I-13",
-     "status": "PENDING",
+     "status": "BLOCKED",
      "title": "Download published assets anonymously and compare hashes"
     }
    ],
@@ -1718,5 +1745,5 @@
  ],
  "schema": "nemesis.production-readiness-tracker/v1",
  "terminal_verdict": null,
- "updated_at": "2026-08-22T09:39:33Z"
+ "updated_at": "2026-08-22T09:45:13Z"
 }
