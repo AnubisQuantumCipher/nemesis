@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { NavigationName } from "../data/navigation";
 import type {
@@ -11,6 +11,7 @@ import type {
   ReplayResult,
   SystemStatus,
 } from "../lib/bridge";
+import { getReplay } from "../lib/bridge";
 import { EvidencePanel } from "./EvidencePanel";
 import { ReplayPanel } from "./ReplayPanel";
 import { SettingsPanel } from "./SettingsPanel";
@@ -77,6 +78,33 @@ export function MissionCockpit({
     replacement: "",
   });
   const [compose, setCompose] = useState(false);
+  const [center, setCenter] = useState<"activity" | "diff" | "evidence" | "conversation">(
+    "activity",
+  );
+  const [kernelLog, setKernelLog] = useState<ReplayResult | null>(replay);
+  useEffect(() => {
+    setKernelLog(replay);
+  }, [replay]);
+  useEffect(() => {
+    if (center !== "conversation") {
+      return;
+    }
+    let current = true;
+    getReplay()
+      .then((loaded) => {
+        if (current) {
+          setKernelLog(loaded);
+        }
+      })
+      .catch(() => {
+        if (current && !replay) {
+          setKernelLog(null);
+        }
+      });
+    return () => {
+      current = false;
+    };
+  }, [center, replay]);
   if (selected === "Evidence") {
     return <EvidencePanel result={result} />;
   }
@@ -157,26 +185,109 @@ export function MissionCockpit({
           <header className="mission-header">
             <div>
               <span className="section-index">LIVE / CONTROL PLANE</span>
-              <h2 id="activity-heading">Mission activity</h2>
+              <h2 id="activity-heading">
+                {center === "diff"
+                  ? "Mission diff"
+                  : center === "evidence"
+                    ? "Mission evidence"
+                    : center === "conversation"
+                      ? "Kernel conversation"
+                      : "Mission activity"}
+              </h2>
             </div>
             <span className={running ? "live-indicator is-running" : "live-indicator"}>
               {result ? "SEALED" : running ? "EXECUTING" : "STANDBY"}
             </span>
           </header>
-          <div className="mission-graph" aria-label="Mission dependency graph">
-            {activity.map(([sequence, label, detail], index) => (
-              <article
-                className={result || index === 0 ? "graph-node is-active" : "graph-node"}
-                key={sequence}
+          <div className="cockpit-tabs" role="tablist" aria-label="Mission cockpit center">
+            {(
+              [
+                ["activity", "Activity"],
+                ["diff", "Diff"],
+                ["evidence", "Evidence"],
+                ["conversation", "Conversation"],
+              ] as const
+            ).map(([id, label]) => (
+              <button
+                key={id}
+                type="button"
+                role="tab"
+                aria-selected={center === id}
+                className={center === id ? "cockpit-tab is-active" : "cockpit-tab"}
+                onClick={() => setCenter(id)}
               >
-                <span>{sequence}</span>
-                <div>
-                  <strong>{label}</strong>
-                  <p>{detail}</p>
-                </div>
-              </article>
+                {label}
+              </button>
             ))}
           </div>
+          {center === "activity" ? (
+            <div className="mission-graph" aria-label="Mission dependency graph">
+              {activity.map(([sequence, label, detail], index) => (
+                <article
+                  className={result || index === 0 ? "graph-node is-active" : "graph-node"}
+                  key={sequence}
+                >
+                  <span>{sequence}</span>
+                  <div>
+                    <strong>{label}</strong>
+                    <p>{detail}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : null}
+          {center === "diff" ? (
+            <div className="cockpit-pane" aria-label="Mission diff">
+              {compiled ? (
+                <dl className="mission-facts">
+                  <div>
+                    <dt>Workspace / file</dt>
+                    <dd>{compiled.relativePath}</dd>
+                  </div>
+                  <div>
+                    <dt>Expected SHA-256</dt>
+                    <dd>{compiled.expectedSha256}</dd>
+                  </div>
+                  <div>
+                    <dt>Replacement bytes</dt>
+                    <dd>{compiled.replacementBytes}</dd>
+                  </div>
+                  <div>
+                    <dt>Final source</dt>
+                    <dd>{result?.sourceDigest ?? "Pending final source"}</dd>
+                  </div>
+                  <div>
+                    <dt>Lane</dt>
+                    <dd>{result?.lanePath ?? "No isolated lane yet"}</dd>
+                  </div>
+                </dl>
+              ) : (
+                <p>No compiled contract. Diff is not inferred.</p>
+              )}
+            </div>
+          ) : null}
+          {center === "evidence" ? <EvidencePanel result={result} /> : null}
+          {center === "conversation" ? (
+            <div className="cockpit-pane" aria-label="Kernel conversation">
+              <p className="section-index">Kernel log, not model chat</p>
+              {(kernelLog?.events ?? []).map((event) => (
+                <article className="replay-event" key={event.sequence}>
+                  <span className="replay-sequence">
+                    EVENT {String(event.sequence).padStart(4, "0")}
+                  </span>
+                  <div>
+                    <strong>
+                      Kind {event.kindCode} · State {event.stateCode}
+                    </strong>
+                    <code>{event.eventHash}</code>
+                  </div>
+                </article>
+              ))}
+              {!replayLoading && !kernelLog ? (
+                <p>No committed kernel events. Workers do not speak here.</p>
+              ) : null}
+            </div>
+          ) : null}
           {error ? (
             <div className="runtime-error" role="alert">
               <strong>{error.code}</strong>

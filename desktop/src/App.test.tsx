@@ -393,6 +393,25 @@ describe("NEMESIS Desktop production surface", () => {
     await waitFor(() => expect(screen.getByText("CORE READY")).toBeInTheDocument());
   });
 
+  it("exposes Activity Diff Evidence Conversation on the LOCAL-001 cockpit", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(await screen.findByRole("button", { name: "Missions" }));
+    expect(screen.getByRole("heading", { name: "Witnessed local change" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Activity" })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("heading", { name: "Mission activity" })).toBeInTheDocument();
+
+    await user.click(screen.getByRole("tab", { name: "Diff" }));
+    expect(screen.getByText("No compiled contract. Diff is not inferred.")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("tab", { name: "Evidence" }));
+    expect(screen.getByRole("heading", { name: "No accepted mission evidence" })).toBeInTheDocument();
+
+    await user.click(screen.getByRole("tab", { name: "Conversation" }));
+    expect(screen.getByText("Kernel log, not model chat")).toBeInTheDocument();
+    expect(screen.queryByText(/Codex said|Claude said|assistant/i)).not.toBeInTheDocument();
+  });
+
   it("keeps every production destination keyboard-reachable with an accessible name", async () => {
     render(<App />);
     await screen.findByRole("button", { name: "Home" });
