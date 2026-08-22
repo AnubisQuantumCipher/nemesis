@@ -1,0 +1,141 @@
+{
+ "schema": "nemesis.production-readiness/v1",
+ "claim_matrix": "receipts/production-readiness-20260821/CLAIMS.json",
+ "subject": {
+  "commit": "28cf02c7361a3464b48f951cd5a52bcacc099b24",
+  "tree": "74d6e7959d5fc1b3542a228f0c608815580fb11e"
+ },
+ "overall": "INDETERMINATE",
+ "automatable_complete": false,
+ "external_blockers": [],
+ "lanes": [
+  {
+   "id": "dependency_supply_chain",
+   "required": true,
+   "status": "PASS",
+   "evidence": [
+    {
+     "id": "vz-hardening",
+     "classification": "CANONICAL",
+     "command": "./scripts/test_security_hardening.sh",
+     "exit_status": 0,
+     "subject": {
+      "commit": "28cf02c7361a3464b48f951cd5a52bcacc099b24",
+      "tree": "74d6e7959d5fc1b3542a228f0c608815580fb11e"
+     },
+     "artifact": {
+      "path": "receipts/phase-16-public/security-hardening.txt",
+      "sha256": "b30d01111e44b99502b0d0cfa826e5914e2a4e256e9444c37acf8b1ddb719347"
+     },
+     "terminal_marker": "PASS_PHASE16_SECURITY_HARDENING"
+    }
+   ],
+   "blockers": []
+  },
+  {
+   "id": "function",
+   "required": true,
+   "status": "SKIPPED",
+   "evidence": [],
+   "blockers": []
+  },
+  {
+   "id": "authority",
+   "required": true,
+   "status": "SKIPPED",
+   "evidence": [],
+   "blockers": []
+  },
+  {
+   "id": "evidence_replay",
+   "required": true,
+   "status": "SKIPPED",
+   "evidence": [],
+   "blockers": []
+  },
+  {
+   "id": "formal_kernel",
+   "required": true,
+   "status": "SKIPPED",
+   "evidence": [],
+   "blockers": []
+  },
+  {
+   "id": "independent_autonomous_external_review",
+   "required": true,
+   "status": "SKIPPED",
+   "evidence": [],
+   "blockers": []
+  },
+  {
+   "id": "accessibility",
+   "required": true,
+   "status": "SKIPPED",
+   "evidence": [],
+   "blockers": []
+  },
+  {
+   "id": "performance",
+   "required": true,
+   "status": "SKIPPED",
+   "evidence": [],
+   "blockers": []
+  },
+  {
+   "id": "reliability_recovery",
+   "required": true,
+   "status": "SKIPPED",
+   "evidence": [],
+   "blockers": []
+  },
+  {
+   "id": "install_upgrade_uninstall",
+   "required": true,
+   "status": "SKIPPED",
+   "evidence": [],
+   "blockers": []
+  },
+  {
+   "id": "privacy",
+   "required": true,
+   "status": "SKIPPED",
+   "evidence": [],
+   "blockers": []
+  },
+  {
+   "id": "packaging_signing_notarization",
+   "required": true,
+   "status": "SKIPPED",
+   "evidence": [],
+   "blockers": []
+  },
+  {
+   "id": "hosted_ci",
+   "required": true,
+   "status": "SKIPPED",
+   "evidence": [],
+   "blockers": []
+  },
+  {
+   "id": "release_readback",
+   "required": true,
+   "status": "SKIPPED",
+   "evidence": [],
+   "blockers": []
+  },
+  {
+   "id": "supportability",
+   "required": true,
+   "status": "SKIPPED",
+   "evidence": [],
+   "blockers": []
+  },
+  {
+   "id": "trust_surface",
+   "required": true,
+   "status": "SKIPPED",
+   "evidence": [],
+   "blockers": []
+  }
+ ]
+}

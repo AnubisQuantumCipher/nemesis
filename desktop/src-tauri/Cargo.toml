@@ -1,6 +1,6 @@
 [package]
 name = "nemesis-desktop"
-version = "0.2.0"
+version = "0.3.1"
 edition = "2024"
 license = "Apache-2.0"
 authors = ["AnubisQuantumCipher"]
@@ -14,6 +14,7 @@ tauri-build = { version = "2", features = [] }
 hex = "0.4"
 libc = "0.2"
 nemesis-protocol = { path = "../../runtime/crates/nemesis-protocol" }
+nemesis-runtime = { path = "../../runtime/crates/nemesis-runtime" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 sha2 = "0.10"

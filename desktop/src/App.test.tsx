@@ -4,27 +4,43 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import App from "./App";
 import {
+  adoptRailMutation,
   cancelMission,
+  changesSnapshot,
   compileMission,
+  dispatchAutomation,
   draftMission,
+  draftRailMutation,
+  executeIntegrationPlugin,
   getMissionStatus,
   getReplay,
   getSystemStatus,
+  railEntities,
   runMission,
+  runRailTest,
+  securitySnapshot,
   updateSettings,
 } from "./lib/bridge";
 
 vi.mock("./lib/bridge", () => ({
+  adoptRailMutation: vi.fn(),
   cancelMission: vi.fn(),
+  changesSnapshot: vi.fn(),
   compileMission: vi.fn(),
+  dispatchAutomation: vi.fn(),
   draftMission: vi.fn(),
+  draftRailMutation: vi.fn(),
+  executeIntegrationPlugin: vi.fn(),
   getMissionStatus: vi.fn(),
   getReplay: vi.fn(),
   getSystemStatus: vi.fn(),
   normalizeFailure: (cause: unknown) => cause,
+  railEntities: vi.fn(),
   runMission: vi.fn(),
+  runRailTest: vi.fn(),
+  securitySnapshot: vi.fn(),
   updateSettings: vi.fn(),
-}));
+}))
 
 const mockedStatus = vi.mocked(getSystemStatus);
 const mockedCompile = vi.mocked(compileMission);
@@ -34,6 +50,14 @@ const mockedMissionStatus = vi.mocked(getMissionStatus);
 const mockedCancel = vi.mocked(cancelMission);
 const mockedReplay = vi.mocked(getReplay);
 const mockedUpdateSettings = vi.mocked(updateSettings);
+const mockedRailEntities = vi.mocked(railEntities);
+const mockedChanges = vi.mocked(changesSnapshot);
+const mockedSecurity = vi.mocked(securitySnapshot);
+const mockedDraftRail = vi.mocked(draftRailMutation);
+const mockedAdopt = vi.mocked(adoptRailMutation);
+const mockedRunRailTest = vi.mocked(runRailTest);
+const mockedDispatch = vi.mocked(dispatchAutomation);
+const mockedExecutePlugin = vi.mocked(executeIntegrationPlugin);
 
 const settings = {
   textScale: "standard" as const,
@@ -122,17 +146,73 @@ beforeEach(() => {
     ],
   });
   mockedUpdateSettings.mockImplementation(async (next) => next);
+  mockedRailEntities.mockResolvedValue({ rail: "skills", entities: [] });
+  mockedChanges.mockResolvedValue({ laneCount: 0, lanes: [] });
+  mockedSecurity.mockResolvedValue({
+    policy: { network: "DENIED_BY_CONTRACT" },
+    secretsPosture: { stored: "NONE" },
+    grants: [],
+    approvals: [],
+    approvalTally: { armed: 0, consumed: 0, corrupt: 0 },
+    adoptionChain: { length: 0, head: "0".repeat(64), verified: true, records: [] },
+  });
+  mockedDraftRail.mockResolvedValue({
+    path: "/tmp/nemesis-home/drafts/mission.json",
+    compiled,
+  });
+  mockedAdopt.mockResolvedValue({
+    schema: "nemesis.rail-adoption/v1",
+    sequence: 1,
+    missionId: "mis_" + "a".repeat(22),
+    rail: "skills",
+    relativePath: "skills/x.json",
+    contentDigest: "d".repeat(64),
+    contractDigest: "e".repeat(64),
+    actionDigest: "f".repeat(64),
+    stateCommit: "1".repeat(40),
+    previous: "0".repeat(64),
+    entryHash: "2".repeat(64),
+  });
+  mockedRunRailTest.mockResolvedValue({
+    schema: "nemesis.test-run/v1",
+    sequence: 1,
+    subject: "t",
+    verdict: "PASS",
+    detail: {},
+    recordedUnixSeconds: 0,
+    previous: "0".repeat(64),
+    entryHash: "3".repeat(64),
+  });
+  mockedDispatch.mockResolvedValue({
+    schema: "nemesis.automation-run/v1",
+    sequence: 1,
+    subject: "a",
+    verdict: "AUTHORIZED_DRAFT_ONLY",
+    detail: {},
+    recordedUnixSeconds: 0,
+    previous: "0".repeat(64),
+    entryHash: "4".repeat(64),
+  });
+  mockedExecutePlugin.mockResolvedValue({
+    schema: "nemesis.plugin-run/v1",
+    sequence: 1,
+    subject: "p",
+    verdict: "EXECUTED",
+    detail: {},
+    recordedUnixSeconds: 0,
+    previous: "0".repeat(64),
+    entryHash: "5".repeat(64),
+  });
 });
 
 describe("NEMESIS Desktop production surface", () => {
-  it("exposes only complete destinations and truthful component state", async () => {
+  it("exposes all fourteen product destinations and truthful component state", async () => {
     render(<App />);
     await screen.findByRole("button", { name: "Home" });
 
-    for (const name of ["Home", "Missions", "Evidence", "Replay", "Settings"]) {
-      expect(screen.getByRole("button", { name })).toBeInTheDocument();
-    }
-    for (const removed of [
+    for (const name of [
+      "Home",
+      "Missions",
       "Workspaces",
       "Agents",
       "Changes",
@@ -142,12 +222,23 @@ describe("NEMESIS Desktop production surface", () => {
       "Automations",
       "Integrations",
       "Security",
+      "Evidence",
+      "Replay",
+      "Settings",
     ]) {
-      expect(screen.queryByRole("button", { name: removed })).not.toBeInTheDocument();
+      expect(screen.getByRole("button", { name })).toBeInTheDocument();
     }
     await waitFor(() => expect(screen.getByText("CORE READY")).toBeInTheDocument());
     expect(screen.getByText("UPDATES DISABLED")).toBeInTheDocument();
     expect(screen.queryByText("PROVED_LOCAL")).not.toBeInTheDocument();
+  });
+
+  it("renders the governed Skills rail through the shared authority shell", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(await screen.findByRole("button", { name: "Skills" }));
+    expect(await screen.findByRole("heading", { name: "Skills" })).toBeInTheDocument();
+    await waitFor(() => expect(mockedRailEntities).toHaveBeenCalledWith("skills"));
   });
 
   it("supports arrow navigation and the native Settings accelerator", async () => {
@@ -302,7 +393,22 @@ describe("NEMESIS Desktop production surface", () => {
   it("keeps every production destination keyboard-reachable with an accessible name", async () => {
     render(<App />);
     await screen.findByRole("button", { name: "Home" });
-    const order = ["Home", "Missions", "Evidence", "Replay", "Settings"];
+    const order = [
+      "Home",
+      "Missions",
+      "Workspaces",
+      "Agents",
+      "Changes",
+      "Tests",
+      "Knowledge",
+      "Skills",
+      "Automations",
+      "Integrations",
+      "Security",
+      "Evidence",
+      "Replay",
+      "Settings",
+    ];
     const buttons = order.map((name) => screen.getByRole("button", { name }));
     buttons[0].focus();
     for (let index = 1; index < buttons.length; index += 1) {

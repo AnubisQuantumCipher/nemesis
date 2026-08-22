@@ -2,6 +2,7 @@ use std::fmt;
 use std::fs::{self, File, OpenOptions};
 use std::io::Write;
 use std::os::unix::fs::{OpenOptionsExt, PermissionsExt};
+use std::os::unix::io::AsRawFd;
 use std::path::{Path, PathBuf};
 
 use nemesis_protocol::validate_repository_relative_path;
@@ -289,6 +290,65 @@ pub(crate) fn atomic_write(path: &Path, bytes: &[u8]) -> Result<(), ProductionEr
     fs::rename(&temporary, path)?;
     File::open(parent)?.sync_all()?;
     Ok(())
+}
+
+/// Filename of the per-home advisory write lock. It lives at the local-home
+/// root — never inside `<home>/state` — so it stays invisible to the governed
+/// git repository and to the atomic-write temporary sweep.
+pub(crate) const GOVERNED_WRITE_LOCK: &str = ".governed-write.lock";
+
+/// Exclusive advisory lock that serializes the read-modify-write critical
+/// section of every hash-chained governed log in one local home: the adoption
+/// chain (`state_repo::adopt_mission`) and each receipt chain
+/// (`rails::append_receipt`).
+///
+/// Without it two callers can interleave `load chain -> verify -> git commit ->
+/// append record`. Two adoptions then produce two git commits but a single
+/// surviving chain record — the second `atomic_write` clobbers the first — i.e.
+/// a governed state change with no receipt. `flock(LOCK_EX)` is held on a
+/// dedicated lock file for the whole section and released on drop.
+///
+/// The lock is bound to the open file description, so two threads that each
+/// open the file independently — and two app instances that share one home —
+/// all serialize. It is never taken re-entrantly: `adopt_mission` and
+/// `append_receipt` neither call each other nor themselves while holding it,
+/// so a single owned `flock` cannot self-deadlock.
+pub(crate) struct GovernedWriteLock {
+    file: File,
+}
+
+impl GovernedWriteLock {
+    pub(crate) fn acquire(home: &Path) -> Result<Self, ProductionError> {
+        let file = OpenOptions::new()
+            .read(true)
+            .write(true)
+            .create(true)
+            .truncate(false)
+            .mode(0o600)
+            .open(home.join(GOVERNED_WRITE_LOCK))?;
+        loop {
+            // SAFETY: `file` owns a valid fd for the duration of this call.
+            let code = unsafe { libc::flock(file.as_raw_fd(), libc::LOCK_EX) };
+            if code == 0 {
+                return Ok(Self { file });
+            }
+            let error = std::io::Error::last_os_error();
+            if error.raw_os_error() == Some(libc::EINTR) {
+                continue;
+            }
+            return Err(ProductionError::from(error));
+        }
+    }
+}
+
+impl Drop for GovernedWriteLock {
+    fn drop(&mut self) {
+        // SAFETY: `self.file` still owns a valid fd; release is best-effort and
+        // the fd is also unlocked implicitly when the file closes after this.
+        unsafe {
+            libc::flock(self.file.as_raw_fd(), libc::LOCK_UN);
+        }
+    }
 }
 
 /// Remove crash-orphaned atomic-write temporaries (`.<name>.tmp-<pid>`) from one

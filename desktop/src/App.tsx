@@ -3,11 +3,22 @@ import { useEffect, useState } from "react";
 import { AuthorityReview } from "./components/AuthorityReview";
 import { MissionCockpit } from "./components/MissionCockpit";
 import { Sidebar } from "./components/Sidebar";
-import type { NavigationName } from "./data/navigation";
+import { AgentsPanel } from "./components/rails/AgentsPanel";
+import { AutomationsPanel } from "./components/rails/AutomationsPanel";
+import { ChangesPanel } from "./components/rails/ChangesPanel";
+import { IntegrationsPanel } from "./components/rails/IntegrationsPanel";
+import { KnowledgePanel } from "./components/rails/KnowledgePanel";
+import { SecurityPanel } from "./components/rails/SecurityPanel";
+import { SkillsPanel } from "./components/rails/SkillsPanel";
+import { TestsPanel } from "./components/rails/TestsPanel";
+import { WorkspacesPanel } from "./components/rails/WorkspacesPanel";
+import { isRailName, type NavigationName, type RailName } from "./data/navigation";
 import {
+  adoptRailMutation,
   cancelMission,
   compileMission,
   draftMission,
+  draftRailMutation,
   getMissionStatus,
   getReplay,
   getSystemStatus,
@@ -20,6 +31,7 @@ import {
   type MissionDraftRequest,
   type MissionRunResult,
   type MissionRuntimeSnapshot,
+  type RailMutationRequest,
   type ReplayResult,
   type SystemStatus,
 } from "./lib/bridge";
@@ -53,6 +65,8 @@ export default function App() {
   const [replay, setReplay] = useState<ReplayResult | null>(null);
   const [replayLoading, setReplayLoading] = useState(false);
   const [error, setError] = useState<CommandFailure | null>(null);
+  const [railMission, setRailMission] = useState<RailName | null>(null);
+  const [stateVersion, setStateVersion] = useState(0);
 
   useEffect(() => {
     let current = true;
@@ -87,9 +101,14 @@ export default function App() {
       const destination: NavigationName | undefined = {
         "1": "Home",
         "2": "Missions",
-        "3": "Evidence",
-        "4": "Replay",
-        "5": "Settings",
+        "3": "Workspaces",
+        "4": "Agents",
+        "5": "Changes",
+        "6": "Tests",
+        "7": "Knowledge",
+        "8": "Skills",
+        "9": "Automations",
+        "0": "Integrations",
         ",": "Settings",
       }[event.key] as NavigationName | undefined;
       if (destination) {
@@ -152,6 +171,7 @@ export default function App() {
   }, [selected]);
 
   async function draftContract(request: MissionDraftRequest) {
+    setRailMission(null);
     setDrafting(true);
     setError(null);
     setCompiled(null);
@@ -167,6 +187,7 @@ export default function App() {
   }
 
   async function compileContract() {
+    setRailMission(null);
     setCompiling(true);
     setError(null);
     setCompiled(null);
@@ -176,6 +197,23 @@ export default function App() {
       setError(normalizeFailure(cause));
     } finally {
       setCompiling(false);
+    }
+  }
+
+  async function beginRailMutation(request: RailMutationRequest) {
+    setDrafting(true);
+    setError(null);
+    setCompiled(null);
+    try {
+      const drafted = await draftRailMutation(request);
+      setContractPath(drafted.path);
+      setCompiled(drafted.compiled);
+      setRailMission(request.rail as RailName);
+      setReviewing(true);
+    } catch (cause) {
+      setError(normalizeFailure(cause));
+    } finally {
+      setDrafting(false);
     }
   }
 
@@ -205,7 +243,21 @@ export default function App() {
         lastResult: completed,
         error: null,
       });
-      setSelected("Evidence");
+      if (railMission) {
+        const destination = railMission;
+        try {
+          await adoptRailMutation(completed.missionId);
+          setStateVersion((version) => version + 1);
+          setSelected(destination);
+        } catch (cause) {
+          setError(normalizeFailure(cause));
+          setSelected("Evidence");
+        } finally {
+          setRailMission(null);
+        }
+      } else {
+        setSelected("Evidence");
+      }
     } catch (cause) {
       const failure = normalizeFailure(cause);
       setError(failure);
@@ -320,6 +372,62 @@ export default function App() {
               onAuthorize={() => void authorizeAndRun()}
               onClose={() => setReviewing(false)}
             />
+          ) : isRailName(selected) ? (
+            selected === "Workspaces" ? (
+              <WorkspacesPanel
+                stateVersion={stateVersion}
+                busy={runtime.running || drafting}
+                onBeginMutation={(request) => void beginRailMutation(request)}
+              />
+            ) : selected === "Agents" ? (
+              <AgentsPanel
+                stateVersion={stateVersion}
+                busy={runtime.running || drafting}
+                onBeginMutation={(request) => void beginRailMutation(request)}
+              />
+            ) : selected === "Changes" ? (
+              <ChangesPanel
+                stateVersion={stateVersion}
+                busy={runtime.running || drafting}
+                onBeginMutation={(request) => void beginRailMutation(request)}
+              />
+            ) : selected === "Tests" ? (
+              <TestsPanel
+                stateVersion={stateVersion}
+                busy={runtime.running || drafting}
+                onBeginMutation={(request) => void beginRailMutation(request)}
+              />
+            ) : selected === "Knowledge" ? (
+              <KnowledgePanel
+                stateVersion={stateVersion}
+                busy={runtime.running || drafting}
+                onBeginMutation={(request) => void beginRailMutation(request)}
+              />
+            ) : selected === "Skills" ? (
+              <SkillsPanel
+                stateVersion={stateVersion}
+                busy={runtime.running || drafting}
+                onBeginMutation={(request) => void beginRailMutation(request)}
+              />
+            ) : selected === "Automations" ? (
+              <AutomationsPanel
+                stateVersion={stateVersion}
+                busy={runtime.running || drafting}
+                onBeginMutation={(request) => void beginRailMutation(request)}
+              />
+            ) : selected === "Integrations" ? (
+              <IntegrationsPanel
+                stateVersion={stateVersion}
+                busy={runtime.running || drafting}
+                onBeginMutation={(request) => void beginRailMutation(request)}
+              />
+            ) : (
+              <SecurityPanel
+                stateVersion={stateVersion}
+                busy={runtime.running || drafting}
+                onBeginMutation={(request) => void beginRailMutation(request)}
+              />
+            )
           ) : (
             <MissionCockpit
               selected={selected}

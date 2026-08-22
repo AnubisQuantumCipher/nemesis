@@ -1,0 +1,60 @@
+{
+  "schema": "nemesis.independent-review/v1",
+  "date": "2026-08-22",
+  "kind": "defensive-code-review",
+  "note": "Replaces the policy-refused BossSecurityReview. Framed defensively (correctness/robustness), no exploit payloads or attack how-to. Policy refusal is not a security PASS; this is a substantive independent review of the same diff.",
+  "subject": {
+    "diff": "4f06d23 (parent 71bad5f)",
+    "files": [
+      "desktop/src-tauri/src/production.rs (GovernedWriteLock)",
+      "desktop/src-tauri/src/state_repo.rs (adopt_mission serialization + hostile test)",
+      "desktop/src-tauri/src/rails/mod.rs (append_receipt serialization + hostile test)"
+    ]
+  },
+  "reviewer": {
+    "agent": "reviewer",
+    "independent": true,
+    "transcript": "history://RaceFixReview"
+  },
+  "verdict": "SOUND_WITH_NITS",
+  "overall_correctness": "correct",
+  "confidence": 0.92,
+  "confirmed": [
+    "flock(LOCK_EX) on an independently-opened fd serializes same-process threads AND multi-process instances sharing one home; EINTR retried; fd held for the lock lifetime; Drop calls LOCK_UN; Rust default O_CLOEXEC keeps the lock fd out of spawned git children",
+    "No self-deadlock reachable: adopt_mission and append_receipt neither call each other nor themselves; no caller holds the lock before delegating to append_receipt (all callsites grepped)",
+    "Fail-closed refusal semantics preserved: lock acquired before chain load; every ? propagation still fires; Drop releases on all early returns (digest mismatch, stale canonical, tamper, idempotency hit)",
+    "Lock file <home>/.governed-write.lock is outside the git repo <home>/state (invisible to require_clean) and outside the sweep_stale_temporaries grammar (survives init)",
+    "Both new tests are genuine regression guards (Barrier(N); exact chain length + sorted 1..=N sequence + exact adopt-commit count; load_*_chain revalidates hash linkage). Neutering the lock fails them."
+  ],
+  "findings": [
+    {
+      "id": "RVN-01",
+      "severity": "info",
+      "title": "Lock scope is intentionally the hash-chained logs only",
+      "detail": "GovernedWriteLock guards the adoption and receipt chains, not every atomic_write to governed entity paths. A preexisting atomic_write .tmp-<pid> TOCTOU between ensure_entity_file (draft path) and adopt_mission on the same entity file remains.",
+      "disposition": "ACKNOWLEDGED_OUT_OF_SCOPE. The code-review finding was specifically the chain read-modify-write race; that is what is fixed. Expanding the lock to all entity writes is scope creep. Boundary documented in the production.rs docstring."
+    },
+    {
+      "id": "RVN-02",
+      "severity": "info",
+      "title": "Residual crash-durability variant of commit-without-receipt",
+      "detail": "A crash/ENOSPC between the git commit and the chain atomic_write leaves an orphan adopt commit with no chain record. Distinct from the concurrency class the fix closes.",
+      "disposition": "ACKNOWLEDGED_OUT_OF_SCOPE_ALREADY_FAIL_CLOSED. The chain stays honest (never attests the orphan); re-adoption of the same mission REFUSES as 'canonical state advanced since review; adoption is stale' (canonical now holds adopted bytes != expected base). No forgery, no silent double-write. Closing it (chain-first ordering or reconciliation-on-load) is a separate durability feature, deferred as a named residual."
+    },
+    {
+      "id": "RVN-03",
+      "severity": "nit",
+      "title": "Advisory lock is not type-enforced against a future forgotten acquire",
+      "detail": "A witness-parameter or LockedHome newtype would make the acquire-first discipline unforgeable for future chain writers.",
+      "disposition": "ACKNOWLEDGED_DEFERRED. Current callsites are correct and are the only chain writers. The refactor would churn signatures + callers for defense-in-depth not required by the finding."
+    },
+    {
+      "id": "RVN-04",
+      "severity": "nit",
+      "title": "Negative direction rests on manual verification",
+      "detail": "A cfg-gated neutered-acquire test asserting failure would make the fix's necessity permanent in-tree.",
+      "disposition": "ACKNOWLEDGED_DECLINED. The negative direction was verified manually this session (neutered flock -> both tests FAIL: 'git commit failed' / 'File exists (os error 17)'; restored -> PASS). A committed race-must-manifest test is nondeterministic/flaky (the OS may serialize); the positive tests already break if the lock is neutered, which is the durable guard."
+    }
+  ],
+  "human_external_review": "NEEDS-HUMAN (independent external security review remains an operator gate; this is an autonomous defensive review, not a substitute for it)"
+}

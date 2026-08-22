@@ -1,0 +1,42 @@
+{
+  "schema": "nemesis.boss-successor-release/v1",
+  "date": "2026-08-22",
+  "purpose": "Hash-bound record of the v0.3.1 successor (release/ is gitignored, so the binding lives here in git). v0.3.1 carries the flock governed-write race fix; v0.3.0 is the predecessor.",
+  "predecessor": {
+    "version": "0.3.0",
+    "asset": "NEMESIS-Desktop-v0.3.0-macos-arm64.zip",
+    "zip_sha256": "9719194b02b23d7cd4e112cd75b98cc0084cdb8268c16acd6e0ecb98609ddb4d",
+    "app_binary_sha256": "ee81e995091468395730791d0559c963003b57ae4840acc52a03230189c9c34b",
+    "source_commit": "71bad5f624f44bc3f0c24bb3b7b908cd7515ff2b"
+  },
+  "successor": {
+    "version": "0.3.1",
+    "asset": "NEMESIS-Desktop-v0.3.1-macos-arm64.zip",
+    "zip_sha256": "2ff7e6327e543ecff8e7a264733347f1f763681b0c0bd6c076f439ffe26738f6",
+    "zip_bytes": 8452959,
+    "manifest_sha256": "492823822d28338f1c5437efff43a83102066807a86d5b7bcf36c175b7c757c4",
+    "app_binary_sha256": "236a8c77b3630514b24e92e322d233448b3593d2073479389ba789a8e08fe8a3",
+    "source_commit": "cb4f1cc2e99dfc895263bba26f1205098c9ab95b",
+    "source_tree": "8f174c75a893aa06bb7f76e52944051c36ee0f85",
+    "signing": "ad-hoc",
+    "notarized": false
+  },
+  "readback": {
+    "zip_recompute_matches_sha256sums": true,
+    "zip_recompute_matches_manifest": true,
+    "successor_binary_embeds_frontend": true,
+    "successor_binary_differs_from_predecessor": "true (236a8c77 != ee81e995) \u2014 the race fix is in the shipped successor bytes",
+    "successor_cfbundle_short_version": "0.3.1"
+  },
+  "install_contract": {
+    "receipt": "receipts/boss-20260822/INSTALL_CONTRACT.json",
+    "result": "PASS_INSTALL_CONTRACT predecessor=0.3.0 successor=0.3.1 state_preserved=true",
+    "proves": "install predecessor from verified bytes -> launch -> seed user state -> upgrade (bundle replaced, user state preserved untouched) -> launch successor against preserved home -> uninstall (bundle removed, zero launch agents/helpers, residuals inventoried); both assets bound by name+digest to SHA256SUMS; versions distinct",
+    "console_locked_launch_criterion": "PROCESS_AND_ONSCREEN_WINDOW_LOCKED_CONSOLE (IOConsoleLocked=Yes)"
+  },
+  "nonclaims": [
+    "Not Developer ID signed or notarized; Gatekeeper approval not claimed.",
+    "The v0.3.1 binary and release/ archive are local artifacts (release/ is gitignored); this receipt is the in-git hash binding.",
+    "No git tag was created or pushed for v0.3.1 in this session; tagging/publishing is an operator gate."
+  ]
+}

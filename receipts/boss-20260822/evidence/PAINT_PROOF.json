@@ -1,0 +1,39 @@
+{
+ "schema": "nemesis.paint-proof/v1",
+ "date": "2026-08-22",
+ "finding": "bundle-embed defect, not WKWebView defect",
+ "experiment": {
+  "binaryA": {
+   "build": "cargo build (no tauri CLI, dev context)",
+   "sha256": "bbb2bdcb53845a82c105ffbb777e8feb2e096c874b7177c00b07be313c0f6057",
+   "embeddedAssetMap": false,
+   "probeListenerRequests": [
+    {
+     "t": "2026-08-22T16:16:32.411Z",
+     "method": "GET",
+     "url": "/",
+     "ua": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko)"
+    }
+   ],
+   "conclusion": "webview fetched the dead dev URL 127.0.0.1:1420 -> blank window in production"
+  },
+  "binaryB": {
+   "build": "tauri build --debug --no-bundle (custom-protocol, embedded assets)",
+   "embeddedAssetMap": true,
+   "probeListenerRequests": [],
+   "conclusion": "served embedded assets; never touched the dev URL"
+  },
+  "bundledReleaseApp": {
+   "build": "tauri build --config src-tauri/tauri.release.conf.json --bundles app",
+   "windowOwnership": "WINDOWS 1, BOUNDS 1440x900 (probe_window_ownership.swift)",
+   "freshHomeIpcProof": "HOME=/tmp/nemesis-fresh-home launch created home.json schema nemesis.local-home/v1 + 7 subdirs within 8s; that write happens only inside the system_status command invoked from the React mount effect -> embedded JS executed and IPC round-tripped",
+   "screenshotSha256": "ed81b05403e6d1d30d55859860e9a63967a0dd2c8a3577dec4a21d4706b91b17",
+   "screenshotShows": "native title bar painted; body uniform dark",
+   "environmentBlocker": "IOConsoleLocked=Yes throughout; WebContent compositing and AX capture unavailable (capture_macos_accessibility.swift refused: session_locked). Content-pixel confirmation deferred, not claimed."
+  }
+ },
+ "fix": {
+  "buildGuard": "desktop/src-tauri/build.rs refuses production compiles without dist (FAIL_FRONTEND_DIST_MISSING / FAIL_FRONTEND_DIST_HOLLOW); verified 4-case matrix",
+  "packageAssertion": "scripts/package_release.sh FAIL_RELEASE_FRONTEND_NOT_EMBEDDED"
+ }
+}

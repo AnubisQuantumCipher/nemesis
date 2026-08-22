@@ -9,7 +9,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
 VALIDATOR="scripts/validate_production_readiness.py"
-ROSTER="receipts/production-readiness-20260821/PRODUCTION_READINESS.json"
+ROSTER="receipts/boss-20260822/PRODUCTION_READINESS.json"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 fails=0

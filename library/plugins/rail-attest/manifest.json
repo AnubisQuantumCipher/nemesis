@@ -1,0 +1,27 @@
+{
+  "schema": "nemesis.plugin-pack/v1",
+  "id": "rail-attest",
+  "name": "Rail attest",
+  "version": "1.0.0",
+  "kind": "wasm-plugin",
+  "modulePath": "module.wat",
+  "moduleSha256": "f0f3cc149d1778f532ab5a9212b43617b8b94908f71c300fe9ba194822da9681",
+  "moduleBytes": 540,
+  "export": "attest",
+  "tools": [
+    {
+      "name": "attest",
+      "schemaDigest": "da2bd927a1a22aef04b419b8839a4557dcd4495255022c6509976d05c02299e9"
+    }
+  ],
+  "toolSchemas": {
+    "attest": "{\"name\":\"attest\",\"input\":null,\"output\":\"i32 rail count\"}"
+  },
+  "capabilities": {
+    "networkHosts": [],
+    "filesystemRoots": [],
+    "secrets": [],
+    "events": []
+  },
+  "install": "Integrations rail -> Register: kind wasm-plugin, moduleWat = module.wat verbatim, export attest. Then Enable. Both are one-shot-reviewed governed mutations; execution is bounded WASI with deny-all capabilities."
+}

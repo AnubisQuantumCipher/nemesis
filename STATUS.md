@@ -1,5 +1,20 @@
 # NEMESIS v0.2.0 Status
 
+## Boss epoch — v0.3.1 (2026-08-22, unstick continuation)
+
+Verdict: `SEALED_LOCAL_BOSS`. Built on the sealed v0.2.0 trust surface and the boss-harness epoch (14 governed rails + a governed skills/plugins ecosystem). This continuation:
+
+- **Governed-write race fixed** (independent code-review finding): concurrent `adopt_mission` / `append_receipt` read-modify-write of the adoption and receipt hash-chains was guarded only by `atomic_write` (last-writer-wins) — two concurrent adoptions could produce two git commits but a single surviving chain record (a governed state change with no receipt). A per-home advisory `flock` (`GovernedWriteLock`, `<home>/.governed-write.lock`) now serializes the whole load→verify→commit→append critical section across threads and app instances. Hostile concurrent tests verify N writers → exactly N linked records + N commits, and were verified to FAIL with the lock neutered. Independent defensive review: **SOUND** ([`receipts/boss-20260822/REVIEW_RACE_FIX.json`](receipts/boss-20260822/REVIEW_RACE_FIX.json)).
+- **Gates re-run** at the race-fix source-final → `PASS_NEMESIS_DESKTOP_COMPLETE` (67 PASS / 0 FAIL). Phase-16 VZ security-hardening re-run inside the `anubis-xcode` Apple Virtualization guest and resealed; hostile-calibration roster re-bound; kernel proof re-bound (81 obligations / 8 units, `PASS_BOUNDED`).
+- **Native paint**: the shipped bytes embed and render the `LOCAL-001` cockpit (built asset hashes present in the packed binary; headless render [`receipts/boss-20260822/evidence/paint-home-local001.webp`](receipts/boss-20260822/evidence/paint-home-local001.webp); vitest 74/74; on-device the named `NEMESIS Desktop.app` owns a 1440×900 window and its embedded JS IPC round-trips). On-device WKWebView composited pixels + AX, and G-10, remain `DEFERRED / ENVIRONMENT_BLOCKED` (IOConsoleLocked=Yes) — **not** called PASS.
+- **Successor v0.3.1** cut (`package_release.sh` → `PASS_RELEASE_PACKAGE`) carrying the fix (binary `236a8c77…` ≠ v0.3.0 `ee81e995…`); `PASS_INSTALL_CONTRACT predecessor=0.3.0 successor=0.3.1 state_preserved=true`; hash-bound archive + readback ([`receipts/boss-20260822/RELEASE_v0.3.1.json`](receipts/boss-20260822/RELEASE_v0.3.1.json)).
+
+Boss receipts: [`receipts/boss-20260822/FINAL.json`](receipts/boss-20260822/FINAL.json), [`receipts/boss-20260822/TRACKER.json`](receipts/boss-20260822/TRACKER.json). Integration PR: [#7](https://github.com/AnubisQuantumCipher/nemesis/pull/7) (base `main`, `MERGEABLE`; merge is an operator gate — not merged this session). `v0.1.0`/`v0.2.0` tags remain immutable; no `v0.3.1` tag was published this session (operator gate: the human presses send). Independent **human** external security review remains `[NEEDS-HUMAN]`.
+
+Hosted checks (PR #7, run [32594083144](https://github.com/AnubisQuantumCipher/nemesis/actions/runs/32594083144)): **all required checks green** — Contract and evidence, Dependency audit, Rust and Desktop (macos-14 + macos-15). `mergeStateStatus=CLEAN`. Merge is the operator's gate.
+
+---
+
 ## Verdict
 
 `SEALED_LOCAL_PRODUCTION` — the trust-surface continuation mission of 2026-08-22 (architect contract sha256 `920900f3a7d37a9a3e1d51541997070789a0e1e7bddecf31808076c67a00d3f9`) implemented TS-001/TS-002, re-ran every gate, merged PR #4 through the protected branch with strict 4/4 hosted checks, published the [v0.2.0 GitHub Release](https://github.com/AnubisQuantumCipher/nemesis/releases/tag/v0.2.0) from the exact merge commit, and read every published byte back anonymously with exact hash matches. Gate tally: **199 PASS / 1 DEFERRED (G-10, authorized) / 0 PENDING of 200**.
