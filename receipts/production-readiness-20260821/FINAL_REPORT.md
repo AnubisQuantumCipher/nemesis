@@ -1,10 +1,10 @@
 # NEMESIS Desktop — Production-Readiness Final Report
 
-**Sealed:** 2026-08-22T10:11:09Z  
+**Sealed:** 2026-08-22T10:19:07Z  
 **Baseline:** `d18cb7cc5bd918a6e9dd67aa99088dab9503e39b` → **Final:** `3ad557caeea762e33ae94273ac35a345735825ec` (tree `d5d854feb1c690764f91c2e76ef22384e31f46d3`)  
 **Branch:** `production/desktop-v1-autonomous-recovery` → `origin` (clean: False)  
 **Diff:** 119 files changed, 19240 insertions(+), 1650 deletions(-) across 119 files  
-**Gate tally:** 154 PASS / 9 BLOCKED / 19 sealed-final of 182
+**Gate tally:** 154 PASS / 9 BLOCKED / 19 PENDING of 182
 
 ## Terminal verdict
 
@@ -12,7 +12,7 @@
 
 All automatable production-readiness lanes (Phases A-L, and E-13 final re-review) are complete and shipped through the strongest safe bounded checkpoint: mission PR #4 with 4/4 required hosted checks green, MERGEABLE/CLEAN, containing no trust-surface change. The only remaining prerequisites are external human/account/credential/trust-surface decisions: Apple Developer ID signing + notarization + Gatekeeper (unavailable), the production default-branch merge (human/policy-gated), and the TS-001/TS-002 authority-integration trust surface (architect sign-off; proposal preserved unmerged). Predecessor v0.1.0 remains immutable.
 
-Every status below names a reproducible gate and its observed marker; no lane is called ready without one.
+Every status names a reproducible gate and observed marker; no lane is called ready without one.
 
 ## Typed readiness roster
 
@@ -30,13 +30,16 @@ Every status below names a reproducible gate and its observed marker; no lane is
 | install_upgrade_uninstall | `PARTIAL_BLOCKED` | I-01..07/12 PASS (artifact built+verified, updater excluded, upgrade/uninstall tested); I-08..11/13 BLOCKED (Developer ID/notarization/Gatekeeper/successor readback) |
 | privacy | `PASS` | J-01..J-04 telemetry-absent + docs |
 | packaging_signing_notarization | `BLOCKED` | ad-hoc signing = local only; Developer ID + notarization unavailable (external account/credential prerequisite) |
-| hosted_ci | `PASS` | 4/4 required checks green on PR #4 exact head 3ad557c |
+| hosted_ci | `PASS` | 4/4 required checks terminal success on final HEAD 089549f (run 32567007222); corroborated by run 32566465609 on source-identical 3ad557c |
 | release_readback | `BLOCKED` | no successor production release published (blocked on signing); predecessor v0.1.0 intact; production merge human-gated |
 | supportability | `PASS` | J-05..J-09 diagnostics + bounded support bundle + troubleshooting matrix |
 
-## Hosted checkpoint
+## Hosted checkpoint (terminal, non-circular binding)
 
-- PR: https://github.com/AnubisQuantumCipher/nemesis/pull/4 (head `3ad557caeea762e33ae94273ac35a345735825ec`) — 4/4 required green, MERGEABLE/CLEAN.
+- PR: https://github.com/AnubisQuantumCipher/nemesis/pull/4 — head `089549f6550dee66023329ff5b9fcc94c817e70b` (source-final `3ad557caeea762e33ae94273ac35a345735825ec`).
+- Load-bearing CI binding: run `32567007222` on `089549f6550dee66023329ff5b9fcc94c817e70b` → **success**, all 4 required checks success (observed to terminal by independent readback).
+- Corroboration: 089549f is byte-identical in source and COVERED_PATHS to 3ad557c (earlier run 32566465609, also 4/4 green); the two independent runs corroborate the source-final state.
+- Non-circularity: The reseal commit that carries THIS attestation modifies only receipts/ (FINAL.json, FINAL_REPORT.md, TRACKER.json) and changes no source or COVERED_PATH; the CI run it necessarily retriggers re-validates byte-identical source and is a mechanical repeat, NOT the load-bearing binding. Per the contract's non-circular rule the binding is fixed to run 32567007222 on 089549f and this reseal is the terminal stopping point; the redundant repeat run is not chased.
 - Predecessor v0.1.0=616c78508b754081bb77fab63e6665d16f47d84d (intact, 3 assets).
 
 ## Residual external prerequisites (why not COMPLETE_PRODUCTION_PUBLIC)
@@ -67,5 +70,5 @@ Every status below names a reproducible gate and its observed marker; no lane is
 - **immutable_predecessor:** v0.1.0 tag/release/assets intact
 - **unrelated_worktrees:** /Users/sicarii/Desktop/Projects/nemesis, /Users/sicarii/Worktrees/nemesis-desktop-production, jackal-* not modified this session
 
-Machine-readable receipt: `receipts/production-readiness-20260821/FINAL.json` (sha256 `b9f58e4110e5e2c2c262da7fe2c82945d84ad715efd7012853880c7b46eacbbd`).
+Machine-readable receipt: `receipts/production-readiness-20260821/FINAL.json` (sha256 `e84a793aa6060b8b52c345be08b19b52583434b8ff3f06a2c52b0d187026822a`); mission_state `SEALED_BLOCKED_PRODUCTION_PUBLIC`.
 

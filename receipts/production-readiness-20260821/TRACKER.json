@@ -12,6 +12,13 @@
   "conversation_resolution": true,
   "default_branch": "main",
   "force_pushes": false,
+  "hosted_ci": {
+   "conclusion": "success",
+   "head": "089549f6550dee66023329ff5b9fcc94c817e70b",
+   "observed_at": "2026-08-22T10:18:46Z",
+   "required_checks_all_success": true,
+   "run_id": "32567007222"
+  },
   "open_pull_requests": [],
   "repository": "AnubisQuantumCipher/nemesis",
   "required_checks": [
@@ -22,7 +29,7 @@
   ],
   "strict_checks": true
  },
- "mission_state": "IN_PROGRESS",
+ "mission_state": "SEALED_BLOCKED_PRODUCTION_PUBLIC",
  "non_interference_baseline": [
   {
    "branch": "main",
@@ -1471,7 +1478,7 @@
     },
     {
      "evidence": [
-      "all required current-head checks terminal GREEN on exact head 3ad557c: Contract and evidence + Dependency audit + Rust and Desktop (macos-14) + Rust and Desktop (macos-15); PR mergeStateStatus=CLEAN mergeable=MERGEABLE"
+      "all required current-head checks terminal SUCCESS on the exact final HEAD 089549f (hosted run 32567007222): Contract and evidence + Dependency audit + Rust and Desktop macos-14 + macos-15; corroborated on source-identical 3ad557c (run 32566465609)"
      ],
      "id": "M-03",
      "status": "PASS",
@@ -1543,7 +1550,7 @@
     },
     {
      "evidence": [
-      "hosted state read back: PR #4 OPEN/MERGEABLE/CLEAN, 4/4 required checks pass on 3ad557c; v0.1.0 tag+release+assets confirmed intact"
+      "hosted state read back to terminal on final HEAD 089549f: run 32567007222 conclusion=success, 4/4 required checks success; PR #4 MERGEABLE/CLEAN; v0.1.0 tag+release+3 assets intact"
      ],
      "id": "M-12",
      "status": "PASS",
@@ -1646,7 +1653,7 @@
     },
     {
      "evidence": [
-      "PR/check/release URLs + exact SHAs \u2014 FINAL.json.github (PR #4 head 3ad557c, 4/4 checks, v0.1.0 intact)"
+      "PR #4 (head 089549f) + hosted run 32567007222 all-required-success + v0.1.0=616c785 intact recorded in FINAL.json.github/hosted_ci; load-bearing CI binding is non-circular (bound to 089549f run, reseal is receipt-only source-identical)"
      ],
      "id": "N-12",
      "status": "PASS",
@@ -1813,9 +1820,9 @@
  "schema": "nemesis.production-readiness-tracker/v1",
  "terminal_final_receipt": {
   "path": "receipts/production-readiness-20260821/FINAL.json",
-  "sha256": "b9f58e4110e5e2c2c262da7fe2c82945d84ad715efd7012853880c7b46eacbbd"
+  "sha256": "e84a793aa6060b8b52c345be08b19b52583434b8ff3f06a2c52b0d187026822a"
  },
  "terminal_verdict": "BLOCKED_PRODUCTION_PUBLIC",
- "terminal_verdict_sealed_at": "2026-08-22T10:11:44Z",
- "updated_at": "2026-08-22T10:11:44Z"
+ "terminal_verdict_sealed_at": "2026-08-22T10:18:46Z",
+ "updated_at": "2026-08-22T10:18:46Z"
 }

@@ -88,7 +88,9 @@
    "classification": "HOSTED",
    "exit_status": 0,
    "gate": "hosted CI on PR #4 head 3ad557c",
-   "marker": "4/4 required checks pass"
+   "head": "089549f6550dee66023329ff5b9fcc94c817e70b",
+   "marker": "4/4 required checks success (run 32567007222, head 089549f)",
+   "run_id": "32567007222"
   },
   {
    "classification": "BLOCKED",
@@ -119,11 +121,29 @@
   "PENDING": 19
  },
  "github": {
-  "checks": "4/4 required green",
+  "checks": "4/4 required terminal success on run 32567007222 (final HEAD 089549f)",
   "mergeable": "MERGEABLE/CLEAN",
   "pr": "https://github.com/AnubisQuantumCipher/nemesis/pull/4",
   "pr_head": "3ad557caeea762e33ae94273ac35a345735825ec",
-  "predecessor_tag": "v0.1.0=616c78508b754081bb77fab63e6665d16f47d84d (intact, 3 assets)"
+  "pr_head_source_final": "3ad557caeea762e33ae94273ac35a345735825ec",
+  "predecessor_tag": "v0.1.0=616c78508b754081bb77fab63e6665d16f47d84d (intact, 3 assets)",
+  "receipt_final_head": "089549f6550dee66023329ff5b9fcc94c817e70b"
+ },
+ "hosted_ci": {
+  "corroboration": "089549f is byte-identical in source and COVERED_PATHS to 3ad557c (earlier run 32566465609, also 4/4 green); the two independent runs corroborate the source-final state",
+  "load_bearing_binding": {
+   "head": "089549f6550dee66023329ff5b9fcc94c817e70b",
+   "observation": "independent readback polled to terminal; all 4 required checks completed success on the exact final HEAD",
+   "required_checks": {
+    "Contract and evidence": "success",
+    "Dependency audit": "success",
+    "Rust and Desktop (macos-14)": "success",
+    "Rust and Desktop (macos-15)": "success"
+   },
+   "run_conclusion": "success",
+   "run_id": "32567007222"
+  },
+  "non_circularity": "The reseal commit that carries THIS attestation modifies only receipts/ (FINAL.json, FINAL_REPORT.md, TRACKER.json) and changes no source or COVERED_PATH; the CI run it necessarily retriggers re-validates byte-identical source and is a mechanical repeat, NOT the load-bearing binding. Per the contract's non-circular rule the binding is fixed to run 32567007222 on 089549f and this reseal is the terminal stopping point; the redundant repeat run is not chased."
  },
  "hostile_controls": {
   "aba": "L-09 exact-byte + kernel PROOF_ABA (D-14)",
@@ -237,7 +257,7 @@
   "disk-full reliability test initially passed a ~50B settings write on a nominally-full volume; fixed with progressive fine-grained fill."
  ],
  "schema": "nemesis.production-final/v1",
- "sealed_at": "2026-08-22T10:10:38Z",
+ "sealed_at": "2026-08-22T10:18:46Z",
  "signing": {
   "adhoc": "local-only",
   "developer_id": "UNAVAILABLE",
@@ -324,7 +344,7 @@
    "status": "BLOCKED"
   },
   {
-   "evidence": "4/4 required checks green on PR #4 exact head 3ad557c",
+   "evidence": "4/4 required checks terminal success on final HEAD 089549f (run 32567007222); corroborated by run 32566465609 on source-identical 3ad557c",
    "lane": "hosted_ci",
    "status": "PASS"
   },
