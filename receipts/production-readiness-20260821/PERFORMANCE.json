@@ -1,0 +1,107 @@
+{
+ "daemon_control_plane_start": {
+  "idle_rss_bytes_median": 1867776,
+  "max_s": 0.004,
+  "median_s": 0.0036,
+  "min_s": 0.0033,
+  "p95_ceiling_s": 2.0,
+  "p95_s": 0.004,
+  "runs": 10,
+  "status": "OK",
+  "within_threshold": true
+ },
+ "declared_product_limits": {
+  "all_present": true,
+  "limits": [
+   {
+    "const": "MAX_REPLAY_BYTES",
+    "expected": 67108864,
+    "found": 67108864,
+    "ok": true,
+    "path": "desktop/src-tauri/src/lib.rs"
+   },
+   {
+    "const": "MAX_LOCAL_CONTRACT_BYTES",
+    "expected": 65536,
+    "found": 65536,
+    "ok": true,
+    "path": "desktop/src-tauri/src/lib.rs"
+   },
+   {
+    "const": "MAX_CONTRACT_BYTES",
+    "expected": 65536,
+    "found": 65536,
+    "ok": true,
+    "path": "desktop/src-tauri/src/production.rs"
+   },
+   {
+    "const": "MAX_GOAL_BYTES",
+    "expected": 1024,
+    "found": 1024,
+    "ok": true,
+    "path": "desktop/src-tauri/src/production.rs"
+   },
+   {
+    "const": "MAX_WORKSPACE_BYTES",
+    "expected": 4096,
+    "found": 4096,
+    "ok": true,
+    "path": "desktop/src-tauri/src/production.rs"
+   },
+   {
+    "const": "MAX_WRITE_BYTES",
+    "expected": 4096,
+    "found": 4096,
+    "ok": true,
+    "path": "desktop/src-tauri/src/production.rs"
+   },
+   {
+    "const": "MAX_RUNTIME_SECONDS",
+    "expected": 900,
+    "found": 900,
+    "ok": true,
+    "path": "desktop/src-tauri/src/production.rs"
+   },
+   {
+    "const": "MAX_OUTPUT_BYTES",
+    "expected": 16777216,
+    "found": 16777216,
+    "ok": true,
+    "path": "desktop/src-tauri/src/production.rs"
+   },
+   {
+    "const": "MAX_CORE_MESSAGE_BYTES",
+    "expected": 65536,
+    "found": 65536,
+    "ok": true,
+    "path": "desktop/src-tauri/src/mission_runner.rs"
+   },
+   {
+    "const": "MAX_RESULT_BYTES",
+    "expected": 4194304,
+    "found": 4194304,
+    "ok": true,
+    "path": "desktop/src-tauri/src/mission_runner.rs"
+   }
+  ]
+ },
+ "gui_launch": {
+  "reason": "console IOConsoleLocked=Yes; native Tauri window-server launch cannot be measured headlessly. Daemon control-plane start is measured as the usable local-control-plane proxy.",
+  "status": "ENVIRONMENT_BLOCKED"
+ },
+ "instrument_validated": true,
+ "machine": {
+  "cpu": "Apple M4 Max",
+  "hw_model": "Mac16,5",
+  "logical_cpus": "16",
+  "macos": "26.6",
+  "mem_bytes": "51539607552",
+  "uname": "Darwin 25.6.0 arm64 arm"
+ },
+ "measured_at": "2026-08-22T08:53:57Z",
+ "schema": "nemesis.performance/v1",
+ "sizes": {
+  "build_bin_total_bytes": 6266848,
+  "desktop_dist_total_bytes": 1222536
+ }
+}

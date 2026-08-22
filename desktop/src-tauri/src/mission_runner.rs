@@ -58,6 +58,15 @@ fn refused(message: impl Into<String>) -> MissionRunError {
     MissionRunError::Refused(message.into())
 }
 
+/// Create a directory (and parents) then enforce private 0700 permissions on it,
+/// so the Core home chain self-enforces the documented socket-directory invariant
+/// instead of relying on an inherited umask.
+fn ensure_private_dir(path: &Path) -> Result<(), MissionRunError> {
+    fs::create_dir_all(path)?;
+    fs::set_permissions(path, fs::Permissions::from_mode(0o700))?;
+    Ok(())
+}
+
 #[derive(Clone, Debug, Default)]
 pub struct MissionCancellation {
     cancelled: Arc<AtomicBool>,
@@ -581,7 +590,7 @@ impl CoreProcess {
                 "Core Unix socket path exceeds the macOS sockaddr_un limit",
             ));
         }
-        fs::create_dir_all(&self.home)?;
+        ensure_private_dir(&self.home)?;
         let stdout = OpenOptions::new()
             .create(true)
             .append(true)
@@ -789,6 +798,8 @@ pub fn run_local_mission(
     let scope_digest = sha256(lane.to_string_lossy().as_bytes());
     let worker_id = format!("wrk_{}", &mission.mission_id[4..]);
     let core_home = home.join(".core").join(&mission.mission_id[4..16]);
+    ensure_private_dir(&home.join(".core"))?;
+    ensure_private_dir(&core_home)?;
     let core_owner_path = core_home.join("mission-id.txt");
     if core_owner_path.exists() {
         if fs::read_to_string(&core_owner_path)?.trim() != mission.mission_id {
@@ -1273,4 +1284,48 @@ pub fn load_last_mission(home: &Path) -> Result<Option<MissionExecutionResult>, 
     }
     validate_result(&result)?;
     Ok(Some(result))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::ensure_private_dir;
+    use std::fs;
+    use std::os::unix::fs::PermissionsExt;
+    use std::time::{SystemTime, UNIX_EPOCH};
+
+    // ARCH-001 regression: the Core home chain self-enforces private 0700
+    // directories (including intermediates), not an inherited umask.
+    #[test]
+    fn core_home_chain_is_private_0700() {
+        let nonce = SystemTime::now()
+            .duration_since(UNIX_EPOCH)
+            .unwrap()
+            .as_nanos();
+        let base =
+            std::env::temp_dir().join(format!("nemesis-arch001-{}-{nonce}", std::process::id()));
+        let core_parent = base.join(".core");
+        let core_home = core_parent.join("abcdef123456");
+
+        ensure_private_dir(&core_parent).unwrap();
+        ensure_private_dir(&core_home).unwrap();
+        // Idempotent second call must not fail or loosen permissions.
+        ensure_private_dir(&core_home).unwrap();
+
+        for directory in [&core_parent, &core_home] {
+            let metadata = fs::symlink_metadata(directory).unwrap();
+            assert!(
+                metadata.is_dir(),
+                "{} must be a directory",
+                directory.display()
+            );
+            assert_eq!(
+                metadata.permissions().mode() & 0o777,
+                0o700,
+                "{} must be private 0700",
+                directory.display()
+            );
+        }
+
+        let _ = fs::remove_dir_all(&base);
+    }
 }

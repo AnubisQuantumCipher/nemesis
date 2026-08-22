@@ -438,6 +438,17 @@ begin
    end if;
    Home := To_Unbounded_String (Ada.Command_Line.Argument (2));
    Ada.Directories.Create_Path (To_String (Home));
+   declare
+      Path : Interfaces.C.Strings.chars_ptr :=
+        Interfaces.C.Strings.New_String (To_String (Home));
+      Code : Interfaces.C.int;
+   begin
+      Code := C_Chmod (Path, 16#1C0#);
+      Interfaces.C.Strings.Free (Path);
+      if Code /= 0 then
+         raise Socket_Error with "failed to restrict local home permissions";
+      end if;
+   end;
    Socket_Path := To_Unbounded_String (To_String (Home) & "/core.sock");
    declare
       Path : Interfaces.C.Strings.chars_ptr :=

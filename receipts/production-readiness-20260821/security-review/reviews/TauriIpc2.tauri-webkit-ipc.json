@@ -1,0 +1,73 @@
+{
+  "coverage_summary": "schema=nemesis.hardening-audit.result/v1 | lane=tauri-webkit-ipc | subject_commit=651e7d839bf1624df2c5e074c11a88a62f024e34 | reviewer=isolated subagent (anthropic/claude-opus-4, TauriIpc2), static-only, read-only. VERDICT=CLEAN (all 5 documented invariants CONFIRMED; only one informational observation, no gap >= medium).\n\nCONFIRMED INVARIANTS (path:line):\n[INV1 command surface] 9 commands registered lib.rs:631-641; each returns typed Result<_,CommandFailure> (CommandFailure lib.rs:28-33). compile_mission/run_mission `path` validated by read_local_contract lib.rs:373-390 (must be absolute; symlink_metadata rejects symlink; regular file; 1..=64KiB) then compile_local_contract production.rs:122-235 validates schema/missionId/goal(1..1024)/workspace/baseRevision/action/budgets/authority/completion. draft_mission request deny_unknown_fields mission_runner.rs:165-171, validated via inspect_workspace + compile_local_contract mission_runner.rs:474-527. update_settings DesktopSettings strict enum/bool deny_unknown_fields production.rs:377-383, bounded load_settings production.rs:396-404. load_replay bounded+home-contained lib.rs:565-599. mission_status/cancel_mission take no external input lib.rs:539-575.\n[INV2 path bounding] read_local_contract lib.rs:374-386; compile_local_contract workspace bound production.rs:143-148 (absolute, <=4096B, no NUL); validate_repository_relative_path runtime/crates/nemesis-protocol/src/lib.rs:147-163 rejects empty/>MAX/NUL/%/backslash/control/absolute and '.'/'..'/'.git'/empty components; inspect_workspace mission_runner.rs:371-427 canonicalizes, refuses symlink, requires canonical Git top-level equality, enforces canonical_target.starts_with(workspace); post-creation re-check mission_runner.rs:537-548; load_last_mission rejects ParentDir + symlink mission_runner.rs:1253-1262; load_replay canonical_replay.starts_with(canonical_home) lib.rs:594-599.\n[INV3 release web config] tauri.release.conf.json:1-25 has only identifier+bundle — no devUrl / no dev/build block; restrictive CSP default-src 'self' inherited from tauri.conf.json:13-15 (connect-src self/ipc, img-src self/asset/data, style-src self+unsafe-inline; no unsafe-eval, no remote script src); release build `tauri build --config src-tauri/tauri.release.conf.json` scripts/package_release.sh:68-70 uses frontendDist ../dist (tauri.conf.json:10) not devUrl; capabilities/default.json:1-7 grants only core:default (no fs/shell/http plugin permissions).\n[INV4 no raw HTML] grep dangerouslySetInnerHTML|innerHTML|outerHTML|insertAdjacentHTML|eval(|document.write|new Function over desktop/src = no matches; index.html:1-14 static (root div + module script); mission-derived strings render via auto-escaped JSX text.\n[INV5 no secret serialization] bridge.ts:6-9 DesktopSettings={textScale,reduceMotion} only; bridge.ts:17-177 invoke payloads carry paths/digests/settings only; grep localStorage|sessionStorage|document.cookie|secret|token|password|apiKey over desktop/src found only UI copy ('No worker secret view' AuthorityReview.tsx:66-68; 'secrets denied' MissionCockpit.tsx:281) — no client-side secret persistence.\n\nTS-001/TS-002 architect-gated residuals not re-litigated; no interaction with the Tauri IPC/web surface observed.",
+  "findings": [
+    {
+      "rule_id": "TAURI-01",
+      "title": "Absolute local-home paths appear in some CommandFailure error strings",
+      "summary": "A few storage/mission error branches embed absolute host paths via path.display() into CommandFailure.message that is surfaced to the webview. For this single-user local desktop app (which already displays localHome in the UI by design) no trust boundary is crossed; recorded informationally against invariant 1's 'no absolute host path leak' phrasing. Precondition: a local storage/mission error occurs (non-private home dir, unavailable workspace/target). Remediation: optionally keep absolute paths in private local-home logs and surface only relative names in CommandFailure.message; not required for the local threat model.",
+      "severity": "informational",
+      "confidence": "high",
+      "category": "information-exposure",
+      "locations": [
+        {
+          "path": "desktop/src-tauri/src/production.rs",
+          "start_line": 224,
+          "end_line": 227,
+          "role": "InvalidHome error embeds path.display()"
+        },
+        {
+          "path": "desktop/src-tauri/src/mission_runner.rs",
+          "start_line": 136,
+          "end_line": 140,
+          "role": "refused() message embeds path.display()"
+        }
+      ],
+      "cwe": [
+        "CWE-209"
+      ],
+      "evidence": [
+        {
+          "label": "path in error string",
+          "explanation": "ProductionError::InvalidHome formats the absolute path; mission_runner refused() messages embed path.display(). Both reach the frontend via CommandFailure.message.",
+          "excerpt": "\"local home path is not a private directory: {}\", path.display()"
+        },
+        {
+          "label": "already surfaced by design",
+          "explanation": "SystemStatus.local_home is intentionally shown in the UI (App.tsx:299), so no additional cross-boundary disclosure occurs in the local single-user model."
+        }
+      ],
+      "optionalProperties": {}
+    }
+  ],
+  "reviewed_paths": [
+    "desktop/src-tauri/src/lib.rs",
+    "desktop/src-tauri/src/main.rs",
+    "desktop/src-tauri/src/production.rs",
+    "desktop/src-tauri/src/mission_runner.rs",
+    "desktop/src-tauri/tauri.conf.json",
+    "desktop/src-tauri/tauri.release.conf.json",
+    "desktop/src-tauri/capabilities/default.json",
+    "desktop/src/lib/bridge.ts",
+    "desktop/src/App.tsx",
+    "desktop/src/components/MissionCockpit.tsx",
+    "desktop/src/components/SettingsPanel.tsx",
+    "desktop/src/components/Sidebar.tsx",
+    "desktop/src/components/ReplayPanel.tsx",
+    "desktop/src/components/EvidencePanel.tsx",
+    "desktop/src/components/AuthorityReview.tsx",
+    "desktop/src/components/StatusMarker.tsx",
+    "desktop/index.html",
+    "desktop/vite.config.ts",
+    "runtime/crates/nemesis-protocol/src/lib.rs",
+    "scripts/package_release.sh"
+  ],
+  "deferred": [
+    {
+      "reason": "Architect-gated residuals TS-001 (daemon one-shot approval consumption) and TS-002 (capability grant persistence) are out of lane scope and not re-litigated; no interaction with the Tauri IPC/web surface observed.",
+      "paths": [
+        "config/formal-kernel-scope.json",
+        "docs/architecture/FORMAL_ASSURANCE.md"
+      ]
+    }
+  ]
+}

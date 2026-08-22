@@ -20,8 +20,8 @@ Cross-unit authority invariants carried by these contracts:
 
 - Authorization cannot widen: `Capabilities.Authorize` refuses requests outside the granted capability, and `Capabilities.Is_Attenuation` requires the child's mission/resource/scope to match, expiry and byte budget to be bounded by the parent, and every child operation to be present in the parent's operation set.
 - Approvals are exact and one-shot at the kernel boundary: `Approvals.Consume_Approval`'s proved postcondition marks an accepted approval `Approval_Consumed` only on exact mission and action-digest match before expiry, and leaves the record unchanged on every refusal (`Approval_Replayed` covers double consumption).
-- Budgets are monotone: `Budgets.Can_Allocate`/`Budgets.Consume` postconditions forbid negative allocation and overflow.
-- Invalid states cannot transition or complete: `Transitions.Allowed`, `Missions.Apply`/`Commit_Event` preconditions, and `Completion.Evaluate` postconditions.
+- Budgets are monotone: `Budgets.Consume`'s proved postcondition forbids negative allocation, and together with the non-negative `Budget_Unit` subtype (`0 .. 2**63 - 1`) and the `Can_Allocate` guard it prevents overflow or any increase.
+- Invalid states cannot transition or complete: `Transitions.Allowed`'s proved postcondition (a terminal source admits no transition), the terminal-state guards in the bodies of `Missions.Apply`/`Commit_Event` together with their proved postconditions, and `Completion.Evaluate`'s proved postcondition.
 - Evidence cannot self-accept: `Evidence.Acceptable`'s proved postcondition.
 
 Semantic calibration: `scripts/verify_proof_aba.py` executes an exact-byte A→B→A tamper gate on a disposable copy (B widens `Capabilities.Authorize` to return `Authorized`); run A proves green, run B fails for the intended GNATprove postcondition reason, restoration is byte-exact, and rerun A2 proves green (`PASS_KERNEL_PROOF_ABA A=0 B=nonzero A2=0 bytes_restored=true`).

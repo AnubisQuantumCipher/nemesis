@@ -1,0 +1,77 @@
+{
+  "coverage_summary": "Lane arch-trust-boundary (ARCH-). Subject commit 651e7d839bf1624df2c5e074c11a88a62f024e34. Verdict: CLEAN — all five documented component trust boundaries are enforced in source; one informational defense-in-depth note (ARCH-001) and two architect-gated residuals (TS-001, TS-002) noted only, not re-litigated.\n\nBRIEF result (nemesis.hardening-audit.result/v1):\n{\n  \"schema\": \"nemesis.hardening-audit.result/v1\",\n  \"lane\": \"arch-trust-boundary\",\n  \"reviewer_identity\": {\"context\": \"isolated subagent, separate process/context from lead\", \"model\": \"anthropic/claude-opus-4-8\", \"limitations\": [\"static-only\", \"no build/execution\", \"single-lane scope: component trust boundaries\", \"SPARK proof results assumed per config/formal-kernel-scope.json, not re-run\"]},\n  \"subject_commit\": \"651e7d839bf1624df2c5e074c11a88a62f024e34\",\n  \"coverage\": [\n    {\"invariant\": \"WebView UI holds no ambient authority; every authority-bearing action flows through a named Tauri command that re-validates inputs\", \"files\": [\"desktop/src-tauri/capabilities/default.json\", \"desktop/src-tauri/tauri.conf.json\", \"desktop/src-tauri/src/lib.rs\", \"desktop/src-tauri/src/mission_runner.rs\"], \"status\": \"CONFIRMED\"},\n    {\"invariant\": \"Mission runner treats child processes as untrusted: bounded output, bounded runtime, sanitized environment, absolute executable paths, symlink/regular gating\", \"files\": [\"desktop/src-tauri/src/mission_runner.rs\"], \"status\": \"CONFIRMED\"},\n    {\"invariant\": \"Single-authority ownership of mission state: workers only propose; Core/Kernel allocate sequence, own transitions, gate evidence freshness and completion; terminal states immutable\", \"files\": [\"daemon/src/nemesis-core-mission_store.adb\", \"daemon/src/nemesis_core_daemon.adb\", \"kernel/src/nemesis-kernel-transitions.adb\", \"kernel/src/nemesis-kernel-missions.ads\", \"kernel/src/nemesis-kernel-capabilities.adb\", \"kernel/src/nemesis-kernel-completion.adb\"], \"status\": \"CONFIRMED\"},\n    {\"invariant\": \"Documented boundaries in THREAT_MODEL.md / TRUST_BOUNDARIES.md match enforcing code (narrow IPC, owner-scoped 0600 socket, bounded messages, path/symlink rejection, clean environment)\", \"files\": [\"THREAT_MODEL.md\", \"TRUST_BOUNDARIES.md\", \"daemon/src/nemesis_core_daemon.adb\", \"daemon/src/nemesis-core-json.ads\", \"desktop/src-tauri/src/mission_runner.rs\", \"runtime/crates/nemesis-protocol/src/lib.rs\"], \"status\": \"CONFIRMED\"},\n    {\"invariant\": \"Local-home layout: private 0700 dirs, 0600 files, bounded regular-file loads\", \"files\": [\"desktop/src-tauri/src/production.rs\", \"desktop/src-tauri/src/mission_runner.rs\"], \"status\": \"CONFIRMED\"}\n  ],\n  \"gaps\": [\n    {\"id\": \"ARCH-001\", \"severity\": \"informational\", \"category\": \"defense-in-depth / directory permissions\", \"cwe\": \"CWE-276\", \"path\": \"daemon/src/nemesis_core_daemon.adb\", \"line\": 442, \"precondition\": \"Core launched with a --home whose parent chain is not already 0700, or the intermediate .core dir created by create_dir_all.\", \"impact\": \"TRUST_BOUNDARIES.md requires 'Socket directory and file permissions must deny other local users.' The daemon hardens only the socket FILE (chmod 0o600 at :456-465) and creates its home via Create_Path (:442) with default umask; it does not chmod its home/socket DIRECTORY to 0700. Mitigated in the desktop flow (socket 0600 denies connect; app-data root 0700 via production.rs; run_local_mission pre-creates core_home 0700). Not exploitable within the audited product, but the daemon does not self-enforce the documented dir invariant.\", \"evidence\": \"nemesis_core_daemon.adb:442 Create_Path has no perm arg; only chmod is on the socket file :456-465; mission_runner.rs CoreProcess::start create_dir_all(&self.home) has no mode; core_home raised to 0700 only via atomic_write->ensure_private_directory (production.rs:251-263); intermediate .core left default under 0700 root.\", \"remediation\": \"Daemon should chmod its home dir to 0700 immediately after Create_Path; mission_runner should create core_home/.core through ensure_private_directory so the 0700 dir invariant is self-enforced.\", \"confidence\": \"high\"}\n  ],\n  \"confirmed_invariants\": [\n    \"WebView no ambient authority: capabilities/default.json:6 permissions=[core:default]; nine named commands only (lib.rs:628-641); CSP restricts network (tauri.conf.json:12-13).\",\n    \"Authority-bearing run re-validates: run_mission re-reads/recompiles contract (lib.rs:380-403) and re-checks reviewed digests (mission_runner.rs:731-736); local_home from app_data_dir not renderer (lib.rs:360-365).\",\n    \"Bounded child output: read_bounded caps at output_limit and errors on overflow (mission_runner.rs:216-228); Core responses LF/size-bounded (MAX_CORE_MESSAGE_BYTES=65536, mission_runner.rs:21).\",\n    \"Bounded child runtime: run_bounded deadline kills on timeout/cancel (mission_runner.rs:240-289, :272).\",\n    \"Sanitized environment: env_clear + fixed PATH/LANG/LC_ALL/TMPDIR allowlist before every spawn (mission_runner.rs:231-238), applied to workers and Core daemon.\",\n    \"Absolute non-symlink regular executable files enforced (GIT :22; MissionExecutables::validate :126-149); lane write O_NOFOLLOW + root check (:542-553).\",\n    \"Kernel owns transitions; terminal states admit none (transitions.ads:16-19, transitions.adb:6-22).\",\n    \"Sequence allocated by Kernel only on Accepted (missions.ads:31-56); daemon persists via Commit_Transition/Commit_Event (mission_store.adb:245-296).\",\n    \"Contract binding on authorize (daemon:165-176); capability Authorize binds mission/subject/scope/op/expiry/bytes (capabilities.adb:4-22; daemon:196-266).\",\n    \"Evidence freshness: Record_Evidence requires Source==Current_Source else Evidence_Stale (mission_store.adb:513-543); Claims_Current (:566-571).\",\n    \"Completion Kernel-decided: Completion.Evaluate (completion.adb:4-23); daemon gates propose_completion on Running + Evaluate (daemon:310-354).\",\n    \"Workers only propose; runner validates two-line proposal vs reviewed action (mission_runner.rs:838-884) and issues all Core requests.\",\n    \"Owner-scoped socket chmod 0o600 (daemon:456-465); bounded messages Max_Message_Bytes=65536 (json.ads:2; daemon:418-420; json.adb:60-62); exact field-count per command.\",\n    \"Path traversal/special-file rejection: validate_repository_relative_path (protocol lib.rs:147-163); canonicalize+symlink+containment (mission_runner.rs:370-428, 533-556); post-run canonical workspace unchanged (:1181-1191).\",\n    \"0700 dirs / 0600 files: ensure_private_directory (production.rs:251-263); atomic_write create_new mode 0o600 + fsync (:266-299); initialize_local_home (:319-335).\",\n    \"Bounded regular-file loads: manifest (production.rs:341-347), settings (:390-398), last-mission pointer/result (mission_runner.rs:1236-1266), replay w/ home containment (lib.rs:583-607).\"\n  ],\n  \"gated_residuals_noted\": [\n    \"TS-001: authorize path does not call Nemesis.Kernel.Approvals.Consume_Approval (config/formal-kernel-scope.json unproved_authority_boundaries.nemesis_core_daemon 'Approvals is not called'); contract-digest + capability binding still enforce the desktop-mission boundary.\",\n    \"TS-002: capability grant synthesized in authorize_action (daemon:222-241 fixed cap_0000..., Maximum_Bytes 4096) rather than persisted parent + attenuated child; Is_Attenuation (capabilities.adb:24-46) is proved but not exercised in issuance; Authorize still bounds escalation.\"\n  ],\n  \"verdict\": \"CLEAN\"\n}",
+  "findings": [
+    {
+      "rule_id": "ARCH-001",
+      "title": "Core daemon does not self-enforce 0700 permissions on its socket/home directory",
+      "summary": "TRUST_BOUNDARIES.md requires the local socket directory and file permissions to deny other local users. The daemon hardens only the socket file (chmod 0o600 at nemesis_core_daemon.adb:456-465) and creates its home via Ada.Directories.Create_Path (:442) with default umask; it never chmods its home/socket directory to 0700. In the audited desktop flow this is mitigated (0600 socket denies connection regardless of dir perms; the app-data root is set 0700 by production.rs; run_local_mission pre-creates core_home 0700 via ensure_private_directory), so it is not exploitable within the product, but the daemon does not self-enforce the documented directory invariant and the intermediate .core directory is left at default perms.",
+      "severity": "informational",
+      "confidence": "high",
+      "category": "directory-permissions",
+      "locations": [
+        {
+          "path": "daemon/src/nemesis_core_daemon.adb",
+          "start_line": 442,
+          "end_line": 465,
+          "role": "socket-home creation without 0700 chmod"
+        },
+        {
+          "path": "desktop/src-tauri/src/mission_runner.rs",
+          "start_line": 481,
+          "end_line": 495,
+          "role": "CoreProcess::start create_dir_all(&self.home) without mode"
+        },
+        {
+          "path": "desktop/src-tauri/src/production.rs",
+          "start_line": 251,
+          "end_line": 263,
+          "role": "ensure_private_directory (the 0700 helper the daemon path does not use)"
+        }
+      ],
+      "cwe": [
+        "CWE-276"
+      ],
+      "evidence": [
+        {
+          "label": "socket file hardened but directory is not",
+          "explanation": "Only the socket file is chmod'd 0o600; the home/socket directory is created with default umask permissions by Create_Path.",
+          "excerpt": "Ada.Directories.Create_Path (To_String (Home));  ...  Code := C_Chmod (Path, 16#180#); -- 0o600 on core.sock only"
+        },
+        {
+          "label": "mitigation in desktop flow",
+          "explanation": "The socket file at 0600 denies connections from other local users regardless of directory perms; the app-data root and core_home reach 0700 through production.rs, so the boundary holds within the audited product.",
+          "excerpt": "fs::set_permissions(path, fs::Permissions::from_mode(0o700))  (production.rs:262)"
+        }
+      ],
+      "optionalProperties": {
+        "precondition": "Core launched with a --home whose parent chain is not already 0700, or reliance on the intermediate .core directory created by create_dir_all.",
+        "impact": "Documented 'socket directory must deny other local users' invariant is enforced only indirectly (via socket-file mode and caller-set root perms), not self-enforced by the daemon.",
+        "remediation": "Daemon should chmod its home directory to 0700 immediately after Create_Path; mission_runner should create core_home and the .core intermediate through ensure_private_directory.",
+        "verdict_effect": "informational only; does not downgrade CLEAN verdict"
+      }
+    }
+  ],
+  "reviewed_paths": [
+    "receipts/production-readiness-20260821/security-review/BRIEF.md",
+    "THREAT_MODEL.md",
+    "TRUST_BOUNDARIES.md",
+    "docs/architecture/LOCAL_DESKTOP_MISSION.md",
+    "desktop/src-tauri/src/lib.rs",
+    "desktop/src-tauri/src/mission_runner.rs",
+    "desktop/src-tauri/src/production.rs",
+    "desktop/src-tauri/tauri.conf.json",
+    "desktop/src-tauri/capabilities/default.json",
+    "daemon/src/nemesis-core-mission_store.ads",
+    "daemon/src/nemesis-core-mission_store.adb",
+    "daemon/src/nemesis_core_daemon.adb",
+    "daemon/src/nemesis-core-json.ads",
+    "kernel/src/nemesis-kernel-transitions.ads",
+    "kernel/src/nemesis-kernel-transitions.adb",
+    "kernel/src/nemesis-kernel-missions.ads",
+    "kernel/src/nemesis-kernel-capabilities.adb",
+    "kernel/src/nemesis-kernel-completion.adb",
+    "runtime/crates/nemesis-protocol/src/lib.rs",
+    "config/formal-kernel-scope.json"
+  ],
+  "deferred": []
+}

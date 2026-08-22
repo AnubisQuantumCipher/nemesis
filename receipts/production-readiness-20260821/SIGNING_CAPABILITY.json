@@ -1,0 +1,17 @@
+{
+ "adhoc_or_development_signing_capability": "AVAILABLE_LOCAL_ONLY",
+ "apple_development_count": 1,
+ "codesigning_identities_present": true,
+ "consequence": "COMPLETE_PRODUCTION_PUBLIC is mechanically unreachable in this environment. Ad-hoc/development signing supports LOCAL validation only and cannot satisfy public production distribution (mission Phase H-7/H-8, gates I-08..I-12).",
+ "developer_id_application_count": 0,
+ "developer_id_signing_capability": "UNAVAILABLE",
+ "gatekeeper_production_accept_capability": "UNAVAILABLE",
+ "hardened_runtime_developer_id_capability": "UNAVAILABLE",
+ "no_secrets_or_identities_recorded": true,
+ "notarization_capability": "UNAVAILABLE",
+ "notarytool_present": true,
+ "probed_at": "2026-08-22T08:44:50Z",
+ "reason": "No Developer ID Application certificate; only an Apple Development certificate exists. Developer ID signing + notarization require an active paid Apple Developer Program membership, a Developer ID certificate, and notarytool credentials. These are external account/credential authority gates the no-human mission may not cross (no account mutation, no credential entry, no spending).",
+ "schema": "nemesis.signing-capability/v1",
+ "stapler_present": true
+}
