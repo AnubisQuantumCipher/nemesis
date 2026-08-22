@@ -35,6 +35,7 @@ python3 scripts/verify_evidence_bundle.py receipts/desktop-latest --write
 python3 scripts/verify_evidence_bundle.py receipts/desktop-latest
 ./scripts/verify_desktop.sh
 ./scripts/test_production_desktop.sh
+./scripts/test_reliability.sh
 ./scripts/test_security_hardening.sh
 python3 scripts/verify_phase16_receipt.py receipts/phase-16-public/PHASE16.json
 python3 scripts/test_phase16_receipt.py receipts/phase-16-public/PHASE16.json

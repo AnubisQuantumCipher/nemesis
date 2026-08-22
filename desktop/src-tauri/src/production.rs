@@ -291,12 +291,40 @@ pub(crate) fn atomic_write(path: &Path, bytes: &[u8]) -> Result<(), ProductionEr
     Ok(())
 }
 
+/// Remove crash-orphaned atomic-write temporaries (`.<name>.tmp-<pid>`) from one
+/// directory. Bounded scan; regular files only; symlinks and directories are skipped.
+fn sweep_stale_temporaries(directory: &Path) -> Result<(), ProductionError> {
+    for entry in fs::read_dir(directory)?.take(4096) {
+        let entry = entry?;
+        let name = entry.file_name();
+        let Some(name) = name.to_str() else {
+            continue;
+        };
+        if !name.starts_with('.') {
+            continue;
+        }
+        let Some((_, suffix)) = name.rsplit_once(".tmp-") else {
+            continue;
+        };
+        if suffix.is_empty() || !suffix.bytes().all(|byte| byte.is_ascii_digit()) {
+            continue;
+        }
+        if entry.file_type()?.is_file() {
+            fs::remove_file(entry.path())?;
+        }
+    }
+    Ok(())
+}
+
 pub fn initialize_local_home(root: &Path) -> Result<LocalHomeStatus, ProductionError> {
     ensure_private_directory(root)?;
+    sweep_stale_temporaries(root)?;
     for directory in [
         "drafts", "missions", "lanes", "receipts", "logs", "support", "tmp",
     ] {
-        ensure_private_directory(&root.join(directory))?;
+        let path = root.join(directory);
+        ensure_private_directory(&path)?;
+        sweep_stale_temporaries(&path)?;
     }
     let manifest_path = root.join("home.json");
     let first_launch = !manifest_path.exists();

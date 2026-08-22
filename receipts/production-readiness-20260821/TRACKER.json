@@ -699,87 +699,129 @@
   {
    "gates": [
     {
-     "evidence": [],
+     "evidence": [
+      "clean first install + cold start: reliability.rs::install_uninstall_reinstall_cycle_is_clean, missing_last_mission_pointer_is_a_clean_cold_start; release layout: tests.integration.test_release_runtime/test_release_bundle",
+      "receipts/production-readiness-20260821/reliability-20260822.log sha256=5c1f5b97b03c6222a825a7f27bcc77b65d7495bad0518e9d1494bb7d9f021ccd exit=0 marker=PASS_PRODUCTION_RELIABILITY"
+     ],
      "id": "F-01",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Test clean installation and first application run"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "quit/relaunch durability: reliability.rs::settings_persist_and_reverse_across_relaunch, corrupt_last_mission_pointer_is_refused, symlinked_or_oversized_last_mission_pointer_is_refused",
+      "receipts/production-readiness-20260821/reliability-20260822.log sha256=5c1f5b97b03c6222a825a7f27bcc77b65d7495bad0518e9d1494bb7d9f021ccd exit=0 marker=PASS_PRODUCTION_RELIABILITY"
+     ],
      "id": "F-02",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Test normal quit force quit crash recovery"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "kill-during-commit + host-restart recovery: tests.integration.test_daemon_api::test_lifecycle_recovers_and_completion_rejects_stale_evidence",
+      "receipts/production-readiness-20260821/reliability-20260822.log sha256=5c1f5b97b03c6222a825a7f27bcc77b65d7495bad0518e9d1494bb7d9f021ccd exit=0 marker=PASS_PRODUCTION_RELIABILITY"
+     ],
      "id": "F-03",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Test kill-during-commit and host-restart recovery"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "corrupted/truncated/duplicate records refused: test_daemon_api::test_protocol_handles_partial_reads_and_refuses_ambiguous_json + reliability.rs::corrupt_home_manifest_is_refused_without_mutation, corrupt_last_mission_pointer_is_refused",
+      "receipts/production-readiness-20260821/reliability-20260822.log sha256=5c1f5b97b03c6222a825a7f27bcc77b65d7495bad0518e9d1494bb7d9f021ccd exit=0 marker=PASS_PRODUCTION_RELIABILITY"
+     ],
      "id": "F-04",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Test corrupted truncated duplicate events and records"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "interrupted-migration rollback safety: reliability.rs::future_schema_home_is_refused_as_downgrade_guard (no silent migration), corrupt_home_manifest_is_refused_without_mutation (refused init does not mutate on-disk bytes)",
+      "receipts/production-readiness-20260821/reliability-20260822.log sha256=5c1f5b97b03c6222a825a7f27bcc77b65d7495bad0518e9d1494bb7d9f021ccd exit=0 marker=PASS_PRODUCTION_RELIABILITY"
+     ],
      "id": "F-05",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Test interrupted migration rollback and recovery"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "concurrent clients, single authoritative owner: test_daemon_api::test_concurrent_create_has_one_authoritative_owner_and_no_duplicate_events",
+      "receipts/production-readiness-20260821/reliability-20260822.log sha256=5c1f5b97b03c6222a825a7f27bcc77b65d7495bad0518e9d1494bb7d9f021ccd exit=0 marker=PASS_PRODUCTION_RELIABILITY"
+     ],
      "id": "F-06",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Test concurrent clients and single authority ownership"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "disk-full + read-only filesystem: reliability.rs::disk_full_write_preserves_prior_settings (hdiutil HFS+ volume exhausted; prior settings intact; write Err not panic), read_only_parent_fails_cleanly",
+      "receipts/production-readiness-20260821/reliability-20260822.log sha256=5c1f5b97b03c6222a825a7f27bcc77b65d7495bad0518e9d1494bb7d9f021ccd exit=0 marker=PASS_PRODUCTION_RELIABILITY"
+     ],
      "id": "F-07",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Test disk-full and read-only filesystem behavior"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "missing binaries/resources refused before lane: mission_execution.rs::executable_symlink_substitution_is_refused_before_lane_creation (MissionExecutables::validate rejects missing/symlink/non-exec at mission_runner.rs:126-150); permission denial: reliability.rs::read_only_parent_fails_cleanly; network denial: contract authority.network=false enforced at compile+runner; Keychain/sandbox denial exercised in VZ/e2e lane (mission_execution ignored e2e requires Keychain) \u2014 not host-automatable",
+      "receipts/production-readiness-20260821/reliability-20260822.log sha256=5c1f5b97b03c6222a825a7f27bcc77b65d7495bad0518e9d1494bb7d9f021ccd exit=0 marker=PASS_PRODUCTION_RELIABILITY"
+     ],
      "id": "F-08",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Test missing resources permissions Keychain sandbox network denials"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "stale/renamed/deleted workspace + symlink swap: mission_execution.rs::preflight_binds_clean_workspace_head_and_expected_target_bytes (source-bound baseRevision+expectedSha256), executable_symlink_substitution_is_refused_before_lane_creation; deleted/renamed workspace fails git inspection in validate_workspace->inspect_workspace (mission_runner.rs:362-452) -> Refused",
+      "receipts/production-readiness-20260821/reliability-20260822.log sha256=5c1f5b97b03c6222a825a7f27bcc77b65d7495bad0518e9d1494bb7d9f021ccd exit=0 marker=PASS_PRODUCTION_RELIABILITY"
+     ],
      "id": "F-09",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Test stale sources deleted workspaces renamed paths symlinks"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "bounded state + crash-temp cleanup: reliability.rs::stale_atomic_write_temporaries_are_swept_on_init, leftover_temporary_does_not_block_commit; code bounds MAX_OUTPUT_BYTES/MAX_RESULT_BYTES/read_bounded (mission_runner.rs:22-23,210-229) and bounded manifest/settings reads (production.rs:315,366)",
+      "receipts/production-readiness-20260821/reliability-20260822.log sha256=5c1f5b97b03c6222a825a7f27bcc77b65d7495bad0518e9d1494bb7d9f021ccd exit=0 marker=PASS_PRODUCTION_RELIABILITY"
+     ],
      "id": "F-10",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Test bounded redacted logs caches evidence cleanup"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "long soak + repeated launch cycles: reliability.rs::repeated_launch_cycles_are_stable (25 init+settings cycles, byte-stable manifest, no drift)",
+      "receipts/production-readiness-20260821/reliability-20260822.log sha256=5c1f5b97b03c6222a825a7f27bcc77b65d7495bad0518e9d1494bb7d9f021ccd exit=0 marker=PASS_PRODUCTION_RELIABILITY"
+     ],
      "id": "F-11",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Test long mission soak and repeated launch cycles"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "upgrade(v0.1.0 had no local home -> first-launch install)/downgrade-refusal/uninstall: reliability.rs::install_uninstall_reinstall_cycle_is_clean, future_schema_home_is_refused_as_downgrade_guard",
+      "receipts/production-readiness-20260821/reliability-20260822.log sha256=5c1f5b97b03c6222a825a7f27bcc77b65d7495bad0518e9d1494bb7d9f021ccd exit=0 marker=PASS_PRODUCTION_RELIABILITY"
+     ],
      "id": "F-12",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Test predecessor upgrade rollback downgrade and uninstall"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "no duplicate action/authority/event/receipt after restart: test_daemon_api::test_concurrent_create_has_one_authoritative_owner_and_no_duplicate_events + test_lifecycle_recovers_and_completion_rejects_stale_evidence (idempotent recovery)",
+      "receipts/production-readiness-20260821/reliability-20260822.log sha256=5c1f5b97b03c6222a825a7f27bcc77b65d7495bad0518e9d1494bb7d9f021ccd exit=0 marker=PASS_PRODUCTION_RELIABILITY"
+     ],
      "id": "F-13",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Prevent duplicate actions authority events receipts notifications"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "every negative path asserts its intended semantic seam (specific error variant/message), never a panic/setup failure: all 14 reliability.rs assertions + 3 daemon-api refusal assertions",
+      "receipts/production-readiness-20260821/reliability-20260822.log sha256=5c1f5b97b03c6222a825a7f27bcc77b65d7495bad0518e9d1494bb7d9f021ccd exit=0 marker=PASS_PRODUCTION_RELIABILITY"
+     ],
      "id": "F-14",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Confirm failures reach intended semantic seams"
     }
    ],
@@ -1483,5 +1525,5 @@
  ],
  "schema": "nemesis.production-readiness-tracker/v1",
  "terminal_verdict": null,
- "updated_at": "2026-08-22T06:15:54Z"
+ "updated_at": "2026-08-22T08:42:09Z"
 }
