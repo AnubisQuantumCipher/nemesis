@@ -39,7 +39,7 @@ function applySettings(settings: DesktopSettings) {
 }
 
 export default function App() {
-  const [selected, setSelected] = useState<NavigationName>("Home");
+  const [selected, setSelected] = useState<NavigationName>("Missions");
   const [system, setSystem] = useState<SystemStatus | null>(null);
   const [firstLaunchDismissed, setFirstLaunchDismissed] = useState(false);
   const [contractPath, setContractPath] = useState("");
@@ -284,6 +284,7 @@ export default function App() {
             <strong>CORE {system.core}</strong>
             <span>KERNEL {system.kernel}</span>
             <span>UPDATES DISABLED</span>
+            <span>NET DENY</span>
           </div>
         </header>
 

@@ -2,6 +2,19 @@
 
 This file records user-visible NEMESIS changes. Verification status comes from the named gates and receipts, not from this summary.
 
+## Unreleased
+
+- Restored the original Terminator/Matrix cockpit design per the architect
+  instruction of 2026-08-22 (sha256
+  `3c4454d1c2c4f23c2f1f3aa759e5e43526145633dd733ce09207af9038cbfddd`):
+  Avenir/Arial Narrow condensed type, hairline 32px grid, clipped N mark,
+  dim graphite with crimson `#ee3c43`, 222px rail. Home is the
+  `MISSION / LOCAL-001` three-column cockpit (mission rail, MISSION
+  ACTIVITY dependency canvas, inspector); Missions keeps the full exact
+  local-contract workflow in the same language; the command bar reports
+  `UPDATES DISABLED` and `NET DENY`. Five rails; authority behavior and
+  the one-shot approval review surface unchanged.
+
 ## 0.2.0 — 2026-08-22
 
 Trust-surface integration release: the desktop authority review is now
