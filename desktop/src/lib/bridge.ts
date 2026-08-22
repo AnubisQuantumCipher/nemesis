@@ -104,6 +104,88 @@ export interface ReplayResult {
   events: ReplayEvent[];
 }
 
+export interface RailMutationRequest {
+  rail: string;
+  verb: string;
+  id: string;
+  payload: Record<string, unknown>;
+}
+
+export interface RailEntityView {
+  id: string;
+  relativePath: string;
+  sha256: string;
+  bytes: number;
+  value: Record<string, unknown>;
+  derived?: Record<string, unknown>;
+}
+
+export interface RailEntitiesResponse {
+  rail: string;
+  entities: RailEntityView[];
+  contradictions?: Array<Record<string, unknown>>;
+  latestRuns?: Array<Record<string, unknown>>;
+}
+
+export interface AdoptionRecord {
+  schema: string;
+  sequence: number;
+  missionId: string;
+  rail: string;
+  relativePath: string;
+  contentDigest: string;
+  contractDigest: string;
+  actionDigest: string;
+  stateCommit: string;
+  previous: string;
+  entryHash: string;
+}
+
+export interface ChainedReceipt {
+  schema: string;
+  sequence: number;
+  subject: string;
+  verdict: string;
+  detail: Record<string, unknown>;
+  recordedUnixSeconds: number;
+  previous: string;
+  entryHash: string;
+}
+
+export interface LaneChange {
+  missionId: string;
+  lanePath: string;
+  status: string;
+  branch?: string;
+  head?: string;
+  dirtyCount?: number;
+  dirtyFiles?: Array<{ code: string; path: string }>;
+  diffShortstat?: string;
+  workspace?: string | null;
+  baseRevision?: string | null;
+  relativePath?: string | null;
+  error?: string;
+}
+
+export interface ChangesSnapshot {
+  laneCount: number;
+  lanes: LaneChange[];
+}
+
+export interface SecuritySnapshot {
+  policy: Record<string, string>;
+  secretsPosture: Record<string, string>;
+  grants: Array<Record<string, unknown>>;
+  approvals: Array<Record<string, unknown>>;
+  approvalTally: { armed: number; consumed: number; corrupt: number };
+  adoptionChain: {
+    length: number;
+    head: string;
+    verified: boolean;
+    records: AdoptionRecord[];
+  };
+}
+
 export function normalizeFailure(cause: unknown): CommandFailure {
   if (
     typeof cause === "object" &&
@@ -174,4 +256,40 @@ export async function getSettings(): Promise<DesktopSettings> {
 
 export async function updateSettings(settings: DesktopSettings): Promise<DesktopSettings> {
   return invoke<DesktopSettings>("update_settings", { settings });
+}
+
+export async function railEntities(rail: string): Promise<RailEntitiesResponse> {
+  return invoke<RailEntitiesResponse>("rail_entities", { rail });
+}
+
+export async function draftRailMutation(
+  request: RailMutationRequest,
+): Promise<DraftedMission> {
+  return invoke<DraftedMission>("draft_rail_mutation", { request });
+}
+
+export async function adoptRailMutation(missionId: string): Promise<AdoptionRecord> {
+  return invoke<AdoptionRecord>("adopt_rail_mutation", { missionId });
+}
+
+export async function changesSnapshot(): Promise<ChangesSnapshot> {
+  return invoke<ChangesSnapshot>("changes_snapshot");
+}
+
+export async function securitySnapshot(): Promise<SecuritySnapshot> {
+  return invoke<SecuritySnapshot>("security_snapshot");
+}
+
+export async function runRailTest(testId: string): Promise<ChainedReceipt> {
+  return invoke<ChainedReceipt>("run_rail_test", { testId });
+}
+
+export async function dispatchAutomation(automationId: string): Promise<ChainedReceipt> {
+  return invoke<ChainedReceipt>("dispatch_automation", { automationId });
+}
+
+export async function executeIntegrationPlugin(
+  integrationId: string,
+): Promise<ChainedReceipt> {
+  return invoke<ChainedReceipt>("execute_integration_plugin", { integrationId });
 }

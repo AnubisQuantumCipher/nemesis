@@ -2,18 +2,56 @@
 
 This file records user-visible NEMESIS changes. Verification status comes from the named gates and receipts, not from this summary.
 
-## Unreleased
 
-- Restored the original Terminator/Matrix cockpit design per the architect
-  instruction of 2026-08-22 (sha256
+## 0.3.0 — 2026-08-22
+
+Boss-harness completion: the cockpit becomes a fourteen-rail product with a
+governed skills/plugins ecosystem, and production builds can no longer paint
+blank.
+
+### Included
+
+- NativePaint (proved and closed): a binary compiled without the Tauri CLI's
+  `custom-protocol` feature embeds no frontend and loads a dead dev URL —
+  demonstrated live (the webview issued `GET /` to a probe listener on
+  `127.0.0.1:1420`). Production builds now refuse to compile when
+  `desktop/dist/index.html` is missing (`FAIL_FRONTEND_DIST_MISSING`) or has
+  no mount point (`FAIL_FRONTEND_DIST_HOLLOW`); `package_release.sh` asserts
+  the packaged binary embeds the asset map
+  (`FAIL_RELEASE_FRONTEND_NOT_EMBEDDED`).
+- Nine new rails — Workspaces, Agents, Changes, Tests, Knowledge, Skills,
+  Automations, Integrations, Security — joining Home, Missions, Evidence,
+  Replay, Settings. Rail state lives in a private governed Git repository;
+  every mutation travels the existing pipeline (compile → AuthorityReview →
+  TS-001 one-shot approval → TS-002 attenuation → receipt → replay) and is
+  then mechanically adopted with digest verification and a hash-chained
+  adoption receipt (`protocols/desktop-rails-v1.md`).
+- NEMESIS-owned skill format (content-addressed hashed bodies, single-step
+  trust ladder, named-approver approval gate) and plugin format (reviewable
+  WebAssembly text, digest-frozen tool schemas, structurally deny-by-default
+  capabilities, bounded WASI execution with metered fuel). Install, enable,
+  disable, and revoke are one-shot-reviewed governed mutations.
+- Built-in library: `library/skills/mission-hygiene` and
+  `library/plugins/rail-attest`, hash-bound by manifests and exercised
+  end-to-end through the real Ada daemon by the new
+  `rail_governance` gate.
+- Automations stop at unapproved authority: the schema can express only
+  `draft-mission`; dispatch is idempotent per trigger key, rate-bounded, and
+  every decision (including refusals) lands in a hash-chained receipt.
+- Security rail: read-only aggregation of persisted parent grants, one-shot
+  approvals (armed/consumed tallies), deny postures, and the verified
+  adoption chain. Corrupt authority records are surfaced, never filtered.
+- Competitive matrix: six columns (Bridgemind added from official sources),
+  ecosystem row split into system (SHIPPED) vs catalog breadth (PARTIAL,
+  deliberate).
+- Restored Terminator/Matrix cockpit design (first release carrying it) per
+  the architect instruction of 2026-08-22 (sha256
   `3c4454d1c2c4f23c2f1f3aa759e5e43526145633dd733ce09207af9038cbfddd`):
   Avenir/Arial Narrow condensed type, hairline 32px grid, clipped N mark,
-  dim graphite with crimson `#ee3c43`, 222px rail. Home is the
-  `MISSION / LOCAL-001` three-column cockpit (mission rail, MISSION
-  ACTIVITY dependency canvas, inspector); Missions keeps the full exact
-  local-contract workflow in the same language; the command bar reports
-  `UPDATES DISABLED` and `NET DENY`. Five rails; authority behavior and
-  the one-shot approval review surface unchanged.
+  dim graphite with crimson `#ee3c43`, 222px rail, `MISSION / LOCAL-001`
+  three-column Home cockpit, `UPDATES DISABLED` and `NET DENY` in the
+  command bar. Authority behavior and the one-shot approval review surface
+  unchanged.
 
 ## 0.2.0 — 2026-08-22
 

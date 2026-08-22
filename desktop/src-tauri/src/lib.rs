@@ -1,5 +1,7 @@
 mod mission_runner;
 mod production;
+pub mod rails;
+pub mod state_repo;
 
 pub use mission_runner::{
     DraftedMission, MissionCancellation, MissionClaimResult, MissionDraftRequest,
@@ -88,6 +90,24 @@ impl CommandFailure {
             )
         };
         Self::new(code, message, recovery)
+    }
+}
+
+impl From<rails::RailError> for CommandFailure {
+    fn from(error: rails::RailError) -> Self {
+        match error {
+            rails::RailError::Refused(message) => Self::new(
+                "REFUSED_RAIL",
+                message,
+                "Correct the refused rail mutation; the governed state was not changed.",
+            ),
+            rails::RailError::Corrupt(message) => Self::new(
+                "BLOCKED_RAIL_STATE",
+                message,
+                "Governed state failed verification. Inspect the state repository; nothing was hidden.",
+            ),
+            rails::RailError::Storage(message) => Self::storage(message),
+        }
     }
 }
 
@@ -622,6 +642,120 @@ fn update_settings(
     load_settings(&home).map_err(CommandFailure::storage)
 }
 
+#[tauri::command]
+fn rail_entities(handle: tauri::AppHandle, rail: String) -> Result<Value, CommandFailure> {
+    let home = local_home(&handle)?;
+    state_repo::initialize_state_repo(&home).map_err(rails::RailError::from)?;
+    let entities = state_repo::read_rail_entities(&home, &rail).map_err(rails::RailError::from)?;
+    let decorated: Vec<Value> = entities
+        .iter()
+        .map(|entity| {
+            let mut view = serde_json::json!({
+                "id": entity.id,
+                "relativePath": entity.relative_path,
+                "sha256": entity.sha256,
+                "bytes": entity.bytes,
+                "value": entity.value,
+            });
+            let derived = match rail.as_str() {
+                "skills" => Some(rails::skills::body_integrity(&home, &entity.value)),
+                "agents" => Some(serde_json::json!({
+                    "availability": rails::agents::availability(&entity.value),
+                })),
+                "workspaces" => Some(rails::workspaces::health(&entity.value)),
+                _ => None,
+            };
+            if let Some(derived) = derived {
+                view["derived"] = derived;
+            }
+            view
+        })
+        .collect();
+    let mut response = serde_json::json!({
+        "rail": rail,
+        "entities": decorated,
+    });
+    if rail == "knowledge" {
+        response["contradictions"] = Value::Array(rails::knowledge::contradictions(&entities));
+    }
+    if rail == "tests" {
+        response["latestRuns"] =
+            Value::Array(rails::tests_rail::latest_runs(&home).map_err(CommandFailure::from)?);
+    }
+    Ok(response)
+}
+
+#[tauri::command]
+fn draft_rail_mutation(
+    handle: tauri::AppHandle,
+    request: rails::RailMutationRequest,
+) -> Result<DraftedMission, CommandFailure> {
+    let home = local_home(&handle)?;
+    state_repo::initialize_state_repo(&home).map_err(rails::RailError::from)?;
+    let plan = rails::plan_mutation(&home, &request).map_err(CommandFailure::from)?;
+    state_repo::ensure_entity_file(&home, &request.rail, &request.id)
+        .map_err(rails::RailError::from)?;
+    let status = state_repo::require_clean(&home).map_err(rails::RailError::from)?;
+    let draft_request = MissionDraftRequest {
+        goal: plan.goal,
+        workspace: status.root,
+        relative_path: plan.relative_path,
+        replacement: plan.replacement,
+    };
+    draft_local_mission(&home, &draft_request, &MissionCancellation::default())
+        .map_err(CommandFailure::mission)
+}
+
+#[tauri::command]
+fn adopt_rail_mutation(
+    handle: tauri::AppHandle,
+    mission_id: String,
+) -> Result<state_repo::AdoptionRecord, CommandFailure> {
+    let home = local_home(&handle)?;
+    state_repo::adopt_mission(&home, &mission_id)
+        .map_err(rails::RailError::from)
+        .map_err(CommandFailure::from)
+}
+
+#[tauri::command]
+fn changes_snapshot(handle: tauri::AppHandle) -> Result<Value, CommandFailure> {
+    let home = local_home(&handle)?;
+    rails::changes::snapshot(&home).map_err(CommandFailure::from)
+}
+
+#[tauri::command]
+fn security_snapshot(handle: tauri::AppHandle) -> Result<Value, CommandFailure> {
+    let home = local_home(&handle)?;
+    rails::security::snapshot(&home).map_err(CommandFailure::from)
+}
+
+#[tauri::command]
+fn run_rail_test(
+    handle: tauri::AppHandle,
+    test_id: String,
+) -> Result<rails::ChainedReceipt, CommandFailure> {
+    let home = local_home(&handle)?;
+    rails::tests_rail::run(&home, &test_id).map_err(CommandFailure::from)
+}
+
+#[tauri::command]
+fn dispatch_automation(
+    handle: tauri::AppHandle,
+    automation_id: String,
+) -> Result<rails::ChainedReceipt, CommandFailure> {
+    let home = local_home(&handle)?;
+    rails::automations::dispatch(&home, &automation_id).map_err(CommandFailure::from)
+}
+
+#[tauri::command]
+fn execute_integration_plugin(
+    handle: tauri::AppHandle,
+    integration_id: String,
+) -> Result<rails::ChainedReceipt, CommandFailure> {
+    let home = local_home(&handle)?;
+    rails::integrations::execute_plugin(&home, &integration_id).map_err(CommandFailure::from)
+}
+
 pub fn run() -> Result<(), tauri::Error> {
     tauri::Builder::default()
         .menu(tauri::menu::Menu::default)
@@ -635,7 +769,15 @@ pub fn run() -> Result<(), tauri::Error> {
             cancel_mission,
             load_replay,
             get_settings,
-            update_settings
+            update_settings,
+            rail_entities,
+            draft_rail_mutation,
+            adopt_rail_mutation,
+            changes_snapshot,
+            security_snapshot,
+            run_rail_test,
+            dispatch_automation,
+            execute_integration_plugin
         ])
         .run(tauri::generate_context!())
 }

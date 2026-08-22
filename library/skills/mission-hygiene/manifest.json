@@ -1,0 +1,10 @@
+{
+  "schema": "nemesis.skill-pack/v1",
+  "id": "mission-hygiene",
+  "name": "Mission hygiene",
+  "version": "1.0.0",
+  "bodyPath": "skill.md",
+  "bodySha256": "8eee99ae320260f24550a3197f7ba4313201b5fb6980fbc6bf905bc79a9e9659",
+  "bodyBytes": 1519,
+  "install": "Skills rail -> Propose: id mission-hygiene, body = skill.md verbatim. The governed record binds bodySha256 through the one-shot authority review."
+}

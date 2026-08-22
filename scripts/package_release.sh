@@ -76,6 +76,10 @@ if [[ ! -d "$APP" || ! -x "$BINARY" ]]; then
   printf '%s\n' "FAIL_RELEASE_APP_MISSING path=$APP" >&2
   exit 1
 fi
+if ! /usr/bin/grep -q "assets/index-" "$BINARY"; then
+  printf '%s\n' "FAIL_RELEASE_FRONTEND_NOT_EMBEDDED binary=$BINARY" >&2
+  exit 1
+fi
 /usr/bin/xattr -cr "$APP"
 for binary in \
   nemesis_core_daemon \
