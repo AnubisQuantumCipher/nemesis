@@ -26,7 +26,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 
-use crate::production::atomic_write;
+use crate::production::{GovernedWriteLock, atomic_write};
 use crate::state_repo::{self, StateRepoError};
 
 pub const MAX_NOTE_BYTES: usize = 256;
@@ -319,6 +319,12 @@ pub fn append_receipt(
     verdict: &str,
     detail: Value,
 ) -> Result<ChainedReceipt, RailError> {
+    // Serialize load -> append against every other governed writer sharing this
+    // home so concurrent receipt appends can never lose a record to a racing
+    // atomic_write. Held until return.
+    let _lock =
+        GovernedWriteLock::acquire(home).map_err(|error| RailError::storage(error.to_string()))?;
+
     let chain = load_receipt_chain(home, name, schema)?;
     let previous = chain
         .last()
@@ -358,6 +364,8 @@ mod tests {
     use super::*;
     use serde_json::json;
     use std::sync::atomic::{AtomicU64, Ordering};
+    use std::sync::{Arc, Barrier};
+    use std::thread;
 
     static NONCE: AtomicU64 = AtomicU64::new(0);
 
@@ -751,5 +759,48 @@ mod tests {
         fs::write(&path, &bytes).unwrap();
         assert!(load_receipt_chain(&home, "probe", "nemesis.test-run/v1").is_err());
         fs::remove_dir_all(&home).unwrap();
+    }
+
+    #[test]
+    fn concurrent_receipt_appends_preserve_every_record() {
+        // Regression for the boss code-review finding: append_receipt is a
+        // read-modify-write over a hash-chained log guarded only by
+        // atomic_write (last writer wins). Without the governed-write lock,
+        // N concurrent appends to one chain silently drop records. With it,
+        // exactly N linked records must survive.
+        const N: usize = 16;
+        let home = Arc::new(scratch_home("concurrent-receipt"));
+        let barrier = Arc::new(Barrier::new(N));
+        let handles: Vec<_> = (0..N)
+            .map(|index| {
+                let home = Arc::clone(&home);
+                let barrier = Arc::clone(&barrier);
+                thread::spawn(move || {
+                    barrier.wait();
+                    append_receipt(
+                        &home,
+                        "hostile-run",
+                        "nemesis.test-run/v1",
+                        &format!("subject-{index}"),
+                        "OK",
+                        json!({ "index": index }),
+                    )
+                })
+            })
+            .collect();
+        for handle in handles {
+            handle
+                .join()
+                .unwrap()
+                .expect("every concurrent append must survive under the lock");
+        }
+
+        let chain = load_receipt_chain(&home, "hostile-run", "nemesis.test-run/v1").unwrap();
+        assert_eq!(chain.len(), N, "a racing append lost its receipt");
+        let mut sequences: Vec<u64> = chain.iter().map(|record| record.sequence).collect();
+        sequences.sort_unstable();
+        assert_eq!(sequences, (1..=N as u64).collect::<Vec<_>>());
+
+        fs::remove_dir_all(&*home).unwrap();
     }
 }

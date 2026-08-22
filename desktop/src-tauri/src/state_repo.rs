@@ -22,7 +22,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 
-use crate::production::{atomic_write, compile_local_contract};
+use crate::production::{GovernedWriteLock, atomic_write, compile_local_contract};
 
 pub const STATE_DIR: &str = "state";
 pub const ADOPTION_CHAIN: &str = "receipts/adoptions.jsonl";
@@ -428,6 +428,13 @@ pub fn adopt_mission(home: &Path, mission_id: &str) -> Result<AdoptionRecord, St
     {
         return Err(StateRepoError::refused("mission id shape refused"));
     }
+    // Serialize the whole load -> verify -> commit -> append critical section:
+    // held until this function returns, so no concurrent adoption (in this
+    // process or another app instance sharing the home) can produce a git
+    // commit whose adoption record a racing writer then clobbers.
+    let _lock = GovernedWriteLock::acquire(home)
+        .map_err(|error| StateRepoError::storage(error.to_string()))?;
+
     let chain = load_adoption_chain(home)?;
     if let Some(existing) = chain.iter().find(|record| record.mission_id == mission_id) {
         return Ok(existing.clone());
@@ -559,6 +566,8 @@ pub fn adopt_mission(home: &Path, mission_id: &str) -> Result<AdoptionRecord, St
 mod tests {
     use super::*;
     use std::sync::atomic::{AtomicU64, Ordering};
+    use std::sync::{Arc, Barrier};
+    use std::thread;
 
     static NONCE: AtomicU64 = AtomicU64::new(0);
 
@@ -617,14 +626,23 @@ mod tests {
         mission_id: &str,
         replacement: &str,
     ) -> (String, String) {
+        seed_completed_mission_entity(home, mission_id, "subject", replacement)
+    }
+
+    fn seed_completed_mission_entity(
+        home: &std::path::Path,
+        mission_id: &str,
+        entity: &str,
+        replacement: &str,
+    ) -> (String, String) {
         initialize_state_repo(home).unwrap();
-        let (relative, expected_sha) = ensure_entity_file(home, "skills", "subject").unwrap();
+        let (relative, expected_sha) = ensure_entity_file(home, "skills", entity).unwrap();
         let root = state_root(home);
         let base_revision = run_git(&root, &["rev-parse", "HEAD"]).unwrap();
         let contract = serde_json::json!({
             "schema": "nemesis.desktop-mission/v1",
             "missionId": mission_id,
-            "goal": "RAIL SKILLS PROPOSE subject — test",
+            "goal": format!("RAIL SKILLS PROPOSE {entity} — test"),
             "workspace": root.display().to_string(),
             "baseRevision": base_revision,
             "action": {
@@ -730,5 +748,70 @@ mod tests {
         fs::write(&path, &bytes).unwrap();
         assert!(load_adoption_chain(&home).is_err());
         fs::remove_dir_all(&home).unwrap();
+    }
+
+    #[test]
+    fn concurrent_adoptions_serialize_and_lose_no_chain_record() {
+        // Regression for the boss code-review finding: without a lock spanning
+        // load -> git commit -> append, N concurrent adoptions produce N git
+        // commits but fewer chain records (a racing atomic_write clobbers the
+        // loser), or fail outright on git index.lock contention. The
+        // governed-write lock must turn N adoptions into exactly N linked
+        // records and N adoption commits — never a commit without a receipt.
+        const N: usize = 8;
+        let home = scratch_home("concurrent-adopt");
+        initialize_state_repo(&home).unwrap();
+        let mut mission_ids = Vec::with_capacity(N);
+        for index in 0..N {
+            let mission_id = format!("mis_concurrent{index:012}");
+            seed_completed_mission_entity(
+                &home,
+                &mission_id,
+                &format!("subject-{index}"),
+                "{\"a\":1}\n",
+            );
+            mission_ids.push(mission_id);
+        }
+
+        let home = Arc::new(home);
+        let barrier = Arc::new(Barrier::new(N));
+        let handles: Vec<_> = mission_ids
+            .into_iter()
+            .map(|mission_id| {
+                let home = Arc::clone(&home);
+                let barrier = Arc::clone(&barrier);
+                thread::spawn(move || {
+                    barrier.wait();
+                    adopt_mission(&home, &mission_id)
+                })
+            })
+            .collect();
+        let results: Vec<_> = handles
+            .into_iter()
+            .map(|handle| handle.join().unwrap())
+            .collect();
+        for result in &results {
+            result
+                .as_ref()
+                .expect("every concurrent adoption must succeed under the lock");
+        }
+
+        // Exactly N records; load_adoption_chain verifies sequence and hash
+        // linkage, so a survivor with a stale `previous` would also be caught.
+        let chain = load_adoption_chain(&home).unwrap();
+        assert_eq!(chain.len(), N, "a racing adoption lost its chain record");
+        let mut sequences: Vec<u64> = chain.iter().map(|record| record.sequence).collect();
+        sequences.sort_unstable();
+        assert_eq!(sequences, (1..=N as u64).collect::<Vec<_>>());
+
+        // One adoption commit per record: no governed commit lacks a receipt.
+        let log = run_git(&state_root(&home), &["log", "--pretty=%s"]).unwrap();
+        let adopt_commits = log
+            .lines()
+            .filter(|line| line.starts_with("adopt skills/"))
+            .count();
+        assert_eq!(adopt_commits, N, "git commits and chain records disagree");
+
+        fs::remove_dir_all(&*home).unwrap();
     }
 }

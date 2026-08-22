@@ -1,0 +1,66 @@
+{
+  "schema": "nemesis.paint-proof/v2",
+  "date": "2026-08-22",
+  "supersedes": "receipts/boss-20260822/evidence/PAINT_PROOF.json",
+  "context": "Unstick continuation. Prior NP-03 evidence was window-ownership + home side effect only; the unstick contract required visible LOCAL-001 chrome or a non-empty AX tree, with an honest ENVIRONMENT_BLOCKED fallback while the console is locked.",
+  "environment": {
+    "ioConsoleLocked": true,
+    "probe": "ioreg -n Root -d1 -a -> IOConsoleLocked=true; loginwindow running",
+    "consequence": "On-device WKWebView compositing and the macOS Accessibility API are unavailable for a locked session; capture_macos_accessibility.swift refuses session_locked. On-device composited-pixel and AX confirmation is DEFERRED, not claimed PASS."
+  },
+  "namedBundle": {
+    "path": "release/v0.3.0/NEMESIS-Desktop-v0.3.0-macos-arm64.zip",
+    "app": "NEMESIS Desktop.app",
+    "cfBundleName": "NEMESIS Desktop",
+    "cfBundleIdentifier": "com.anubisquantumcipher.nemesis",
+    "cfBundleExecutable": "nemesis-desktop",
+    "cfBundleShortVersionString": "0.3.0",
+    "executableSha256": "ee81e995091468395730791d0559c963003b57ae4840acc52a03230189c9c34b"
+  },
+  "embedProof": {
+    "method": "Rebuilt the frontend from the unchanged source (npm run build = tsc -b && vite build) and matched the content-addressed asset filenames against the packed executable bytes.",
+    "builtAssets": ["assets/index-CKEx4ugd.js", "assets/index-yd6hQHIq.css"],
+    "builtIndexHtmlHasRootMount": true,
+    "packedBinaryContainsBuiltJs": true,
+    "packedBinaryContainsBuiltCss": true,
+    "packedBinaryContainsCustomProtocol": "tauri://localhost present (x3); embedded asset-map keys index.html (x10) and assets/index- (x3)",
+    "conclusion": "Vite content hashes derive from file bytes, so the packed executable embeds byte-identical shipped frontend. The blank-window defect (PAINT_PROOF.json: dev-URL fallback) is fixed and the fix is in the shipped bytes."
+  },
+  "contentPaintProof": {
+    "engine": "headless Chromium (offscreen; does not require an unlocked WindowServer, so it is valid while the console is locked)",
+    "served": "the exact built dist embedded in the app, served over loopback; Tauri IPC mocked at window.__TAURI_INTERNALS__ so the shipped React app renders against representative system status",
+    "viewport": "1440x900 (the app's configured window size)",
+    "missionsView": {
+      "screenshot": "receipts/boss-20260822/evidence/paint-missions-cockpit.webp",
+      "sha256": "1f5f1d32d3320eea748415876723fbd5c322e193b3996f9a77ae4cd78e7633d6",
+      "shows": "Terminator/Matrix cockpit: clipped N mark, NEMESIS / THE PROVABLE AGENT OPERATING SYSTEM, 14-rail sidebar, // MISSIONS LOCAL CONTROL PLANE, LOCAL MISSIONS create-contract workspace, CORE READY / KERNEL AVAILABLE / NET DENY status, footer INTELLIGENCE PROPOSES. NEMESIS GOVERNS. EVIDENCE DECIDES., v0.3.0"
+    },
+    "homeViewLocal001": {
+      "screenshot": "receipts/boss-20260822/evidence/paint-home-local001.webp",
+      "sha256": "bdbc8b553cad42ece242d816c5bb6636d6080987dde6bee03b0d416a97bb1f1c",
+      "domAssertions": {
+        "hasLocal001": true,
+        "hasWitnessedLocalChange": true,
+        "sectionIndex": "MISSION / LOCAL-001",
+        "missionHeading": "Witnessed local change",
+        "sidebarDestinations": 14
+      },
+      "shows": "Visible LOCAL-001 chrome: MISSION / LOCAL-001, WITNESSED LOCAL CHANGE, mission facts (STATE AWAITING AUTH, PREDICATES 0/2, WORKER LANES 1 ISOLATED, NETWORK DENIED, PUSH/PUBLISH DISABLED), REVIEW CONTRACT, MISSION ACTIVITY (CONTRACT/LANE/VERIFY/RECEIPT), inspector AUTHORITY SOURCE: SPARK Kernel with committed-decision integrity digest and DEFERRED residuals"
+    }
+  },
+  "domRenderProof": {
+    "suite": "desktop vitest (npm run test)",
+    "result": "74/74 passed across App.test.tsx (12) and all nine rail panels",
+    "meaning": "The shipped frontend component tree renders all fourteen destinations and truthful component state in jsdom."
+  },
+  "onDeviceProof": {
+    "windowOwnership": "PAINT_PROOF.json bundledReleaseApp: WINDOWS 1, BOUNDS 1440x900 (probe_window_ownership.swift)",
+    "ipcRoundTrip": "PAINT_PROOF.json bundledReleaseApp: fresh-home launch created home.json (nemesis.local-home/v1) + 7 subdirs, a write that only happens inside the system_status command invoked from the React mount effect -> embedded JS executed and IPC round-tripped",
+    "compositedPixels": "ENVIRONMENT_BLOCKED (IOConsoleLocked=Yes). Not claimed PASS.",
+    "accessibilityTree": "ENVIRONMENT_BLOCKED (session_locked). Not claimed PASS."
+  },
+  "verdict": {
+    "np03": "CONTENT_PAINT_PROVEN_ONDEVICE_COMPOSITE_ENV_BLOCKED",
+    "rationale": "Shipped bytes provably embed and render the LOCAL-001 cockpit (embed match + headless content paint + vitest DOM + on-device window/IPC). The one remaining link, on-device WKWebView compositing and AX capture, is blocked by the locked console and is honestly deferred, never called PASS."
+  }
+}
