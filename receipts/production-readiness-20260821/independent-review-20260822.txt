@@ -1,2 +1,2 @@
-lanes: [('daemon_authority_path', 'CLEAN'), ('kernel_formal_surface', 'CLEAN'), ('protocol_clients', 'CLEAN'), ('gates_integrity', 'GAPS'), ('distribution_contract', 'GAPS'), ('final_fix_rereview', 'CLEAN')]
-PASS_INDEPENDENT_AUTONOMOUS_REVIEW lanes=6 clean=4 gaps_lanes=2 mediums_fixed=true final_rereview=CLEAN
+lanes: [('daemon_authority_path', 'CLEAN'), ('kernel_formal_surface', 'CLEAN'), ('protocol_clients', 'CLEAN'), ('gates_integrity', 'GAPS'), ('distribution_contract', 'GAPS'), ('final_fix_rereview', 'CLEAN'), ('design_restore', 'CLEAN')]
+PASS_INDEPENDENT_AUTONOMOUS_REVIEW lanes=7 clean=5 gaps_lanes=2 mediums_fixed=true design_lane=CLEAN

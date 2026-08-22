@@ -146,7 +146,7 @@ test invalid_action_path_fails_without_emitting_a_proposal ... ok
 test completion_mode_emits_a_proposal_not_a_state_transition ... ok
 test plan_emits_only_protocol_valid_proposals ... ok
 
-test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
 
 
 running 0 tests
@@ -157,8 +157,8 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 running 6 tests
 test accepts_a_bounded_relative_action_proposal ... ok
 test rejects_unknown_params_and_oversized_messages ... ok
-test permits_only_a_completion_proposal ... ok
 test rejects_unknown_protocol_and_identifiers ... ok
+test permits_only_a_completion_proposal ... ok
 test rejects_worker_supplied_authoritative_fields ... ok
 test rejects_absolute_and_traversing_action_paths ... ok
 
@@ -175,7 +175,7 @@ test canonical_sign1_is_deterministic_and_independently_verifiable ... ok
 test wrong_key_and_nonverified_mandatory_claim_are_rejected ... ok
 test every_single_byte_mutation_is_rejected ... ok
 
-test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
 
 
 running 0 tests
@@ -204,9 +204,9 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 
 running 5 tests
+test usage_accounting_refuses_over_budget_without_mutation ... ok
 test api_profiles_require_explicit_network_and_secret_capabilities ... ok
 test fallback_preserves_authority_and_consequence_ceiling ... ok
-test usage_accounting_refuses_over_budget_without_mutation ... ok
 test missing_provider_is_typed_unavailable_not_a_fallback_success ... ok
 test generic_subprocess_adapter_runs_protocol_worker_in_workspace_safe ... ok
 
@@ -225,17 +225,17 @@ test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 running 5 tests
 test superseded_revoked_and_expired_facts_are_not_active ... ok
 test context_budget_refuses_instead_of_omitting_mandatory_state ... ok
-test capsule_signature_rejects_one_byte_mutation ... ok
 test repository_index_binds_relative_files_and_rejects_traversal ... ok
+test capsule_signature_rejects_one_byte_mutation ... ok
 test context_replacement_retains_obligations_and_visible_contradictions ... ok
 
 test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
 
 running 5 tests
+test causal_graph_returns_recorded_chain_not_retrospective_story ... ok
 test old_source_and_unauthorized_verifier_cannot_complete_claims ... ok
 test changed_dependency_invalidates_accepted_evidence ... ok
-test causal_graph_returns_recorded_chain_not_retrospective_story ... ok
 test mission_fork_preserves_prefix_and_marks_model_reexecution_comparative ... ok
 test replay_reconstructs_hash_chain_and_rejects_mutation ... ok
 
@@ -250,16 +250,16 @@ test signed_plugin_cannot_exceed_granted_capabilities ... ok
 test wasi_host_runs_bounded_module_without_ambient_capabilities ... ok
 test wasi_host_enforces_fuel_and_memory_limits ... ok
 
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
 
 
 running 4 tests
-test ci_observation_is_accepted_only_for_current_source ... ok
 test push_merge_and_unrelated_deletion_refuse_without_exact_authority ... ok
+test ci_observation_is_accepted_only_for_current_source ... ok
 test path_traversal_and_git_metadata_staging_refuse ... ok
 test exact_lane_commit_leaves_default_branch_unchanged ... ok
 
-test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.23s
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.25s
 
 
 running 5 tests
@@ -269,7 +269,7 @@ test sandbox_refuses_read_and_write_outside_lane ... ok
 test sandbox_refuses_a_reachable_loopback_connection ... ok
 test creates_an_isolated_git_worktree_without_moving_main ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
 
 
 running 2 tests
@@ -281,10 +281,10 @@ test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 running 6 tests
 test builder_cannot_accept_own_elevated_evidence ... ok
-test conflicting_lane_patches_are_surfaced_not_merged ... ok
-test compatible_tasks_serialize_when_only_one_worker_is_available ... ok
-test scheduler_records_explainable_decisions_and_preserves_authority ... ok
 test scheduler_refuses_missing_worker_budget_and_cycles ... ok
+test conflicting_lane_patches_are_surfaced_not_merged ... ok
+test scheduler_records_explainable_decisions_and_preserves_authority ... ok
+test compatible_tasks_serialize_when_only_one_worker_is_available ... ok
 test schedule_is_deterministic_across_input_order ... ok
 
 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
@@ -300,8 +300,8 @@ test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 
 running 2 tests
-test tests::keychain_creation_trusts_only_the_stable_security_binary ... ok
 test tests::prompted_secret_is_supplied_twice_over_stdin ... ok
+test tests::keychain_creation_trusts_only_the_stable_security_binary ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
@@ -326,7 +326,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 running 1 test
 test standalone_cli_accepts_valid_and_rejects_tampered_receipt ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
 
 
 running 0 tests
@@ -353,9 +353,9 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 PASS_PHASE5_WORKER_BOUNDARY
 
 running 5 tests
+test usage_accounting_refuses_over_budget_without_mutation ... ok
 test api_profiles_require_explicit_network_and_secret_capabilities ... ok
 test fallback_preserves_authority_and_consequence_ceiling ... ok
-test usage_accounting_refuses_over_budget_without_mutation ... ok
 test missing_provider_is_typed_unavailable_not_a_fallback_success ... ok
 test generic_subprocess_adapter_runs_protocol_worker_in_workspace_safe ... ok
 
@@ -366,10 +366,10 @@ PASS_PHASE8_WORKER_ADAPTERS
 
 running 6 tests
 test builder_cannot_accept_own_elevated_evidence ... ok
-test conflicting_lane_patches_are_surfaced_not_merged ... ok
-test compatible_tasks_serialize_when_only_one_worker_is_available ... ok
-test scheduler_records_explainable_decisions_and_preserves_authority ... ok
 test scheduler_refuses_missing_worker_budget_and_cycles ... ok
+test conflicting_lane_patches_are_surfaced_not_merged ... ok
+test scheduler_records_explainable_decisions_and_preserves_authority ... ok
+test compatible_tasks_serialize_when_only_one_worker_is_available ... ok
 test schedule_is_deterministic_across_input_order ... ok
 
 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
@@ -379,8 +379,8 @@ PASS_PHASE9_DETERMINISTIC_SCHEDULER
 running 5 tests
 test superseded_revoked_and_expired_facts_are_not_active ... ok
 test context_budget_refuses_instead_of_omitting_mandatory_state ... ok
-test capsule_signature_rejects_one_byte_mutation ... ok
 test repository_index_binds_relative_files_and_rejects_traversal ... ok
+test capsule_signature_rejects_one_byte_mutation ... ok
 test context_replacement_retains_obligations_and_visible_contradictions ... ok
 
 test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
@@ -389,8 +389,8 @@ PASS_PHASE10_CONTEXT_KNOWLEDGE
 
 running 5 tests
 test old_source_and_unauthorized_verifier_cannot_complete_claims ... ok
-test causal_graph_returns_recorded_chain_not_retrospective_story ... ok
 test changed_dependency_invalidates_accepted_evidence ... ok
+test causal_graph_returns_recorded_chain_not_retrospective_story ... ok
 test mission_fork_preserves_prefix_and_marks_model_reexecution_comparative ... ok
 test replay_reconstructs_hash_chain_and_rejects_mutation ... ok
 
@@ -417,12 +417,12 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
  RUN  v3.2.7 /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop
 
- ✓ src/App.test.tsx (11 tests) 645ms
+ ✓ src/App.test.tsx (11 tests) 672ms
 
  Test Files  1 passed (1)
       Tests  11 passed (11)
-   Start at  11:38:14
-   Duration  1.04s (transform 58ms, setup 43ms, collect 84ms, tests 645ms, environment 129ms, prepare 24ms)
+   Start at  11:47:21
+   Duration  1.28s (transform 65ms, setup 90ms, collect 104ms, tests 672ms, environment 253ms, prepare 34ms)
 
 
 running 6 tests
@@ -446,17 +446,17 @@ test signed_plugin_cannot_exceed_granted_capabilities ... ok
 test wasi_host_runs_bounded_module_without_ambient_capabilities ... ok
 test wasi_host_enforces_fuel_and_memory_limits ... ok
 
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.05s
 
 PASS_PHASE12_EXTENSION_SECURITY
 
 running 4 tests
-test ci_observation_is_accepted_only_for_current_source ... ok
 test push_merge_and_unrelated_deletion_refuse_without_exact_authority ... ok
+test ci_observation_is_accepted_only_for_current_source ... ok
 test path_traversal_and_git_metadata_staging_refuse ... ok
 test exact_lane_commit_leaves_default_branch_unchanged ... ok
 
-test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.22s
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.25s
 
 PASS_PHASE13_LOCAL_GIT_WORKFLOWS
 
@@ -530,12 +530,12 @@ PASS_EVIDENCE_BUNDLE
 
  RUN  v3.2.7 /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop
 
- ✓ src/App.test.tsx (11 tests) 657ms
+ ✓ src/App.test.tsx (11 tests) 684ms
 
  Test Files  1 passed (1)
       Tests  11 passed (11)
-   Start at  11:38:23
-   Duration  1.04s (transform 59ms, setup 44ms, collect 85ms, tests 657ms, environment 129ms, prepare 27ms)
+   Start at  11:47:31
+   Duration  1.11s (transform 62ms, setup 47ms, collect 91ms, tests 684ms, environment 134ms, prepare 23ms)
 
 vite v7.3.6 building client environment for production...
 transforming...
@@ -543,23 +543,23 @@ transforming...
 rendering chunks...
 computing gzip size...
 dist/index.html                   0.45 kB │ gzip:  0.29 kB
-dist/assets/index-Cz4VluLz.css   19.91 kB │ gzip:  4.43 kB
-dist/assets/index-fA60dLVn.js   220.93 kB │ gzip: 68.03 kB │ map: 994.76 kB
-✓ built in 353ms
+dist/assets/index-B5ArnsNv.css   19.90 kB │ gzip:  4.43 kB
+dist/assets/index-DFCto__0.js   220.90 kB │ gzip: 68.01 kB │ map: 994.65 kB
+✓ built in 378ms
 vite v7.3.6 building client environment for production...
 transforming...
 ✓ 40 modules transformed.
 rendering chunks...
 computing gzip size...
 dist/index.html                   0.45 kB │ gzip:  0.29 kB
-dist/assets/index-Cz4VluLz.css   19.91 kB │ gzip:  4.43 kB
-dist/assets/index-fA60dLVn.js   220.93 kB │ gzip: 68.03 kB │ map: 994.76 kB
-✓ built in 359ms
+dist/assets/index-B5ArnsNv.css   19.90 kB │ gzip:  4.43 kB
+dist/assets/index-DFCto__0.js   220.90 kB │ gzip: 68.01 kB │ map: 994.65 kB
+✓ built in 376ms
 PASS_NEMESIS_DESKTOP_PROCESS
 PASS_EVIDENCE_BUNDLE
 PASS_NEMESIS_DESKTOP_VERTICAL_SLICE
 
-added 164 packages, and audited 165 packages in 856ms
+added 164 packages, and audited 165 packages in 905ms
 
 29 packages are looking for funding
   run `npm fund` for details
@@ -568,12 +568,12 @@ found 0 vulnerabilities
 
  RUN  v3.2.7 /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop
 
- ✓ src/App.test.tsx (11 tests) 659ms
+ ✓ src/App.test.tsx (11 tests) 673ms
 
  Test Files  1 passed (1)
       Tests  11 passed (11)
-   Start at  11:38:37
-   Duration  1.05s (transform 58ms, setup 43ms, collect 84ms, tests 659ms, environment 132ms, prepare 25ms)
+   Start at  11:47:47
+   Duration  1.11s (transform 61ms, setup 50ms, collect 91ms, tests 673ms, environment 146ms, prepare 27ms)
 
 vite v7.3.6 building client environment for production...
 transforming...
@@ -581,9 +581,9 @@ transforming...
 rendering chunks...
 computing gzip size...
 dist/index.html                   0.45 kB │ gzip:  0.29 kB
-dist/assets/index-Cz4VluLz.css   19.91 kB │ gzip:  4.43 kB
-dist/assets/index-fA60dLVn.js   220.93 kB │ gzip: 68.03 kB │ map: 994.76 kB
-✓ built in 357ms
+dist/assets/index-B5ArnsNv.css   19.90 kB │ gzip:  4.43 kB
+dist/assets/index-DFCto__0.js   220.90 kB │ gzip: 68.01 kB │ map: 994.65 kB
+✓ built in 386ms
 
 running 6 tests
 test tests::rejects_empty_or_model_exact_replay ... ok
@@ -593,7 +593,7 @@ test tests::rejects_bundled_support_root_with_wrong_contract ... ok
 test tests::selects_bundled_support_root_when_contract_matches ... ok
 test tests::discovers_development_source_root_from_runtime_ancestors ... ok
 
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
 
 running 0 tests
@@ -603,14 +603,14 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 running 7 tests
 test executes_reviewed_contract_and_persists_current_receipt_and_replay ... ignored, requires built Ada and Rust runtime executables plus macOS Keychain
-test pre_cancelled_mission_refuses_before_creating_a_lane ... ok
 test reviewed_digest_mismatch_refuses_before_creating_a_lane ... ok
+test pre_cancelled_mission_refuses_before_creating_a_lane ... ok
 test executable_symlink_substitution_is_refused_before_lane_creation ... ok
-test preflight_binds_clean_workspace_head_and_expected_target_bytes ... ok
 test drafts_an_exact_source_bound_contract_inside_the_private_local_home ... ok
+test preflight_binds_clean_workspace_head_and_expected_target_bytes ... ok
 test child_process_environment_is_sanitized_before_lane_creation ... ok
 
-test result: ok. 6 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.56s
+test result: ok. 6 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.50s
 
 
 running 4 tests
@@ -627,18 +627,18 @@ test read_only_parent_fails_cleanly ... ok
 test missing_last_mission_pointer_is_a_clean_cold_start ... ok
 test future_schema_home_is_refused_as_downgrade_guard ... ok
 test corrupt_home_manifest_is_refused_without_mutation ... ok
-test settings_recover_or_refuse_at_the_intended_seam ... ok
-test stale_atomic_write_temporaries_are_swept_on_init ... ok
-test corrupt_last_mission_pointer_is_refused ... ok
-test symlinked_or_oversized_last_mission_pointer_is_refused ... ok
-test symlinked_or_oversized_home_manifest_is_refused ... ok
 test leftover_temporary_does_not_block_commit ... ok
+test settings_recover_or_refuse_at_the_intended_seam ... ok
+test corrupt_last_mission_pointer_is_refused ... ok
+test symlinked_or_oversized_home_manifest_is_refused ... ok
+test symlinked_or_oversized_last_mission_pointer_is_refused ... ok
+test stale_atomic_write_temporaries_are_swept_on_init ... ok
 test settings_persist_and_reverse_across_relaunch ... ok
 test install_uninstall_reinstall_cycle_is_clean ... ok
 test repeated_launch_cycles_are_stable ... ok
 test disk_full_write_preserves_prior_settings ... ok
 
-test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.59s
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.51s
 
 
 running 0 tests
@@ -649,38 +649,38 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 running 1 test
 test executes_reviewed_contract_and_persists_current_receipt_and_replay ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.90s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.92s
 
 PASS_PRODUCTION_DESKTOP_AUTOMATED
 
 running 14 tests
 test read_only_parent_fails_cleanly ... ok
-test corrupt_home_manifest_is_refused_without_mutation ... ok
 test missing_last_mission_pointer_is_a_clean_cold_start ... ok
+test leftover_temporary_does_not_block_commit ... ok
 test corrupt_last_mission_pointer_is_refused ... ok
 test future_schema_home_is_refused_as_downgrade_guard ... ok
-test symlinked_or_oversized_last_mission_pointer_is_refused ... ok
-test symlinked_or_oversized_home_manifest_is_refused ... ok
-test settings_recover_or_refuse_at_the_intended_seam ... ok
+test corrupt_home_manifest_is_refused_without_mutation ... ok
 test settings_persist_and_reverse_across_relaunch ... ok
-test leftover_temporary_does_not_block_commit ... ok
+test settings_recover_or_refuse_at_the_intended_seam ... ok
+test symlinked_or_oversized_home_manifest_is_refused ... ok
+test symlinked_or_oversized_last_mission_pointer_is_refused ... ok
 test stale_atomic_write_temporaries_are_swept_on_init ... ok
 test install_uninstall_reinstall_cycle_is_clean ... ok
 test repeated_launch_cycles_are_stable ... ok
 test disk_full_write_preserves_prior_settings ... ok
 
-test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.59s
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.54s
 
 PASS_PRODUCTION_RELIABILITY
 
  RUN  v3.2.7 /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop
 
- ✓ src/App.test.tsx (11 tests) 643ms
+ ✓ src/App.test.tsx (11 tests) 663ms
 
  Test Files  1 passed (1)
       Tests  11 passed (11)
-   Start at  11:38:56
-   Duration  1.03s (transform 59ms, setup 44ms, collect 84ms, tests 643ms, environment 130ms, prepare 24ms)
+   Start at  11:48:06
+   Duration  1.08s (transform 61ms, setup 48ms, collect 91ms, tests 663ms, environment 135ms, prepare 24ms)
 
 PASS_PRODUCTION_ACCESSIBILITY
 {
@@ -689,7 +689,7 @@ PASS_PRODUCTION_ACCESSIBILITY
   "idle_rss_bytes_median": 2064384,
   "max_s": 0.0043,
   "median_s": 0.0039,
-  "min_s": 0.0038,
+  "min_s": 0.0032,
   "p95_ceiling_s": 2.0,
   "p95_s": 0.0043,
   "runs": 10,
@@ -698,19 +698,19 @@ PASS_PRODUCTION_ACCESSIBILITY
   "within_threshold": true
  },
  "daemon_workload": {
-  "authorize_run_transition_s": 0.02996,
+  "authorize_run_transition_s": 0.03297,
   "authorized_state": "PLANNING",
   "bytes_per_mission": 977,
-  "create_max_s": 0.06097,
-  "create_median_s": 0.04938,
-  "create_min_s": 0.04605,
-  "create_p95_s": 0.06097,
+  "create_max_s": 0.06094,
+  "create_median_s": 0.05053,
+  "create_min_s": 0.0453,
+  "create_p95_s": 0.06094,
   "missions_dir_bytes": 9770,
   "replay_load": {
    "event_lines": 4,
    "ledger_bytes": 1220,
    "max_ledger_bytes_cap": 67108864,
-   "parse_s": 0.00583,
+   "parse_s": 0.00486,
    "verdict_verified": true
   },
   "run_state": "RUNNING",
@@ -805,11 +805,11 @@ PASS_PRODUCTION_ACCESSIBILITY
   "mem_bytes": "51539607552",
   "uname": "Darwin 25.6.0 arm64 arm"
  },
- "measured_at": "2026-08-22T15:38:57Z",
+ "measured_at": "2026-08-22T15:48:08Z",
  "schema": "nemesis.performance/v1",
  "sizes": {
   "build_bin_total_bytes": 7344064,
-  "desktop_dist_total_bytes": 1236053
+  "desktop_dist_total_bytes": 1235901
  }
 }
 PASS_PERFORMANCE_BOUNDED
@@ -1527,7 +1527,7 @@ test canonical_sign1_is_deterministic_and_independently_verifiable ... ok
 test wrong_key_and_nonverified_mandatory_claim_are_rejected ... ok
 test every_single_byte_mutation_is_rejected ... ok
 
-test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
 
 
 running 0 tests
@@ -1557,8 +1557,8 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 running 5 tests
 test usage_accounting_refuses_over_budget_without_mutation ... ok
-test fallback_preserves_authority_and_consequence_ceiling ... ok
 test api_profiles_require_explicit_network_and_secret_capabilities ... ok
+test fallback_preserves_authority_and_consequence_ceiling ... ok
 test missing_provider_is_typed_unavailable_not_a_fallback_success ... ok
 test generic_subprocess_adapter_runs_protocol_worker_in_workspace_safe ... ok
 
@@ -1585,9 +1585,9 @@ test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 
 running 5 tests
+test causal_graph_returns_recorded_chain_not_retrospective_story ... ok
 test old_source_and_unauthorized_verifier_cannot_complete_claims ... ok
 test changed_dependency_invalidates_accepted_evidence ... ok
-test causal_graph_returns_recorded_chain_not_retrospective_story ... ok
 test mission_fork_preserves_prefix_and_marks_model_reexecution_comparative ... ok
 test replay_reconstructs_hash_chain_and_rejects_mutation ... ok
 
@@ -1602,7 +1602,7 @@ test signed_plugin_cannot_exceed_granted_capabilities ... ok
 test wasi_host_runs_bounded_module_without_ambient_capabilities ... ok
 test wasi_host_enforces_fuel_and_memory_limits ... ok
 
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
 
 
 running 4 tests
@@ -1621,7 +1621,7 @@ test sandbox_refuses_read_and_write_outside_lane ... ok
 test sandbox_refuses_a_reachable_loopback_connection ... ok
 test creates_an_isolated_git_worktree_without_moving_main ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
 
 
 running 2 tests
@@ -1635,8 +1635,8 @@ running 6 tests
 test builder_cannot_accept_own_elevated_evidence ... ok
 test scheduler_refuses_missing_worker_budget_and_cycles ... ok
 test conflicting_lane_patches_are_surfaced_not_merged ... ok
-test scheduler_records_explainable_decisions_and_preserves_authority ... ok
 test compatible_tasks_serialize_when_only_one_worker_is_available ... ok
+test scheduler_records_explainable_decisions_and_preserves_authority ... ok
 test schedule_is_deterministic_across_input_order ... ok
 
 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
@@ -1652,8 +1652,8 @@ test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 
 running 2 tests
-test tests::keychain_creation_trusts_only_the_stable_security_binary ... ok
 test tests::prompted_secret_is_supplied_twice_over_stdin ... ok
+test tests::keychain_creation_trusts_only_the_stable_security_binary ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
@@ -1703,7 +1703,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 PASS_PHASE16_VZ_SECURITY_HARDENING
 PASS_PHASE16_VZ_SECURITY_HARDENING_ORCHESTRATOR base=anubis-xcode
 PASS_PHASE16_SECURITY_HARDENING
-PASS_PHASE16_RECEIPT subject=46399744f595aa051b6a6e781803ff1396e0aa11 verdict=VERIFIED
-PASS_PHASE16_RECEIPT subject=46399744f595aa051b6a6e781803ff1396e0aa11 verdict=VERIFIED
+PASS_PHASE16_RECEIPT subject=909db2e79a0085b2ba77a292e50b2ce3789cb690 verdict=VERIFIED
+PASS_PHASE16_RECEIPT subject=909db2e79a0085b2ba77a292e50b2ce3789cb690 verdict=VERIFIED
 PASS_PHASE16_RECEIPT_TAMPER_REJECTION
 PASS_NEMESIS_DESKTOP_COMPLETE

@@ -14,6 +14,17 @@
   "source_locator": "/tmp/NEMESIS_DESKTOP_PRODUCTION_READINESS_AUTONOMOUS_MISSION_2026-08-21.md",
   "words": 3417
  },
+ "design_epoch": {
+  "commits": [
+   "95383450d1bd76901af51e2d27892fc4f8c1170c",
+   "46399744f595aa051b6a6e781803ff1396e0aa11",
+   "909db2e79a0085b2ba77a292e50b2ce3789cb690"
+  ],
+  "instruction_sha256": "3c4454d1c2c4f23c2f1f3aa759e5e43526145633dd733ce09207af9038cbfddd",
+  "note": "Live visual correction inside the sealed line; not a new production-public seal.",
+  "source_final": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+  "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
+ },
  "github": {
   "branch_deletion": false,
   "conversation_resolution": true,
@@ -1905,6 +1916,24 @@
      "id": "O-18",
      "status": "PASS",
      "title": "Seal the SEALED_LOCAL_PRODUCTION roster"
+    },
+    {
+     "evidence": [
+      "instruction /tmp/NEMESIS_RESTORE_TERMINATOR_MATRIX_DESIGN_2026-08-22.md verified sha256=3c4454d1c2c4f23c2f1f3aa759e5e43526145633dd733ce09207af9038cbfddd bytes=1957 lines=49; adopted the three prepared files byte-exact from the design-restore worktree (read-only source, undisturbed) with three documented corrections: cockpit reachability (Home-only branch so the drafter->compile->Review authority path stays reachable), reduce-motion/UPDATES-DISABLED accessibility contract ports, and --text-muted #626a75->#7d8694 (the adopted value measured 3.19-3.70:1 on real surfaces - an objective WCAG AA failure the G-03 gate refuses; corrected value >=4.74:1 everywhere)",
+      "contrast instrument re-pinned from the retired recovery-skin vocabulary to the adopted tokens with usage-derived pairs at unchanged thresholds; PASS_CONTRAST_WCAG_AA; PASS_PRODUCTION_ACCESSIBILITY; vitest 11/11; visual verification of Home LOCAL-001 cockpit / Missions workspace / AUTHORITY REVIEW (ONE-SHOT, PARENT GRANT -> ATTENUATED CHILD rows intact) via shimmed headless render",
+      "design-restore review lane CLEAN (7/7 invariants, WCAG ratios independently reproduced, authority surface byte-identical vs 237ee69); DSR-01 dead residue fixed in 909db2e; five rails; no authority/daemon/kernel changes"
+     ],
+     "id": "O-19",
+     "status": "PASS",
+     "title": "Restore Terminator/Matrix cockpit design (architect instruction 3c4454d1)"
+    },
+    {
+     "evidence": [
+      "phase-16 VZ hardening re-run and receipt resealed at subject 909db2e79a0085b2ba77a292e50b2ce3789cb690 (fresh anubis-xcode guests, deleted after every run); full battery green: PASS_NEMESIS_DESKTOP_COMPLETE (verify-complete-20260822-design-final.txt); sealed roster re-bound: PASS_PRODUCTION_ROSTER_VALID overall=PASS lanes=16 verdict=SEALED_LOCAL_PRODUCTION; PASS_HOSTILE_CALIBRATION re-run against the final sealed roster bytes; the intermediate stale-seal battery abort (FAIL_HOSTILE baseline-roster-valid) was the GIN-05 staleness bind firing as designed and is preserved as a scar"
+     ],
+     "id": "O-20",
+     "status": "PASS",
+     "title": "Re-seal receipts at the design source-final"
     }
    ],
    "id": "O",
@@ -2028,6 +2057,10 @@
    "classification": "INSTRUMENT_REDESIGNED_HONESTLY",
    "command": "python3 scripts/verify_install_contract.py (first run, minimal env, locked console)",
    "exit_status": 1
+  },
+  {
+   "classification": "INSTRUMENT_CORRECT_REFUSAL",
+   "scar": "DESIGN_EPOCH_STALENESS_REFUSAL: the first design-epoch battery aborted at hostile calibration because the sealed roster (subject 18ae665) correctly refused to validate against changed non-receipt paths (GIN-05 bind); resolved by re-binding the seal to the design source-final 909db2e79a0085b2ba77a292e50b2ce3789cb690 after all gates re-ran; instrument behaved as designed"
   }
  ],
  "schema": "nemesis.production-readiness-tracker/v1",
@@ -2056,9 +2089,9 @@
  },
  "terminal_final_receipt": {
   "path": "receipts/production-readiness-20260821/FINAL.json",
-  "sha256": "8b31f73ffc32288a938cf9e2c5e5d8aa48c276b8ace6ab2118274e20d27ca7fe"
+  "sha256": "58878390365baa17c034cde9e30b2108518dbea1ea1a93480a737ea38a125c5c"
  },
  "terminal_verdict": "SEALED_LOCAL_PRODUCTION",
  "terminal_verdict_sealed_at": "2026-08-22T14:55:38.257301Z",
- "updated_at": "2026-08-22T14:55:38.257301Z"
+ "updated_at": "2026-08-22T15:50:03.292863Z"
 }

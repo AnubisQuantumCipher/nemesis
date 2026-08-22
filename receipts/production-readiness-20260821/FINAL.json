@@ -11,6 +11,18 @@
    "reason": "IOConsoleLocked=Yes; native AX walkthrough requires unlocked GUI; automatable substitutes PASS; authorized by contract clause 3; not called PASS"
   }
  ],
+ "design_correction": {
+  "gate_tally_after": {
+   "BLOCKED": 1,
+   "PASS": 201,
+   "PENDING": 0,
+   "total": 202
+  },
+  "instruction_sha256": "3c4454d1c2c4f23c2f1f3aa759e5e43526145633dd733ce09207af9038cbfddd",
+  "source_final": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+  "summary": "Terminator/Matrix cockpit restored per live architect instruction; authority surface byte-identical; a11y corrections (reduce-motion port, UPDATES DISABLED, --text-muted to #7d8694) with the contrast instrument re-pinned to the adopted vocabulary at unchanged thresholds; design-restore review lane CLEAN; phase-16 resealed, battery green, roster re-bound and hostile-calibrated at the design source-final.",
+  "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
+ },
  "diffstat_baseline_to_source_final": "57 files changed, 6005 insertions(+), 352 deletions(-)",
  "excluded_untouched": {
   "excluded_platforms": "per constitution",
@@ -19,9 +31,9 @@
  },
  "gate_tally": {
   "BLOCKED_DEFERRED": 1,
-  "PASS": 199,
+  "PASS": 201,
   "PENDING": 0,
-  "total": 200
+  "total": 202
  },
  "host_policy_note": "Tool \"bash\" is blocked by user policy. To allow: remove \"tools.approval.bash: deny\" from config. (observed 2026-08-22 during Release phase; execution continued through the sanctioned eval kernel per contract clause: preserve the exact technical rejection and take another permitted path)",
  "independent_reviews": {
@@ -98,11 +110,11 @@
    "status": "ACCEPTED_LOW"
   }
  ],
- "roster_sha256": "40b423d87b245642bd875c45c92ff3010c645df0da2d284a52480b27d2646d2c",
+ "roster_sha256": "0a4a9572af4828a1ac3cf6bc8697d758e01970dc4fbf1c10f1b23f8d0f0bfcb1",
  "schema": "nemesis.production-final/v1",
- "sealed_at": "2026-08-22T14:55:38.257301Z",
- "source_final_commit": "18ae66513620da8fa8dc8f917477b9b9c8d44804",
- "source_final_tree": "8a7da1057ae272bf58bc41a0affc777c7e1d449a",
+ "sealed_at": "2026-08-22T15:50:03.292863Z",
+ "source_final_commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+ "source_final_tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2",
  "spark": {
   "aba": [
    "PASS_KERNEL_PROOF_ABA",

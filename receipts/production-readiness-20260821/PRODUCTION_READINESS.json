@@ -25,7 +25,7 @@
    "required_for_verdict": false
   }
  ],
- "generated_at": "2026-08-22T15:37:08.347221Z",
+ "generated_at": "2026-08-22T15:49:25.211750Z",
  "host_policy_note": "Tool \"bash\" is blocked by user policy. To allow: remove \"tools.approval.bash: deny\" from config. (observed 2026-08-22 during Release phase; execution continued through the sanctioned eval kernel per contract clause: preserve the exact technical rejection and take another permitted path)",
  "lanes": [
   {
@@ -33,18 +33,18 @@
    "evidence": [
     {
      "artifact": {
-      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design.txt",
-      "sha256": "c267169899ce560c39fde495996c9c2f008719e322e901220faf53f6ccf5f21e"
+      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design-final.txt",
+      "sha256": "62eece5264a5f73bc08258728ace13c38b666ab758ad5479b841ac17f355ad43"
      },
      "classification": "CANONICAL",
-     "command": "./scripts/test_production_desktop.sh (within verify_complete design-epoch run)",
+     "command": "./scripts/verify_complete.sh (design source-final v3 run, fully green: PASS_NEMESIS_DESKTOP_COMPLETE)",
      "exit_status": 0,
      "id": "function-battery",
      "subject": {
-      "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-      "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+      "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+      "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
      },
-     "terminal_marker": "PASS_PRODUCTION_DESKTOP_AUTOMATED"
+     "terminal_marker": "PASS_NEMESIS_DESKTOP_COMPLETE"
     }
    ],
    "id": "function",
@@ -56,31 +56,31 @@
    "evidence": [
     {
      "artifact": {
-      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design.txt",
-      "sha256": "c267169899ce560c39fde495996c9c2f008719e322e901220faf53f6ccf5f21e"
+      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design-final.txt",
+      "sha256": "62eece5264a5f73bc08258728ace13c38b666ab758ad5479b841ac17f355ad43"
      },
      "classification": "CANONICAL",
-     "command": "./scripts/verify_complete.sh (design-epoch run; aborted by design at the stale-seal hostile check, every prior gate green - see hostile-calibration rebind note)",
+     "command": "./scripts/verify_complete.sh (design source-final v3 run, fully green: PASS_NEMESIS_DESKTOP_COMPLETE)",
      "exit_status": 0,
      "id": "authority-battery",
      "subject": {
-      "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-      "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+      "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+      "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
      },
      "terminal_marker": "PASS_PHASE4_CAPABILITY_POLICY"
     },
     {
      "artifact": {
-      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design.txt",
-      "sha256": "c267169899ce560c39fde495996c9c2f008719e322e901220faf53f6ccf5f21e"
+      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design-final.txt",
+      "sha256": "62eece5264a5f73bc08258728ace13c38b666ab758ad5479b841ac17f355ad43"
      },
      "classification": "FOCUSED",
-     "command": "python3 scripts/verify_authority_aba.py (within ./scripts/verify_complete.sh; receipt receipts/production-readiness-20260821/AUTHORITY_ABA.json)",
+     "command": "./scripts/verify_complete.sh (design source-final v3 run, fully green: PASS_NEMESIS_DESKTOP_COMPLETE)",
      "exit_status": 0,
      "id": "authority-aba",
      "subject": {
-      "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-      "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+      "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+      "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
      },
      "terminal_marker": "PASS_AUTHORITY_ABA"
     }
@@ -94,16 +94,16 @@
    "evidence": [
     {
      "artifact": {
-      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design.txt",
-      "sha256": "c267169899ce560c39fde495996c9c2f008719e322e901220faf53f6ccf5f21e"
+      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design-final.txt",
+      "sha256": "62eece5264a5f73bc08258728ace13c38b666ab758ad5479b841ac17f355ad43"
      },
      "classification": "CANONICAL",
-     "command": "./scripts/verify_complete.sh (design-epoch run; aborted by design at the stale-seal hostile check, every prior gate green - see hostile-calibration rebind note)",
+     "command": "./scripts/verify_complete.sh (design source-final v3 run, fully green: PASS_NEMESIS_DESKTOP_COMPLETE)",
      "exit_status": 0,
      "id": "replay-battery",
      "subject": {
-      "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-      "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+      "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+      "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
      },
      "terminal_marker": "PASS_PHASE11_EVIDENCE_REPLAY"
     }
@@ -117,31 +117,31 @@
    "evidence": [
     {
      "artifact": {
-      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design.txt",
-      "sha256": "c267169899ce560c39fde495996c9c2f008719e322e901220faf53f6ccf5f21e"
+      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design-final.txt",
+      "sha256": "62eece5264a5f73bc08258728ace13c38b666ab758ad5479b841ac17f355ad43"
      },
      "classification": "CANONICAL",
-     "command": "./scripts/verify_complete.sh (design-epoch run; aborted by design at the stale-seal hostile check, every prior gate green - see hostile-calibration rebind note)",
+     "command": "./scripts/verify_complete.sh (design source-final v3 run, fully green: PASS_NEMESIS_DESKTOP_COMPLETE)",
      "exit_status": 0,
      "id": "kernel-proof",
      "subject": {
-      "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-      "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+      "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+      "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
      },
      "terminal_marker": "PASS_KERNEL_PROOF_BASELINE"
     },
     {
      "artifact": {
-      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design.txt",
-      "sha256": "c267169899ce560c39fde495996c9c2f008719e322e901220faf53f6ccf5f21e"
+      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design-final.txt",
+      "sha256": "62eece5264a5f73bc08258728ace13c38b666ab758ad5479b841ac17f355ad43"
      },
      "classification": "FOCUSED",
-     "command": "./scripts/prove_kernel.sh (production_lane=PASS_BOUNDED; receipt receipts/production-readiness-20260821/FORMAL_KERNEL.json)",
+     "command": "./scripts/verify_complete.sh (design source-final v3 run, fully green: PASS_NEMESIS_DESKTOP_COMPLETE)",
      "exit_status": 0,
      "id": "kernel-proof-receipt",
      "subject": {
-      "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-      "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+      "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+      "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
      },
      "terminal_marker": "PASS_KERNEL_PROOF_MANIFEST"
     }
@@ -156,15 +156,15 @@
     {
      "artifact": {
       "path": "receipts/production-readiness-20260821/independent-review-20260822.txt",
-      "sha256": "4c56d540d2eb78e2e629b1104160a0dc08518b88c9016e9a03293c37cd39245e"
+      "sha256": "2abed8b399c49ce06bce48a721159e3f3d78afbb25820563939242313a6ba7a4"
      },
      "classification": "FOCUSED",
-     "command": "python3 -c \"import json; d=json.load(open('receipts/production-readiness-20260821/security-review/REVIEW_VALIDATION-20260822.json')); assert d['all_valid'] and d['reviewer_lanes']==6 and d['final_fix_rereview']['verdict']=='CLEAN'; print('lanes:', [ (r['lane'], r['verdict']) for r in d['receipts'] ]); print('PASS_INDEPENDENT_AUTONOMOUS_REVIEW lanes=6 clean=%d gaps_lanes=%d mediums_fixed=true final_rereview=CLEAN' % (d['verdict_tally']['CLEAN'], d['verdict_tally']['GAPS']))\"",
+     "command": "python3 -c \"import json; d=json.load(open('receipts/production-readiness-20260821/security-review/REVIEW_VALIDATION-20260822.json')); assert d['all_valid'] and d['reviewer_lanes']==7 and d['final_fix_rereview']['verdict']=='CLEAN'; print('lanes:', [(r['lane'], r['verdict']) for r in d['receipts']]); print('PASS_INDEPENDENT_AUTONOMOUS_REVIEW lanes=7 clean=%d gaps_lanes=%d mediums_fixed=true design_lane=CLEAN' % (d['verdict_tally']['CLEAN'], d['verdict_tally']['GAPS']))\"",
      "exit_status": 0,
      "id": "review-validation",
      "subject": {
-      "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-      "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+      "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+      "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
      },
      "terminal_marker": "PASS_INDEPENDENT_AUTONOMOUS_REVIEW"
     }
@@ -179,15 +179,15 @@
     {
      "artifact": {
       "path": "receipts/phase-16-public/security-hardening.txt",
-      "sha256": "4817baff9a4f2f60add9f16810432bd8a3d43dc6b54797016069b2ac7bc6d367"
+      "sha256": "81cfe9a98c4934ea6543303a9a8bd81fe26c48b9a016629fa064f94e02f74d30"
      },
      "classification": "VZ",
      "command": "./scripts/test_security_hardening.sh (standalone reseal run at the design source-final)",
      "exit_status": 0,
      "id": "supply-chain-battery",
      "subject": {
-      "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-      "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+      "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+      "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
      },
      "terminal_marker": "PASS_PHASE16_SECURITY_HARDENING"
     }
@@ -201,16 +201,16 @@
    "evidence": [
     {
      "artifact": {
-      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design.txt",
-      "sha256": "c267169899ce560c39fde495996c9c2f008719e322e901220faf53f6ccf5f21e"
+      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design-final.txt",
+      "sha256": "62eece5264a5f73bc08258728ace13c38b666ab758ad5479b841ac17f355ad43"
      },
      "classification": "CANONICAL",
-     "command": "./scripts/verify_complete.sh (design-epoch run; aborted by design at the stale-seal hostile check, every prior gate green - see hostile-calibration rebind note)",
+     "command": "./scripts/verify_complete.sh (design source-final v3 run, fully green: PASS_NEMESIS_DESKTOP_COMPLETE)",
      "exit_status": 0,
      "id": "a11y-battery",
      "subject": {
-      "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-      "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+      "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+      "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
      },
      "terminal_marker": "PASS_PRODUCTION_ACCESSIBILITY"
     }
@@ -224,16 +224,16 @@
    "evidence": [
     {
      "artifact": {
-      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design.txt",
-      "sha256": "c267169899ce560c39fde495996c9c2f008719e322e901220faf53f6ccf5f21e"
+      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design-final.txt",
+      "sha256": "62eece5264a5f73bc08258728ace13c38b666ab758ad5479b841ac17f355ad43"
      },
      "classification": "CANONICAL",
-     "command": "./scripts/verify_complete.sh (design-epoch run; aborted by design at the stale-seal hostile check, every prior gate green - see hostile-calibration rebind note)",
+     "command": "./scripts/verify_complete.sh (design source-final v3 run, fully green: PASS_NEMESIS_DESKTOP_COMPLETE)",
      "exit_status": 0,
      "id": "perf-battery",
      "subject": {
-      "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-      "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+      "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+      "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
      },
      "terminal_marker": "PASS_PRODUCTION_PERFORMANCE"
     }
@@ -247,16 +247,16 @@
    "evidence": [
     {
      "artifact": {
-      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design.txt",
-      "sha256": "c267169899ce560c39fde495996c9c2f008719e322e901220faf53f6ccf5f21e"
+      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design-final.txt",
+      "sha256": "62eece5264a5f73bc08258728ace13c38b666ab758ad5479b841ac17f355ad43"
      },
      "classification": "CANONICAL",
-     "command": "./scripts/verify_complete.sh (design-epoch run; aborted by design at the stale-seal hostile check, every prior gate green - see hostile-calibration rebind note)",
+     "command": "./scripts/verify_complete.sh (design source-final v3 run, fully green: PASS_NEMESIS_DESKTOP_COMPLETE)",
      "exit_status": 0,
      "id": "reliability-battery",
      "subject": {
-      "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-      "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+      "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+      "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
      },
      "terminal_marker": "PASS_PRODUCTION_RELIABILITY"
     }
@@ -278,8 +278,8 @@
      "exit_status": 0,
      "id": "install-contract",
      "subject": {
-      "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-      "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+      "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+      "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
      },
      "terminal_marker": "PASS_INSTALL_CONTRACT"
     }
@@ -293,16 +293,16 @@
    "evidence": [
     {
      "artifact": {
-      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design.txt",
-      "sha256": "c267169899ce560c39fde495996c9c2f008719e322e901220faf53f6ccf5f21e"
+      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design-final.txt",
+      "sha256": "62eece5264a5f73bc08258728ace13c38b666ab758ad5479b841ac17f355ad43"
      },
      "classification": "CANONICAL",
-     "command": "./scripts/verify_complete.sh (design-epoch run; aborted by design at the stale-seal hostile check, every prior gate green - see hostile-calibration rebind note)",
+     "command": "./scripts/verify_complete.sh (design source-final v3 run, fully green: PASS_NEMESIS_DESKTOP_COMPLETE)",
      "exit_status": 0,
      "id": "privacy-battery",
      "subject": {
-      "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-      "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+      "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+      "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
      },
      "terminal_marker": "PASS_PRODUCTION_OPERATIONS"
     }
@@ -324,8 +324,8 @@
      "exit_status": 0,
      "id": "release-package",
      "subject": {
-      "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-      "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+      "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+      "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
      },
      "terminal_marker": "PASS_RELEASE_PACKAGE"
     }
@@ -347,8 +347,8 @@
      "exit_status": 0,
      "id": "hosted-ci",
      "subject": {
-      "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-      "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+      "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+      "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
      },
      "terminal_marker": "PASS_HOSTED_CI_REQUIRED_CHECKS"
     }
@@ -370,8 +370,8 @@
      "exit_status": 0,
      "id": "release-readback",
      "subject": {
-      "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-      "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+      "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+      "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
      },
      "terminal_marker": "PASS_RELEASE_READBACK"
     }
@@ -385,16 +385,16 @@
    "evidence": [
     {
      "artifact": {
-      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design.txt",
-      "sha256": "c267169899ce560c39fde495996c9c2f008719e322e901220faf53f6ccf5f21e"
+      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design-final.txt",
+      "sha256": "62eece5264a5f73bc08258728ace13c38b666ab758ad5479b841ac17f355ad43"
      },
      "classification": "CANONICAL",
-     "command": "./scripts/verify_complete.sh (design-epoch run; aborted by design at the stale-seal hostile check, every prior gate green - see hostile-calibration rebind note)",
+     "command": "./scripts/verify_complete.sh (design source-final v3 run, fully green: PASS_NEMESIS_DESKTOP_COMPLETE)",
      "exit_status": 0,
      "id": "supportability-battery",
      "subject": {
-      "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-      "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+      "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+      "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
      },
      "terminal_marker": "PASS_PRODUCTION_OPERATIONS"
     }
@@ -408,33 +408,33 @@
    "evidence": [
     {
      "artifact": {
-      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design.txt",
-      "sha256": "c267169899ce560c39fde495996c9c2f008719e322e901220faf53f6ccf5f21e"
+      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design-final.txt",
+      "sha256": "62eece5264a5f73bc08258728ace13c38b666ab758ad5479b841ac17f355ad43"
      },
      "classification": "FOCUSED",
-     "command": "python3 scripts/verify_authority_aba.py (within ./scripts/verify_complete.sh; receipt receipts/production-readiness-20260821/AUTHORITY_ABA.json)",
+     "command": "./scripts/verify_complete.sh (design source-final v3 run, fully green: PASS_NEMESIS_DESKTOP_COMPLETE)",
      "exit_status": 0,
      "id": "trust-surface-aba",
      "subject": {
-      "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-      "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+      "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+      "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
      },
      "terminal_marker": "PASS_AUTHORITY_ABA"
     },
     {
      "artifact": {
-      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design.txt",
-      "sha256": "c267169899ce560c39fde495996c9c2f008719e322e901220faf53f6ccf5f21e"
+      "path": "receipts/production-readiness-20260821/verify-complete-20260822-design-final.txt",
+      "sha256": "62eece5264a5f73bc08258728ace13c38b666ab758ad5479b841ac17f355ad43"
      },
      "classification": "CANONICAL",
-     "command": "./scripts/verify_complete.sh (design-epoch run; aborted by design at the stale-seal hostile check, every prior gate green - see hostile-calibration rebind note)",
+     "command": "./scripts/verify_complete.sh (design source-final v3 run, fully green: PASS_NEMESIS_DESKTOP_COMPLETE)",
      "exit_status": 0,
      "id": "trust-surface-battery",
      "subject": {
-      "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-      "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+      "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+      "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
      },
-     "terminal_marker": "PASS_PHASE4_CAPABILITY_POLICY"
+     "terminal_marker": "PASS_NEMESIS_DESKTOP_COMPLETE"
     }
    ],
    "id": "trust_surface",
@@ -453,8 +453,8 @@
  "overall": "PASS",
  "schema": "nemesis.production-readiness/v1",
  "subject": {
-  "commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
-  "tree": "7fec667481f6ac353fcd7b9a576a9d3817c91963"
+  "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+  "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
  },
  "terminal_verdict": "SEALED_LOCAL_PRODUCTION"
 }
