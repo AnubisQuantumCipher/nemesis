@@ -7,6 +7,7 @@
  "baseline_commit": "d18cb7cc5bd918a6e9dd67aa99088dab9503e39b",
  "branch": "production/desktop-v1-autonomous-recovery",
  "changed_file_count": 119,
+ "changed_file_count_baseline_to_source_final": 102,
  "command_table": [
   {
    "classification": "CANONICAL",
@@ -87,10 +88,12 @@
    ],
    "classification": "HOSTED",
    "exit_status": 0,
-   "gate": "hosted CI on PR #4 head 3ad557c",
-   "head": "089549f6550dee66023329ff5b9fcc94c817e70b",
-   "marker": "4/4 required checks success (run 32567007222, head 089549f)",
-   "run_id": "32567007222"
+   "gate": "hosted CI over covered-source tree 43058f04 (PR #4)",
+   "marker": "4/4 required checks success over covered-source tree 43058f04",
+   "terminal_runs": [
+    "32567007222@089549f",
+    "32567308119@8ee557a"
+   ]
   },
   {
    "classification": "BLOCKED",
@@ -107,43 +110,49 @@
  ],
  "continuation_contract_sha256": "ad54115ae3a6550ff65e9963a37be1ae4482257a48ebd344b88766068fc23518",
  "diffstat": "119 files changed, 19240 insertions(+), 1650 deletions(-)",
+ "diffstat_baseline_to_source_final": "102 files changed, 15826 insertions(+), 1467 deletions(-)",
  "dirty": false,
  "excluded_untouched": {
   "excluded_platforms": "no iOS/Android/web/Windows/Linux/SaaS work added",
   "immutable_predecessor": "v0.1.0 tag/release/assets intact",
   "unrelated_worktrees": "/Users/sicarii/Desktop/Projects/nemesis, /Users/sicarii/Worktrees/nemesis-desktop-production, jackal-* not modified this session"
  },
- "final_commit": "3ad557caeea762e33ae94273ac35a345735825ec",
- "final_tree": "d5d854feb1c690764f91c2e76ef22384e31f46d3",
  "gate_tally": {
   "BLOCKED": 9,
-  "PASS": 154,
-  "PENDING": 19
+  "PASS": 173
  },
  "github": {
-  "checks": "4/4 required terminal success on run 32567007222 (final HEAD 089549f)",
+  "covered_source_final_commit": "2f78bf13574dd9602ffa57fc180741b225e03af8",
+  "covered_source_final_tree": "43058f04fbd0f3cded16d2d887a03ef8450e4198",
   "mergeable": "MERGEABLE/CLEAN",
   "pr": "https://github.com/AnubisQuantumCipher/nemesis/pull/4",
-  "pr_head": "3ad557caeea762e33ae94273ac35a345735825ec",
-  "pr_head_source_final": "3ad557caeea762e33ae94273ac35a345735825ec",
+  "pr_number": 4,
+  "pr_state": "OPEN",
   "predecessor_tag": "v0.1.0=616c78508b754081bb77fab63e6665d16f47d84d (intact, 3 assets)",
-  "receipt_final_head": "089549f6550dee66023329ff5b9fcc94c817e70b"
+  "repository": "AnubisQuantumCipher/nemesis"
  },
  "hosted_ci": {
-  "corroboration": "089549f is byte-identical in source and COVERED_PATHS to 3ad557c (earlier run 32566465609, also 4/4 green); the two independent runs corroborate the source-final state",
-  "load_bearing_binding": {
-   "head": "089549f6550dee66023329ff5b9fcc94c817e70b",
-   "observation": "independent readback polled to terminal; all 4 required checks completed success on the exact final HEAD",
-   "required_checks": {
-    "Contract and evidence": "success",
-    "Dependency audit": "success",
-    "Rust and Desktop (macos-14)": "success",
-    "Rust and Desktop (macos-15)": "success"
+  "bound_to": "covered-source tree 43058f04 (source-final commit 2f78bf1); NOT a mutating branch head",
+  "non_circularity": "Every commit after source-final is receipts-only (proven: git diff over runtime/kernel/daemon/desktop/protocols/config/scripts/docs/.github/tests is EMPTY vs 2f78bf1). Each such commit retriggers CI, but every run validates the identical covered-source tree 43058f04 and is a determinate repeat. Two independent runs (089549f, 8ee557a) already reached terminal 4/4 success; the receipts-only commit carrying THIS receipt re-validates the same tree and is observed post-push, not chased with a further reseal. The load-bearing attestation is fixed to the covered-source tree, so it stays true regardless of which receipts head is the tip.",
+  "required_checks": [
+   "Contract and evidence",
+   "Dependency audit",
+   "Rust and Desktop (macos-14)",
+   "Rust and Desktop (macos-15)"
+  ],
+  "required_checks_all_success": true,
+  "terminal_runs": [
+   {
+    "conclusion": "success",
+    "head": "089549f6550dee66023329ff5b9fcc94c817e70b",
+    "run_id": "32567007222"
    },
-   "run_conclusion": "success",
-   "run_id": "32567007222"
-  },
-  "non_circularity": "The reseal commit that carries THIS attestation modifies only receipts/ (FINAL.json, FINAL_REPORT.md, TRACKER.json) and changes no source or COVERED_PATH; the CI run it necessarily retriggers re-validates byte-identical source and is a mechanical repeat, NOT the load-bearing binding. Per the contract's non-circular rule the binding is fixed to run 32567007222 on 089549f and this reseal is the terminal stopping point; the redundant repeat run is not chased."
+   {
+    "conclusion": "success",
+    "head": "8ee557a10600b8d701135e1c4e0a0874ed874bf3",
+    "run_id": "32567308119"
+   }
+  ]
  },
  "hostile_controls": {
   "aba": "L-09 exact-byte + kernel PROOF_ABA (D-14)",
@@ -238,6 +247,7 @@
   "receipt": "receipts/production-readiness-20260821/PERFORMANCE.json",
   "sha256": "acc360194310e61490aa1abf8b8b67d6a8b685cfe371ff2f56453c0f396a2038"
  },
+ "receipts_final_note": "After source-final (2f78bf1) only receipts/ change; the branch tip advances with each receipts-only reseal and is intentionally NOT self-referenced here, so this attestation never goes stale or circular. Covered-source/COVERED_PATHS are byte-identical from 2f78bf1 through every later head (git diff empty).",
  "residuals": [
   "Developer ID signing + notarization + Gatekeeper acceptance: external Apple account/credential prerequisite (no Developer ID certificate; membership inactive). Blocks COMPLETE_PRODUCTION_PUBLIC.",
   "Production main merge of PR #4: human/policy-gated in this session (merge tool denied). PR is CLEAN/MERGEABLE, all checks green, no trust-surface change \u2014 ready for the architect to press merge.",
@@ -257,7 +267,7 @@
   "disk-full reliability test initially passed a ~50B settings write on a nominally-full volume; fixed with progressive fine-grained fill."
  ],
  "schema": "nemesis.production-final/v1",
- "sealed_at": "2026-08-22T10:18:46Z",
+ "sealed_at": "2026-08-22T10:32:00Z",
  "signing": {
   "adhoc": "local-only",
   "developer_id": "UNAVAILABLE",
@@ -266,6 +276,8 @@
   "receipt": "receipts/production-readiness-20260821/SIGNING_CAPABILITY.json",
   "sha256": "275aa5974021359c66d3344f3a2eaab05a3df3a6c3eeffc1a3caef79f348f95e"
  },
+ "source_final_commit": "2f78bf13574dd9602ffa57fc180741b225e03af8",
+ "source_final_tree": "43058f04fbd0f3cded16d2d887a03ef8450e4198",
  "spark": {
   "aba": "PASS_KERNEL_PROOF_ABA",
   "assumptions": 0,
@@ -344,7 +356,7 @@
    "status": "BLOCKED"
   },
   {
-   "evidence": "4/4 required checks terminal success on final HEAD 089549f (run 32567007222); corroborated by run 32566465609 on source-identical 3ad557c",
+   "evidence": "4/4 required checks terminal success over covered-source tree 43058f04 (source-final 2f78bf1); two independent terminal-green runs 32567007222@089549f and 32567308119@8ee557a",
    "lane": "hosted_ci",
    "status": "PASS"
   },
