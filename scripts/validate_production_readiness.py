@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -346,6 +347,62 @@ def validate_roster(data: Any, root: Path = ROOT) -> list[str]:
                 "SEALED_LOCAL_PRODUCTION accepts only informational EXTERNAL blockers "
                 "marked required_for_verdict=false"
             )
+
+    if verdict is not None:
+        for lane_id, lane in lane_by_id.items():
+            lane_blockers = lane.get("blockers") or []
+            if lane.get("status") == "PASS" and lane_blockers:
+                errors.append(
+                    f"terminal verdict forbids PASS lane {lane_id} carrying blockers"
+                )
+            if verdict != "BLOCKED_TRUST_SURFACE" and any(
+                isinstance(blocker, dict) and blocker.get("kind") == "TRUST_SURFACE"
+                for blocker in lane_blockers
+            ):
+                errors.append(
+                    f"lane {lane_id} carries a TRUST_SURFACE blocker under verdict {verdict}"
+                )
+
+    if (
+        verdict in {"SEALED_LOCAL_PRODUCTION", "COMPLETE_PRODUCTION_PUBLIC"}
+        and isinstance(subject, dict)
+        and (root / ".git").exists()
+    ):
+        commit = subject.get("commit", "")
+
+        def _git(*arguments: str) -> subprocess.CompletedProcess[str]:
+            return subprocess.run(
+                ["/usr/bin/git", *arguments],
+                cwd=root,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+            )
+
+        if _git("cat-file", "-e", f"{commit}^{{commit}}").returncode != 0:
+            errors.append("sealed roster subject commit is not in the repository")
+        elif _git("merge-base", "--is-ancestor", commit, "HEAD").returncode != 0:
+            errors.append("sealed roster subject commit is not an ancestor of HEAD")
+        else:
+            observed_tree = _git("rev-parse", f"{commit}^{{tree}}").stdout.strip()
+            if subject.get("tree") != observed_tree:
+                errors.append("sealed roster subject tree contradicts the commit")
+            #  receipts/ and STATUS.md are post-seal evidence follow-up
+            #  surfaces (v0.1.0 precedent); every other path is source-bound.
+            changed = [
+                line
+                for line in _git(
+                    "diff", "--name-only", f"{commit}..HEAD"
+                ).stdout.splitlines()
+                if line
+                and not line.startswith("receipts/")
+                and line != "STATUS.md"
+            ]
+            if changed:
+                errors.append(
+                    "sealed roster subject is stale: non-receipt paths changed "
+                    f"since seal: {sorted(changed)[:8]}"
+                )
 
     return errors
 

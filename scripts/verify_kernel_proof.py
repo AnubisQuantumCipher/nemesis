@@ -23,6 +23,14 @@ UNIT_PATTERN = re.compile(r"^in unit ([a-z0-9-]+),", re.MULTILINE)
 ANALYZED_PATTERN = re.compile(r"^Analyzed (\d+) units$", re.MULTILINE)
 WARNING_PATTERN = re.compile(r"\((?:[^)]*?)(\d+) warnings and (\d+) pragma Assume statements\)")
 TIMEOUT_PATTERN = re.compile(r"\b(?:timeout|timed out)\b", re.IGNORECASE)
+#  Exact architect authorizations permitted to resolve trust-surface
+#  blockers. A resolution anchored to any other contract hash refuses.
+AUTHORIZED_TRUST_SURFACE_CONTRACTS = frozenset(
+    {
+        # NEMESIS_TS001_TS002_CONTINUATION_2026-08-22.md
+        "920900f3a7d37a9a3e1d51541997070789a0e1e7bddecf31808076c67a00d3f9",
+    }
+)
 
 
 class ProofValidationError(ValueError):
@@ -33,6 +41,7 @@ class ProofValidationError(ValueError):
 class ProofSummary:
     total_obligations: int
     unproved: int
+    justified: int
     analyzed_units: int
     units: set[str]
     warnings: int
@@ -58,19 +67,23 @@ def load_strict_json(text: str) -> Any:
         raise ProofValidationError(f"invalid JSON: {error}") from error
 
 
-def _total_row(text: str) -> tuple[int, int]:
+def _total_row(text: str) -> tuple[int, int, int]:
     for line in text.splitlines():
         fields = line.split()
-        if fields and fields[0] == "Total" and len(fields) >= 2 and fields[1].isdigit():
+        if fields and fields[0] == "Total" and len(fields) >= 3 and fields[1].isdigit():
             total = int(fields[1])
-            final = fields[-1]
-            unproved = 0 if final == "." else int(final) if final.isdigit() else -1
-            return total, unproved
+
+            def column(value: str) -> int:
+                return 0 if value == "." else int(value) if value.isdigit() else -1
+
+            unproved = column(fields[-1])
+            justified = column(fields[-2])
+            return total, unproved, justified
     raise ProofValidationError("GNATprove summary has no parseable Total row")
 
 
 def parse_gnatprove_summary(text: str) -> ProofSummary:
-    total, unproved = _total_row(text)
+    total, unproved, justified = _total_row(text)
     analyzed_match = ANALYZED_PATTERN.search(text)
     if analyzed_match is None:
         raise ProofValidationError("GNATprove summary has no analyzed-unit count")
@@ -78,6 +91,7 @@ def parse_gnatprove_summary(text: str) -> ProofSummary:
     return ProofSummary(
         total_obligations=total,
         unproved=unproved,
+        justified=justified,
         analyzed_units=int(analyzed_match.group(1)),
         units=set(UNIT_PATTERN.findall(text)),
         warnings=sum(int(warnings) for warnings, _ in warning_rows),
@@ -92,6 +106,10 @@ def validate_proof_summary(summary: ProofSummary, expected_units: set[str]) -> l
         errors.append("proof reported zero obligations")
     if summary.unproved != 0:
         errors.append(f"proof reported unproved obligations={summary.unproved}")
+    if summary.justified != 0:
+        errors.append(
+            f"proof reported manually justified obligations={summary.justified}"
+        )
     if summary.analyzed_units != len(expected_units):
         errors.append(
             "analyzed unit count contradicts scope: "
@@ -210,6 +228,10 @@ def validate_live_scope(scope: Any, root: Path = ROOT) -> list[str]:
             ):
                 errors.append(
                     f"{prefix} requires authorized_by contract path, matching contract_sha256, and date"
+                )
+            elif authorized["contract_sha256"] not in AUTHORIZED_TRUST_SURFACE_CONTRACTS:
+                errors.append(
+                    f"{prefix} authorized_by contract hash is not a pinned architect authorization"
                 )
     return errors
 

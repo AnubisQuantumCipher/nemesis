@@ -97,6 +97,17 @@ def main() -> int:
     for stale in (RECEIPT, OUTPUT / "A.log", OUTPUT / "B.log", OUTPUT / "A2.log"):
         if stale.exists():
             stale.unlink()
+    dirty = [
+        line
+        for line in git(
+            "status", "--porcelain=v1", "--untracked-files=all", "--",
+            *INVENTORY_ROOTS,
+        ).splitlines()
+        if line
+    ]
+    if dirty:
+        print(f"FAIL_KERNEL_PROOF_ABA dirty_subject={dirty}")
+        return 1
     source_before = hash_inventory(ROOT)
     with tempfile.TemporaryDirectory(prefix="nemesis-proof-aba-") as temporary:
         copy = Path(temporary) / "repo"
@@ -155,6 +166,7 @@ def main() -> int:
         "subject": {
             "commit": git("rev-parse", "HEAD"),
             "tree": git("rev-parse", "HEAD^{tree}"),
+            "dirty_paths": dirty,
             "source_inventory_sha256": sha256(
                 json.dumps(source_before, sort_keys=True, separators=(",", ":")).encode()
             ),

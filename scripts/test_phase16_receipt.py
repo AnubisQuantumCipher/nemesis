@@ -48,6 +48,22 @@ def main() -> int:
         print(f"FAIL_PHASE16_RECEIPT_TAMPER_ACCEPTED\n{rejected.stdout}{rejected.stderr}")
         return 1
 
+    stripped = json.loads(receipt.read_text(encoding="utf-8"))
+    stripped.pop("epoch", None)
+    with tempfile.TemporaryDirectory(prefix=".phase16-receipt-", dir=ROOT / "receipts") as temp:
+        epochless = Path(temp) / "PHASE16.json"
+        epochless.write_text(
+            json.dumps(stripped, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+        downgraded = verify(epochless)
+    if downgraded.returncode == 0 or "FAIL_PHASE16_RECEIPT release_epoch" not in downgraded.stdout:
+        print(
+            "FAIL_PHASE16_RECEIPT_EPOCH_DOWNGRADE_ACCEPTED\n"
+            f"{downgraded.stdout}{downgraded.stderr}"
+        )
+        return 1
+
     print(valid.stdout.strip())
     print("PASS_PHASE16_RECEIPT_TAMPER_REJECTION")
     return 0

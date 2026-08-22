@@ -100,17 +100,29 @@ Deliberate residuals (user data, removed only by explicit choice):
 - Keychain item service `dev.nemesis.receipt.seed.v1`, account
   `local-default` — the local receipt signing seed. Remove with:
   `security delete-generic-password -s dev.nemesis.receipt.seed.v1 -a local-default`.
+- Inside any workspace repository you authorized a mission against: the
+  isolated lane's Git worktree registration (under that repository's
+  `.git/worktrees/`) and the `nemesis/desktop-*` mission branch. Remove with
+  `git worktree prune` and `git branch -D nemesis/desktop-<id>` in that
+  repository.
 
-The app installs no launchd jobs, no kernel extensions, no privileged
-helpers, and never writes outside its bundle, its local home, and the
-Keychain item above.
+The app installs no launchd jobs, no kernel extensions, and no privileged
+helpers. Outside its bundle it writes only to its local home, the Keychain
+item above, and — during an explicitly authorized mission — the isolated
+lane worktree and branch of the workspace repository you selected and
+reviewed.
 
 ## Executable proof
 
 `scripts/verify_install_contract.py` proves this contract end to end on real
-bytes: hash verification, clean extract, ad-hoc signature validity, launch
-(process + local-home creation under an isolated `$HOME`), upgrade with state
-preservation across bundle replacement, version identity change, uninstall
-with an explicit residual inventory. It writes
+bytes: both assets bound by exact name and recomputed digest to their
+release `SHA256SUMS` before anything is extracted or executed, clean
+extract, ad-hoc signature validity (`Signature=adhoc`, `TeamIdentifier` not
+set), launch under an isolated `$HOME` (full local-home creation loop when
+the console is unlocked; process plus owned on-screen CoreGraphics window —
+the `LOCKED_SESSION.json` evidence class — when `IOConsoleLocked=Yes`),
+upgrade with byte-exact user-state preservation across bundle replacement,
+enforced version identity change, an observed empty launch-agent/helper
+inventory, and uninstall with an explicit residual inventory. It writes
 `receipts/production-readiness-20260821/INSTALL_CONTRACT.json` with a
 `PASS_INSTALL_CONTRACT` terminal marker.

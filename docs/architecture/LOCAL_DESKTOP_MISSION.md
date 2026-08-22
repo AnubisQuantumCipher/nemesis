@@ -57,7 +57,7 @@ The Desktop drafter replaces the example identities with observed current values
 
 ## Current authority boundary
 
-The flow binds explicit contract and action digests and uses the existing capability and completion decisions. It does not claim that `Nemesis.Kernel.Approvals` is durably integrated into the daemon: that accept-condition change is a recorded trust-surface blocker and is not silently landed by the production-readiness mission.
+The flow binds explicit contract and action digests and uses the existing capability and completion decisions. Since 2026-08-22 (architect contract sha256 `920900f3a7d37a9a3e1d51541997070789a0e1e7bddecf31808076c67a00d3f9`), `Nemesis.Kernel.Approvals` IS durably integrated into the daemon: `authorize_action` consumes a persisted, exact, one-shot approval and derives the per-action child grant from a persisted parent through the SPARK-proved `Derive_Child_Grant` (see `config/formal-kernel-scope.json` trust_surface_resolutions and `protocols/local-core-v1.md`).
 
 ## Non-claims
 

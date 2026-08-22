@@ -398,6 +398,103 @@ class DaemonApiTests(unittest.TestCase):
         self.assertEqual(corrupt_grant["decision"], "REFUSED_CAPABILITY")
         self.assertEqual(corrupt_grant["reason"], "grant_corrupt")
 
+    def test_capability_refusals_burn_the_one_shot_approval(self) -> None:
+        #  PCL-03: exercise the post-consumption Authorize dimensions through
+        #  the socket. Consumption precedes the capability check, so a scope,
+        #  subject, or budget refusal burns the one-shot approval and an
+        #  exact retry must report approval_replayed - the documented
+        #  fail-closed direction, proven end to end.
+        def prepare(mission_id: str) -> None:
+            created = self.request(
+                "create",
+                mission_id=mission_id,
+                worker_id=WORKER,
+                contract_digest=CONTRACT,
+                scope_digest=SCOPE,
+                source_digest=SOURCE_INITIAL,
+            )
+            self.assertEqual(created["status"], "OK")
+            self.assertEqual(
+                self.request(
+                    "authorize", mission_id=mission_id, contract_digest=CONTRACT
+                )["status"],
+                "OK",
+            )
+            self.assertEqual(
+                self.request(
+                    "create_grant", mission_id=mission_id, grant_id=GRANT
+                )["status"],
+                "OK",
+            )
+            self.assertEqual(
+                self.request(
+                    "create_approval",
+                    mission_id=mission_id,
+                    approval_id=APPROVAL,
+                    action_digest=ACTION,
+                )["status"],
+                "OK",
+            )
+            self.assertEqual(
+                self.request("run", mission_id=mission_id)["status"], "OK"
+            )
+
+        def exact_retry(mission_id: str) -> None:
+            replayed = self.request(
+                "authorize_action",
+                mission_id=mission_id,
+                worker_id=WORKER,
+                scope_digest=SCOPE,
+                action_digest=ACTION,
+                estimated_bytes=128,
+            )
+            self.assertEqual(replayed["status"], "REFUSED")
+            self.assertEqual(replayed["decision"], "REFUSED_APPROVAL")
+            self.assertEqual(replayed["reason"], "approval_replayed")
+
+        wrong_scope = "mis_ffffffffffffffffffffff"
+        prepare(wrong_scope)
+        refused = self.request(
+            "authorize_action",
+            mission_id=wrong_scope,
+            worker_id=WORKER,
+            scope_digest="99" * 32,
+            action_digest=ACTION,
+            estimated_bytes=128,
+        )
+        self.assertEqual(refused["status"], "REFUSED")
+        self.assertEqual(refused["decision"], "REFUSED_CAPABILITY")
+        self.assertNotIn("reason", refused)
+        exact_retry(wrong_scope)
+
+        wrong_worker = "mis_gggggggggggggggggggggg"
+        prepare(wrong_worker)
+        refused = self.request(
+            "authorize_action",
+            mission_id=wrong_worker,
+            worker_id="wrk_1111111111111111111111",
+            scope_digest=SCOPE,
+            action_digest=ACTION,
+            estimated_bytes=128,
+        )
+        self.assertEqual(refused["status"], "REFUSED")
+        self.assertEqual(refused["decision"], "REFUSED_CAPABILITY")
+        exact_retry(wrong_worker)
+
+        over_budget = "mis_hhhhhhhhhhhhhhhhhhhhhh"
+        prepare(over_budget)
+        refused = self.request(
+            "authorize_action",
+            mission_id=over_budget,
+            worker_id=WORKER,
+            scope_digest=SCOPE,
+            action_digest=ACTION,
+            estimated_bytes=4_097,
+        )
+        self.assertEqual(refused["status"], "REFUSED")
+        self.assertEqual(refused["decision"], "REFUSED_BUDGET")
+        exact_retry(over_budget)
+
     def test_stale_or_lagging_checkpoint_recovers_from_authoritative_ledger(self) -> None:
         # SQL-001: a crash between the durable ledger append and the checkpoint
         # rename leaves the checkpoint behind the ledger. The hash-chain-validated

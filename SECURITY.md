@@ -59,4 +59,4 @@ None of those establishes universal correctness, perfect sandboxing, supply-chai
 
 Dependencies are pinned by lockfiles where supported. Kernel, policy, protocol, receipt, signer, secret, sandbox, and completion changes require hostile regression coverage and source-bound review. Generated manifests and receipts are derived from bytes rather than edited to match a desired result.
 
-The `v0.1.x` macOS artifact is ad-hoc signed and not notarized. Developer ID signing, Gatekeeper approval, App Store distribution, mobile/web/remote-public products, package registration, and legal clearance are not claimed.
+Every shipped `0.x` macOS artifact is ad-hoc signed and not notarized. Per the supported source-install distribution contract (`docs/release/SOURCE_INSTALL.md`), Developer ID signing, notarization, Gatekeeper approval, App Store distribution, mobile/web/remote-public products, package registration, and legal clearance are not claimed; trust in release bytes is established by hash verification against the release manifest.

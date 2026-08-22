@@ -65,6 +65,21 @@ class KernelProofManifestTests(unittest.TestCase):
         self.assertTrue(any("assumptions" in error for error in errors))
         self.assertTrue(any("timeout" in error for error in errors))
 
+    def test_rejects_manually_justified_obligations(self) -> None:
+        justified = VALID_SUMMARY.replace(
+            "42 (54%)           .          .",
+            "42 (54%)           3          .",
+        )
+
+        summary = parse_gnatprove_summary(justified)
+        self.assertEqual(summary.justified, 3)
+        errors = validate_proof_summary(
+            summary,
+            {"nemesis-kernel-approvals", "nemesis-kernel-types"},
+        )
+        self.assertTrue(any("justified" in error for error in errors))
+
+
     def test_live_scope_covers_every_kernel_body_and_public_operation(self) -> None:
         scope = load_strict_json(SCOPE.read_text(encoding="utf-8"))
 
