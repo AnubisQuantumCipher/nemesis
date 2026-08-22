@@ -41,6 +41,7 @@ EVIDENCE_CLASSIFICATIONS = frozenset(
 TERMINAL_VERDICTS = frozenset(
     {
         "COMPLETE_PRODUCTION_PUBLIC",
+        "SEALED_LOCAL_PRODUCTION",
         "BLOCKED_PRODUCTION_PUBLIC",
         "BLOCKED_TRUST_SURFACE",
     }
@@ -318,6 +319,33 @@ def validate_roster(data: Any, root: Path = ROOT) -> list[str]:
             errors.append("BLOCKED_TRUST_SURFACE requires TRUST_SURFACE blocker evidence")
         if any(status not in {"PASS", "BLOCKED"} for status in statuses):
             errors.append("BLOCKED_TRUST_SURFACE forbids unfinished lane states")
+    elif verdict == "SEALED_LOCAL_PRODUCTION":
+        if declared_overall != "PASS" or any(status != "PASS" for status in statuses):
+            errors.append("SEALED_LOCAL_PRODUCTION requires every lane PASS")
+        if data.get("automatable_complete") is not True:
+            errors.append("SEALED_LOCAL_PRODUCTION requires automatable_complete=true")
+        nonclaims = data.get("nonclaims")
+        joined = " ".join(str(entry) for entry in nonclaims) if isinstance(nonclaims, list) else ""
+        if (
+            not isinstance(nonclaims, list)
+            or "Developer ID" not in joined
+            or "notariz" not in joined.lower()
+            or "Gatekeeper" not in joined
+        ):
+            errors.append(
+                "SEALED_LOCAL_PRODUCTION requires explicit Developer ID, notarization, "
+                "and Gatekeeper nonclaims"
+            )
+        if any(
+            not isinstance(blocker, dict)
+            or blocker.get("kind") != "EXTERNAL"
+            or blocker.get("required_for_verdict") is not False
+            for blocker in external_blockers
+        ):
+            errors.append(
+                "SEALED_LOCAL_PRODUCTION accepts only informational EXTERNAL blockers "
+                "marked required_for_verdict=false"
+            )
 
     return errors
 

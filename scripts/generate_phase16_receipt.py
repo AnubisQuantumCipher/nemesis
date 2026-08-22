@@ -116,7 +116,7 @@ def build_receipt(
         relative_log = gate_log.resolve().relative_to(ROOT).as_posix()
     except ValueError:
         relative_log = gate_log.name
-    template["epoch"] = "v0.1.0-release-candidate"
+    template["epoch"] = "v0.2.0-trust-surface"
     template["release_contract"] = {
         "path": RELEASE_CONTRACT.relative_to(ROOT).as_posix(),
         "sha256": RELEASE_CONTRACT_SHA256,

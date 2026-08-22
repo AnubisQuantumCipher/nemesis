@@ -159,16 +159,16 @@ Historical machine receipts intentionally retain observed local tool paths becau
 From a clean committed macOS arm64 worktree:
 
 ```sh
-./scripts/package_release.sh 0.1.0
+./scripts/package_release.sh 0.2.0
 ```
 
-The packager builds the release runtime, audits accepted dependency licenses, generates and embeds third-party notices, removes private Mach-O RPATHs, strips local symbols, rejects private path/credential signatures, applies an ad-hoc signature, creates the app ZIP, and derives `release-manifest.json` plus `SHA256SUMS` from final bytes. Output is written under ignored `release/v0.1.0/`.
+The packager builds the release runtime, audits accepted dependency licenses, generates and embeds third-party notices, removes private Mach-O RPATHs, strips local symbols, rejects private path/credential signatures, applies an ad-hoc signature, creates the app ZIP, and derives `release-manifest.json` plus `SHA256SUMS` from final bytes. Output is written under ignored `release/v<version>/`.
 
 ## Install a GitHub release
 
 Download these assets from [GitHub Releases](https://github.com/AnubisQuantumCipher/nemesis/releases):
 
-- `NEMESIS-Desktop-v0.1.0-macos-arm64.zip`
+- `NEMESIS-Desktop-v<version>-macos-arm64.zip`
 - `release-manifest.json`
 - `SHA256SUMS`
 
@@ -176,11 +176,11 @@ Place them in one directory, then verify before extracting:
 
 ```sh
 shasum -a 256 -c SHA256SUMS
-ditto -x -k NEMESIS-Desktop-v0.1.0-macos-arm64.zip .
+ditto -x -k NEMESIS-Desktop-v<version>-macos-arm64.zip .
 codesign --verify --deep --strict --verbose=2 "NEMESIS Desktop.app"
 ```
 
-The app is **ad-hoc signed and not notarized** because an active Apple Developer membership is unavailable. Gatekeeper rejection is expected for downloaded bytes. Prefer building from reviewed source. If you deliberately trust the verified archive, use macOS **Privacy & Security → Open Anyway**; do not interpret that override as Developer ID or notarization evidence.
+The app is **ad-hoc signed and not notarized**. Per the supported distribution contract ([docs/release/SOURCE_INSTALL.md](docs/release/SOURCE_INSTALL.md)), Developer ID signing, notarization, and Gatekeeper acceptance are **not requirements** of this product: trust is established by hash verification against the release manifest, never by Apple code-signing identity. Gatekeeper rejection of a quarantined download is expected behavior for unsigned software, not a defect. Prefer building from reviewed source. If you deliberately trust the hash-verified archive, use macOS **Privacy & Security → Open Anyway** (or remove quarantine after `shasum -c` passes); do not interpret that override as Developer ID or notarization evidence. `scripts/verify_install_contract.py` proves the install → launch → upgrade → uninstall contract on real release bytes.
 
 ## Security reporting
 

@@ -41,7 +41,10 @@ nemesis-kernel-capabilities.ads:55:11: high: postcondition might fail, cannot pr
         and Grant.Operations(Read_Data) = True
 nemesis-kernel-capabilities.ads:64:13: info: implicit aspect Always_Terminates on "Is_Attenuation" has been proved, subprogram will terminate
 nemesis-kernel-capabilities.ads:67:06: info: data dependencies proved
-nemesis-kernel-capabilities.ads:69:08: info: postcondition proved (CVC5: 6 VC in max 0.0 seconds and 1 step; Trivial: 2 VC in max 0.0 seconds and 2 steps)
+nemesis-kernel-capabilities.ads:69:08: info: postcondition proved (CVC5: 9 VC in max 0.0 seconds and 1 step; Trivial: 1 VC in max 0.0 seconds and 2 steps)
+nemesis-kernel-capabilities.ads:82:13: info: implicit aspect Always_Terminates on "Derive_Child_Grant" has been proved, subprogram will terminate
+nemesis-kernel-capabilities.ads:89:06: info: data dependencies proved
+nemesis-kernel-capabilities.ads:96:08: info: postcondition proved (CVC5: 11 VC in max 0.0 seconds and 1 step)
 nemesis-kernel-completion.adb:12:22: info: index check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
 nemesis-kernel-completion.adb:18:22: info: index check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
 nemesis-kernel-completion.ads:17:13: info: implicit aspect Always_Terminates on "Evaluate" has been proved, subprogram will terminate
@@ -88,6 +91,6 @@ nemesis-kernel-types.ads:55:13: info: implicit aspect Always_Terminates on "Next
 nemesis-kernel-types.ads:57:06: info: data dependencies proved
 nemesis-kernel-types.ads:59:14: info: postcondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
 nemesis-kernel-types.ads:59:34: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
-Summary logged in /private/var/folders/bg/pt9l6y1j47q642kp3z5blrmh0000gn/T/nemesis-proof-aba-3ihhjp3f/repo/build/obj/debug/gnatprove/gnatprove.out
+Summary logged in /private/var/folders/bg/pt9l6y1j47q642kp3z5blrmh0000gn/T/nemesis-proof-aba-62460sxo/repo/build/obj/debug/gnatprove/gnatprove.out
 gnatprove: unproved check messages considered as errors
-ERROR: Command ["env", "-u", "LIBRARY_PATH", "gnatprove", "-P", "/private/var/folders/bg/pt9l6y1j47q642kp3z5blrmh0000gn/T/nemesis-proof-aba-3ihhjp3f/repo/nemesis.gpr", "-u", "nemesis-kernel-approvals.adb", "nemesis-kernel-budgets.adb", "nemesis-kernel-capabilities.adb", "nemesis-kernel-completion.adb", "nemesis-kernel-evidence.adb", "nemesis-kernel-missions.adb", "nemesis-kernel-transitions.adb", "nemesis-kernel-types.adb", "--mode=all", "--level=2", "--checks-as-errors=on", "--warnings=error", "--report=statistics"] exited with code 1
+ERROR: Command ["env", "-u", "LIBRARY_PATH", "gnatprove", "-P", "/private/var/folders/bg/pt9l6y1j47q642kp3z5blrmh0000gn/T/nemesis-proof-aba-62460sxo/repo/nemesis.gpr", "-u", "nemesis-kernel-approvals.adb", "nemesis-kernel-budgets.adb", "nemesis-kernel-capabilities.adb", "nemesis-kernel-completion.adb", "nemesis-kernel-evidence.adb", "nemesis-kernel-missions.adb", "nemesis-kernel-transitions.adb", "nemesis-kernel-types.adb", "--mode=all", "--level=2", "--checks-as-errors=on", "--warnings=error", "--report=statistics"] exited with code 1

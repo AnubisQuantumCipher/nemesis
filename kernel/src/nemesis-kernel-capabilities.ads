@@ -66,8 +66,10 @@ package Nemesis.Kernel.Capabilities with SPARK_Mode => On is
    with
      Global => null,
      Post =>
-       (if Is_Attenuation'Result then
-          Child.Mission = Parent.Mission
+       Is_Attenuation'Result =
+         (Parent.Status = Active
+          and then Child.Status = Active
+          and then Child.Mission = Parent.Mission
           and then Child.Resource = Parent.Resource
           and then Child.Scope = Parent.Scope
           and then Child.Expires_After <= Parent.Expires_After
@@ -76,4 +78,31 @@ package Nemesis.Kernel.Capabilities with SPARK_Mode => On is
             (for all Operation in Operation_Kind =>
                (if Child.Operations (Operation) then
                     Parent.Operations (Operation))));
+
+   function Derive_Child_Grant
+     (Parent        : Capability_Grant;
+      Child_Id      : Capability_Id;
+      Operation     : Operation_Kind;
+      Expires_After : Sequence_Number;
+      Maximum_Bytes : Natural) return Capability_Grant
+   with
+     Global => null,
+     Pre  =>
+       Parent.Status = Active
+       and then Parent.Operations (Operation)
+       and then Expires_After <= Parent.Expires_After
+       and then Maximum_Bytes <= Parent.Maximum_Bytes,
+     Post =>
+       Is_Attenuation (Parent, Derive_Child_Grant'Result)
+       and then Derive_Child_Grant'Result.Id = Child_Id
+       and then Derive_Child_Grant'Result.Mission = Parent.Mission
+       and then Derive_Child_Grant'Result.Subject = Parent.Subject
+       and then Derive_Child_Grant'Result.Resource = Parent.Resource
+       and then Derive_Child_Grant'Result.Scope = Parent.Scope
+       and then Derive_Child_Grant'Result.Status = Active
+       and then Derive_Child_Grant'Result.Expires_After = Expires_After
+       and then Derive_Child_Grant'Result.Maximum_Bytes = Maximum_Bytes
+       and then
+         (for all Item in Operation_Kind =>
+            Derive_Child_Grant'Result.Operations (Item) = (Item = Operation));
 end Nemesis.Kernel.Capabilities;

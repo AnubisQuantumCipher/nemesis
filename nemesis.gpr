@@ -11,6 +11,7 @@ project Nemesis is
      ("nemesis_core_daemon.adb",
       "nemesis_kernel_tests.adb",
       "nemesis_authority_tests.adb",
+      "nemesis_authority_store_tests.adb",
       "nemesis_path_tests.adb",
       "nemesis_ledger_tests.adb",
       "nemesis_storage_tests.adb",
@@ -21,6 +22,8 @@ project Nemesis is
       for Executable ("nemesis_kernel_tests.adb") use "nemesis_kernel_tests";
       for Executable ("nemesis_authority_tests.adb") use
         "nemesis_authority_tests";
+      for Executable ("nemesis_authority_store_tests.adb") use
+        "nemesis_authority_store_tests";
       for Executable ("nemesis_path_tests.adb") use "nemesis_path_tests";
       for Executable ("nemesis_ledger_tests.adb") use "nemesis_ledger_tests";
       for Executable ("nemesis_storage_tests.adb") use "nemesis_storage_tests";

@@ -6,7 +6,7 @@
     "old": "return Refused_Capability;",
     "path": "kernel/src/nemesis-kernel-capabilities.adb"
   },
-  "observed_at": "2026-08-22T04:09:03.449686Z",
+  "observed_at": "2026-08-22T13:55:05.785223Z",
   "restoration": {
     "copy_inventory_equal": true,
     "subject_inventory_equal": true,
@@ -14,33 +14,33 @@
   },
   "runs": {
     "A": {
-      "bytes": 8452,
+      "bytes": 8769,
       "exit_status": 0,
-      "lines": 87,
+      "lines": 90,
       "path": "receipts/production-readiness-20260821/proof-aba/A.log",
-      "sha256": "273a745c9376929ada9607ab34aaff9f866938d0ec1d2798b31ab87d3abfde1d"
+      "sha256": "e18c73ba6ec43924a9ea44bab6090c43415556b38fd007312e0091b88a1791f0"
     },
     "A2": {
-      "bytes": 8399,
+      "bytes": 8716,
       "exit_status": 0,
-      "lines": 84,
+      "lines": 87,
       "path": "receipts/production-readiness-20260821/proof-aba/A2.log",
-      "sha256": "803a53159c9cc79ff27802740ce5a52a3811213d25110e16b713258462673abe"
+      "sha256": "aab8749dd15f733acb708570828e662a75356f312c150b43c84f0592f56c36c3"
     },
     "B": {
-      "bytes": 9174,
+      "bytes": 9500,
       "exit_status": 1,
-      "lines": 93,
+      "lines": 96,
       "path": "receipts/production-readiness-20260821/proof-aba/B.log",
-      "sha256": "827ec6a28eb3a28d6d94f5686e0e9fef3c8e014b3a86d3c830cd1d28e949a43a"
+      "sha256": "0b2561b6c57c36e60b5c8affd6931cf99fc548a9e3c335be77f175a61ede6578"
     }
   },
   "schema": "nemesis.kernel-proof-aba/v1",
   "status": "PASS",
   "subject": {
-    "commit": "d18cb7cc5bd918a6e9dd67aa99088dab9503e39b",
-    "source_inventory_sha256": "e5ec93f60f4aebd9577e57aa7a1479f24a02d44dc24b4dd6d962e51a25a0077a",
-    "tree": "80d1b4af38cecf97becca780b6094ab99dfbf0fd"
+    "commit": "4f0f387923545d994fc1f3e93ee3208f0f04ff77",
+    "source_inventory_sha256": "b540e5a0a8fd25182f076cc42bc3aacd3e339302dcdbfec01a266184cbee9e39",
+    "tree": "292312a0cd01b882e4214a7b3b550d7cee6c060f"
   },
   "terminal_marker": "PASS_KERNEL_PROOF_ABA"
 }

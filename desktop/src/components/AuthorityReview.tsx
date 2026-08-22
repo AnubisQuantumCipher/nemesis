@@ -67,6 +67,16 @@ export function AuthorityReview({
           <span role="cell">No worker secret view</span>
           <b role="cell" className="decision-deny">SECRETS DENY</b>
         </div>
+        <div className="authority-row" role="row">
+          <strong role="rowheader">APPROVAL</strong>
+          <span role="cell">One-shot, bound to reviewed action</span>
+          <b role="cell" className="decision-exact">ONE-SHOT · EXACT ACTION DIGEST</b>
+        </div>
+        <div className="authority-row" role="row">
+          <strong role="rowheader">CAPABILITY</strong>
+          <span role="cell">Attenuated from persisted parent</span>
+          <b role="cell" className="decision-exact">PARENT GRANT → ATTENUATED CHILD</b>
+        </div>
       </div>
 
       <div className="invariant-grid">
@@ -84,6 +94,11 @@ export function AuthorityReview({
           <span>RUNTIME BUDGET</span>
           <strong>{compiled.maxRuntimeSeconds} seconds</strong>
           <p>Output capped at {compiled.maxOutputBytes} bytes.</p>
+        </div>
+        <div>
+          <span>APPROVAL</span>
+          <strong>Consumed exactly once</strong>
+          <p>The SPARK kernel consumes the approval exactly once; replay is refused.</p>
         </div>
       </div>
 

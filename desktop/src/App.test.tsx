@@ -50,7 +50,7 @@ const system = {
   localHome: "/tmp/nemesis-home",
   firstLaunch: false,
   schemaVersion: 1,
-  appVersion: "0.1.0",
+  appVersion: "0.2.0",
   sandbox: "WORKSPACE_SAFE_AVAILABLE",
   network: "DENIED_BY_CONTRACT",
   updates: "DISABLED_NO_AUTHENTICATED_UPDATER",
@@ -206,6 +206,11 @@ describe("NEMESIS Desktop production surface", () => {
     expect(screen.getByText("NETWORK DENY")).toBeInTheDocument();
     expect(screen.getByText("PUSH DENY")).toBeInTheDocument();
     expect(screen.getByText("SECRETS DENY")).toBeInTheDocument();
+    expect(screen.getByText("ONE-SHOT · EXACT ACTION DIGEST")).toBeInTheDocument();
+    expect(screen.getByText("PARENT GRANT → ATTENUATED CHILD")).toBeInTheDocument();
+    expect(
+      screen.getByText("The SPARK kernel consumes the approval exactly once; replay is refused."),
+    ).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Authorize and run" }));
 
     await waitFor(() =>

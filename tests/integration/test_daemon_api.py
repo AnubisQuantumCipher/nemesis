@@ -15,6 +15,8 @@ ROOT = Path(__file__).resolve().parents[2]
 DAEMON = ROOT / "build/bin/nemesis_core_daemon"
 MISSION = "mis_0000000000000000000000"
 WORKER = "wrk_0000000000000000000000"
+GRANT = "cap_0000000000000000000000"
+APPROVAL = "apr_0000000000000000000000"
 CONTRACT = "11" * 32
 SCOPE = "22" * 32
 SOURCE_INITIAL = "33" * 32
@@ -179,6 +181,15 @@ class DaemonApiTests(unittest.TestCase):
             "authorize", mission_id=MISSION, contract_digest=CONTRACT
         )
         self.assertEqual(authorized["state"], "PLANNING")
+        grant = self.request("create_grant", mission_id=MISSION, grant_id=GRANT)
+        self.assertEqual(grant["status"], "OK")
+        approval = self.request(
+            "create_approval",
+            mission_id=MISSION,
+            approval_id=APPROVAL,
+            action_digest=ACTION,
+        )
+        self.assertEqual(approval["status"], "OK")
         running = self.request("run", mission_id=MISSION)
         self.assertEqual(running["state"], "RUNNING")
 
@@ -259,6 +270,133 @@ class DaemonApiTests(unittest.TestCase):
         self.assertEqual(terminal_retry["status"], "REFUSED")
         unchanged = self.request("inspect", mission_id=MISSION)
         self.assertEqual(unchanged["sequence"], complete["sequence"])
+
+    def test_authority_is_persisted_one_shot_and_fail_closed(self) -> None:
+        def prepare(mission_id: str, *, grant: bool, approval: bool) -> None:
+            created = self.request(
+                "create",
+                mission_id=mission_id,
+                worker_id=WORKER,
+                contract_digest=CONTRACT,
+                scope_digest=SCOPE,
+                source_digest=SOURCE_INITIAL,
+            )
+            self.assertEqual(created["status"], "OK")
+            authorized = self.request(
+                "authorize", mission_id=mission_id, contract_digest=CONTRACT
+            )
+            self.assertEqual(authorized["status"], "OK")
+            if grant:
+                issued = self.request(
+                    "create_grant", mission_id=mission_id, grant_id=GRANT
+                )
+                self.assertEqual(issued["status"], "OK")
+            if approval:
+                issued = self.request(
+                    "create_approval",
+                    mission_id=mission_id,
+                    approval_id=APPROVAL,
+                    action_digest=ACTION,
+                )
+                self.assertEqual(issued["status"], "OK")
+
+        def attempt(mission_id: str) -> dict[str, object]:
+            return self.request(
+                "authorize_action",
+                mission_id=mission_id,
+                worker_id=WORKER,
+                scope_digest=SCOPE,
+                action_digest=ACTION,
+                estimated_bytes=128,
+            )
+
+        # (a) No grant and no approval: fail closed on the missing capability.
+        bare = "mis_aaaaaaaaaaaaaaaaaaaaaa"
+        prepare(bare, grant=False, approval=False)
+        self.assertEqual(self.request("run", mission_id=bare)["status"], "OK")
+        refused = attempt(bare)
+        self.assertEqual(refused["status"], "REFUSED")
+        self.assertEqual(refused["decision"], "REFUSED_CAPABILITY")
+        self.assertEqual(refused["reason"], "no_parent_grant")
+
+        # (e) Grant and approval issuance is a PLANNING-only authority.
+        running_grant = self.request("create_grant", mission_id=bare, grant_id=GRANT)
+        self.assertEqual(running_grant["status"], "REFUSED")
+        running_approval = self.request(
+            "create_approval",
+            mission_id=bare,
+            approval_id=APPROVAL,
+            action_digest=ACTION,
+        )
+        self.assertEqual(running_approval["status"], "REFUSED")
+
+        # (b) Grant present but no one-shot approval for the digest.
+        unapproved = "mis_bbbbbbbbbbbbbbbbbbbbbb"
+        prepare(unapproved, grant=True, approval=False)
+        self.assertEqual(self.request("run", mission_id=unapproved)["status"], "OK")
+        refused = attempt(unapproved)
+        self.assertEqual(refused["status"], "REFUSED")
+        self.assertEqual(refused["decision"], "REFUSED_APPROVAL")
+        self.assertEqual(refused["reason"], "no_approval")
+
+        # (c) Full path authorizes exactly once; the approval is consumed
+        # durably before the authorization event and stays consumed across
+        # a daemon kill/restart.
+        oneshot = "mis_cccccccccccccccccccccc"
+        prepare(oneshot, grant=True, approval=True)
+
+        # (d) Duplicate issuance refuses without clobbering persisted authority.
+        duplicate_grant = self.request(
+            "create_grant", mission_id=oneshot, grant_id=GRANT
+        )
+        self.assertEqual(duplicate_grant["status"], "REFUSED")
+        self.assertEqual(duplicate_grant["reason"], "grant_already_exists")
+        duplicate_approval = self.request(
+            "create_approval",
+            mission_id=oneshot,
+            approval_id=APPROVAL,
+            action_digest=ACTION,
+        )
+        self.assertEqual(duplicate_approval["status"], "REFUSED")
+        self.assertEqual(duplicate_approval["reason"], "approval_already_exists")
+
+        self.assertEqual(self.request("run", mission_id=oneshot)["status"], "OK")
+        authorized = attempt(oneshot)
+        self.assertEqual(authorized["status"], "OK")
+        self.assertEqual(authorized["decision"], "AUTHORIZED")
+        replayed = attempt(oneshot)
+        self.assertEqual(replayed["status"], "REFUSED")
+        self.assertEqual(replayed["decision"], "REFUSED_APPROVAL")
+        self.assertEqual(replayed["reason"], "approval_replayed")
+        self.restart_daemon()
+        replayed_after_restart = attempt(oneshot)
+        self.assertEqual(replayed_after_restart["status"], "REFUSED")
+        self.assertEqual(replayed_after_restart["decision"], "REFUSED_APPROVAL")
+        self.assertEqual(replayed_after_restart["reason"], "approval_replayed")
+
+        # (f) Hostile on-disk tamper of the approval record fails closed.
+        tampered = "mis_dddddddddddddddddddddd"
+        prepare(tampered, grant=True, approval=True)
+        self.assertEqual(self.request("run", mission_id=tampered)["status"], "OK")
+        approval_path = self.home / "missions" / tampered / f"approval-{ACTION}.apr"
+        self.assertTrue(approval_path.exists())
+        approval_path.write_bytes(b"\x00garbage-not-an-approval\xff")
+        corrupt_approval = attempt(tampered)
+        self.assertEqual(corrupt_approval["status"], "REFUSED")
+        self.assertEqual(corrupt_approval["decision"], "REFUSED_APPROVAL")
+        self.assertEqual(corrupt_approval["reason"], "approval_corrupt")
+
+        # (f) Hostile on-disk tamper of the parent grant fails closed.
+        broken = "mis_eeeeeeeeeeeeeeeeeeeeee"
+        prepare(broken, grant=True, approval=True)
+        self.assertEqual(self.request("run", mission_id=broken)["status"], "OK")
+        grant_path = self.home / "missions" / broken / "parent.grant"
+        self.assertTrue(grant_path.exists())
+        grant_path.write_bytes(b"\x00garbage-not-a-grant\xff")
+        corrupt_grant = attempt(broken)
+        self.assertEqual(corrupt_grant["status"], "REFUSED")
+        self.assertEqual(corrupt_grant["decision"], "REFUSED_CAPABILITY")
+        self.assertEqual(corrupt_grant["reason"], "grant_corrupt")
 
     def test_stale_or_lagging_checkpoint_recovers_from_authoritative_ledger(self) -> None:
         # SQL-001: a crash between the durable ledger append and the checkpoint

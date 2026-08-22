@@ -830,6 +830,24 @@ pub fn run_local_mission(
     }))?)?;
     expect_core(core.request(json!({
         "schema":"nemesis.local/v1",
+        "command":"create_grant",
+        "mission_id":mission.mission_id,
+        "grant_id":format!("cap_{}", &mission.mission_id[4..])
+    }))?)?;
+    expect_core(core.request(json!({
+        "schema":"nemesis.local/v1",
+        "command":"create_approval",
+        "mission_id":mission.mission_id,
+        "approval_id":format!("apr_{}", &mission.mission_id[4..]),
+        "action_digest":mission.action_digest
+    }))?)?;
+    progress(
+        callback,
+        "APPROVAL_ISSUED",
+        "Durable parent grant and one-shot action approval were persisted before execution.",
+    );
+    expect_core(core.request(json!({
+        "schema":"nemesis.local/v1",
         "command":"run",
         "mission_id":mission.mission_id
     }))?)?;

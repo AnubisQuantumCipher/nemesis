@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Run a byte-restoring A→B→A GNATprove calibration in a disposable copy."""
+"""Run a byte-restoring A→B→A authority tamper gate in a disposable copy.
+
+The mutation is a compiling authority-widening variant of the daemon's
+TS-001 approval consumption check: replayed (already consumed) approvals
+would be accepted. The hostile daemon API test must reject run B for that
+reason, and byte-identical restoration must return the gate to green.
+"""
 
 from __future__ import annotations
 
@@ -13,23 +19,27 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT = ROOT / "receipts/production-readiness-20260821/proof-aba"
-RECEIPT = ROOT / "receipts/production-readiness-20260821/PROOF_ABA.json"
-MUTATION_PATH = Path("kernel/src/nemesis-kernel-capabilities.adb")
-ORIGINAL = "         return Refused_Capability;"
-MUTATED = "         return Authorized;"
-COPY_DIRS = ("config", "kernel", "daemon", "scripts")
-COPY_FILES = (
-    "alire.toml",
-    "nemesis.gpr",
-    "receipts/production-readiness-20260821/trust-surface/TS_CONTINUATION_CONTRACT_2026-08-22.md",
+OUTPUT = ROOT / "receipts/production-readiness-20260821/authority-aba"
+RECEIPT = ROOT / "receipts/production-readiness-20260821/AUTHORITY_ABA.json"
+MUTATION_PATH = Path("daemon/src/nemesis_core_daemon.adb")
+ORIGINAL = "            if Consume_Result /= Approval_Accepted then"
+MUTATED = (
+    "            if Consume_Result not in"
+    " Approval_Accepted | Approval_Replayed then"
 )
+HOSTILE_TEST = (
+    "tests.integration.test_daemon_api.DaemonApiTests."
+    "test_authority_is_persisted_one_shot_and_fail_closed"
+)
+COPY_DIRS = ("config", "kernel", "daemon", "scripts", "tests", "alire")
+COPY_FILES = ("alire.toml", "nemesis.gpr")
 INVENTORY_ROOTS = (
     "config/formal-kernel-scope.json",
     "kernel/src",
     "daemon/src",
-    "scripts/prove_kernel.sh",
-    "scripts/verify_kernel_proof.py",
+    "tests/integration/test_daemon_api.py",
+    "scripts/build_ada.sh",
+    "scripts/verify_authority_aba.py",
 )
 
 
@@ -42,7 +52,9 @@ def hash_inventory(root: Path) -> dict[str, str]:
     for relative in INVENTORY_ROOTS:
         path = root / relative
         if path.is_dir():
-            files.extend(candidate for candidate in path.rglob("*") if candidate.is_file())
+            files.extend(
+                candidate for candidate in path.rglob("*") if candidate.is_file()
+            )
         else:
             files.append(path)
     return {
@@ -53,31 +65,39 @@ def hash_inventory(root: Path) -> dict[str, str]:
 
 def git(*arguments: str) -> str:
     return subprocess.run(
-        ["/usr/bin/git", *arguments],
+        ["git", *arguments],
         cwd=ROOT,
-        check=True,
         stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
+        check=True,
         text=True,
     ).stdout.strip()
 
 
-def run_proof(root: Path) -> subprocess.CompletedProcess[bytes]:
+def run_gate(root: Path) -> subprocess.CompletedProcess[bytes]:
     environment = {
         "HOME": str(Path.home()),
         "LANG": "C",
         "LC_ALL": "C",
-        "NEMESIS_PROOF_CHECK_ONLY": "1",
         "PATH": os.environ.get("PATH", "/usr/bin:/bin"),
         "TMPDIR": "/tmp",
     }
-    return subprocess.run(
-        ["/bin/bash", "scripts/prove_kernel.sh"],
+    build = subprocess.run(
+        ["/bin/bash", "scripts/build_ada.sh"],
         cwd=root,
         env=environment,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
-        timeout=300,
+        timeout=600,
+    )
+    if build.returncode != 0:
+        return build
+    return subprocess.run(
+        ["python3", "-m", "unittest", HOSTILE_TEST, "-v"],
+        cwd=root,
+        env=environment,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        timeout=600,
     )
 
 
@@ -98,59 +118,63 @@ def main() -> int:
         if stale.exists():
             stale.unlink()
     source_before = hash_inventory(ROOT)
-    with tempfile.TemporaryDirectory(prefix="nemesis-proof-aba-") as temporary:
+    with tempfile.TemporaryDirectory(prefix="nemesis-authority-aba-") as temporary:
         copy = Path(temporary) / "repo"
         copy.mkdir()
         for directory in COPY_DIRS:
-            shutil.copytree(ROOT / directory, copy / directory)
+            shutil.copytree(
+                ROOT / directory,
+                copy / directory,
+                ignore=shutil.ignore_patterns("__pycache__"),
+            )
         for filename in COPY_FILES:
-            destination = copy / filename
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            shutil.copy2(ROOT / filename, destination)
+            shutil.copy2(ROOT / filename, copy / filename)
         copied_before = hash_inventory(copy)
 
-        a = run_proof(copy)
+        a = run_gate(copy)
         (OUTPUT / "A.log").write_bytes(a.stdout)
-        if a.returncode != 0 or b"PASS_KERNEL_PROOF_BASELINE" not in a.stdout:
-            print("FAIL_KERNEL_PROOF_ABA initial_A")
+        if a.returncode != 0:
+            print("FAIL_AUTHORITY_ABA initial_A")
             return 1
 
         target = copy / MUTATION_PATH
         original_bytes = target.read_bytes()
         text = original_bytes.decode("utf-8")
         if text.count(ORIGINAL) != 1:
-            print("FAIL_KERNEL_PROOF_ABA mutation_anchor")
+            print("FAIL_AUTHORITY_ABA mutation_anchor")
             return 1
         target.write_text(text.replace(ORIGINAL, MUTATED, 1), encoding="utf-8")
         if target.read_bytes() == original_bytes:
-            print("FAIL_KERNEL_PROOF_ABA mutation_noop")
+            print("FAIL_AUTHORITY_ABA mutation_noop")
             return 1
 
-        b = run_proof(copy)
+        b = run_gate(copy)
         (OUTPUT / "B.log").write_bytes(b.stdout)
-        lower_b = b.stdout.lower()
-        if b.returncode == 0 or not (
-            b"postcondition" in lower_b and (b"might fail" in lower_b or b"medium:" in lower_b)
+        if b"gprbuild" in b.stdout and b"compilation phase failed" in b.stdout:
+            print("FAIL_AUTHORITY_ABA mutation_does_not_compile")
+            return 1
+        if b.returncode == 0 or (
+            b"FAILED" not in b.stdout and b"errors=" not in b.stdout
         ):
-            print("FAIL_KERNEL_PROOF_ABA violation_not_rejected_for_intended_reason")
+            print("FAIL_AUTHORITY_ABA widening_not_rejected")
             return 1
 
         target.write_bytes(original_bytes)
         if target.read_bytes() != original_bytes or hash_inventory(copy) != copied_before:
-            print("FAIL_KERNEL_PROOF_ABA byte_restoration")
+            print("FAIL_AUTHORITY_ABA byte_restoration")
             return 1
 
-        a2 = run_proof(copy)
+        a2 = run_gate(copy)
         (OUTPUT / "A2.log").write_bytes(a2.stdout)
-        if a2.returncode != 0 or b"PASS_KERNEL_PROOF_BASELINE" not in a2.stdout:
-            print("FAIL_KERNEL_PROOF_ABA final_A")
+        if a2.returncode != 0:
+            print("FAIL_AUTHORITY_ABA final_A")
             return 1
 
     if hash_inventory(ROOT) != source_before:
-        print("FAIL_KERNEL_PROOF_ABA subject_tree_changed")
+        print("FAIL_AUTHORITY_ABA subject_tree_changed")
         return 1
     receipt = {
-        "schema": "nemesis.kernel-proof-aba/v1",
+        "schema": "nemesis.authority-aba/v1",
         "status": "PASS",
         "subject": {
             "commit": git("rev-parse", "HEAD"),
@@ -163,8 +187,14 @@ def main() -> int:
             "path": str(MUTATION_PATH),
             "old": ORIGINAL.strip(),
             "new": MUTATED.strip(),
-            "expected_reason": "GNATprove postcondition failure",
+            "expected_reason": (
+                "hostile daemon API test rejects replayed-approval acceptance"
+            ),
             "landed_in_subject": False,
+        },
+        "gate": {
+            "build": "./scripts/build_ada.sh",
+            "test": f"python3 -m unittest {HOSTILE_TEST}",
         },
         "runs": {
             "A": log_metadata(OUTPUT / "A.log", 0),
@@ -177,12 +207,12 @@ def main() -> int:
             "temporary_copy_removed": True,
         },
         "observed_at": dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z"),
-        "terminal_marker": "PASS_KERNEL_PROOF_ABA",
+        "terminal_marker": "PASS_AUTHORITY_ABA",
     }
     temporary = RECEIPT.with_name(f".{RECEIPT.name}.tmp-{os.getpid()}")
     temporary.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     temporary.replace(RECEIPT)
-    print("PASS_KERNEL_PROOF_ABA A=0 B=nonzero A2=0 bytes_restored=true")
+    print("PASS_AUTHORITY_ABA A=0 B=nonzero A2=0 bytes_restored=true")
     return 0
 
 

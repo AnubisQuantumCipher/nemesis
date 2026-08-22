@@ -183,12 +183,34 @@ def validate_live_scope(scope: Any, root: Path = ROOT) -> list[str]:
                 if not _safe_path(relative) or not (root / relative).is_file():
                     errors.append(f"{prefix} has missing or unsafe path={relative}")
     blockers = scope.get("trust_surface_blockers")
-    if not isinstance(blockers, list) or not blockers:
-        errors.append("trust_surface_blockers must remain explicit")
+    resolutions = scope.get("trust_surface_resolutions", [])
+    if not isinstance(blockers, list) or not isinstance(resolutions, list) or not all(
+        isinstance(entry, dict) for entry in [*(blockers or []), *(resolutions or [])]
+    ):
+        errors.append("trust_surface_blockers and trust_surface_resolutions must be explicit lists")
     else:
-        identifiers = [entry.get("id") for entry in blockers if isinstance(entry, dict)]
+        if not blockers and not resolutions:
+            errors.append("trust surface state must remain explicit: no blockers and no resolutions")
+        identifiers = [entry.get("id") for entry in [*blockers, *resolutions]]
         if len(identifiers) != len(set(identifiers)) or any(not value for value in identifiers):
-            errors.append("trust_surface_blocker ids are empty or duplicated")
+            errors.append("trust_surface ids are empty or duplicated")
+        for entry in resolutions:
+            prefix = f"trust_surface_resolutions.{entry.get('id') or '?'}"
+            if not entry.get("description") or not entry.get("resolution"):
+                errors.append(f"{prefix} requires description and resolution")
+            authorized = entry.get("authorized_by")
+            if (
+                not isinstance(authorized, dict)
+                or not _safe_path(authorized.get("contract"))
+                or not (root / authorized["contract"]).is_file()
+                or not isinstance(authorized.get("contract_sha256"), str)
+                or len(authorized.get("contract_sha256", "")) != 64
+                or _sha256(root / authorized["contract"]) != authorized["contract_sha256"]
+                or not authorized.get("date")
+            ):
+                errors.append(
+                    f"{prefix} requires authorized_by contract path, matching contract_sha256, and date"
+                )
     return errors
 
 
@@ -258,11 +280,27 @@ def build_receipt(
         "scripts/prove_kernel.sh",
         "scripts/verify_kernel_proof.py",
     ).splitlines()
+    production_formal_lane = (
+        "BLOCKED_TRUST_SURFACE" if scope["trust_surface_blockers"] else "PASS_BOUNDED"
+    )
+    limitations = [
+        "The bounded proof applies only to proved_units and their named obligations.",
+        "SPARK conclusions do not extend to Rust, Tauri/WebKit, SQLite, Git, Keychain, macOS, compilers, provers, or dependencies.",
+    ]
+    if scope["trust_surface_blockers"]:
+        limitations.append(
+            "Unproved authority boundaries and trust-surface blockers keep the production formal lane non-PASS."
+        )
+    else:
+        limitations.append(
+            "Unproved authority boundaries remain SPARK_Mode Off and are covered by tests; "
+            "resolved trust-surface changes are enforced by the daemon authority path and its hostile A-B-A gates."
+        )
     return {
         "schema": "nemesis.kernel-proof/v1",
         "status": "PARTIAL",
         "bounded_proof_status": "PASS",
-        "production_formal_lane": "BLOCKED_TRUST_SURFACE",
+        "production_formal_lane": production_formal_lane,
         "subject": {
             "commit": _git("rev-parse", "HEAD"),
             "tree": _git("rev-parse", "HEAD^{tree}"),
@@ -288,6 +326,7 @@ def build_receipt(
             "proved_units": scope["proved_units"],
             "unproved_authority_boundaries": scope["unproved_authority_boundaries"],
             "trust_surface_blockers": scope["trust_surface_blockers"],
+            "trust_surface_resolutions": scope.get("trust_surface_resolutions", []),
         },
         "source_sha256": source_sha256,
         "toolchain": {
@@ -300,11 +339,7 @@ def build_receipt(
             ),
         },
         "observed_at": dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z"),
-        "limitations": [
-            "The bounded proof applies only to proved_units and their named obligations.",
-            "SPARK conclusions do not extend to Rust, Tauri/WebKit, SQLite, Git, Keychain, macOS, compilers, provers, or dependencies.",
-            "Unproved authority boundaries and trust-surface blockers keep the production formal lane non-PASS.",
-        ],
+        "limitations": limitations,
     }
 
 
@@ -341,10 +376,13 @@ def main() -> int:
         temporary = output.with_name(f".{output.name}.tmp-{os.getpid()}")
         temporary.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
         temporary.replace(output)
+    lane = (
+        "BLOCKED_TRUST_SURFACE" if scope["trust_surface_blockers"] else "PASS_BOUNDED"
+    )
     print(
         "PASS_KERNEL_PROOF_MANIFEST "
         f"obligations={summary.total_obligations} units={summary.analyzed_units} "
-        "production_lane=BLOCKED_TRUST_SURFACE"
+        f"production_lane={lane}"
     )
     return 0
 

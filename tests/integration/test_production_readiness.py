@@ -144,6 +144,49 @@ class ProductionReadinessValidatorTests(unittest.TestCase):
 
         self.assertTrue(any("automatable_complete" in error for error in errors))
 
+    def test_sealed_local_production_requires_pass_lanes_and_nonclaims(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            sealed = fixture(root)
+            sealed["terminal_verdict"] = "SEALED_LOCAL_PRODUCTION"
+            sealed["nonclaims"] = [
+                "The app is not Developer ID signed.",
+                "The app is not notarized.",
+                "Gatekeeper acceptance is not claimed.",
+            ]
+            sealed["external_blockers"] = [
+                {
+                    "id": "external-unlocked-console",
+                    "kind": "EXTERNAL",
+                    "required_for_verdict": False,
+                    "finding": "G-10 native walkthrough deferred: IOConsoleLocked=Yes",
+                }
+            ]
+            self.assertEqual(validate_roster(sealed, root), [])
+
+            missing_nonclaims = deepcopy(sealed)
+            missing_nonclaims["nonclaims"] = ["unsigned"]
+            errors = validate_roster(missing_nonclaims, root)
+            self.assertTrue(any("nonclaims" in error for error in errors))
+
+            blocked_lane = deepcopy(sealed)
+            blocked_lane["lanes"][0]["status"] = "BLOCKED"  # type: ignore[index]
+            blocked_lane["overall"] = "BLOCKED"
+            errors = validate_roster(blocked_lane, root)
+            self.assertTrue(
+                any("SEALED_LOCAL_PRODUCTION requires every lane PASS" in error
+                    for error in errors)
+            )
+
+            load_bearing_blocker = deepcopy(sealed)
+            load_bearing_blocker["external_blockers"] = [
+                {"id": "x", "kind": "EXTERNAL", "required_for_verdict": True}
+            ]
+            errors = validate_roster(load_bearing_blocker, root)
+            self.assertTrue(
+                any("informational EXTERNAL blockers" in error for error in errors)
+            )
+
     def test_strict_parser_round_trips_a_valid_roster(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
