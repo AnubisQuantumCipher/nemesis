@@ -35,12 +35,12 @@
     "process_launched": true,
     "terminated_cleanly": true
   },
-  "observed_at": "2026-08-22T14:54:27.983803Z",
+  "observed_at": "2026-08-22T15:45:49.002208Z",
   "predecessor_sha256sums": "BOUND_BY_NAME_AND_DIGEST",
   "schema": "nemesis.install-contract/v1",
   "subject": {
-    "commit": "6e7a9c9e17fe3b18157d3085e9b84079a4505817",
-    "tree": "5688d6579b3f2d09204fe7285ff4ce1ea5eee6be"
+    "commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+    "tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
   },
   "successor_sha256sums": "BOUND_BY_NAME_AND_DIGEST",
   "terminal_marker": "PASS_INSTALL_CONTRACT",
@@ -49,7 +49,7 @@
     "observed_launch_agents_or_helpers": [],
     "residuals": {
       "keychain_item": "dev.nemesis.receipt.seed.v1 (never touched by this gate; removal command documented in docs/release/SOURCE_INSTALL.md)",
-      "local_home": "/var/folders/bg/pt9l6y1j47q642kp3z5blrmh0000gn/T/nemesis-install-contract-y69pa36q/home/Library/Application Support/com.anubisquantumcipher.nemesis",
+      "local_home": "/var/folders/bg/pt9l6y1j47q642kp3z5blrmh0000gn/T/nemesis-install-contract-5manhtpk/home/Library/Application Support/com.anubisquantumcipher.nemesis",
       "local_home_files": 2,
       "workspace_note": "authorized missions additionally register git worktrees and nemesis/desktop-* branches inside the user-selected workspace repository; not exercised by this gate, removal commands documented in SOURCE_INSTALL.md"
     }

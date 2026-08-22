@@ -1,0 +1,118 @@
+{
+  "coverage_summary": "Lane design_restore: audited git diff 237ee69..4639974 on branch production/terminator-matrix-cockpit (HEAD 46399744f595aa051b6a6e781803ff1396e0aa11). Authorizing instruction /tmp/NEMESIS_RESTORE_TERMINATOR_MATRIX_DESIGN_2026-08-22.md verified sha256=3c4454d1c2c4f23c2f1f3aa759e5e43526145633dd733ce09207af9038cbfddd. VERDICT: CLEAN. Invariant results \u2014 (1) CONFIRMED authority behavior unchanged: within desktop/ only App.tsx, MissionCockpit.tsx, styles.css changed; bridge.ts, AuthorityReview.tsx, Sidebar.tsx, navigation.ts, App.test.tsx byte-identical vs 237ee69 (empty diff). App.tsx delta is exactly two lines: default rail Home\u2192Missions and one added <span>NET DENY</span>. authorizeAndRun \u2192 runMission(contractPath.trim(), compiled.contractDigest, compiled.actionDigest) intact at App.tsx:195-199; AuthorityReview mounts only when `reviewing && compiled` (App.tsx:316); review rows 'ONE-SHOT \u00b7 EXACT ACTION DIGEST' (AuthorityReview.tsx:73), 'PARENT GRANT \u2192 ATTENUATED CHILD' (:78), 'Consumed exactly once' (:100) identical at both revs. (2) CONFIRMED five rails only (Home/Missions/Evidence/Replay/Settings); navigation.ts untouched; no removed destination reappears. (3) CONFIRMED reachability: Home renders the LOCAL-001 3-column cockpit; the Missions fall-through branch retains drafter form \u2192 Compile contract \u2192 compiled digests \u2192 'Review authority' button calling onReview; App.test.tsx tests click Missions explicitly and reference no removed Home markup. Minor dead residue noted (DSR-01, low). (4) CONFIRMED a11y: :root[data-reduce-motion=\"true\"] rule at styles.css:1326-1333 is declaration-identical to 237ee69:1024-1031; @media (prefers-reduced-motion: reduce) block present with same four declarations (styles.css:1228-1237); applySettings drives documentElement dataset; UPDATES DISABLED present in command bar (App.tsx:286) with NET DENY added. Independently recomputed WCAG 2.1 ratios for --text-muted #7d8694 (sRGB-linearized relative luminance, (L1+0.05)/(L2+0.05)): on --black #050608 = 5.51, graphite-950 #08090b = 5.42, graphite-900 #0c0e11 = 5.26, graphite-850 #111317 = 5.06, graphite-800 #171a1f = 4.74 \u2014 all \u2265 4.5. (5) CONFIRMED instrument re-pin: every PAIRS token (text, text-secondary, text-muted, red, red-black, amber, verified, black, graphite-950/900/850/800) exists as hex in adopted styles.css; thresholds unchanged (text 4.5, ui 3.0) and three pairs strengthened (red/amber/verified promoted from ui 3.0 to text 4.5); white-on-black self-validation intact and independently reproduced at 21.0000; dropped pairs (graphite-1/2/3, red-bright, green, focus, line-strong) reference tokens absent from the adopted vocabulary; all var(--text-muted)/--text-secondary/--amber/--verified/--red small-text usages sit on surfaces covered by (or lighter than) pinned pairs \u2014 no background lighter than graphite-850 exists under any text (graphite-800/700 have zero background usages; graphite-600 is one border), red-black fills carry --text (17.9:1), #f3b7ba error text (10.8:1), or pinned red (4.70:1); skip-link black-on-red equals the pinned red/black ratio 5.18. All 17 pinned pairs recomputed PASS, worst margin muted/graphite-800 4.74. (6) CONFIRMED no network additions: zero url(), @import, @font-face, or http(s) references in the changed css/tsx; font stacks are local system families only. (7) CONFIRMED CHANGELOG Unreleased accuracy: sha256 matches, 222px rail (styles.css:64), 32px hairline grid (background-size 32px 32px), clipped N mark (clip-path polygon), crimson #ee3c43, 3-column Home cockpit, Missions workflow retained, UPDATES DISABLED + NET DENY, five rails, authority unchanged \u2014 each verified against source. Receipts files in the range (PHASE16.json, security-hardening.txt, ABA logs, ca92fef seal commit) are gate-rerun churn belonging to other lanes; spot-check showed digest/subject-commit updates consistent with a rerun, no source-claim rewriting. Two sub-medium notes recorded (DSR-01 low, DSR-02 informational); no gap \u2265 medium.",
+  "deferred": [
+    {
+      "paths": [
+        "receipts/phase-16-public/PHASE16.json",
+        "receipts/phase-16-public/security-hardening.txt",
+        "receipts/production-readiness-20260821/"
+      ],
+      "reason": "Receipts churn in the same range (ca92fef terminal-seal commit; PHASE16.json / security-hardening.txt / ABA-log digest updates in 4639974) is gate-rerun bookkeeping owned by the gates-integrity lane; spot-checked as consistent with a rerun (log de-noised, digests and subject_commit updated to 9538345) but not exhaustively audited here."
+    }
+  ],
+  "findings": [
+    {
+      "category": "code-quality/dead-code",
+      "confidence": "high",
+      "cwe": [
+        "CWE-561"
+      ],
+      "evidence": [
+        {
+          "excerpt": "4639974:desktop/src/components/MissionCockpit.tsx:32:  onSelect: (name: NavigationName) => void;\n4639974:desktop/src/components/MissionCockpit.tsx:67:  onSelect,",
+          "explanation": "git grep of 4639974 shows onSelect only at the interface (line 32) and destructure (line 67) inside MissionCockpit; the old Home branch's onSelect(\"Missions\") call was removed with the panel. Sidebar and App retain their own live uses.",
+          "label": "onSelect has no call site in MissionCockpit at HEAD"
+        },
+        {
+          "excerpt": ".onboarding-panel,\n.home-panel,\n.settings-panel,\n.contract-drafter {\n  min-height: 100%;\n  padding: 28px 32px;\n}",
+          "explanation": "The grouped rule at styles.css:1295-1301 includes .home-panel; git grep across all tsx at HEAD finds zero uses of the class.",
+          "label": ".home-panel styled but never rendered"
+        }
+      ],
+      "locations": [
+        {
+          "path": "desktop/src/components/MissionCockpit.tsx",
+          "role": "unused prop declaration",
+          "start_line": 32
+        },
+        {
+          "path": "desktop/src/components/MissionCockpit.tsx",
+          "role": "unused destructured parameter",
+          "start_line": 67
+        },
+        {
+          "path": "desktop/src/styles.css",
+          "role": "orphaned selector",
+          "start_line": 1296
+        }
+      ],
+      "optionalProperties": {
+        "gap_id": "DSR-01",
+        "lane": "design_restore",
+        "verdict_impact": "none"
+      },
+      "rule_id": "DSR-01",
+      "severity": "low",
+      "summary": "The cockpit-grid Home branch no longer calls onSelect, but MissionCockpit still declares and destructures the onSelect prop (interface line 32, destructure line 67) with no remaining call site in the component; styles.css still lists .home-panel in a grouped rule (line 1296) though no component renders that class; a stray double blank line remains where the old branch was excised (MissionCockpit.tsx:207-208). No behavioral or security effect \u2014 TypeScript accepts unused destructured props and the orphaned selector matches nothing \u2014 but the restore instruction's 'no dead code remains' bar is not fully met.",
+      "title": "Dead residue from the removed home-card panel: unused onSelect prop and orphaned .home-panel selector"
+    },
+    {
+      "category": "accessibility/measurement-coverage",
+      "confidence": "high",
+      "cwe": [],
+      "evidence": [
+        {
+          "excerpt": "237ee69: button,input,select,a,summary,[tabindex]:focus-visible { outline: 2px solid var(--focus); }\n4639974: button:focus-visible { outline: 1px solid var(--red); outline-offset: 2px; }",
+          "explanation": "237ee69 styled six focusable selectors with a 2px --focus outline; HEAD styles only button:focus-visible with a 1px --red outline. No `outline: none` exists at HEAD, so other controls keep UA defaults.",
+          "label": "Old vs new focus-visible scope"
+        },
+        {
+          "excerpt": "--line: rgba(255, 255, 255, 0.09);\n--line-strong: rgba(255, 255, 255, 0.17);",
+          "explanation": "--line: rgba(255,255,255,0.09) and --line-strong: rgba(255,255,255,0.17) do not match the parser's #RRGGBB regex; the dropped 'strong line on black' pair is not replaced by any border pair. Blended over --black, 0.17 alpha yields \u22481.9:1 (recomputed), below the old 3.0 ui bar \u2014 an intentional hairline-grid design choice per the architect instruction, flagged for awareness only.",
+          "label": "Line tokens now rgba and unmeasured"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 66,
+          "path": "scripts/measure_contrast.py",
+          "role": "re-pinned PAIRS (line tokens absent)",
+          "start_line": 49
+        },
+        {
+          "end_line": 21,
+          "path": "desktop/src/styles.css",
+          "role": "rgba hairline tokens outside instrument vocabulary",
+          "start_line": 20
+        },
+        {
+          "end_line": 55,
+          "path": "desktop/src/styles.css",
+          "role": "focus outline narrowed to button",
+          "start_line": 52
+        }
+      ],
+      "optionalProperties": {
+        "gap_id": "DSR-02",
+        "lane": "design_restore",
+        "verdict_impact": "none"
+      },
+      "rule_id": "DSR-02",
+      "severity": "informational",
+      "summary": "Two measurement-coverage reductions ride the adopted skin, both below medium and both consequences of the authorized hairline aesthetic rather than threshold weakening. (a) The prior instrument pinned 'strong line on black' (old --line-strong #58616f, ui 3.0); the adopted skin redefines --line/--line-strong as rgba(255,255,255,0.09/0.17), which the hex-only parser cannot represent, so no border/divider token is measured at all \u2014 the 0.17-alpha hairline blends to roughly 1.9:1 over black, below the 3.0 non-text bar of WCAG 1.4.11 where a border is the sole component boundary cue. (b) The prior stylesheet applied the custom focus outline to button, input, select, a, summary, and [tabindex]:focus-visible (237ee69 styles.css:66-73); the adopted skin styles only button:focus-visible (styles.css:52-55). No outline suppression exists anywhere, so inputs/textareas/selects fall back to the user-agent default focus ring \u2014 visible, but no longer the measured red indicator. Text-token coverage (the invariant-5 contract) is complete; these are non-text-UI residuals.",
+      "title": "Instrument no longer measures any hairline/border token and custom focus ring narrowed to buttons"
+    }
+  ],
+  "reviewed_paths": [
+    "desktop/src/styles.css",
+    "desktop/src/App.tsx",
+    "desktop/src/components/MissionCockpit.tsx",
+    "desktop/src/App.test.tsx",
+    "desktop/src/components/AuthorityReview.tsx",
+    "desktop/src/components/Sidebar.tsx",
+    "desktop/src/lib/bridge.ts",
+    "desktop/src/data/navigation.ts",
+    "scripts/measure_contrast.py",
+    "CHANGELOG.md"
+  ]
+}

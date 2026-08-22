@@ -1,6 +1,7 @@
 {
   "all_valid": true,
   "brief": "receipts/production-readiness-20260821/security-review/BRIEF-20260822.md",
+  "design_epoch_note": "design_restore lane audited diff 237ee69..4639974 (adopted skin + a11y corrections): CLEAN, authority surface byte-identical, WCAG ratios independently reproduced, instrument re-pin verified honest. DSR-01 (low, dead residue) fixed in 909db2e; DSR-02 informational recorded.",
   "disposition": "All mediums (DCO-01, DCO-02, GIN-01) and actionable lows (DCO-03/04/05, GIN-02/03/04/05, KFS-01, PCL-01/02/03, PCL-04 doc-side) were fixed in commit 18ae66513620da8fa8dc8f917477b9b9c8d44804 and re-gated; accepted residuals (recorded, not fixed this epoch): DAP-01 (best-effort directory flush, doc softened + ordering argument), DAP-02, KFS-02 (receipt provenance regenerated at the final clean commit), KFS-03, PCL-05. A final independent re-review lane (final_fix_rereview) verified every fix on the final bytes.",
   "epoch": "2026-08-22-trust-surface",
   "final_fix_rereview": {
@@ -111,14 +112,30 @@
       "subject_commit": "18ae66513620da8fa8dc8f917477b9b9c8d44804",
       "valid": true,
       "verdict": "CLEAN"
+    },
+    {
+      "coverage_rows": 7,
+      "gap_ids": [
+        "DSR-01",
+        "DSR-02"
+      ],
+      "gaps": 2,
+      "lane": "design_restore",
+      "max_severity": "low",
+      "receipt": "receipts/production-readiness-20260821/security-review/reviews-20260822/RevDesignRestore.design-restore.json",
+      "sha256": "323d9ec223507b56b5d33fe052b9c588b0409fc0f0204e6d5345245336610aa9",
+      "subject_bound": true,
+      "subject_commit": "46399744f595aa051b6a6e781803ff1396e0aa11",
+      "valid": true,
+      "verdict": "CLEAN"
     }
   ],
-  "reviewer_lanes": 6,
+  "reviewer_lanes": 7,
   "schema": "nemesis.review-validation/v1",
   "subject_commit": "9dd22f259d164ebb1afde3b8940a891161cad3f6",
-  "validated_at": "2026-08-22T14:40:26.698759Z",
+  "validated_at": "2026-08-22T15:45:27.817490Z",
   "verdict_tally": {
-    "CLEAN": 4,
+    "CLEAN": 5,
     "GAPS": 2
   }
 }

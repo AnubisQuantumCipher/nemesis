@@ -6,6 +6,10 @@
 
 Authoritative machine receipts: [`receipts/production-readiness-20260821/FINAL.json`](receipts/production-readiness-20260821/FINAL.json), [`TRACKER.json`](receipts/production-readiness-20260821/TRACKER.json), sealed roster [`PRODUCTION_READINESS.json`](receipts/production-readiness-20260821/PRODUCTION_READINESS.json).
 
+## Design epoch (2026-08-22, post-seal visual correction)
+
+The Terminator/Matrix cockpit is the shipping skin per the live architect instruction (sha256 `3c4454d1c2c4f23c2f1f3aa759e5e43526145633dd733ce09207af9038cbfddd`): Avenir/condensed type, hairline 32px grid, clipped N mark, graphite + crimson `#ee3c43`, 222px rail, `MISSION / LOCAL-001` three-column Home cockpit, full exact-contract workflow on Missions, `UPDATES DISABLED` + `NET DENY` in the command bar. Authority behavior and the one-shot approval review surface are byte-identical. Seal re-bound to design source-final `909db2e79a0085b2ba77a292e50b2ce3789cb690`; gate tally 201 PASS / 1 deferred (G-10) / 0 PENDING of 202. See the design-epoch addendum in [`FINAL_REPORT.md`](receipts/production-readiness-20260821/FINAL_REPORT.md).
+
 ## Release identity
 
 - Repository: https://github.com/AnubisQuantumCipher/nemesis

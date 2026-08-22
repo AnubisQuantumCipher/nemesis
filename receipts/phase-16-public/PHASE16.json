@@ -61,12 +61,12 @@
       "transport": "Tart over Apple Virtualization.framework"
     },
     "log": {
-      "bytes": 56454,
+      "bytes": 30756,
       "file": "receipts/phase-16-public/security-hardening.txt",
-      "line_count": 1333,
-      "sha256": "bf216bd5c1fdeea824a27675e9570f28b9c8f215630b651e52899da8a69970a0"
+      "line_count": 877,
+      "sha256": "81cfe9a98c4934ea6543303a9a8bd81fe26c48b9a016629fa064f94e02f74d30"
     },
-    "observed_at": "2026-08-22T14:31:55Z",
+    "observed_at": "2026-08-22T15:45:01Z",
     "observed_warnings": [
       "Ada link steps reported a deployment-target override from 16.0 to the host target 26.0; every build, test, and bounded proof command still exited zero."
     ],
@@ -91,9 +91,9 @@
     "sha256": "8f62d762c30849ec6841b0fbde87004ced41365b456c98c79f6f1bf53c347ccc"
   },
   "repository": {
-    "branch": "production/desktop-v1-autonomous-recovery",
-    "subject_commit": "18ae66513620da8fa8dc8f917477b9b9c8d44804",
-    "subject_tree": "8a7da1057ae272bf58bc41a0affc777c7e1d449a"
+    "branch": "production/terminator-matrix-cockpit",
+    "subject_commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
+    "subject_tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
   },
   "residuals": [
     {
