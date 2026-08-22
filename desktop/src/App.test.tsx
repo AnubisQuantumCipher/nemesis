@@ -275,4 +275,34 @@ describe("NEMESIS Desktop production surface", () => {
       }),
     );
   });
+
+  it("reflects reduced-motion and text-scale on the document element", async () => {
+    render(<App />);
+    await screen.findByRole("button", { name: "Home" });
+    await waitFor(() =>
+      expect(document.documentElement.dataset.reduceMotion).toBe("true"),
+    );
+    expect(document.documentElement.dataset.textScale).toBe("standard");
+  });
+
+  it("conveys system health with text, not color alone", async () => {
+    render(<App />);
+    await screen.findByRole("button", { name: "Home" });
+    const health = await screen.findByLabelText("Local system health");
+    // The colored dot is decorative; the load-bearing status is textual.
+    expect(health.querySelector(".health-dot")).toHaveAttribute("aria-hidden", "true");
+    await waitFor(() => expect(screen.getByText("CORE READY")).toBeInTheDocument());
+  });
+
+  it("keeps every production destination keyboard-reachable with an accessible name", async () => {
+    render(<App />);
+    await screen.findByRole("button", { name: "Home" });
+    const order = ["Home", "Missions", "Evidence", "Replay", "Settings"];
+    const buttons = order.map((name) => screen.getByRole("button", { name }));
+    buttons[0].focus();
+    for (let index = 1; index < buttons.length; index += 1) {
+      fireEvent.keyDown(buttons[index - 1], { key: "ArrowDown" });
+      expect(buttons[index]).toHaveFocus();
+    }
+  });
 });

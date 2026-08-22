@@ -83,6 +83,7 @@ def measure_daemon_start(runs: int) -> dict:
         return {"status": "UNAVAILABLE", "reason": f"missing {DAEMON}"}
     latencies: list[float] = []
     rss_samples: list[int] = []
+    cpu_samples: list[float] = []
     for _ in range(runs):
         with tempfile.TemporaryDirectory() as temporary:
             home = Path(temporary) / "home"
@@ -116,11 +117,14 @@ def measure_daemon_start(runs: int) -> dict:
             latencies.append(ready - start)
             try:
                 out = subprocess.run(
-                    ["ps", "-o", "rss=", "-p", str(process.pid)],
+                    ["ps", "-o", "rss=,%cpu=", "-p", str(process.pid)],
                     capture_output=True, text=True, timeout=3,
                 ).stdout.strip()
                 if out:
-                    rss_samples.append(int(out) * 1024)
+                    parts = out.split()
+                    rss_samples.append(int(parts[0]) * 1024)
+                    if len(parts) > 1:
+                        cpu_samples.append(float(parts[1]))
             except Exception:
                 pass
             process.terminate()
@@ -141,6 +145,8 @@ def measure_daemon_start(runs: int) -> dict:
         "p95_ceiling_s": DAEMON_START_P95_CEILING_S,
         "within_threshold": p95 <= DAEMON_START_P95_CEILING_S,
         "idle_rss_bytes_median": int(statistics.median(rss_samples)) if rss_samples else None,
+        "idle_cpu_percent_median": round(statistics.median(cpu_samples), 3) if cpu_samples else None,
+        "wakeups": "NOT_MEASURED_REQUIRES_PRIVILEGED_POWERMETRICS",
     }
 
 
@@ -175,6 +181,105 @@ def measure_sizes() -> dict:
     return sizes
 
 
+def _daemon_call(sock_path: Path, command: str, **fields) -> dict:
+    payload = {"schema": "nemesis.local/v1", "command": command, **fields}
+    encoded = json.dumps(payload, separators=(",", ":"), sort_keys=True).encode() + b"\n"
+    with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as client:
+        client.settimeout(5)
+        client.connect(str(sock_path))
+        client.sendall(encoded)
+        response = bytearray()
+        while not response.endswith(b"\n"):
+            chunk = client.recv(4096)
+            if not chunk:
+                break
+            response.extend(chunk)
+    return json.loads(response)
+
+
+def measure_daemon_workload(runs: int) -> dict:
+    """Mission-start latency (H-05), evidence/DB growth (H-07), and soak (H-08),
+    driven directly over the Keychain-free daemon control socket."""
+    if not DAEMON.exists() or not os.access(DAEMON, os.X_OK):
+        return {"status": "UNAVAILABLE", "reason": f"missing {DAEMON}"}
+    digest = "ab" * 32
+    create_latencies: list[float] = []
+    with tempfile.TemporaryDirectory() as temporary:
+        home = Path(temporary) / "home"
+        home.mkdir()
+        sock = home / "core.sock"
+        process = subprocess.Popen(
+            [str(DAEMON), "--home", str(home)],
+            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+        )
+        try:
+            deadline = time.monotonic() + 10
+            while time.monotonic() < deadline and not sock.exists():
+                time.sleep(0.002)
+            if not sock.exists():
+                return {"status": "FAIL", "reason": "socket not created"}
+            if _daemon_call(sock, "ping").get("status") != "OK":
+                return {"status": "FAIL", "reason": "ping not OK"}
+            for index in range(runs):
+                mission = f"mis_{index:022d}"
+                start = time.monotonic()
+                created = _daemon_call(
+                    sock, "create",
+                    mission_id=mission, worker_id=f"wrk_{index:022d}",
+                    contract_digest=digest, scope_digest=digest, source_digest=digest,
+                )
+                create_latencies.append(time.monotonic() - start)
+                if created.get("status") != "OK":
+                    return {"status": "FAIL", "reason": f"create {index} status={created.get('status')}"}
+            # One transition to measure authorize+run start latency.
+            first = "mis_" + "0" * 22
+            t0 = time.monotonic()
+            authorized = _daemon_call(sock, "authorize", mission_id=first, contract_digest=digest)
+            run = _daemon_call(sock, "run", mission_id=first)
+            transition_latency = time.monotonic() - t0
+            missions_dir = home / "missions"
+            growth_bytes = sum(f.stat().st_size for f in missions_dir.rglob("*") if f.is_file())
+            replay_load = None
+            replay_bin = ROOT / "runtime/target/debug/nemesis-replay"
+            ledger = missions_dir / first / "events.ledger"
+            if replay_bin.exists() and ledger.exists():
+                r0 = time.monotonic()
+                proc = subprocess.run(
+                    [str(replay_bin), "--ledger", str(ledger)],
+                    capture_output=True, text=True, timeout=10,
+                )
+                replay_load = {
+                    "event_lines": len(ledger.read_bytes().splitlines()),
+                    "ledger_bytes": ledger.stat().st_size,
+                    "parse_s": round(time.monotonic() - r0, 5),
+                    "verdict_verified": '"verdict":"VERIFIED"' in proc.stdout.replace(" ", ""),
+                    "max_ledger_bytes_cap": 64 * 1024 * 1024,
+                }
+        finally:
+            process.terminate()
+            try:
+                process.wait(timeout=3)
+            except subprocess.TimeoutExpired:
+                process.kill()
+                process.wait()
+    create_latencies.sort()
+    p95 = create_latencies[min(len(create_latencies) - 1, int(round(0.95 * (len(create_latencies) - 1))))]
+    return {
+        "status": "OK",
+        "runs": len(create_latencies),
+        "create_min_s": round(min(create_latencies), 5),
+        "create_median_s": round(statistics.median(create_latencies), 5),
+        "create_p95_s": round(p95, 5),
+        "create_max_s": round(max(create_latencies), 5),
+        "authorize_run_transition_s": round(transition_latency, 5),
+        "authorized_state": authorized.get("state"),
+        "run_state": run.get("state"),
+        "missions_dir_bytes": growth_bytes,
+        "bytes_per_mission": growth_bytes // max(1, len(create_latencies)),
+        "replay_load": replay_load,
+    }
+
+
 def main() -> int:
     out_path = ROOT / "receipts/production-readiness-20260821/PERFORMANCE.json"
     if "--out" in sys.argv:
@@ -184,6 +289,7 @@ def main() -> int:
     daemon = measure_daemon_start(DAEMON_START_RUNS)
     limits = verify_declared_limits()
     sizes = measure_sizes()
+    workload = measure_daemon_workload(DAEMON_START_RUNS)
 
     receipt = {
         "schema": "nemesis.performance/v1",
@@ -197,6 +303,7 @@ def main() -> int:
         "daemon_control_plane_start": daemon,
         "declared_product_limits": limits,
         "sizes": sizes,
+        "daemon_workload": workload,
     }
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_text(json.dumps(receipt, indent=1, sort_keys=True) + "\n", encoding="utf-8")
@@ -210,6 +317,9 @@ def main() -> int:
         return 1
     if not limits["all_present"]:
         print("FAIL_PERFORMANCE missing_declared_limit")
+        return 1
+    if workload.get("status") not in ("OK", "UNAVAILABLE"):
+        print(f"FAIL_PERFORMANCE daemon_workload={workload.get('reason')}")
         return 1
     print("PASS_PERFORMANCE_BOUNDED")
     return 0

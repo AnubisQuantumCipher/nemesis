@@ -1,14 +1,36 @@
 {
  "daemon_control_plane_start": {
+  "idle_cpu_percent_median": 0.0,
   "idle_rss_bytes_median": 1867776,
-  "max_s": 0.004,
-  "median_s": 0.0036,
-  "min_s": 0.0033,
+  "max_s": 0.0041,
+  "median_s": 0.0035,
+  "min_s": 0.0032,
   "p95_ceiling_s": 2.0,
-  "p95_s": 0.004,
+  "p95_s": 0.0041,
   "runs": 10,
   "status": "OK",
+  "wakeups": "NOT_MEASURED_REQUIRES_PRIVILEGED_POWERMETRICS",
   "within_threshold": true
+ },
+ "daemon_workload": {
+  "authorize_run_transition_s": 0.00069,
+  "authorized_state": "PLANNING",
+  "bytes_per_mission": 977,
+  "create_max_s": 0.00157,
+  "create_median_s": 0.00087,
+  "create_min_s": 0.00081,
+  "create_p95_s": 0.00157,
+  "missions_dir_bytes": 9770,
+  "replay_load": {
+   "event_lines": 4,
+   "ledger_bytes": 1220,
+   "max_ledger_bytes_cap": 67108864,
+   "parse_s": 0.0027,
+   "verdict_verified": true
+  },
+  "run_state": "RUNNING",
+  "runs": 10,
+  "status": "OK"
  },
  "declared_product_limits": {
   "all_present": true,
@@ -98,7 +120,7 @@
   "mem_bytes": "51539607552",
   "uname": "Darwin 25.6.0 arm64 arm"
  },
- "measured_at": "2026-08-22T08:53:57Z",
+ "measured_at": "2026-08-22T09:04:38Z",
  "schema": "nemesis.performance/v1",
  "sizes": {
   "build_bin_total_bytes": 6266848,

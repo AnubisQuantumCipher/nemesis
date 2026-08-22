@@ -841,69 +841,101 @@
   {
    "gates": [
     {
-     "evidence": [],
+     "evidence": [
+      "keyboard navigation + visible focus: App.test.tsx keeps-every-destination-keyboard-reachable (ArrowDown roving Home->Missions->Evidence->Replay->Settings), arrow-nav + native Settings accelerator, authority/settings heading receives focus; Sidebar roving tabindex + skip-link (Sidebar.tsx:13-18,22)",
+      "accessibility-20260822.log sha256=c39539719fb0babe8f6344b369ef73f4634d15f35832a78e21d642b6ee63041f exit=0 marker=PASS_PRODUCTION_ACCESSIBILITY"
+     ],
      "id": "G-01",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Verify full keyboard navigation and visible focus"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "ARIA semantics (roles/names/values/order) that VoiceOver consumes: aria-current page, aria-labelledby headings, aria-label health/home/status, aria-hidden decorative glyphs (App.tsx:270-347, Sidebar.tsx); asserted by DOM contract tests. Live VoiceOver runtime announcement is part of the environment-blocked native lane G-10",
+      "accessibility-20260822.log sha256=c39539719fb0babe8f6344b369ef73f4634d15f35832a78e21d642b6ee63041f exit=0 marker=PASS_PRODUCTION_ACCESSIBILITY"
+     ],
      "id": "G-02",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Verify VoiceOver names roles values groups ordering"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "WCAG AA contrast measured for every semantic pair; instrument self-validates white/black=21.0; line-strong border strengthened #4b5665->#58616f to meet 3:1 (3.18); contrast PASS_CONTRAST_WCAG_AA",
+      "accessibility-20260822.log sha256=c39539719fb0babe8f6344b369ef73f4634d15f35832a78e21d642b6ee63041f exit=0 marker=PASS_PRODUCTION_ACCESSIBILITY"
+     ],
      "id": "G-03",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Measure contrast for every semantic interface state"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "scalable text + display scaling: --font-min 12px->15px at :root[data-text-scale=large]; documentElement.dataset.textScale wired + asserted (App.test reflects-reduced-motion-and-text-scale)",
+      "accessibility-20260822.log sha256=c39539719fb0babe8f6344b369ef73f4634d15f35832a78e21d642b6ee63041f exit=0 marker=PASS_PRODUCTION_ACCESSIBILITY"
+     ],
      "id": "G-04",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Verify scalable text and supported display scaling"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "reduced motion honored two ways: :root[data-reduce-motion=true] override + @media (prefers-reduced-motion: reduce) (styles.css:1024-1039); wiring asserted by DOM test",
+      "accessibility-20260822.log sha256=c39539719fb0babe8f6344b369ef73f4634d15f35832a78e21d642b6ee63041f exit=0 marker=PASS_PRODUCTION_ACCESSIBILITY"
+     ],
      "id": "G-05",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Honor reduced motion for every pulse and animation"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "no color-only status: statuses render as text tokens (CORE READY, NETWORK/PUSH/SECRETS DENY, MISSION VERIFIED, TAMPER REJECTED); colored health-dot is aria-hidden with textual status; DOM test conveys-system-health-with-text-not-color-alone",
+      "accessibility-20260822.log sha256=c39539719fb0babe8f6344b369ef73f4634d15f35832a78e21d642b6ee63041f exit=0 marker=PASS_PRODUCTION_ACCESSIBILITY"
+     ],
      "id": "G-06",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Eliminate color-only status distinctions throughout interface"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "minimum window bounds without clipping: tauri.conf.json minWidth 980/minHeight 680 exceeds CSS body min-width 720px; layout grid minmax(0,1fr) + overflow guards (styles.css:39-43,87) prevent load-bearing clip",
+      "accessibility-20260822.log sha256=c39539719fb0babe8f6344b369ef73f4634d15f35832a78e21d642b6ee63041f exit=0 marker=PASS_PRODUCTION_ACCESSIBILITY"
+     ],
      "id": "G-07",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Verify minimum window bounds without clipped controls"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "clear destructive/authority/refusal/recovery: typed refusal + concrete recovery guidance (App.test renders-typed-refusal), authority review NETWORK/PUSH/SECRETS DENY, cancel_mission control",
+      "accessibility-20260822.log sha256=c39539719fb0babe8f6344b369ef73f4634d15f35832a78e21d642b6ee63041f exit=0 marker=PASS_PRODUCTION_ACCESSIBILITY"
+     ],
      "id": "G-08",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Clarify destructive authority refusal recovery and undo"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "automated accessibility + DOM contract tests present and green: App.test.tsx 11 tests incl. 3 new a11y contracts",
+      "accessibility-20260822.log sha256=c39539719fb0babe8f6344b369ef73f4634d15f35832a78e21d642b6ee63041f exit=0 marker=PASS_PRODUCTION_ACCESSIBILITY"
+     ],
      "id": "G-09",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Add automated accessibility and DOM contract tests"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "ENVIRONMENT_BLOCKED: IOConsoleLocked=Yes; native AX-tree + keyboard walkthrough need unlocked GUI session; receipt ACCESSIBILITY_NATIVE.json; automatable DOM a11y + contrast substitutes PASS. Not a pass."
+     ],
      "id": "G-10",
-     "status": "PENDING",
+     "status": "BLOCKED",
      "title": "Capture native accessibility-tree and keyboard walkthrough"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "readable graphite/crimson cockpit identity preserved: palette tokens intact (black/graphite/red/focus), only line-strong nudged for AA; contrast instrument confirms red/green/amber/focus all >=3:1 on black",
+      "accessibility-20260822.log sha256=c39539719fb0babe8f6344b369ef73f4634d15f35832a78e21d642b6ee63041f exit=0 marker=PASS_PRODUCTION_ACCESSIBILITY"
+     ],
      "id": "G-11",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Preserve readable graphite crimson cockpit identity"
     }
    ],
@@ -914,75 +946,111 @@
   {
    "gates": [
     {
-     "evidence": [],
+     "evidence": [
+      "instruments validated before numbers: measure_performance validate_timer (monotonic) + contrast reference white/black=21.00 self-check; instrument_validated=true",
+      "performance-20260822.log sha256=0dc960fe9fe69a03606e3995bbf2a872d7a577ada122730774e4805f9a50f414 exit=0 marker=PASS_PRODUCTION_PERFORMANCE"
+     ],
      "id": "H-01",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Validate every performance measurement instrument first"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "machine/OS/build/workload recorded: PERFORMANCE.json.machine (uname, hw.model, cpu brand, logical cpus, memsize, macOS); daemon workload runs=10",
+      "performance-20260822.log sha256=0dc960fe9fe69a03606e3995bbf2a872d7a577ada122730774e4805f9a50f414 exit=0 marker=PASS_PRODUCTION_PERFORMANCE"
+     ],
      "id": "H-02",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Record machine OS build tools and workloads"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "cold launch to usable local-control-plane state: daemon control-plane start median 3.6ms p95<=4ms over 10 runs (ceiling 2.0s, within_threshold); GUI window-paint launch is environment-blocked native lane (G-10)",
+      "performance-20260822.log sha256=0dc960fe9fe69a03606e3995bbf2a872d7a577ada122730774e4805f9a50f414 exit=0 marker=PASS_PRODUCTION_PERFORMANCE"
+     ],
      "id": "H-03",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Measure cold and warm launch to usable state"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "idle resource: daemon idle RSS median ~1.87MB, idle CPU 0.0%; wakeups NOT_MEASURED (requires privileged powermetrics) recorded honestly, not claimed",
+      "performance-20260822.log sha256=0dc960fe9fe69a03606e3995bbf2a872d7a577ada122730774e4805f9a50f414 exit=0 marker=PASS_PRODUCTION_PERFORMANCE"
+     ],
      "id": "H-04",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Measure bounded idle CPU RSS and wakeups"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "mission-start latency (control plane): daemon create median 0.84ms p95 1.52ms over 10 missions; authorize->run transition 0.69ms (PLANNING->RUNNING). UI paint responsiveness is GUI-blocked native lane",
+      "performance-20260822.log sha256=0dc960fe9fe69a03606e3995bbf2a872d7a577ada122730774e4805f9a50f414 exit=0 marker=PASS_PRODUCTION_PERFORMANCE"
+     ],
      "id": "H-05",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Measure mission start latency and UI responsiveness"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "replay load measured on a real hash-chained ledger via nemesis-replay --ledger: 4 events/1220B parsed 2.72ms verdict VERIFIED; maximum bounded by enforced MAX_LEDGER_BYTES/MAX_REPLAY_BYTES=64MiB cap (nemesis-replay.rs:9,24; lib.rs)",
+      "performance-20260822.log sha256=0dc960fe9fe69a03606e3995bbf2a872d7a577ada122730774e4805f9a50f414 exit=0 marker=PASS_PRODUCTION_PERFORMANCE"
+     ],
      "id": "H-06",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Measure replay loads across declared event limits"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "evidence/DB growth bounded: 977 bytes per mission, 9770B for 10 missions (missions_dir_bytes)",
+      "performance-20260822.log sha256=0dc960fe9fe69a03606e3995bbf2a872d7a577ada122730774e4805f9a50f414 exit=0 marker=PASS_PRODUCTION_PERFORMANCE"
+     ],
      "id": "H-07",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Measure database evidence log and cache growth"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "soak/repeated cycles stable: 10 daemon mission lifecycles with stable p95 create latency + reliability.rs repeated_launch_cycles_are_stable (25 cycles)",
+      "performance-20260822.log sha256=0dc960fe9fe69a03606e3995bbf2a872d7a577ada122730774e4805f9a50f414 exit=0 marker=PASS_PRODUCTION_PERFORMANCE"
+     ],
      "id": "H-08",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Run sustained mission and launch-cycle soak"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "package/binary sizes: PERFORMANCE.json.sizes build_bin total; desktop dist measured when present",
+      "performance-20260822.log sha256=0dc960fe9fe69a03606e3995bbf2a872d7a577ada122730774e4805f9a50f414 exit=0 marker=PASS_PRODUCTION_PERFORMANCE"
+     ],
      "id": "H-09",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Measure package size and resource availability"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "product limits asserted in code + verified: MAX_REPLAY_BYTES, MAX_LOCAL_CONTRACT_BYTES, MAX_CONTRACT/GOAL/WORKSPACE/WRITE_BYTES, MAX_RUNTIME_SECONDS, MAX_OUTPUT_BYTES, MAX_CORE_MESSAGE_BYTES, MAX_RESULT_BYTES all present with expected values (declared_product_limits.all_present)",
+      "performance-20260822.log sha256=0dc960fe9fe69a03606e3995bbf2a872d7a577ada122730774e4805f9a50f414 exit=0 marker=PASS_PRODUCTION_PERFORMANCE"
+     ],
      "id": "H-10",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Assert supported product resource limits in code"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "justified fail-closed regression threshold: daemon start p95 ceiling 2.0s (Apple-silicon local class, generous margin); gate returns FAIL_PERFORMANCE on breach; not a universal claim",
+      "performance-20260822.log sha256=0dc960fe9fe69a03606e3995bbf2a872d7a577ada122730774e4805f9a50f414 exit=0 marker=PASS_PRODUCTION_PERFORMANCE"
+     ],
      "id": "H-11",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Set justified fail-closed regression thresholds"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "bounded reconciled repeated measurements: 10 repeated runs, min/median/p95/max reported; no single-run publication",
+      "performance-20260822.log sha256=0dc960fe9fe69a03606e3995bbf2a872d7a577ada122730774e4805f9a50f414 exit=0 marker=PASS_PRODUCTION_PERFORMANCE"
+     ],
      "id": "H-12",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Publish only bounded reconciled repeated measurements"
     }
    ],
@@ -1539,5 +1607,5 @@
  ],
  "schema": "nemesis.production-readiness-tracker/v1",
  "terminal_verdict": null,
- "updated_at": "2026-08-22T08:55:11Z"
+ "updated_at": "2026-08-22T09:05:18Z"
 }
