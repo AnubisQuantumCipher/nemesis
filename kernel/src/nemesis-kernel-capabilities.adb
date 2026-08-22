@@ -26,24 +26,35 @@ package body Nemesis.Kernel.Capabilities with SPARK_Mode => On is
      (Parent : Capability_Grant; Child : Capability_Grant) return Boolean
    is
    begin
-      if Parent.Status /= Active
-        or else Child.Status /= Active
-        or else Child.Mission /= Parent.Mission
-        or else Child.Resource /= Parent.Resource
-        or else Child.Scope /= Parent.Scope
-        or else Child.Expires_After > Parent.Expires_After
-        or else Child.Maximum_Bytes > Parent.Maximum_Bytes
-      then
-         return False;
-      end if;
-
-      for Operation in Operation_Kind loop
-         if Child.Operations (Operation) and then not Parent.Operations (Operation)
-         then
-            return False;
-         end if;
-      end loop;
-      return True;
+      return
+        Parent.Status = Active
+        and then Child.Status = Active
+        and then Child.Mission = Parent.Mission
+        and then Child.Resource = Parent.Resource
+        and then Child.Scope = Parent.Scope
+        and then Child.Expires_After <= Parent.Expires_After
+        and then Child.Maximum_Bytes <= Parent.Maximum_Bytes
+        and then
+          (for all Operation in Operation_Kind =>
+             (if Child.Operations (Operation) then
+                  Parent.Operations (Operation)));
    end Is_Attenuation;
+
+   function Derive_Child_Grant
+     (Parent        : Capability_Grant;
+      Child_Id      : Capability_Id;
+      Operation     : Operation_Kind;
+      Expires_After : Sequence_Number;
+      Maximum_Bytes : Natural) return Capability_Grant
+   is
+     ((Id            => Child_Id,
+       Mission       => Parent.Mission,
+       Subject       => Parent.Subject,
+       Resource      => Parent.Resource,
+       Operations    => [for Item in Operation_Kind => Item = Operation],
+       Scope         => Parent.Scope,
+       Expires_After => Expires_After,
+       Maximum_Bytes => Maximum_Bytes,
+       Status        => Active));
 
 end Nemesis.Kernel.Capabilities;

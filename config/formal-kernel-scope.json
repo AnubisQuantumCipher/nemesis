@@ -1,0 +1,125 @@
+{
+  "schema": "nemesis.formal-kernel-scope/v1",
+  "proved_units": {
+    "nemesis-kernel-approvals": {
+      "body": "kernel/src/nemesis-kernel-approvals.adb",
+      "public_operations": ["Consume_Approval"],
+      "spec": "kernel/src/nemesis-kernel-approvals.ads"
+    },
+    "nemesis-kernel-budgets": {
+      "body": "kernel/src/nemesis-kernel-budgets.adb",
+      "public_operations": ["Can_Allocate", "Consume"],
+      "spec": "kernel/src/nemesis-kernel-budgets.ads"
+    },
+    "nemesis-kernel-capabilities": {
+      "body": "kernel/src/nemesis-kernel-capabilities.adb",
+      "public_operations": ["Authorize", "Is_Attenuation", "Derive_Child_Grant"],
+      "spec": "kernel/src/nemesis-kernel-capabilities.ads"
+    },
+    "nemesis-kernel-completion": {
+      "body": "kernel/src/nemesis-kernel-completion.adb",
+      "public_operations": ["Evaluate"],
+      "spec": "kernel/src/nemesis-kernel-completion.ads"
+    },
+    "nemesis-kernel-evidence": {
+      "body": "kernel/src/nemesis-kernel-evidence.adb",
+      "public_operations": ["Acceptable"],
+      "spec": "kernel/src/nemesis-kernel-evidence.ads"
+    },
+    "nemesis-kernel-missions": {
+      "body": "kernel/src/nemesis-kernel-missions.adb",
+      "public_operations": ["Create", "Restore", "State_Of", "Sequence_Of", "Apply", "Commit_Event"],
+      "spec": "kernel/src/nemesis-kernel-missions.ads"
+    },
+    "nemesis-kernel-transitions": {
+      "body": "kernel/src/nemesis-kernel-transitions.adb",
+      "public_operations": ["Allowed"],
+      "spec": "kernel/src/nemesis-kernel-transitions.ads"
+    },
+    "nemesis-kernel-types": {
+      "body": "kernel/src/nemesis-kernel-types.adb",
+      "public_operations": ["Encode_State", "Decode_State", "Is_Terminal", "Next"],
+      "spec": "kernel/src/nemesis-kernel-types.ads"
+    }
+  },
+  "unproved_authority_boundaries": {
+    "nemesis-core-authority_store": {
+      "paths": ["daemon/src/nemesis-core-authority_store.ads", "daemon/src/nemesis-core-authority_store.adb"],
+      "reason": "SPARK_Mode Off; durable parent-grant and one-shot approval persistence boundary for TS-001/TS-002 (fixed-width strict parse, F_FULLFSYNC, atomic rename)"
+    },
+    "nemesis-core-checkpoints": {
+      "paths": ["daemon/src/nemesis-core-checkpoints.ads", "daemon/src/nemesis-core-checkpoints.adb"],
+      "reason": "SPARK_Mode Off; durable checkpoint parsing, fsync, and atomic rename boundary"
+    },
+    "nemesis-core-index": {
+      "paths": ["daemon/src/nemesis-core-index.ads", "daemon/src/nemesis-core-index.adb"],
+      "reason": "SPARK_Mode Off; derived SQLite migration and index boundary"
+    },
+    "nemesis-core-json": {
+      "paths": ["daemon/src/nemesis-core-json.ads", "daemon/src/nemesis-core-json.adb"],
+      "reason": "SPARK_Mode Off; bounded local protocol parser"
+    },
+    "nemesis-core-ledger": {
+      "paths": ["daemon/src/nemesis-core-ledger.ads", "daemon/src/nemesis-core-ledger.adb"],
+      "reason": "SPARK_Mode Off; authoritative event framing, hashing, append, and recovery boundary"
+    },
+    "nemesis-core-mission_store": {
+      "paths": ["daemon/src/nemesis-core-mission_store.ads", "daemon/src/nemesis-core-mission_store.adb"],
+      "reason": "SPARK_Mode Off; primary authority-persistence and evidence-freshness boundary"
+    },
+    "nemesis-core-objects": {
+      "paths": ["daemon/src/nemesis-core-objects.ads", "daemon/src/nemesis-core-objects.adb"],
+      "reason": "SPARK_Mode Off; content-addressed evidence object boundary"
+    },
+    "nemesis-core-paths": {
+      "paths": ["daemon/src/nemesis-core-paths.ads", "daemon/src/nemesis-core-paths.adb"],
+      "reason": "SPARK_Mode Off; canonical path and symlink authorization boundary"
+    },
+    "nemesis-core-root": {
+      "paths": ["daemon/src/nemesis-core.ads"],
+      "reason": "SPARK_Mode Off root package"
+    },
+    "nemesis_core_daemon": {
+      "paths": ["daemon/src/nemesis_core_daemon.adb"],
+      "reason": "SPARK_Mode Off; socket dispatch and Kernel composition boundary; authorize_action consumes persisted one-shot approvals via Approvals.Consume_Approval and derives attenuated child grants from the persisted parent via Capabilities.Derive_Child_Grant"
+    }
+  },
+  "trust_surface_blockers": [],
+  "trust_surface_resolutions": [
+    {
+      "id": "TS-001",
+      "description": "Requiring persisted exact one-shot approvals in authorize_action changes the current authorization accept condition.",
+      "resolution": "Implemented 2026-08-22: authorize_action loads the persisted approval for the exact action digest, the SPARK-proved Approvals.Consume_Approval accepts it exactly once, the consumed record is made durable (F_FULLFSYNC + atomic rename) before the Action_Authorized event commits, and every failure path refuses (no_approval, approval_corrupt, approval_replayed, approval_revoked, approval_expired, mission/action mismatch). Approvals are issued only through the create_approval protocol command in the PLANNING state and can never be re-armed (Persist_Approval refuses overwrite).",
+      "enforced_by": [
+        "daemon/src/nemesis_core_daemon.adb",
+        "daemon/src/nemesis-core-authority_store.adb",
+        "tests/integration/test_daemon_api.py",
+        "daemon/tests/nemesis_authority_store_tests.adb",
+        "scripts/verify_authority_aba.py"
+      ],
+      "authorized_by": {
+        "contract": "receipts/production-readiness-20260821/trust-surface/TS_CONTINUATION_CONTRACT_2026-08-22.md",
+        "contract_sha256": "920900f3a7d37a9a3e1d51541997070789a0e1e7bddecf31808076c67a00d3f9",
+        "date": "2026-08-22"
+      }
+    },
+    {
+      "id": "TS-002",
+      "description": "Replacing the synthesized capability grant with persisted parent and attenuated child grants changes capability issuance and replay semantics.",
+      "resolution": "Implemented 2026-08-22: the per-request synthesized grant is gone. A single immutable parent grant per mission is issued through the create_grant protocol command in the PLANNING state (all authority fields derived from the authorized mission context; the protocol cannot widen them) and persisted durably. authorize_action loads it and derives the per-action child through the SPARK-proved Capabilities.Derive_Child_Grant, whose postcondition guarantees Is_Attenuation (Parent, Child); a runtime Is_Attenuation re-check remains as defense in depth. Missing, corrupt, or inactive parents refuse (no_parent_grant, grant_corrupt, parent_grant_inactive).",
+      "enforced_by": [
+        "kernel/src/nemesis-kernel-capabilities.ads",
+        "kernel/src/nemesis-kernel-capabilities.adb",
+        "daemon/src/nemesis_core_daemon.adb",
+        "daemon/src/nemesis-core-authority_store.adb",
+        "tests/integration/test_daemon_api.py",
+        "kernel/tests/nemesis_authority_tests.adb"
+      ],
+      "authorized_by": {
+        "contract": "receipts/production-readiness-20260821/trust-surface/TS_CONTINUATION_CONTRACT_2026-08-22.md",
+        "contract_sha256": "920900f3a7d37a9a3e1d51541997070789a0e1e7bddecf31808076c67a00d3f9",
+        "date": "2026-08-22"
+      }
+    }
+  ]
+}

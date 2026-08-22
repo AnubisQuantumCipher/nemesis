@@ -18,8 +18,31 @@ package body Nemesis.Core.Mission_Store with SPARK_Mode => Off is
    Contract_Tag : constant String := "NEMESIS_CONTRACT_V1";
    Evidence_Tag : constant String := "NEMESIS_EVIDENCE_V1";
 
-   function Fsync (FD : Interfaces.C.int) return Interfaces.C.int
-   with Import, Convention => C, External_Name => "fsync";
+   --  macOS fsync() does not flush to stable storage; F_FULLFSYNC does.
+   F_FULLFSYNC : constant Interfaces.C.int := 51;
+   O_RDONLY : constant Interfaces.C.int := 0;
+
+   function Fcntl (FD : Interfaces.C.int; Cmd : Interfaces.C.int)
+     return Interfaces.C.int
+   with Import, Convention => C, External_Name => "fcntl";
+
+   function C_Open (Path : Interfaces.C.char_array; Flags : Interfaces.C.int)
+     return Interfaces.C.int
+   with Import, Convention => C, External_Name => "open";
+
+   function C_Close (FD : Interfaces.C.int) return Interfaces.C.int
+   with Import, Convention => C, External_Name => "close";
+
+   procedure Full_Sync_Directory (Dir : String) is
+      FD : Interfaces.C.int;
+      Ignore : Interfaces.C.int;
+   begin
+      FD := C_Open (Interfaces.C.To_C (Dir), O_RDONLY);
+      if FD >= 0 then
+         Ignore := Fcntl (FD, F_FULLFSYNC);
+         Ignore := C_Close (FD);
+      end if;
+   end Full_Sync_Directory;
 
    function Mission_Directory (Home : String; Id : Mission_Id) return String is
      (Home & "/missions/" & String (Id));
@@ -82,7 +105,9 @@ package body Nemesis.Core.Mission_Store with SPARK_Mode => Off is
          return;
       end if;
       Written := GNAT.OS_Lib.Write (FD, Data'Address, Data'Length);
-      if Written /= Data'Length or else Fsync (Interfaces.C.int (FD)) /= 0 then
+      if Written /= Data'Length
+        or else Fcntl (Interfaces.C.int (FD), F_FULLFSYNC) /= 0
+      then
          GNAT.OS_Lib.Close (FD, Closed);
          return;
       end if;
@@ -91,6 +116,9 @@ package body Nemesis.Core.Mission_Store with SPARK_Mode => Off is
          return;
       end if;
       GNAT.OS_Lib.Rename_File (Temp, Path, Renamed);
+      if Renamed then
+         Full_Sync_Directory (Ada.Directories.Containing_Directory (Path));
+      end if;
       Success := Renamed;
    exception
       when others =>
@@ -444,19 +472,45 @@ package body Nemesis.Core.Mission_Store with SPARK_Mode => Off is
       Read_Checkpoint
         (Checkpoint_Path (Home, Id), Checkpoint_Status, Checkpoint);
       if Recovered.Status /= Recovered_Valid
-        or else Checkpoint_Status /= Checkpoint_Valid
-        or else Recovered.Sequence /= Checkpoint.Sequence
-        or else Recovered.State /= Checkpoint.State
-        or else Recovered.Head /= Checkpoint.Ledger_Head
         or else Recovered.First_Payload /=
           Nemesis.Core.Ledger.Digest_Hex (Reference)
+      then
+         --  The append-only, hash-chain-validated ledger is the sole source of
+         --  truth; without a valid ledger on the expected chain there is nothing
+         --  authoritative to load.
+         Result := Store_Corrupt;
+         return;
+      end if;
+      --  A valid checkpoint may never be ahead of the authoritative ledger: the
+      --  ledger record is appended and fsynced before the checkpoint is written.
+      if Checkpoint_Status = Checkpoint_Valid
+        and then Checkpoint.Sequence > Recovered.Sequence
       then
          Result := Store_Corrupt;
          return;
       end if;
       Context.Mission := Restore (Recovered.State, Recovered.Sequence);
-      Context.Current_Source := Digest_256 (Checkpoint.Source_Digest);
+      Context.Current_Source := Digest_256 (Recovered.Source);
       Context.Ledger_Head := Digest_256 (Recovered.Head);
+      --  Rebuild the derived checkpoint from the ledger tail whenever it is
+      --  missing or stale, so a crash between the durable ledger append and the
+      --  checkpoint rename cannot brick an otherwise intact mission (SQL-001).
+      if Checkpoint_Status /= Checkpoint_Valid
+        or else Checkpoint.Sequence /= Recovered.Sequence
+        or else Checkpoint.State /= Recovered.State
+        or else Checkpoint.Ledger_Head /= Recovered.Head
+        or else Checkpoint.Source_Digest /= Recovered.Source
+      then
+         declare
+            Rebuilt_OK : Boolean;
+         begin
+            Save_Checkpoint (Home, Context, Rebuilt_OK);
+            if not Rebuilt_OK then
+               Result := Store_IO_Failure;
+               return;
+            end if;
+         end;
+      end if;
       Load_Evidence (Home, Context, "build", Evidence_OK);
       if not Evidence_OK then
          Result := Store_Corrupt;

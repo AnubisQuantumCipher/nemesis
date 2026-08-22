@@ -1,0 +1,9 @@
+{
+ "automatable_substitute": "DOM accessibility contract tests (desktop/src/App.test.tsx: keyboard reachability, roles/labels, color-independent status, focus-to-heading) + WCAG contrast instrument (scripts/measure_contrast.py) all PASS",
+ "gate": "G-10 native macOS accessibility-tree and keyboard walkthrough",
+ "instrument": "scripts/capture_macos_accessibility.swift",
+ "probed_at": "2026-08-22T09:05:18Z",
+ "reason": "IOConsoleLocked=Yes (re-probed this session). Native Tauri window-server launch + AXUIElement capture (scripts/capture_macos_accessibility.swift) require an unlocked GUI session; cannot run headlessly. Not faked.",
+ "schema": "nemesis.accessibility-native/v1",
+ "status": "ENVIRONMENT_BLOCKED"
+}

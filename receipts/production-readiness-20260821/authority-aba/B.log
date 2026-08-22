@@ -1,0 +1,17 @@
+test_authority_is_persisted_one_shot_and_fail_closed (tests.integration.test_daemon_api.DaemonApiTests) ... FAIL
+
+======================================================================
+FAIL: test_authority_is_persisted_one_shot_and_fail_closed (tests.integration.test_daemon_api.DaemonApiTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/var/folders/bg/pt9l6y1j47q642kp3z5blrmh0000gn/T/nemesis-authority-aba-g4y3fmx6/repo/tests/integration/test_daemon_api.py", line 368, in test_authority_is_persisted_one_shot_and_fail_closed
+    self.assertEqual(replayed["status"], "REFUSED")
+AssertionError: 'OK' != 'REFUSED'
+- OK
++ REFUSED
+
+
+----------------------------------------------------------------------
+Ran 1 test in 0.560s
+
+FAILED (failures=1)

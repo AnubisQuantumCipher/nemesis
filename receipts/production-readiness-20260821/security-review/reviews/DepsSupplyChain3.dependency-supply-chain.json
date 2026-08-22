@@ -1,0 +1,59 @@
+{
+  "coverage_summary": "{\"schema\":\"nemesis.hardening-audit.result/v1\",\"lane\":\"dependency-supply-chain\",\"reviewer_identity\":{\"context\":\"isolated subagent, separate process/context from lead\",\"model\":\"anthropic/claude-opus-4 (as configured)\",\"limitations\":[\"static-only\",\"no build/package-manager execution\",\"lockfile pinning spot-checked, not exhaustively enumerated\"]},\"subject_commit\":\"47f6976332a41006718198f43844e9e4724c1fd8\",\"coverage\":[{\"invariant\":\"Lockfiles present and pinned; no floating git deps\",\"files\":[\"runtime/Cargo.lock\",\"desktop/src-tauri/Cargo.lock\",\"desktop/package-lock.json\",\"runtime/Cargo.toml\",\"desktop/src-tauri/Cargo.toml\"],\"status\":\"CONFIRMED\"},{\"invariant\":\"Advisory scanning gated (cargo audit + npm audit) with pinned toolchain\",\"files\":[\"scripts/test_security_hardening.sh\",\".github/workflows/ci.yml\"],\"status\":\"GAP\"},{\"invariant\":\"CI actions pinned by SHA, least-privilege permissions, no pull_request_target untrusted checkout\",\"files\":[\".github/workflows/ci.yml\"],\"status\":\"CONFIRMED\"},{\"invariant\":\"SBOM/third-party notices generated from locked deps\",\"files\":[\"scripts/package_release.sh\",\"scripts/generate_third_party_notices.py\",\"tests/integration/test_third_party_notices.py\",\".github/workflows/ci.yml\"],\"status\":\"CONFIRMED\"},{\"invariant\":\"Minimal release feature surface (no devtools/inspector); wasmtime/tauri pinned\",\"files\":[\"runtime/Cargo.toml\",\"desktop/src-tauri/Cargo.toml\",\"desktop/src-tauri/tauri.release.conf.json\"],\"status\":\"CONFIRMED\"}],\"gaps\":[{\"id\":\"DEP-01\",\"severity\":\"medium\",\"category\":\"advisory-scanning-coverage\",\"cwe\":\"CWE-1104\",\"path\":\".github/workflows/ci.yml\",\"line\":115,\"precondition\":\"A RUSTSEC advisory is published against a crate present only in the desktop bridge dependency tree (tauri, tauri-build, libc, or transitives) and not in the runtime workspace.\",\"impact\":\"A known-vulnerable Rust dependency in the shipped Tauri app binary passes both the local security-hardening gate and CI undetected, because cargo audit is only pointed at runtime/Cargo.lock. The desktop tree is license-enumerated (cargo about) but never advisory-scanned.\",\"evidence\":\"cargo audit is invoked exactly twice, both against runtime only: scripts/test_security_hardening.sh:9 and .github/workflows/ci.yml:115, each 'cargo audit --file runtime/Cargo.lock'. No cargo audit invocation targets desktop/src-tauri/Cargo.lock, which is a distinct checksum-pinned graph (desktop/src-tauri/Cargo.lock:2956 tauri 2.11.5).\",\"remediation\":\"Add 'cargo audit --file desktop/src-tauri/Cargo.lock' alongside the existing runtime invocation in both scripts/test_security_hardening.sh and the CI dependency-audit job.\",\"confidence\":\"high\"}],\"confirmed_invariants\":[\"Lockfiles present and registry-pinned; runtime/Cargo.lock, desktop/src-tauri/Cargo.lock, desktop/package-lock.json all exist; no git/floating sources (grep for git+/source=git and ^/~ npm ranges: no matches); wasmtime pinned '=47.0.3' runtime/Cargo.toml:29-30 and locked runtime/Cargo.lock:1613-1616; tauri locked desktop/src-tauri/Cargo.lock:2956-2959\",\"npm audit gated with set -euo pipefail in scripts/test_security_hardening.sh:10-13 and .github/workflows/ci.yml:116; tool versions pinned .github/workflows/ci.yml:108-111 (rust 1.94.0, cargo-audit 0.22.1 --locked, cargo-about 0.9.2 --locked)\",\"CI actions pinned by commit SHA (.github/workflows/ci.yml checkout@11d5960a... , setup-node@49933ea...); top-level permissions: contents: read (.github/workflows/ci.yml:8-9); trigger on: pull_request not pull_request_target (.github/workflows/ci.yml:4-6)\",\"Third-party notices/SBOM generated from LOCKED deps for both runtime and desktop via 'cargo about ... --locked --fail' (scripts/package_release.sh; .github/workflows/ci.yml:118-135) feeding scripts/generate_third_party_notices.py, with tests/integration/test_third_party_notices.py present and run in CI (.github/workflows/ci.yml:46)\",\"Minimal release feature surface: tauri features=[] desktop/src-tauri/Cargo.toml:14, tauri-build features=[] :9; grep devtools/inspector/withGlobalTauri across desktop/src-tauri: no matches; wasmtime default-features=false minimal features runtime/Cargo.toml:29\"],\"verdict\":\"GAPS\"}",
+  "findings": [
+    {
+      "rule_id": "DEP-01",
+      "title": "Desktop Tauri Rust dependency tree is not advisory-scanned by cargo audit",
+      "summary": "cargo audit runs only against runtime/Cargo.lock in both the local security-hardening gate and CI; the shipped desktop bridge's Rust dependency graph (desktop/src-tauri/Cargo.lock) is license-enumerated but never checked for RUSTSEC advisories.",
+      "severity": "medium",
+      "confidence": "high",
+      "category": "advisory-scanning-coverage",
+      "locations": [
+        {
+          "path": ".github/workflows/ci.yml",
+          "start_line": 115,
+          "role": "CI advisory audit — runtime-only cargo audit"
+        },
+        {
+          "path": "scripts/test_security_hardening.sh",
+          "start_line": 9,
+          "role": "security-hardening gate — runtime-only cargo audit"
+        },
+        {
+          "path": "desktop/src-tauri/Cargo.lock",
+          "start_line": 2956,
+          "role": "unscanned shipped dependency (tauri 2.11.5)"
+        }
+      ],
+      "cwe": [
+        "CWE-1104"
+      ],
+      "evidence": [
+        {
+          "label": "cargo audit scope",
+          "explanation": "Both cargo audit invocations target only runtime/Cargo.lock; no invocation references desktop/src-tauri/Cargo.lock.",
+          "excerpt": "ci.yml:115 cargo audit --file runtime/Cargo.lock; test_security_hardening.sh:9 cargo audit --file runtime/Cargo.lock"
+        },
+        {
+          "label": "desktop tree is distinct and pinned",
+          "explanation": "desktop/src-tauri/Cargo.lock is a separate checksum-pinned graph (tauri 2.11.5 etc.) that only cargo about (licenses), not cargo audit (advisories), processes.",
+          "excerpt": "desktop/src-tauri/Cargo.lock:2956 name = \"tauri\" version = \"2.11.5\""
+        }
+      ],
+      "optionalProperties": {}
+    }
+  ],
+  "reviewed_paths": [
+    "runtime/Cargo.toml",
+    "desktop/src-tauri/Cargo.toml",
+    "runtime/Cargo.lock",
+    "desktop/src-tauri/Cargo.lock",
+    "desktop/package-lock.json",
+    "scripts/test_security_hardening.sh",
+    ".github/workflows/ci.yml",
+    "scripts/package_release.sh",
+    "scripts/generate_third_party_notices.py",
+    "tests/integration/test_third_party_notices.py",
+    "desktop/src-tauri/tauri.release.conf.json"
+  ]
+}

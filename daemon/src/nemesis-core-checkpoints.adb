@@ -18,8 +18,31 @@ package body Nemesis.Core.Checkpoints with SPARK_Mode => Off is
    Line_Length : constant Positive := 240;
    File_Length : constant Positive := 241;
 
-   function Fsync (FD : Interfaces.C.int) return Interfaces.C.int
-   with Import, Convention => C, External_Name => "fsync";
+   --  macOS fsync() does not flush to stable storage; F_FULLFSYNC does.
+   F_FULLFSYNC : constant Interfaces.C.int := 51;
+   O_RDONLY : constant Interfaces.C.int := 0;
+
+   function Fcntl (FD : Interfaces.C.int; Cmd : Interfaces.C.int)
+     return Interfaces.C.int
+   with Import, Convention => C, External_Name => "fcntl";
+
+   function C_Open (Path : Interfaces.C.char_array; Flags : Interfaces.C.int)
+     return Interfaces.C.int
+   with Import, Convention => C, External_Name => "open";
+
+   function C_Close (FD : Interfaces.C.int) return Interfaces.C.int
+   with Import, Convention => C, External_Name => "close";
+
+   procedure Full_Sync_Directory (Dir : String) is
+      FD : Interfaces.C.int;
+      Ignore : Interfaces.C.int;
+   begin
+      FD := C_Open (Interfaces.C.To_C (Dir), O_RDONLY);
+      if FD >= 0 then
+         Ignore := Fcntl (FD, F_FULLFSYNC);
+         Ignore := C_Close (FD);
+      end if;
+   end Full_Sync_Directory;
 
    function Is_Hex (Value : Digest_Hex) return Boolean is
    begin
@@ -206,7 +229,7 @@ package body Nemesis.Core.Checkpoints with SPARK_Mode => Off is
             Result := Checkpoint_Write_Failed;
             return;
          end if;
-         if Fsync (Interfaces.C.int (FD)) /= 0 then
+         if Fcntl (Interfaces.C.int (FD), F_FULLFSYNC) /= 0 then
             GNAT.OS_Lib.Close (FD, Close_OK);
             Result := Checkpoint_Sync_Failed;
             return;
@@ -221,6 +244,7 @@ package body Nemesis.Core.Checkpoints with SPARK_Mode => Off is
             Result := Checkpoint_Rename_Failed;
             return;
          end if;
+         Full_Sync_Directory (Ada.Directories.Containing_Directory (Path));
          Checkpoint_Digest := Hash;
          Result := Checkpoint_Committed;
       end;

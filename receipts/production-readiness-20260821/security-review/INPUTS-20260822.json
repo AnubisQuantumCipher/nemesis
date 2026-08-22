@@ -1,0 +1,90 @@
+{
+  "authorizing_contract": {
+    "path": "receipts/production-readiness-20260821/trust-surface/TS_CONTINUATION_CONTRACT_2026-08-22.md",
+    "sha256": "920900f3a7d37a9a3e1d51541997070789a0e1e7bddecf31808076c67a00d3f9"
+  },
+  "brief": "receipts/production-readiness-20260821/security-review/BRIEF-20260822.md",
+  "changed_files_baseline_to_subject": [
+    "CHANGELOG.md",
+    "README.md",
+    "config/formal-kernel-scope.json",
+    "daemon/src/nemesis-core-authority_store.adb",
+    "daemon/src/nemesis-core-authority_store.ads",
+    "daemon/src/nemesis_core_daemon.adb",
+    "daemon/tests/nemesis_authority_store_tests.adb",
+    "desktop/package-lock.json",
+    "desktop/package.json",
+    "desktop/src-tauri/Cargo.lock",
+    "desktop/src-tauri/Cargo.toml",
+    "desktop/src-tauri/src/mission_runner.rs",
+    "desktop/src-tauri/tauri.conf.json",
+    "desktop/src/App.test.tsx",
+    "desktop/src/components/AuthorityReview.tsx",
+    "docs/architecture/FORMAL_ASSURANCE.md",
+    "docs/release/SOURCE_INSTALL.md",
+    "docs/verification/COMPETITIVE_MATRIX.md",
+    "kernel/src/nemesis-kernel-capabilities.adb",
+    "kernel/src/nemesis-kernel-capabilities.ads",
+    "kernel/tests/nemesis_authority_tests.adb",
+    "nemesis.gpr",
+    "protocols/local-core-v1.md",
+    "receipts/production-readiness-20260821/AUTHORITY_ABA.json",
+    "receipts/production-readiness-20260821/FORMAL_KERNEL.json",
+    "receipts/production-readiness-20260821/PROOF_ABA.json",
+    "receipts/production-readiness-20260821/authority-aba/A.log",
+    "receipts/production-readiness-20260821/authority-aba/A2.log",
+    "receipts/production-readiness-20260821/authority-aba/B.log",
+    "receipts/production-readiness-20260821/proof-aba/A.log",
+    "receipts/production-readiness-20260821/proof-aba/A2.log",
+    "receipts/production-readiness-20260821/proof-aba/B.log",
+    "receipts/production-readiness-20260821/trust-surface/TS_CONTINUATION_CONTRACT_2026-08-22.md",
+    "scripts/generate_phase16_receipt.py",
+    "scripts/run_vertical_slice.py",
+    "scripts/test_authority.sh",
+    "scripts/test_storage.sh",
+    "scripts/validate_production_readiness.py",
+    "scripts/verify_authority_aba.py",
+    "scripts/verify_install_contract.py",
+    "scripts/verify_kernel_proof.py",
+    "scripts/verify_phase16_receipt.py",
+    "scripts/verify_proof_aba.py",
+    "tests/integration/test_daemon_api.py",
+    "tests/integration/test_production_readiness.py",
+    "tests/phase0/test_kernel_proof_manifest.py"
+  ],
+  "formal_report": {
+    "path": "receipts/production-readiness-20260821/FORMAL_KERNEL.json",
+    "sha256": "8fca1216aab3d714b0367ca1ec269dbe2124d35037f3be31f08e2e94c1344016"
+  },
+  "formal_scope": {
+    "path": "config/formal-kernel-scope.json",
+    "sha256": "d283198f3a3c7b6ed43c9e63374ce75ca1e197b479db47c45b99d1de7c96b20f"
+  },
+  "frozen_at": "2026-08-22T14:09:25.725581Z",
+  "gate_artifacts": [
+    {
+      "path": "receipts/production-readiness-20260821/AUTHORITY_ABA.json",
+      "sha256": "0c03402b94df52959f1d3967cadcbc3b29d2f8e1bb784610575a482aeeb4bb89"
+    },
+    {
+      "path": "receipts/production-readiness-20260821/PROOF_ABA.json",
+      "sha256": "53f925ed6127a86289ea943dd7815a1cfd14b2a09a8d5b7c402cc8d2b9879487"
+    },
+    {
+      "path": "receipts/phase-16-public/PHASE16.json",
+      "sha256": "0de52b82cc4d5444227c03a418f84d17d0d950564a524627d9b7fd043415c86f"
+    }
+  ],
+  "note": "Reviewers receive the exact source hash and receipt artifacts, not lead reasoning. TS-001/TS-002 are implemented in this epoch and are review subjects, not residuals.",
+  "schema": "nemesis.security-review-inputs/v1",
+  "subject": {
+    "baseline": "4f0f387923545d994fc1f3e93ee3208f0f04ff77",
+    "branch": "production/desktop-v1-autonomous-recovery",
+    "commit": "9dd22f259d164ebb1afde3b8940a891161cad3f6",
+    "tree": "1532c116b1e2bf9ee23c38f159a615769f34f802"
+  },
+  "trust_surface_resolutions": [
+    "TS-001",
+    "TS-002"
+  ]
+}

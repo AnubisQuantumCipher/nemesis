@@ -1,0 +1,32 @@
+2026-08-22T02:12:14Z RESUME_BASELINE_RUN date=2026-08-22T06:12:14Z cwd=/Users/sicarii/Worktrees/nemesis-desktop-production-recovered head=f36d84b267af73bc559b89a76ce6c9a6c57bb770 tree=88f83b2e4aa52176bc104e1fa1596b9fa04e5cd4 session=fable5-resume-20260822
+2026-08-22T02:12:14Z PASS_CONTRACT_INTEGRITY sha256=ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e0d8beebee532779 bytes=77321 lines=2188
+2026-08-22T02:12:14Z PASS_PRODUCTION_CONTRACT sha256=2485cd682cdedfeb0bfd13ce2aabd51194c72204495de0c12058631cb7c92c87 bytes=26694 lines=320 words=3417
+2026-08-22T02:12:14Z PASS_RELEASE_CONTRACT sha256=8f62d762c30849ec6841b0fbde87004ced41365b456c98c79f6f1bf53c347ccc bytes=12735 lines=137
+2026-08-22T02:12:14Z test_desktop_qa_receipt_is_covered_by_manifest (tests.integration.test_evidence_bundle.EvidenceBundleTests) ... ok
+2026-08-22T02:12:15Z test_unlisted_artifact_is_rejected (tests.integration.test_evidence_bundle.EvidenceBundleTests) ... ok
+2026-08-22T02:12:15Z test_private_absolute_rpaths_are_selected_for_removal (tests.integration.test_macho_sanitizer.MachOSanitizerTests) ... ok
+2026-08-22T02:12:15Z test_gate_metadata_requires_every_terminal_sentinel (tests.integration.test_phase16_receipt_generation.Phase16ReceiptGenerationTests) ... ok
+2026-08-22T02:12:15Z test_generator_runs_as_a_script (tests.integration.test_phase16_receipt_generation.Phase16ReceiptGenerationTests) ... ok
+2026-08-22T02:12:15Z test_receipt_verifies_when_clone_has_a_git_remote (tests.integration.test_phase16_public_verification.Phase16PublicVerificationTests) ... FAIL
+2026-08-22T02:12:15Z test_release_config_bundles_complete_standalone_runtime (tests.integration.test_release_bundle.ReleaseBundleTests) ... ok
+2026-08-22T02:12:15Z test_release_contract_with_private_paths_is_not_bundled (tests.integration.test_release_bundle.ReleaseBundleTests) ... ok
+2026-08-22T02:12:15Z test_private_build_path_and_token_are_rejected (tests.integration.test_release_leaks.ReleaseLeakTests) ... ok
+2026-08-22T02:12:15Z test_manifest_derives_asset_identity_from_bytes (tests.integration.test_release_manifest.ReleaseManifestTests) ... ok
+2026-08-22T02:12:15Z test_prebuilt_layout_resolves_every_backend_executable (tests.integration.test_release_runtime.ReleaseRuntimeTests) ... ok
+2026-08-22T02:12:15Z test_exact_contract_passes_and_one_byte_tamper_rejects (tests.phase0.test_production_contract.ProductionContractTests) ... ok
+2026-08-22T02:12:15Z test_notices_include_shipped_cargo_and_npm_license_texts (tests.integration.test_third_party_notices.ThirdPartyNoticesTests) ... ok
+2026-08-22T02:12:15Z 
+2026-08-22T02:12:15Z ======================================================================
+2026-08-22T02:12:15Z FAIL: test_receipt_verifies_when_clone_has_a_git_remote (tests.integration.test_phase16_public_verification.Phase16PublicVerificationTests)
+2026-08-22T02:12:15Z ----------------------------------------------------------------------
+2026-08-22T02:12:15Z Traceback (most recent call last):
+2026-08-22T02:12:15Z   File "/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/tests/integration/test_phase16_public_verification.py", line 23, in test_receipt_verifies_when_clone_has_a_git_remote
+2026-08-22T02:12:15Z     self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+2026-08-22T02:12:15Z AssertionError: 1 != 0 : FAIL_PHASE16_RECEIPT covered_source_changed=['config/formal-kernel-scope.json', 'desktop/src-tauri/Cargo.lock', 'desktop/src-tauri/Cargo.toml', 'desktop/src-tauri/src/lib.rs', 'desktop/src-tauri/src/main.rs', 'desktop/src-tauri/src/mission_runner.rs', 'desktop/src-tauri/src/production.rs', 'desktop/src-tauri/tauri.release.conf.json', 'desktop/src-tauri/tests/mission_execution.rs', 'desktop/src-tauri/tests/production_mission.rs', 'desktop/src/App.test.tsx', 'desktop/src/App.tsx', 'desktop/src/components/AuthorityReview.tsx', 'desktop/src/components/EvidencePanel.tsx', 'desktop/src/components/MissionCockpit.tsx', 'desktop/src/components/ReplayPanel.tsx', 'desktop/src/components/SettingsPanel.tsx', 'desktop/src/components/Sidebar.tsx', 'desktop/src/data/navigation.ts', 'desktop/src/lib/bridge.ts', 'desktop/src/styles.css', 'kernel/src/nemesis-kernel-capabilities.ads', 'protocols/schemas/nemesis.desktop-mission.v1.schema.json', 'scripts/prove_kernel.sh']
+2026-08-22T02:12:15Z 
+2026-08-22T02:12:15Z 
+2026-08-22T02:12:15Z ----------------------------------------------------------------------
+2026-08-22T02:12:15Z Ran 13 tests in 0.188s
+2026-08-22T02:12:15Z 
+2026-08-22T02:12:15Z FAILED (failures=1)
+2026-08-22T02:12:15Z VERIFY_COMPLETE_EXIT_STATUS=1

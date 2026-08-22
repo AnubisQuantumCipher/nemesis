@@ -1,0 +1,167 @@
+{
+  "coverage_summary": "LANE release-integrity (nemesis.hardening-audit.result/v1). subject_commit=fb321bb2320c8002032580bc44b04773c7e18cff. VERDICT=CLEAN (all 5 checked invariants CONFIRMED; only low/informational residuals, none >= medium). Static-only review; verifier control flow read from bytes, not executed. Reviewer: isolated subagent, model anthropic/claude-opus-4-8.\n\nCOVERAGE (invariant -> status):\n1. Evidence/receipt verifiers reject stale/missing/unlisted/digest-mismatched artifacts -> CONFIRMED. verify_evidence_bundle.py:75-77 rejects any file outside the ARTIFACTS+OPTIONAL allowlist; :83-85 recomputes a manifest of live bytes and requires it to byte-equal committed MANIFEST.json (catches stale/mismatched digests). architect_contract_sha256 is a constant enforced against the committed manifest; contract.json is a distinct per-bundle artifact (phase-6 sha 959ae506 != architect ebebe1a7) whose own digest is recorded, so there is no false contract-pin. verify_phase16_receipt.py:98-116 pins the architect contract by sha256+bytes+lines from disk AND from claim; :163 requires artifact set==EXPECTED; :166-174 rejects absolute/.. artifact paths and recomputes every SHA-256. verify_release_contract.py:15-33 and verify_production_contract.py:15-46 pin contract sha256+bytes+lines(+words). verify_kernel_proof.py:92-116 fails on zero obligations/any unproved/scope drift/warnings/assumptions/timeout, and :318-330 rejects symlink/empty/oversized summaries with strict duplicate-key JSON. verify_proof_aba.py:110-154 runs a real A->B->A calibration: baseline PASS, single-byte mutation must FAIL for a postcondition reason, bytes restored, A2 PASS, subject tree unchanged -- so a receipt cannot pass on zero work.\n2. Source/commit/tree binding enforced -> CONFIRMED. verify_phase16_receipt.py:145 (subject commit exists), :147 (ancestor of HEAD), :149-151 (subject_tree match), :152-160 (git diff subject..HEAD over COVERED_PATHS empty), :220-227 (git status clean over COVERED_PATHS). Contract SHA pins as above; release_manifest.py:36-64 pins desktop+release contract SHAs and derives asset identity from bytes.\n3. Release archive excludes private paths/usernames/debug servers/mutable scripts -> CONFIRMED. package_release.sh:31-32 RUSTFLAGS --remap-path-prefix rewrites $ROOT and $HOME at compile; :103 sanitize_macho, :108 strip -x, :110 check_release_leaks all run before ditto (:131). sanitize_macho.py:57-74 deletes /Users and /private/tmp RPATHs, re-checks none remain, rejects non-system dylib deps. check_release_leaks.py:11-24 rejects /Users, /private/tmp, GitHub tokens, PEM keys. tauri.release.conf.json:8-19 ships only backend binaries + one mission doc + LICENSE + notices (no scripts, no devUrl); Cargo.toml tauri features=[] (no devtools/inspector in release); identifier overridden to com.anubisquantumcipher.nemesis. test_release_bundle.py:30-45 asserts the resources map exactly and that the private-path release-contract doc is NOT bundled; test_release_leaks.py / test_macho_sanitizer.py / test_release_runtime.py exercise the scrubbers.\n4. Shell gate scripts injection-safe + set -euo pipefail -> CONFIRMED. Every scripts/*.sh sets `set -euo pipefail` (package_release.sh:2); no eval, no curl|sh/wget anywhere in scripts/ (repo-wide grep); package_release.sh quotes all expansions and validates VERSION with a regex (:8) that forbids shell metacharacters, and refuses dirty worktree (:16-18) and version drift (:24-28).\n5. CI pins actions and does not evaluate untrusted input -> CONFIRMED. ci.yml:9 permissions contents:read; actions pinned by full commit SHA (checkout 11d5960a @:23/:64/:98, setup-node 49933ea5); trigger is pull_request (not pull_request_target); no ${{ github.event.* }}/head_ref interpolation into any run: block; toolchains pinned (rust 1.94.0, node 22, cargo-audit 0.22.1, cargo-about 0.9.2); all release regression tests + contract/evidence verifiers are gated in the contract-evidence job.\n\nRESIDUALS (all < medium): REL-01 (low) phase-16 gate-log evidence self-attested when receipt omits epoch; REL-02 (informational) package_release.sh resolves most build tools via PATH not fixed paths; REL-03 (informational) leak scan omits /var/folders and shipped text resources. Architect-gated residuals TS-001/TS-002 not re-litigated.",
+  "findings": [
+    {
+      "rule_id": "REL-01",
+      "title": "Phase-16 gate-execution evidence is self-attested when the receipt omits `epoch`",
+      "summary": "verify_phase16_receipt.py gates the byte verification of the security-hardening gate log (log sha256/bytes/line_count, presence of every expected sentinel, absence of FAIL_/FATAL_/REFUSED_ markers) and the release_contract pin behind `if epoch is not None`. The committed receipts/phase-16/PHASE16.json has no `epoch` key, so gate.status==PASS and gate.sentinels are trusted from the receipt JSON without any on-disk log proving the disposable-guest run actually passed. Source/commit/tree binding and per-artifact SHA-256 checks remain enforced unconditionally, so only the gate-execution outcome is unproven.",
+      "severity": "low",
+      "confidence": "high",
+      "category": "receipt-evidence-self-attestation",
+      "locations": [
+        {
+          "path": "scripts/verify_phase16_receipt.py",
+          "start_line": 184,
+          "end_line": 202,
+          "role": "gate-log verification guarded by epoch"
+        },
+        {
+          "path": "scripts/verify_phase16_receipt.py",
+          "start_line": 117,
+          "end_line": 141,
+          "role": "epoch read + conditional release_contract pin"
+        },
+        {
+          "path": "receipts/phase-16/PHASE16.json",
+          "start_line": 53,
+          "end_line": 73,
+          "role": "committed receipt with no epoch; gate result self-declared"
+        }
+      ],
+      "cwe": [
+        "CWE-345"
+      ],
+      "evidence": [
+        {
+          "label": "epoch conditional",
+          "explanation": "Line 117 reads epoch = data.get(\"epoch\"); both the release_contract identity block (line 118) and the gate-log block (line 184) run only `if epoch is not None:`. A no-epoch receipt skips both.",
+          "excerpt": "epoch = data.get(\"epoch\")  ...  if epoch is not None:  (gate log block)"
+        },
+        {
+          "label": "committed receipt omits epoch",
+          "explanation": "grep of receipts/phase-16/PHASE16.json shows schema/status/repository/gate but no `epoch` or `release_contract` keys, so the weaker path is what actually executes for the shipped receipt.",
+          "excerpt": "\"gate\": { \"command\": ..., \"sentinels\": [...], \"status\": \"PASS\" }  (no epoch/log fields)"
+        },
+        {
+          "label": "receipt not covered-source",
+          "explanation": "COVERED_PATHS excludes receipts/, so editing PHASE16.json does not trip the covered-source diff (:152-160) or dirty-source guard (:220-227); the gate outcome is therefore not otherwise re-checked.",
+          "excerpt": "COVERED_PATHS = [runtime, kernel, daemon, desktop, ... docs/verification/PHASE16_SECURITY_REVIEW.md]"
+        }
+      ],
+      "optionalProperties": {
+        "id": "REL-01",
+        "precondition": "A phase-16 receipt with no top-level `epoch` field is verified (true for the committed PHASE16.json).",
+        "impact": "The security-hardening gate can be marked PASS/VERIFIED from receipt JSON alone, without a byte-verified log demonstrating the disposable-guest run passed.",
+        "remediation": "Make gate-log byte verification (log identity + all EXPECTED_SENTINELS present + no FAIL_/FATAL_/REFUSED_ markers) unconditional, or refuse status:VERIFIED unless epoch and a byte-verified gate.log are present."
+      }
+    },
+    {
+      "rule_id": "REL-02",
+      "title": "package_release.sh resolves most build tools via PATH rather than fixed paths",
+      "summary": "The release packaging script pins only /usr/bin/xattr (and sanitize_macho.py pins /usr/bin/otool + /usr/bin/install_name_tool) but resolves cargo, npm, node, python3, strip, codesign, lipo, plutil, ditto, shasum and git by bare name via PATH. This is a partial deviation from the documented 'fixed tool paths' accept condition. All other injection vectors are closed (no eval, no curl|sh, quoted expansions, regex-validated VERSION, clean-worktree required), so risk is limited to a maintainer with an attacker-influenced PATH.",
+      "severity": "informational",
+      "confidence": "high",
+      "category": "tool-path-resolution",
+      "locations": [
+        {
+          "path": "scripts/package_release.sh",
+          "start_line": 39,
+          "end_line": 138,
+          "role": "bare-name tool invocations"
+        }
+      ],
+      "cwe": [
+        "CWE-426"
+      ],
+      "evidence": [
+        {
+          "label": "bare-name tools",
+          "explanation": "cargo/npm/python3/node (:39-71), codesign (:112-113), lipo (:117), plutil (:110), ditto (:131), shasum (:138) are all invoked by name; only /usr/bin/xattr (:80) is absolute. Contrast the fixed-path subprocess calls in sanitize_macho.py:57-63.",
+          "excerpt": "codesign --force --deep --sign - \"$APP\"; lipo -archs \"$BINARY\"; ditto -c -k ...; shasum -a 256 -c SHA256SUMS"
+        }
+      ],
+      "optionalProperties": {
+        "id": "REL-02",
+        "precondition": "Attacker can prepend a directory to PATH in the maintainer's release shell.",
+        "impact": "A shadowing binary earlier in PATH could run during packaging; documented 'fixed tool paths' invariant only partially met.",
+        "remediation": "Pin absolute paths for the OS-provided tools (strip, codesign, lipo, plutil, ditto, shasum) or set a validated PATH as verify_kernel_proof.py does."
+      }
+    },
+    {
+      "rule_id": "REL-03",
+      "title": "Release leak scan omits /var/folders temp root and non-binary shipped resources",
+      "summary": "check_release_leaks scans only the eight Mach-O binaries passed by package_release.sh, and only for /Users, /private/tmp, GitHub tokens and PEM keys. It does not cover /var/folders (the default macOS TMPDIR) nor the non-binary bundled resources (mission doc, Info.plist, THIRD_PARTY_NOTICES.txt, LICENSE) that ditto archives. Primary defenses hold (RUSTFLAGS --remap-path-prefix and sanitize_macho), so this is defense-in-depth breadth, not a confirmed leak.",
+      "severity": "informational",
+      "confidence": "medium",
+      "category": "leak-scan-scope",
+      "locations": [
+        {
+          "path": "scripts/check_release_leaks.py",
+          "start_line": 11,
+          "end_line": 24,
+          "role": "leak patterns"
+        },
+        {
+          "path": "scripts/package_release.sh",
+          "start_line": 98,
+          "end_line": 131,
+          "role": "only RELEASE_BINARIES scanned before ditto archives whole app"
+        }
+      ],
+      "cwe": [
+        "CWE-200"
+      ],
+      "evidence": [
+        {
+          "label": "pattern scope",
+          "explanation": "PATTERNS cover /Users/ and /private/tmp/ but not /var/folders/, where macOS build temp dirs live by default.",
+          "excerpt": "(\"private_user_path\", re.compile(rb\"/Users/[^/\\x00\\s]+\")), (\"private_temp_path\", re.compile(rb\"/private/tmp/[^\\x00\\s]+\"))"
+        },
+        {
+          "label": "target scope",
+          "explanation": "package_release.sh passes only RELEASE_BINARIES to the scanner (:110), while ditto (:131) archives the whole .app including the text resources declared in tauri.release.conf.json:8-19.",
+          "excerpt": "python3 scripts/check_release_leaks.py \"${RELEASE_BINARIES[@]}\" ... ditto -c -k --sequesterRsrc --keepParent \"$APP\""
+        }
+      ],
+      "optionalProperties": {
+        "id": "REL-03",
+        "precondition": "A private path/secret appears outside the scanned patterns or in a shipped text resource.",
+        "impact": "Such a leak would not be caught by the release gate.",
+        "remediation": "Add a /var/folders/[^\\x00\\s]+ pattern and extend the scan (or an explicit assertion) to the shipped text resources before archiving."
+      }
+    }
+  ],
+  "reviewed_paths": [
+    "scripts/verify_evidence_bundle.py",
+    "scripts/verify_phase16_receipt.py",
+    "scripts/verify_release_contract.py",
+    "scripts/verify_production_contract.py",
+    "scripts/verify_kernel_proof.py",
+    "scripts/verify_proof_aba.py",
+    "scripts/package_release.sh",
+    "scripts/sanitize_macho.py",
+    "scripts/check_release_leaks.py",
+    "scripts/release_manifest.py",
+    "tests/integration/test_release_leaks.py",
+    "tests/integration/test_macho_sanitizer.py",
+    "tests/integration/test_release_bundle.py",
+    "tests/integration/test_release_runtime.py",
+    "tests/integration/test_release_manifest.py",
+    "desktop/src-tauri/tauri.release.conf.json",
+    "desktop/src-tauri/tauri.conf.json",
+    "desktop/src-tauri/Cargo.toml",
+    ".github/workflows/ci.yml",
+    "receipts/phase-16/PHASE16.json",
+    "receipts/phase-6/MANIFEST.json",
+    "receipts/production-readiness-20260821/security-review/BRIEF.md"
+  ],
+  "deferred": [
+    {
+      "reason": "Architect-gated residuals excluded from scope by BRIEF ground rule 5; noted only for interaction.",
+      "paths": [
+        "config/formal-kernel-scope.json",
+        "docs/architecture/FORMAL_ASSURANCE.md"
+      ]
+    }
+  ]
+}

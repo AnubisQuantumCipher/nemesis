@@ -1,0 +1,2 @@
+PASS_KERNEL_PROOF_ABA A=0 B=nonzero A2=0 bytes_restored=true
+PROOF_ABA_EXIT_STATUS=0

@@ -52,6 +52,8 @@ GIT = Path("/usr/bin/git")
 
 MISSION_ID = "mis_0000000000000000000000"
 WORKER_ID = "wrk_0000000000000000000000"
+GRANT_ID = "cap_" + MISSION_ID[4:]
+APPROVAL_ID = "apr_" + MISSION_ID[4:]
 
 
 def run(command: list[str | Path], *, cwd: Path | None = None) -> subprocess.CompletedProcess[bytes]:
@@ -250,6 +252,21 @@ def main() -> int:
                     contract_digest=contract_digest,
                 )
             )
+            expect(
+                core.request(
+                    "create_grant",
+                    mission_id=MISSION_ID,
+                    grant_id=GRANT_ID,
+                )
+            )
+            expect(
+                core.request(
+                    "create_approval",
+                    mission_id=MISSION_ID,
+                    approval_id=APPROVAL_ID,
+                    action_digest=action_digest,
+                )
+            )
             expect(core.request("run", mission_id=MISSION_ID))
 
             worker = run(
@@ -300,6 +317,19 @@ def main() -> int:
             recovered = expect(core.request("inspect", mission_id=MISSION_ID))
             if recovered["sequence"] != sequence_before_restart or recovered["state"] != "RUNNING":
                 raise RuntimeError("Core did not recover the acknowledged mission state")
+
+            replayed = core.request(
+                "authorize_action",
+                mission_id=MISSION_ID,
+                worker_id=WORKER_ID,
+                scope_digest=scope_digest,
+                action_digest=action_digest,
+                estimated_bytes=len(desired),
+            )
+            if replayed.get("status") != "REFUSED" or replayed.get("reason") != "approval_replayed":
+                raise RuntimeError(
+                    f"one-shot approval was not durably consumed: {replayed}"
+                )
 
             (lane / "value.txt").write_bytes(desired)
             final_source = source_digest(repo, lane)

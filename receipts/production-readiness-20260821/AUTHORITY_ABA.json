@@ -1,0 +1,51 @@
+{
+  "gate": {
+    "build": "./scripts/build_ada.sh",
+    "test": "python3 -m unittest tests.integration.test_daemon_api.DaemonApiTests.test_authority_is_persisted_one_shot_and_fail_closed"
+  },
+  "mutation": {
+    "expected_reason": "hostile daemon API test rejects replayed-approval acceptance",
+    "landed_in_subject": false,
+    "new": "if Consume_Result not in Approval_Accepted | Approval_Replayed then",
+    "old": "if Consume_Result /= Approval_Accepted then",
+    "path": "daemon/src/nemesis_core_daemon.adb"
+  },
+  "observed_at": "2026-08-22T14:33:23.930297Z",
+  "restoration": {
+    "copy_inventory_equal": true,
+    "subject_inventory_equal": true,
+    "temporary_copy_removed": true
+  },
+  "runs": {
+    "A": {
+      "bytes": 208,
+      "exit_status": 0,
+      "lines": 6,
+      "path": "receipts/production-readiness-20260821/authority-aba/A.log",
+      "sha256": "b9dd46de275ab9e42400e3d2eb7ffdfa7ca4fd1331e68625d4c7732cba9d5b7c"
+    },
+    "A2": {
+      "bytes": 208,
+      "exit_status": 0,
+      "lines": 6,
+      "path": "receipts/production-readiness-20260821/authority-aba/A2.log",
+      "sha256": "466d72b5162336022a61041666bb193e551d4c9f209d1c822b55f561a90f7283"
+    },
+    "B": {
+      "bytes": 823,
+      "exit_status": 1,
+      "lines": 17,
+      "path": "receipts/production-readiness-20260821/authority-aba/B.log",
+      "sha256": "7425e2509470384359ca8cb80da2fcc0d64331085e305d07e3496ffca4fa71da"
+    }
+  },
+  "schema": "nemesis.authority-aba/v1",
+  "status": "PASS",
+  "subject": {
+    "commit": "18ae66513620da8fa8dc8f917477b9b9c8d44804",
+    "dirty_paths": [],
+    "source_inventory_sha256": "51f17145a863961a632201ce06bbfb626d0588254b1d508faf67dd3bc6b1f2da",
+    "tree": "8a7da1057ae272bf58bc41a0affc777c7e1d449a"
+  },
+  "terminal_marker": "PASS_AUTHORITY_ABA"
+}

@@ -3,6 +3,601 @@ PASS_CONTRACT_INTEGRITY sha256=ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e
       Loaded 1225 security advisories (from /Users/sicarii/.cargo/advisory-db)
     Updating crates.io index
     Scanning runtime/Cargo.lock for vulnerabilities (231 crate dependencies)
+    Fetching advisory database from `https://github.com/RustSec/advisory-db.git`
+      Loaded 1225 security advisories (from /Users/sicarii/.cargo/advisory-db)
+    Updating crates.io index
+    Scanning desktop/src-tauri/Cargo.lock for vulnerabilities (417 crate dependencies)
+Crate:     atk
+Version:   0.18.2
+Warning:   unmaintained
+Title:     gtk-rs GTK3 bindings - no longer maintained
+Date:      2024-03-04
+ID:        RUSTSEC-2024-0413
+URL:       https://rustsec.org/advisories/RUSTSEC-2024-0413
+Dependency tree:
+atk 0.18.2
+└── gtk 0.18.2
+    ├── wry 0.55.1
+    │   └── tauri-runtime-wry 2.11.4
+    │       └── tauri 2.11.5
+    │           └── nemesis-desktop 0.2.0
+    ├── webkit2gtk 2.0.2
+    │   ├── wry 0.55.1
+    │   ├── tauri-runtime-wry 2.11.4
+    │   ├── tauri-runtime 2.11.3
+    │   │   ├── tauri-runtime-wry 2.11.4
+    │   │   └── tauri 2.11.5
+    │   └── tauri 2.11.5
+    ├── tauri-runtime-wry 2.11.4
+    ├── tauri-runtime 2.11.3
+    ├── tauri 2.11.5
+    ├── tao 0.35.3
+    │   └── tauri-runtime-wry 2.11.4
+    ├── muda 0.19.3
+    │   ├── tray-icon 0.24.2
+    │   │   └── tauri 2.11.5
+    │   └── tauri 2.11.5
+    └── libappindicator 0.9.0
+        └── tray-icon 0.24.2
+
+Crate:     atk-sys
+Version:   0.18.2
+Warning:   unmaintained
+Title:     gtk-rs GTK3 bindings - no longer maintained
+Date:      2024-03-04
+ID:        RUSTSEC-2024-0416
+URL:       https://rustsec.org/advisories/RUSTSEC-2024-0416
+Dependency tree:
+atk-sys 0.18.2
+├── gtk-sys 0.18.2
+│   ├── webkit2gtk-sys 2.0.2
+│   │   ├── wry 0.55.1
+│   │   │   └── tauri-runtime-wry 2.11.4
+│   │   │       └── tauri 2.11.5
+│   │   │           └── nemesis-desktop 0.2.0
+│   │   └── webkit2gtk 2.0.2
+│   │       ├── wry 0.55.1
+│   │       ├── tauri-runtime-wry 2.11.4
+│   │       ├── tauri-runtime 2.11.3
+│   │       │   ├── tauri-runtime-wry 2.11.4
+│   │       │   └── tauri 2.11.5
+│   │       └── tauri 2.11.5
+│   ├── webkit2gtk 2.0.2
+│   ├── libappindicator-sys 0.9.0
+│   │   └── libappindicator 0.9.0
+│   │       └── tray-icon 0.24.2
+│   │           └── tauri 2.11.5
+│   ├── libappindicator 0.9.0
+│   └── gtk 0.18.2
+│       ├── wry 0.55.1
+│       ├── webkit2gtk 2.0.2
+│       ├── tauri-runtime-wry 2.11.4
+│       ├── tauri-runtime 2.11.3
+│       ├── tauri 2.11.5
+│       ├── tao 0.35.3
+│       │   └── tauri-runtime-wry 2.11.4
+│       ├── muda 0.19.3
+│       │   ├── tray-icon 0.24.2
+│       │   └── tauri 2.11.5
+│       └── libappindicator 0.9.0
+└── atk 0.18.2
+    └── gtk 0.18.2
+
+Crate:     gdk
+Version:   0.18.2
+Warning:   unmaintained
+Title:     gtk-rs GTK3 bindings - no longer maintained
+Date:      2024-03-04
+ID:        RUSTSEC-2024-0412
+URL:       https://rustsec.org/advisories/RUSTSEC-2024-0412
+Dependency tree:
+gdk 0.18.2
+├── webkit2gtk 2.0.2
+│   ├── wry 0.55.1
+│   │   └── tauri-runtime-wry 2.11.4
+│   │       └── tauri 2.11.5
+│   │           └── nemesis-desktop 0.2.0
+│   ├── tauri-runtime-wry 2.11.4
+│   ├── tauri-runtime 2.11.3
+│   │   ├── tauri-runtime-wry 2.11.4
+│   │   └── tauri 2.11.5
+│   └── tauri 2.11.5
+├── gtk 0.18.2
+│   ├── wry 0.55.1
+│   ├── webkit2gtk 2.0.2
+│   ├── tauri-runtime-wry 2.11.4
+│   ├── tauri-runtime 2.11.3
+│   ├── tauri 2.11.5
+│   ├── tao 0.35.3
+│   │   └── tauri-runtime-wry 2.11.4
+│   ├── muda 0.19.3
+│   │   ├── tray-icon 0.24.2
+│   │   │   └── tauri 2.11.5
+│   │   └── tauri 2.11.5
+│   └── libappindicator 0.9.0
+│       └── tray-icon 0.24.2
+└── gdkx11 0.18.2
+    └── wry 0.55.1
+
+Crate:     gdk-sys
+Version:   0.18.2
+Warning:   unmaintained
+Title:     gtk-rs GTK3 bindings - no longer maintained
+Date:      2024-03-04
+ID:        RUSTSEC-2024-0418
+URL:       https://rustsec.org/advisories/RUSTSEC-2024-0418
+Dependency tree:
+gdk-sys 0.18.2
+├── webkit2gtk-sys 2.0.2
+│   ├── wry 0.55.1
+│   │   └── tauri-runtime-wry 2.11.4
+│   │       └── tauri 2.11.5
+│   │           └── nemesis-desktop 0.2.0
+│   └── webkit2gtk 2.0.2
+│       ├── wry 0.55.1
+│       ├── tauri-runtime-wry 2.11.4
+│       ├── tauri-runtime 2.11.3
+│       │   ├── tauri-runtime-wry 2.11.4
+│       │   └── tauri 2.11.5
+│       └── tauri 2.11.5
+├── webkit2gtk 2.0.2
+├── gtk-sys 0.18.2
+│   ├── webkit2gtk-sys 2.0.2
+│   ├── webkit2gtk 2.0.2
+│   ├── libappindicator-sys 0.9.0
+│   │   └── libappindicator 0.9.0
+│   │       └── tray-icon 0.24.2
+│   │           └── tauri 2.11.5
+│   ├── libappindicator 0.9.0
+│   └── gtk 0.18.2
+│       ├── wry 0.55.1
+│       ├── webkit2gtk 2.0.2
+│       ├── tauri-runtime-wry 2.11.4
+│       ├── tauri-runtime 2.11.3
+│       ├── tauri 2.11.5
+│       ├── tao 0.35.3
+│       │   └── tauri-runtime-wry 2.11.4
+│       ├── muda 0.19.3
+│       │   ├── tray-icon 0.24.2
+│       │   └── tauri 2.11.5
+│       └── libappindicator 0.9.0
+├── gdkx11-sys 0.18.2
+│   ├── tao 0.35.3
+│   └── gdkx11 0.18.2
+│       └── wry 0.55.1
+├── gdkwayland-sys 0.18.2
+│   └── tao 0.35.3
+└── gdk 0.18.2
+    ├── webkit2gtk 2.0.2
+    ├── gtk 0.18.2
+    └── gdkx11 0.18.2
+
+Crate:     gdkwayland-sys
+Version:   0.18.2
+Warning:   unmaintained
+Title:     gtk-rs GTK3 bindings - no longer maintained
+Date:      2024-03-04
+ID:        RUSTSEC-2024-0411
+URL:       https://rustsec.org/advisories/RUSTSEC-2024-0411
+Dependency tree:
+gdkwayland-sys 0.18.2
+└── tao 0.35.3
+    └── tauri-runtime-wry 2.11.4
+        └── tauri 2.11.5
+            └── nemesis-desktop 0.2.0
+
+Crate:     gdkx11
+Version:   0.18.2
+Warning:   unmaintained
+Title:     gtk-rs GTK3 bindings - no longer maintained
+Date:      2024-03-04
+ID:        RUSTSEC-2024-0417
+URL:       https://rustsec.org/advisories/RUSTSEC-2024-0417
+Dependency tree:
+gdkx11 0.18.2
+└── wry 0.55.1
+    └── tauri-runtime-wry 2.11.4
+        └── tauri 2.11.5
+            └── nemesis-desktop 0.2.0
+
+Crate:     gdkx11-sys
+Version:   0.18.2
+Warning:   unmaintained
+Title:     gtk-rs GTK3 bindings - no longer maintained
+Date:      2024-03-04
+ID:        RUSTSEC-2024-0414
+URL:       https://rustsec.org/advisories/RUSTSEC-2024-0414
+Dependency tree:
+gdkx11-sys 0.18.2
+├── tao 0.35.3
+│   └── tauri-runtime-wry 2.11.4
+│       └── tauri 2.11.5
+│           └── nemesis-desktop 0.2.0
+└── gdkx11 0.18.2
+    └── wry 0.55.1
+        └── tauri-runtime-wry 2.11.4
+
+Crate:     gtk
+Version:   0.18.2
+Warning:   unmaintained
+Title:     gtk-rs GTK3 bindings - no longer maintained
+Date:      2024-03-04
+ID:        RUSTSEC-2024-0415
+URL:       https://rustsec.org/advisories/RUSTSEC-2024-0415
+Dependency tree:
+gtk 0.18.2
+├── wry 0.55.1
+│   └── tauri-runtime-wry 2.11.4
+│       └── tauri 2.11.5
+│           └── nemesis-desktop 0.2.0
+├── webkit2gtk 2.0.2
+│   ├── wry 0.55.1
+│   ├── tauri-runtime-wry 2.11.4
+│   ├── tauri-runtime 2.11.3
+│   │   ├── tauri-runtime-wry 2.11.4
+│   │   └── tauri 2.11.5
+│   └── tauri 2.11.5
+├── tauri-runtime-wry 2.11.4
+├── tauri-runtime 2.11.3
+├── tauri 2.11.5
+├── tao 0.35.3
+│   └── tauri-runtime-wry 2.11.4
+├── muda 0.19.3
+│   ├── tray-icon 0.24.2
+│   │   └── tauri 2.11.5
+│   └── tauri 2.11.5
+└── libappindicator 0.9.0
+    └── tray-icon 0.24.2
+
+Crate:     gtk-sys
+Version:   0.18.2
+Warning:   unmaintained
+Title:     gtk-rs GTK3 bindings - no longer maintained
+Date:      2024-03-04
+ID:        RUSTSEC-2024-0420
+URL:       https://rustsec.org/advisories/RUSTSEC-2024-0420
+Dependency tree:
+gtk-sys 0.18.2
+├── webkit2gtk-sys 2.0.2
+│   ├── wry 0.55.1
+│   │   └── tauri-runtime-wry 2.11.4
+│   │       └── tauri 2.11.5
+│   │           └── nemesis-desktop 0.2.0
+│   └── webkit2gtk 2.0.2
+│       ├── wry 0.55.1
+│       ├── tauri-runtime-wry 2.11.4
+│       ├── tauri-runtime 2.11.3
+│       │   ├── tauri-runtime-wry 2.11.4
+│       │   └── tauri 2.11.5
+│       └── tauri 2.11.5
+├── webkit2gtk 2.0.2
+├── libappindicator-sys 0.9.0
+│   └── libappindicator 0.9.0
+│       └── tray-icon 0.24.2
+│           └── tauri 2.11.5
+├── libappindicator 0.9.0
+└── gtk 0.18.2
+    ├── wry 0.55.1
+    ├── webkit2gtk 2.0.2
+    ├── tauri-runtime-wry 2.11.4
+    ├── tauri-runtime 2.11.3
+    ├── tauri 2.11.5
+    ├── tao 0.35.3
+    │   └── tauri-runtime-wry 2.11.4
+    ├── muda 0.19.3
+    │   ├── tray-icon 0.24.2
+    │   └── tauri 2.11.5
+    └── libappindicator 0.9.0
+
+Crate:     gtk3-macros
+Version:   0.18.2
+Warning:   unmaintained
+Title:     gtk-rs GTK3 bindings - no longer maintained
+Date:      2024-03-04
+ID:        RUSTSEC-2024-0419
+URL:       https://rustsec.org/advisories/RUSTSEC-2024-0419
+Dependency tree:
+gtk3-macros 0.18.2
+└── gtk 0.18.2
+    ├── wry 0.55.1
+    │   └── tauri-runtime-wry 2.11.4
+    │       └── tauri 2.11.5
+    │           └── nemesis-desktop 0.2.0
+    ├── webkit2gtk 2.0.2
+    │   ├── wry 0.55.1
+    │   ├── tauri-runtime-wry 2.11.4
+    │   ├── tauri-runtime 2.11.3
+    │   │   ├── tauri-runtime-wry 2.11.4
+    │   │   └── tauri 2.11.5
+    │   └── tauri 2.11.5
+    ├── tauri-runtime-wry 2.11.4
+    ├── tauri-runtime 2.11.3
+    ├── tauri 2.11.5
+    ├── tao 0.35.3
+    │   └── tauri-runtime-wry 2.11.4
+    ├── muda 0.19.3
+    │   ├── tray-icon 0.24.2
+    │   │   └── tauri 2.11.5
+    │   └── tauri 2.11.5
+    └── libappindicator 0.9.0
+        └── tray-icon 0.24.2
+
+Crate:     proc-macro-error
+Version:   1.0.4
+Warning:   unmaintained
+Title:     proc-macro-error is unmaintained
+Date:      2024-09-01
+ID:        RUSTSEC-2024-0370
+URL:       https://rustsec.org/advisories/RUSTSEC-2024-0370
+Dependency tree:
+proc-macro-error 1.0.4
+├── gtk3-macros 0.18.2
+│   └── gtk 0.18.2
+│       ├── wry 0.55.1
+│       │   └── tauri-runtime-wry 2.11.4
+│       │       └── tauri 2.11.5
+│       │           └── nemesis-desktop 0.2.0
+│       ├── webkit2gtk 2.0.2
+│       │   ├── wry 0.55.1
+│       │   ├── tauri-runtime-wry 2.11.4
+│       │   ├── tauri-runtime 2.11.3
+│       │   │   ├── tauri-runtime-wry 2.11.4
+│       │   │   └── tauri 2.11.5
+│       │   └── tauri 2.11.5
+│       ├── tauri-runtime-wry 2.11.4
+│       ├── tauri-runtime 2.11.3
+│       ├── tauri 2.11.5
+│       ├── tao 0.35.3
+│       │   └── tauri-runtime-wry 2.11.4
+│       ├── muda 0.19.3
+│       │   ├── tray-icon 0.24.2
+│       │   │   └── tauri 2.11.5
+│       │   └── tauri 2.11.5
+│       └── libappindicator 0.9.0
+│           └── tray-icon 0.24.2
+└── glib-macros 0.18.5
+    └── glib 0.18.5
+        ├── webkit2gtk 2.0.2
+        ├── soup3 0.5.0
+        │   ├── wry 0.55.1
+        │   └── webkit2gtk 2.0.2
+        ├── pango 0.18.3
+        │   ├── gtk 0.18.2
+        │   └── gdk 0.18.2
+        │       ├── webkit2gtk 2.0.2
+        │       ├── gtk 0.18.2
+        │       └── gdkx11 0.18.2
+        │           └── wry 0.55.1
+        ├── libappindicator 0.9.0
+        ├── javascriptcore-rs 1.1.2
+        │   ├── wry 0.55.1
+        │   └── webkit2gtk 2.0.2
+        ├── gtk 0.18.2
+        ├── gio 0.18.4
+        │   ├── webkit2gtk 2.0.2
+        │   ├── soup3 0.5.0
+        │   ├── pango 0.18.3
+        │   ├── gtk 0.18.2
+        │   ├── gdkx11 0.18.2
+        │   ├── gdk-pixbuf 0.18.5
+        │   │   ├── gtk 0.18.2
+        │   │   └── gdk 0.18.2
+        │   └── gdk 0.18.2
+        ├── gdkx11 0.18.2
+        ├── gdk-pixbuf 0.18.5
+        ├── gdk 0.18.2
+        ├── cairo-rs 0.18.5
+        │   ├── webkit2gtk 2.0.2
+        │   ├── gtk 0.18.2
+        │   └── gdk 0.18.2
+        └── atk 0.18.2
+            └── gtk 0.18.2
+
+Crate:     unic-char-property
+Version:   0.9.0
+Warning:   unmaintained
+Title:     `unic-char-property` is unmaintained
+Date:      2025-10-18
+ID:        RUSTSEC-2025-0081
+URL:       https://rustsec.org/advisories/RUSTSEC-2025-0081
+Dependency tree:
+unic-char-property 0.9.0
+└── unic-ucd-ident 0.9.0
+    └── urlpattern 0.3.0
+        └── tauri-utils 2.9.3
+            ├── tauri-runtime-wry 2.11.4
+            │   └── tauri 2.11.5
+            │       └── nemesis-desktop 0.2.0
+            ├── tauri-runtime 2.11.3
+            │   ├── tauri-runtime-wry 2.11.4
+            │   └── tauri 2.11.5
+            ├── tauri-macros 2.6.3
+            │   └── tauri 2.11.5
+            ├── tauri-codegen 2.6.3
+            │   └── tauri-macros 2.6.3
+            ├── tauri-build 2.6.3
+            │   ├── tauri 2.11.5
+            │   └── nemesis-desktop 0.2.0
+            └── tauri 2.11.5
+
+Crate:     unic-char-range
+Version:   0.9.0
+Warning:   unmaintained
+Title:     `unic-char-range` is unmaintained
+Date:      2025-10-18
+ID:        RUSTSEC-2025-0075
+URL:       https://rustsec.org/advisories/RUSTSEC-2025-0075
+Dependency tree:
+unic-char-range 0.9.0
+├── unic-ucd-ident 0.9.0
+│   └── urlpattern 0.3.0
+│       └── tauri-utils 2.9.3
+│           ├── tauri-runtime-wry 2.11.4
+│           │   └── tauri 2.11.5
+│           │       └── nemesis-desktop 0.2.0
+│           ├── tauri-runtime 2.11.3
+│           │   ├── tauri-runtime-wry 2.11.4
+│           │   └── tauri 2.11.5
+│           ├── tauri-macros 2.6.3
+│           │   └── tauri 2.11.5
+│           ├── tauri-codegen 2.6.3
+│           │   └── tauri-macros 2.6.3
+│           ├── tauri-build 2.6.3
+│           │   ├── tauri 2.11.5
+│           │   └── nemesis-desktop 0.2.0
+│           └── tauri 2.11.5
+└── unic-char-property 0.9.0
+    └── unic-ucd-ident 0.9.0
+
+Crate:     unic-common
+Version:   0.9.0
+Warning:   unmaintained
+Title:     `unic-common` is unmaintained
+Date:      2025-10-18
+ID:        RUSTSEC-2025-0080
+URL:       https://rustsec.org/advisories/RUSTSEC-2025-0080
+Dependency tree:
+unic-common 0.9.0
+└── unic-ucd-version 0.9.0
+    └── unic-ucd-ident 0.9.0
+        └── urlpattern 0.3.0
+            └── tauri-utils 2.9.3
+                ├── tauri-runtime-wry 2.11.4
+                │   └── tauri 2.11.5
+                │       └── nemesis-desktop 0.2.0
+                ├── tauri-runtime 2.11.3
+                │   ├── tauri-runtime-wry 2.11.4
+                │   └── tauri 2.11.5
+                ├── tauri-macros 2.6.3
+                │   └── tauri 2.11.5
+                ├── tauri-codegen 2.6.3
+                │   └── tauri-macros 2.6.3
+                ├── tauri-build 2.6.3
+                │   ├── tauri 2.11.5
+                │   └── nemesis-desktop 0.2.0
+                └── tauri 2.11.5
+
+Crate:     unic-ucd-ident
+Version:   0.9.0
+Warning:   unmaintained
+Title:     `unic-ucd-ident` is unmaintained
+Date:      2025-10-18
+ID:        RUSTSEC-2025-0100
+URL:       https://rustsec.org/advisories/RUSTSEC-2025-0100
+Dependency tree:
+unic-ucd-ident 0.9.0
+└── urlpattern 0.3.0
+    └── tauri-utils 2.9.3
+        ├── tauri-runtime-wry 2.11.4
+        │   └── tauri 2.11.5
+        │       └── nemesis-desktop 0.2.0
+        ├── tauri-runtime 2.11.3
+        │   ├── tauri-runtime-wry 2.11.4
+        │   └── tauri 2.11.5
+        ├── tauri-macros 2.6.3
+        │   └── tauri 2.11.5
+        ├── tauri-codegen 2.6.3
+        │   └── tauri-macros 2.6.3
+        ├── tauri-build 2.6.3
+        │   ├── tauri 2.11.5
+        │   └── nemesis-desktop 0.2.0
+        └── tauri 2.11.5
+
+Crate:     unic-ucd-version
+Version:   0.9.0
+Warning:   unmaintained
+Title:     `unic-ucd-version` is unmaintained
+Date:      2025-10-18
+ID:        RUSTSEC-2025-0098
+URL:       https://rustsec.org/advisories/RUSTSEC-2025-0098
+Dependency tree:
+unic-ucd-version 0.9.0
+└── unic-ucd-ident 0.9.0
+    └── urlpattern 0.3.0
+        └── tauri-utils 2.9.3
+            ├── tauri-runtime-wry 2.11.4
+            │   └── tauri 2.11.5
+            │       └── nemesis-desktop 0.2.0
+            ├── tauri-runtime 2.11.3
+            │   ├── tauri-runtime-wry 2.11.4
+            │   └── tauri 2.11.5
+            ├── tauri-macros 2.6.3
+            │   └── tauri 2.11.5
+            ├── tauri-codegen 2.6.3
+            │   └── tauri-macros 2.6.3
+            ├── tauri-build 2.6.3
+            │   ├── tauri 2.11.5
+            │   └── nemesis-desktop 0.2.0
+            └── tauri 2.11.5
+
+Crate:     glib
+Version:   0.18.5
+Warning:   unsound
+Title:     Unsoundness in `Iterator` and `DoubleEndedIterator` impls for `glib::VariantStrIter`
+Date:      2024-03-30
+ID:        RUSTSEC-2024-0429
+URL:       https://rustsec.org/advisories/RUSTSEC-2024-0429
+Dependency tree:
+glib 0.18.5
+├── webkit2gtk 2.0.2
+│   ├── wry 0.55.1
+│   │   └── tauri-runtime-wry 2.11.4
+│   │       └── tauri 2.11.5
+│   │           └── nemesis-desktop 0.2.0
+│   ├── tauri-runtime-wry 2.11.4
+│   ├── tauri-runtime 2.11.3
+│   │   ├── tauri-runtime-wry 2.11.4
+│   │   └── tauri 2.11.5
+│   └── tauri 2.11.5
+├── soup3 0.5.0
+│   ├── wry 0.55.1
+│   └── webkit2gtk 2.0.2
+├── pango 0.18.3
+│   ├── gtk 0.18.2
+│   │   ├── wry 0.55.1
+│   │   ├── webkit2gtk 2.0.2
+│   │   ├── tauri-runtime-wry 2.11.4
+│   │   ├── tauri-runtime 2.11.3
+│   │   ├── tauri 2.11.5
+│   │   ├── tao 0.35.3
+│   │   │   └── tauri-runtime-wry 2.11.4
+│   │   ├── muda 0.19.3
+│   │   │   ├── tray-icon 0.24.2
+│   │   │   │   └── tauri 2.11.5
+│   │   │   └── tauri 2.11.5
+│   │   └── libappindicator 0.9.0
+│   │       └── tray-icon 0.24.2
+│   └── gdk 0.18.2
+│       ├── webkit2gtk 2.0.2
+│       ├── gtk 0.18.2
+│       └── gdkx11 0.18.2
+│           └── wry 0.55.1
+├── libappindicator 0.9.0
+├── javascriptcore-rs 1.1.2
+│   ├── wry 0.55.1
+│   └── webkit2gtk 2.0.2
+├── gtk 0.18.2
+├── gio 0.18.4
+│   ├── webkit2gtk 2.0.2
+│   ├── soup3 0.5.0
+│   ├── pango 0.18.3
+│   ├── gtk 0.18.2
+│   ├── gdkx11 0.18.2
+│   ├── gdk-pixbuf 0.18.5
+│   │   ├── gtk 0.18.2
+│   │   └── gdk 0.18.2
+│   └── gdk 0.18.2
+├── gdkx11 0.18.2
+├── gdk-pixbuf 0.18.5
+├── gdk 0.18.2
+├── cairo-rs 0.18.5
+│   ├── webkit2gtk 2.0.2
+│   ├── gtk 0.18.2
+│   └── gdk 0.18.2
+└── atk 0.18.2
+    └── gtk 0.18.2
+
+warning: 17 allowed warnings found
 found 0 vulnerabilities
 Compile
    [Ada]          nemesis_core_daemon.adb
@@ -10,6 +605,8 @@ clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverridin
    [Ada]          nemesis_kernel_tests.adb
 clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
    [Ada]          nemesis_authority_tests.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis_authority_store_tests.adb
 clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
    [Ada]          nemesis_path_tests.adb
 clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
@@ -23,6 +620,8 @@ clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverridin
 clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
    [Ada]          nemesis-core.ads
 clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-core-authority_store.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
    [Ada]          nemesis-core-json.adb
 clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
    [Ada]          nemesis-core-ledger.adb
@@ -30,6 +629,8 @@ clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverridin
    [Ada]          nemesis-core-mission_store.adb
 clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
    [Ada]          nemesis-kernel.ads
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-kernel-approvals.adb
 clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
    [Ada]          nemesis-kernel-capabilities.adb
 clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
@@ -40,8 +641,6 @@ clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverridin
    [Ada]          nemesis-kernel-types.adb
 clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
    [Ada]          nemesis-kernel-transitions.adb
-clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
-   [Ada]          nemesis-kernel-approvals.adb
 clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
    [Ada]          nemesis-kernel-budgets.adb
 clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
@@ -65,6 +664,9 @@ clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverridin
    [gprbind]      nemesis_authority_tests.bexch
    [Ada]          nemesis_authority_tests.ali
 clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [gprbind]      nemesis_authority_store_tests.bexch
+   [Ada]          nemesis_authority_store_tests.ali
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
    [gprbind]      nemesis_path_tests.bexch
    [Ada]          nemesis_path_tests.ali
 clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
@@ -81,6 +683,7 @@ Link
    [link]         nemesis_core_daemon.adb
    [link]         nemesis_kernel_tests.adb
    [link]         nemesis_authority_tests.adb
+   [link]         nemesis_authority_store_tests.adb
    [link]         nemesis_path_tests.adb
    [link]         nemesis_ledger_tests.adb
    [link]         nemesis_storage_tests.adb
@@ -96,49 +699,9 @@ PASS_SQLITE_INDEX_MIGRATION
 Phase 1 of 3: generation of data representation information ...
 Phase 2 of 3: generation of Global contracts ...
 Phase 3 of 3: flow analysis and proof ...
-nemesis-kernel-types.adb:13:13: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
-nemesis-kernel-types.ads:26:13: info: implicit aspect Always_Terminates on "Encode_State" has been proved, subprogram will terminate
-nemesis-kernel-types.ads:28:06: info: data dependencies proved
-nemesis-kernel-types.ads:29:14: info: postcondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
-nemesis-kernel-types.ads:31:13: info: implicit aspect Always_Terminates on "Decode_State" has been proved, subprogram will terminate
-nemesis-kernel-types.ads:33:06: info: data dependencies proved
-nemesis-kernel-types.ads:34:14: info: postcondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
-nemesis-kernel-types.ads:48:13: info: implicit aspect Always_Terminates on "Is_Terminal" has been proved, subprogram will terminate
-nemesis-kernel-types.ads:50:06: info: data dependencies proved
-nemesis-kernel-types.ads:52:08: info: postcondition proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
-nemesis-kernel-types.ads:55:13: info: implicit aspect Always_Terminates on "Next" has been proved, subprogram will terminate
-nemesis-kernel-types.ads:57:06: info: data dependencies proved
-nemesis-kernel-types.ads:59:14: info: postcondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
-nemesis-kernel-types.ads:59:34: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
-nemesis-kernel-transitions.ads:13:13: info: implicit aspect Always_Terminates on "Allowed" has been proved, subprogram will terminate
-nemesis-kernel-transitions.ads:16:06: info: data dependencies proved
-nemesis-kernel-transitions.ads:17:14: info: postcondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step; Trivial: 1 VC in max 0.0 seconds and 2 steps)
-nemesis-kernel-missions.adb:32:36: info: precondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
-nemesis-kernel-missions.adb:46:36: info: precondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
-nemesis-kernel-missions.ads:11:13: info: implicit aspect Always_Terminates on "Create" has been proved, subprogram will terminate
-nemesis-kernel-missions.ads:13:06: info: data dependencies proved
-nemesis-kernel-missions.ads:15:08: info: postcondition proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
-nemesis-kernel-missions.ads:18:13: info: implicit aspect Always_Terminates on "Restore" has been proved, subprogram will terminate
-nemesis-kernel-missions.ads:21:06: info: data dependencies proved
-nemesis-kernel-missions.ads:23:08: info: postcondition proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
-nemesis-kernel-missions.ads:26:13: info: implicit aspect Always_Terminates on "State_Of" has been proved, subprogram will terminate
-nemesis-kernel-missions.ads:27:09: info: data dependencies proved
-nemesis-kernel-missions.ads:29:13: info: implicit aspect Always_Terminates on "Sequence_Of" has been proved, subprogram will terminate
-nemesis-kernel-missions.ads:30:09: info: data dependencies proved
-nemesis-kernel-missions.ads:35:07: info: initialization of "Decision" proved
-nemesis-kernel-missions.ads:37:06: info: data dependencies proved
-nemesis-kernel-missions.ads:39:08: info: postcondition proved (CVC5: 4 VC in max 0.0 seconds and 1 step)
-nemesis-kernel-missions.ads:41:70: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
-nemesis-kernel-missions.ads:47:40: info: initialization of "Decision" proved
-nemesis-kernel-missions.ads:49:06: info: data dependencies proved
-nemesis-kernel-missions.ads:51:08: info: postcondition proved (CVC5: 3 VC in max 0.0 seconds and 1 step)
-nemesis-kernel-missions.ads:54:63: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
-nemesis-kernel-capabilities.ads:47:13: info: implicit aspect Always_Terminates on "Authorize" has been proved, subprogram will terminate
-nemesis-kernel-capabilities.ads:52:06: info: data dependencies proved
-nemesis-kernel-capabilities.ads:54:08: info: postcondition proved (CVC5: 8 VC in max 0.0 seconds and 1 step; Trivial: 1 VC in max 0.0 seconds and 2 steps)
-nemesis-kernel-capabilities.ads:64:13: info: implicit aspect Always_Terminates on "Is_Attenuation" has been proved, subprogram will terminate
-nemesis-kernel-capabilities.ads:67:06: info: data dependencies proved
-nemesis-kernel-capabilities.ads:69:08: info: postcondition proved (CVC5: 5 VC in max 0.0 seconds and 1 step; Trivial: 1 VC in max 0.0 seconds and 2 steps)
+nemesis-kernel-approvals.ads:30:07: info: initialization of "Decision" proved
+nemesis-kernel-approvals.ads:32:06: info: data dependencies proved
+nemesis-kernel-approvals.ads:34:08: info: postcondition proved (CVC5: 5 VC in max 0.0 seconds and 1 step)
 nemesis-kernel-budgets.adb:25:35: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
 nemesis-kernel-budgets.adb:25:35: info: range check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
 nemesis-kernel-budgets.adb:26:44: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
@@ -162,144 +725,188 @@ nemesis-kernel-budgets.ads:34:39: info: overflow check proved (CVC5: 2 VC in max
 nemesis-kernel-budgets.ads:36:37: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
 nemesis-kernel-budgets.ads:38:41: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
 nemesis-kernel-budgets.ads:40:41: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
-nemesis-kernel-approvals.ads:30:07: info: initialization of "Decision" proved
-nemesis-kernel-approvals.ads:32:06: info: data dependencies proved
-nemesis-kernel-approvals.ads:34:08: info: postcondition proved (CVC5: 5 VC in max 0.0 seconds and 1 step)
-nemesis-kernel-evidence.ads:36:13: info: implicit aspect Always_Terminates on "Acceptable" has been proved, subprogram will terminate
-nemesis-kernel-evidence.ads:41:06: info: data dependencies proved
-nemesis-kernel-evidence.ads:43:08: info: postcondition proved (CVC5: 5 VC in max 0.0 seconds and 1 step; Trivial: 1 VC in max 0.0 seconds and 2 steps)
+nemesis-kernel-capabilities.ads:47:13: info: implicit aspect Always_Terminates on "Authorize" has been proved, subprogram will terminate
+nemesis-kernel-capabilities.ads:52:06: info: data dependencies proved
+nemesis-kernel-capabilities.ads:54:08: info: postcondition proved (CVC5: 8 VC in max 0.0 seconds and 1 step; Trivial: 1 VC in max 0.0 seconds and 2 steps)
+nemesis-kernel-capabilities.ads:64:13: info: implicit aspect Always_Terminates on "Is_Attenuation" has been proved, subprogram will terminate
+nemesis-kernel-capabilities.ads:67:06: info: data dependencies proved
+nemesis-kernel-capabilities.ads:69:08: info: postcondition proved (CVC5: 9 VC in max 0.0 seconds and 1 step; Trivial: 1 VC in max 0.0 seconds and 2 steps)
+nemesis-kernel-capabilities.ads:82:13: info: implicit aspect Always_Terminates on "Derive_Child_Grant" has been proved, subprogram will terminate
+nemesis-kernel-capabilities.ads:89:06: info: data dependencies proved
+nemesis-kernel-capabilities.ads:96:08: info: postcondition proved (CVC5: 11 VC in max 0.0 seconds and 1 step)
 nemesis-kernel-completion.adb:12:22: info: index check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
 nemesis-kernel-completion.adb:18:22: info: index check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
 nemesis-kernel-completion.ads:17:13: info: implicit aspect Always_Terminates on "Evaluate" has been proved, subprogram will terminate
 nemesis-kernel-completion.ads:22:06: info: data dependencies proved
 nemesis-kernel-completion.ads:24:08: info: postcondition proved (CVC5: 3 VC in max 0.0 seconds and 1 step; Trivial: 1 VC in max 0.0 seconds and 2 steps)
 nemesis-kernel-completion.ads:29:24: info: index check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
-Summary logged in /Users/sicarii/Desktop/Projects/nemesis/.worktrees/desktop-local/build/obj/debug/gnatprove/gnatprove.out
+nemesis-kernel-evidence.ads:36:13: info: implicit aspect Always_Terminates on "Acceptable" has been proved, subprogram will terminate
+nemesis-kernel-evidence.ads:41:06: info: data dependencies proved
+nemesis-kernel-evidence.ads:43:08: info: postcondition proved (CVC5: 5 VC in max 0.0 seconds and 1 step; Trivial: 1 VC in max 0.0 seconds and 2 steps)
+nemesis-kernel-missions.adb:32:36: info: precondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.adb:46:36: info: precondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.ads:11:13: info: implicit aspect Always_Terminates on "Create" has been proved, subprogram will terminate
+nemesis-kernel-missions.ads:13:06: info: data dependencies proved
+nemesis-kernel-missions.ads:15:08: info: postcondition proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.ads:18:13: info: implicit aspect Always_Terminates on "Restore" has been proved, subprogram will terminate
+nemesis-kernel-missions.ads:21:06: info: data dependencies proved
+nemesis-kernel-missions.ads:23:08: info: postcondition proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.ads:26:13: info: implicit aspect Always_Terminates on "State_Of" has been proved, subprogram will terminate
+nemesis-kernel-missions.ads:27:09: info: data dependencies proved
+nemesis-kernel-missions.ads:29:13: info: implicit aspect Always_Terminates on "Sequence_Of" has been proved, subprogram will terminate
+nemesis-kernel-missions.ads:30:09: info: data dependencies proved
+nemesis-kernel-missions.ads:35:07: info: initialization of "Decision" proved
+nemesis-kernel-missions.ads:37:06: info: data dependencies proved
+nemesis-kernel-missions.ads:39:08: info: postcondition proved (CVC5: 4 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.ads:41:70: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.ads:47:40: info: initialization of "Decision" proved
+nemesis-kernel-missions.ads:49:06: info: data dependencies proved
+nemesis-kernel-missions.ads:51:08: info: postcondition proved (CVC5: 3 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.ads:54:63: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-transitions.ads:13:13: info: implicit aspect Always_Terminates on "Allowed" has been proved, subprogram will terminate
+nemesis-kernel-transitions.ads:16:06: info: data dependencies proved
+nemesis-kernel-transitions.ads:17:14: info: postcondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step; Trivial: 1 VC in max 0.0 seconds and 2 steps)
+nemesis-kernel-types.adb:13:13: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-types.ads:26:13: info: implicit aspect Always_Terminates on "Encode_State" has been proved, subprogram will terminate
+nemesis-kernel-types.ads:28:06: info: data dependencies proved
+nemesis-kernel-types.ads:29:14: info: postcondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-types.ads:31:13: info: implicit aspect Always_Terminates on "Decode_State" has been proved, subprogram will terminate
+nemesis-kernel-types.ads:33:06: info: data dependencies proved
+nemesis-kernel-types.ads:34:14: info: postcondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-types.ads:48:13: info: implicit aspect Always_Terminates on "Is_Terminal" has been proved, subprogram will terminate
+nemesis-kernel-types.ads:50:06: info: data dependencies proved
+nemesis-kernel-types.ads:52:08: info: postcondition proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-types.ads:55:13: info: implicit aspect Always_Terminates on "Next" has been proved, subprogram will terminate
+nemesis-kernel-types.ads:57:06: info: data dependencies proved
+nemesis-kernel-types.ads:59:14: info: postcondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-types.ads:59:34: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+Summary logged in /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/build/obj/debug/gnatprove/gnatprove.out
+PASS_KERNEL_PROOF_MANIFEST obligations=81 units=8 production_lane=PASS_BOUNDED
 PASS_KERNEL_PROOF_BASELINE
-Warning: Permanently added '192.168.65.77' (ED25519) to the list of known hosts.
-Warning: Permanently added '192.168.65.77' (ED25519) to the list of known hosts.
+Warning: Permanently added '192.168.64.2' (ED25519) to the list of known hosts.
+Warning: Permanently added '192.168.64.2' (ED25519) to the list of known hosts.
 PASS_CONTRACT_INTEGRITY sha256=ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e0d8beebee532779 bytes=77321 lines=2188
     Updating crates.io index
  Downloading crates ...
-  Downloaded cranelift-control v0.134.4
-  Downloaded async-trait v0.1.92
-  Downloaded cranelift-entity v0.134.3
+  Downloaded cranelift-assembler-x64-meta v0.134.4
+  Downloaded bitflags v2.13.1
   Downloaded cranelift-srcgen v0.134.4
-  Downloaded wasmtime-internal-jit-debug v47.0.3
-  Downloaded id-arena v2.3.0
-  Downloaded zmij v1.0.23
+  Downloaded futures-sink v0.3.34
+  Downloaded futures-core v0.3.34
+  Downloaded cranelift-codegen-shared v0.134.4
+  Downloaded futures-io v0.3.34
   Downloaded futures-task v0.3.34
-  Downloaded leb128 v0.2.7
-  Downloaded fs-set-times v0.20.3
   Downloaded maybe-owned v0.3.4
   Downloaded ambient-authority v0.0.2
-  Downloaded wiggle-macro v47.0.3
-  Downloaded cranelift-native v0.134.3
-  Downloaded futures-io v0.3.34
-  Downloaded cranelift-bitset v0.134.3
   Downloaded leb128fmt v0.1.0
-  Downloaded wasmtime-internal-wit-bindgen v47.0.3
-  Downloaded witx v0.9.1
-  Downloaded addr2line v0.26.1
-  Downloaded cranelift-codegen-shared v0.134.4
-  Downloaded potential_utf v0.1.6
-  Downloaded wat v1.257.1
-  Downloaded wasmtime-internal-jit-icache-coherence v47.0.3
   Downloaded wasmtime-internal-versioned-export-macros v47.0.3
-  Downloaded writeable v0.6.4
+  Downloaded id-arena v2.3.0
+  Downloaded leb128 v0.2.7
+  Downloaded wasmtime-internal-jit-debug v47.0.3
+  Downloaded pulley-macros v47.0.3
   Downloaded wasmtime-internal-component-util v47.0.3
+  Downloaded cranelift-control v0.134.4
+  Downloaded fs-set-times v0.20.3
+  Downloaded cranelift-native v0.134.3
+  Downloaded cranelift-bitset v0.134.3
+  Downloaded witx v0.9.1
+  Downloaded potential_utf v0.1.6
+  Downloaded wasmtime-internal-jit-icache-coherence v47.0.3
+  Downloaded cap-fs-ext v4.0.3
   Downloaded either v1.17.0
-  Downloaded find-msvc-tools v0.1.11
-  Downloaded futures-core v0.3.34
-  Downloaded futures-sink v0.3.34
+  Downloaded cranelift-assembler-x64 v0.134.4
+  Downloaded displaydoc v0.2.7
+  Downloaded foldhash v0.2.0
+  Downloaded io-lifetimes v3.0.1
+  Downloaded rustc-demangle v0.1.28
+  Downloaded termcolor v1.4.1
+  Downloaded tinystr v0.8.4
+  Downloaded async-trait v0.1.92
   Downloaded io-lifetimes v2.0.4
   Downloaded minicbor-derive v0.15.3
   Downloaded quote v1.0.47
-  Downloaded cap-fs-ext v4.0.3
-  Downloaded zerovec-derive v0.11.5
-  Downloaded wiggle-generate v47.0.3
-  Downloaded ipnet v2.12.1
-  Downloaded fastrand v2.5.0
-  Downloaded foldhash v0.2.0
-  Downloaded termcolor v1.4.1
-  Downloaded displaydoc v0.2.7
-  Downloaded thiserror v2.0.20
-  Downloaded wasmtime-internal-unwinder v47.0.3
-  Downloaded thiserror-impl v2.0.20
-  Downloaded io-lifetimes v3.0.1
-  Downloaded litemap v0.8.3
-  Downloaded cranelift-assembler-x64-meta v0.134.4
-  Downloaded wasmtime-internal-fiber v47.0.3
-  Downloaded cranelift-assembler-x64 v0.134.4
-  Downloaded wiggle v47.0.3
-  Downloaded wast v35.0.2
-  Downloaded zerotrie v0.2.5
-  Downloaded cranelift-bforest v0.134.3
-  Downloaded futures-channel v0.3.34
-  Downloaded anyhow v1.0.104
-  Downloaded cap-std v4.0.3
-  Downloaded io-extras v0.19.0
   Downloaded target-lexicon v0.13.5
-  Downloaded mach2 v0.6.0
-  Downloaded tinystr v0.8.4
+  Downloaded cranelift-entity v0.134.3
+  Downloaded writeable v0.6.4
+  Downloaded find-msvc-tools v0.1.11
+  Downloaded wasmtime-internal-unwinder v47.0.3
+  Downloaded cap-std v4.0.3
+  Downloaded cranelift-bforest v0.134.3
+  Downloaded wasmtime-internal-fiber v47.0.3
+  Downloaded fastrand v2.5.0
+  Downloaded futures-channel v0.3.34
+  Downloaded io-extras v0.19.0
+  Downloaded wiggle v47.0.3
   Downloaded minicbor v0.25.1
-  Downloaded zerovec v0.11.8
+  Downloaded ipnet v2.12.1
+  Downloaded litemap v0.8.3
+  Downloaded thiserror v2.0.20
+  Downloaded thiserror-impl v2.0.20
+  Downloaded wiggle-macro v47.0.3
+  Downloaded addr2line v0.26.1
+  Downloaded arbitrary v1.4.2
   Downloaded cranelift-frontend v0.134.3
   Downloaded futures v0.3.34
-  Downloaded icu_provider v2.3.0
   Downloaded proc-macro2 v1.0.107
+  Downloaded mach2 v0.6.0
   Downloaded serde_derive v1.0.229
-  Downloaded wast v257.0.1
-  Downloaded arbitrary v1.4.2
-  Downloaded wit-parser v0.252.0
-  Downloaded bitflags v2.13.1
-  Downloaded rustc-demangle v0.1.28
+  Downloaded icu_provider v2.3.0
   Downloaded serde_core v1.0.229
   Downloaded wasmprinter v0.252.0
   Downloaded wasmtime-internal-core v47.0.3
-  Downloaded icu_normalizer_data v2.3.0
-  Downloaded pulley-interpreter v47.0.3
-  Downloaded icu_locale_core v2.3.0
-  Downloaded socket2 v0.6.5
-  Downloaded cpp_demangle v0.5.1
-  Downloaded cranelift-isle v0.134.3
   Downloaded bytes v1.12.1
+  Downloaded icu_normalizer_data v2.3.0
+  Downloaded wat v1.257.1
+  Downloaded socket2 v0.6.5
+  Downloaded icu_locale_core v2.3.0
+  Downloaded wiggle-generate v47.0.3
+  Downloaded pulley-interpreter v47.0.3
+  Downloaded cpp_demangle v0.5.1
   Downloaded icu_collections v2.3.0
-  Downloaded wasm-encoder v0.257.1
   Downloaded wasm-encoder v0.252.0
-  Downloaded cranelift-codegen-meta v0.134.3
-  Downloaded cc v1.4.3
-  Downloaded icu_properties v2.3.0
-  Downloaded mio v1.2.2
+  Downloaded anyhow v1.0.104
   Downloaded cap-primitives v4.0.3
-  Downloaded memchr v2.8.3
+  Downloaded cranelift-codegen-meta v0.134.3
+  Downloaded cranelift-isle v0.134.3
+  Downloaded zerovec-derive v0.11.5
+  Downloaded zmij v1.0.23
   Downloaded serde v1.0.229
-  Downloaded regalloc2 v0.15.2
+  Downloaded wasmtime-wasi-io v47.0.3
+  Downloaded icu_properties v2.3.0
+  Downloaded wasm-encoder v0.257.1
+  Downloaded cc v1.4.3
+  Downloaded memchr v2.8.3
+  Downloaded mio v1.2.2
   Downloaded hashbrown v0.16.1
+  Downloaded regalloc2 v0.15.2
+  Downloaded icu_properties_data v2.3.0
   Downloaded serde_json v1.0.151
   Downloaded futures-util v0.3.34
-  Downloaded icu_properties_data v2.3.0
-  Downloaded wasmtime-wasi v47.0.3
-  Downloaded wasmtime-internal-component-macro v47.0.3
-  Downloaded unicode-width v0.2.2
-  Downloaded wasmparser v0.252.0
+  Downloaded wasmtime-internal-wit-bindgen v47.0.3
   Downloaded wasmtime-internal-cranelift v47.0.3
-  Downloaded syn v2.0.119
+  Downloaded wasmtime-wasi v47.0.3
   Downloaded wasmparser v0.257.1
-  Downloaded syn v3.0.3
+  Downloaded wasmtime-internal-component-macro v47.0.3
+  Downloaded wasmparser v0.252.0
   Downloaded wasmtime-environ v47.0.3
+  Downloaded wast v35.0.2
+  Downloaded wast v257.0.1
+  Downloaded unicode-width v0.2.2
+  Downloaded zerotrie v0.2.5
+  Downloaded syn v2.0.119
+  Downloaded syn v3.0.3
   Downloaded gimli v0.33.0
   Downloaded object v0.39.1
+  Downloaded wit-parser v0.252.0
+  Downloaded zerovec v0.11.8
   Downloaded icu_normalizer v2.3.0
-  Downloaded libc v0.2.189
   Downloaded tokio v1.53.1
+  Downloaded libc v0.2.189
   Downloaded wasmtime v47.0.3
   Downloaded cranelift-codegen v0.134.3
-  Downloaded pulley-macros v47.0.3
-  Downloaded wasmtime-wasi-io v47.0.3
    Compiling proc-macro2 v1.0.107
-   Compiling unicode-ident v1.0.24
    Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.24
    Compiling serde_core v1.0.229
    Compiling libc v0.2.189
    Compiling serde v1.0.229
@@ -314,11 +921,11 @@ PASS_CONTRACT_INTEGRITY sha256=ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e
    Compiling memchr v2.8.3
    Compiling zmij v1.0.23
    Compiling serde_json v1.0.151
+   Compiling cpufeatures v0.2.17
    Compiling block-buffer v0.10.4
    Compiling crypto-common v0.1.7
-   Compiling cpufeatures v0.2.17
-   Compiling digest v0.10.7
    Compiling itoa v1.0.18
+   Compiling digest v0.10.7
    Compiling hashbrown v0.17.1
    Compiling syn v3.0.3
    Compiling syn v2.0.119
@@ -328,39 +935,40 @@ PASS_CONTRACT_INTEGRITY sha256=ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e
    Compiling wasmtime-internal-core v47.0.3
    Compiling bitflags v2.13.1
    Compiling rustc_version v0.4.1
-   Compiling cranelift-srcgen v0.134.4
    Compiling target-lexicon v0.13.5
    Compiling heck v0.5.0
-   Compiling cranelift-assembler-x64-meta v0.134.4
+   Compiling cranelift-srcgen v0.134.4
    Compiling curve25519-dalek v4.1.3
-   Compiling subtle v2.6.1
+   Compiling cranelift-assembler-x64-meta v0.134.4
    Compiling signature v2.2.0
    Compiling zeroize v1.9.0
+   Compiling subtle v2.6.1
    Compiling ed25519 v2.2.3
    Compiling rustix v1.1.4
    Compiling stable_deref_trait v1.2.1
    Compiling errno v0.3.14
-   Compiling hex v0.4.3
    Compiling anyhow v1.0.104
+   Compiling hex v0.4.3
    Compiling allocator-api2 v0.2.21
    Compiling cranelift-isle v0.134.3
    Compiling ed25519-dalek v2.2.0
    Compiling bumpalo v3.20.3
-   Compiling fnv v1.0.7
-   Compiling leb128fmt v0.1.0
-   Compiling cranelift-codegen-shared v0.134.4
    Compiling indexmap v2.14.0
+   Compiling leb128fmt v0.1.0
    Compiling hashbrown v0.16.1
+   Compiling fnv v1.0.7
+   Compiling cranelift-codegen-shared v0.134.4
    Compiling cranelift-assembler-x64 v0.134.4
    Compiling gimli v0.33.0
    Compiling crc32fast v1.5.0
    Compiling synstructure v0.13.2
-   Compiling object v0.39.1
    Compiling rustc-hash v2.1.3
-   Compiling find-msvc-tools v0.1.11
    Compiling shlex v2.0.1
    Compiling arbitrary v1.4.2
+   Compiling find-msvc-tools v0.1.11
+   Compiling object v0.39.1
    Compiling cc v1.4.3
+   Compiling cranelift-control v0.134.4
    Compiling serde_derive v1.0.229
    Compiling thiserror-impl v2.0.20
    Compiling zerofrom-derive v0.1.7
@@ -368,54 +976,53 @@ PASS_CONTRACT_INTEGRITY sha256=ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e
    Compiling yoke-derive v0.8.2
    Compiling zerovec-derive v0.11.5
    Compiling displaydoc v0.2.7
+   Compiling zerofrom v0.1.8
    Compiling cobs v0.3.0
    Compiling wasmtime-internal-versioned-export-macros v47.0.3
-   Compiling zerofrom v0.1.8
-   Compiling cranelift-control v0.134.4
-   Compiling once_cell v1.21.4
    Compiling yoke v0.8.3
-   Compiling termcolor v1.4.1
-   Compiling zerovec v0.11.8
    Compiling wasmtime-internal-component-util v47.0.3
+   Compiling zerovec v0.11.8
+   Compiling termcolor v1.4.1
+   Compiling once_cell v1.21.4
    Compiling wasm-encoder v0.252.0
    Compiling writeable v0.6.4
    Compiling litemap v0.8.3
+   Compiling zerotrie v0.2.5
    Compiling tinystr v0.8.4
    Compiling potential_utf v0.1.6
-   Compiling zerotrie v0.2.5
    Compiling icu_locale_core v2.3.0
-   Compiling wasmtime-internal-unwinder v47.0.3
    Compiling pin-project-lite v0.2.17
-   Compiling thiserror v1.0.69
-   Compiling id-arena v2.3.0
-   Compiling icu_properties_data v2.3.0
    Compiling io-lifetimes v2.0.4
+   Compiling io-lifetimes v3.0.1
+   Compiling wasmtime-internal-unwinder v47.0.3
    Compiling smallvec v1.15.2
    Compiling postcard v1.1.3
    Compiling wasmparser v0.252.0
    Compiling regalloc2 v0.15.2
-   Compiling icu_normalizer_data v2.3.0
+   Compiling thiserror v1.0.69
    Compiling cranelift-bitset v0.134.3
-   Compiling cranelift-entity v0.134.3
+   Compiling icu_properties_data v2.3.0
    Compiling pulley-interpreter v47.0.3
+   Compiling cranelift-entity v0.134.3
    Compiling cranelift-bforest v0.134.3
+   Compiling id-arena v2.3.0
    Compiling utf8_iter v1.0.4
-   Compiling io-lifetimes v3.0.1
+   Compiling icu_normalizer_data v2.3.0
    Compiling icu_collections v2.3.0
    Compiling cranelift-codegen-meta v0.134.3
    Compiling icu_provider v2.3.0
    Compiling wasmtime-internal-fiber v47.0.3
    Compiling thiserror-impl v1.0.69
    Compiling wasm-encoder v0.257.1
-   Compiling getrandom v0.3.4
    Compiling unicode-width v0.2.2
-   Compiling leb128 v0.2.7
    Compiling io-extras v0.19.0
-   Compiling wasmtime-internal-component-macro v47.0.3
+   Compiling leb128 v0.2.7
    Compiling either v1.17.0
    Compiling wasmtime-internal-cranelift v47.0.3
-   Compiling itertools v0.14.0
+   Compiling getrandom v0.3.4
+   Compiling wasmtime-internal-component-macro v47.0.3
    Compiling wast v257.0.1
+   Compiling itertools v0.14.0
    Compiling wast v35.0.2
    Compiling cranelift-codegen v0.134.3
    Compiling wit-parser v0.252.0
@@ -424,45 +1031,45 @@ PASS_CONTRACT_INTEGRITY sha256=ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e
    Compiling wasmtime-internal-wit-bindgen v47.0.3
    Compiling nemesis-protocol v0.1.0 (/Users/admin/nemesis-security/runtime/crates/nemesis-protocol)
    Compiling wasmtime v47.0.3
-   Compiling cap-primitives v4.0.3
    Compiling futures-core v0.3.34
    Compiling futures-sink v0.3.34
-   Compiling wat v1.257.1
+   Compiling cap-primitives v4.0.3
    Compiling icu_normalizer v2.3.0
-   Compiling fs-set-times v0.20.3
+   Compiling wat v1.257.1
    Compiling icu_properties v2.3.0
+   Compiling fs-set-times v0.20.3
    Compiling witx v0.9.1
    Compiling wasmtime-internal-jit-icache-coherence v47.0.3
    Compiling tracing-core v0.1.36
    Compiling tracing-attributes v0.1.31
    Compiling async-trait v0.1.92
    Compiling encoding_rs v0.8.35
-   Compiling cap-std v4.0.3
-   Compiling futures-task v0.3.34
-   Compiling mach2 v0.6.0
-   Compiling ipnet v2.12.1
-   Compiling rand_core v0.10.1
-   Compiling getrandom v0.4.3
-   Compiling ambient-authority v0.0.2
    Compiling wiggle-macro v47.0.3
+   Compiling cap-std v4.0.3
+   Compiling rand_core v0.10.1
    Compiling maybe-owned v0.3.4
+   Compiling ipnet v2.12.1
+   Compiling ambient-authority v0.0.2
+   Compiling futures-task v0.3.34
+   Compiling getrandom v0.4.3
+   Compiling mach2 v0.6.0
    Compiling tracing v0.1.44
    Compiling futures-util v0.3.34
    Compiling idna_adapter v1.2.2
    Compiling futures-channel v0.3.34
+   Compiling cap-fs-ext v4.0.3
    Compiling percent-encoding v2.3.2
    Compiling bytes v1.12.1
    Compiling futures-io v0.3.34
-   Compiling cap-fs-ext v4.0.3
    Compiling form_urlencoded v1.2.2
    Compiling idna v1.1.0
    Compiling chacha20 v0.10.1
-   Compiling socket2 v0.6.5
    Compiling mio v1.2.2
-   Compiling url v2.5.8
    Compiling futures v0.3.34
-   Compiling tokio v1.53.1
+   Compiling socket2 v0.6.5
    Compiling rand v0.10.2
+   Compiling url v2.5.8
+   Compiling tokio v1.53.1
    Compiling fastrand v2.5.0
    Compiling minicbor v0.25.1
    Compiling tempfile v3.27.0
@@ -471,13 +1078,13 @@ PASS_CONTRACT_INTEGRITY sha256=ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e
    Compiling nemesis-receipt v0.1.0 (/Users/admin/nemesis-security/runtime/crates/nemesis-receipt)
    Compiling nemesis-signer v0.1.0 (/Users/admin/nemesis-security/runtime/crates/nemesis-signer)
    Compiling nemesis-verify v0.1.0 (/Users/admin/nemesis-security/runtime/crates/nemesis-verify)
-   Compiling cranelift-frontend v0.134.3
    Compiling cranelift-native v0.134.3
+   Compiling cranelift-frontend v0.134.3
    Compiling wasmtime-wasi-io v47.0.3
    Compiling wiggle v47.0.3
    Compiling wasmtime-wasi v47.0.3
    Compiling nemesis-runtime v0.1.0 (/Users/admin/nemesis-security/runtime/crates/nemesis-runtime)
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 34.46s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 35.57s
      Running unittests src/main.rs (runtime/target/debug/deps/nemesis_deterministic_worker-e7d44065ee4af0be)
 
 running 0 tests
@@ -504,8 +1111,8 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 running 6 tests
 test accepts_a_bounded_relative_action_proposal ... ok
 test rejects_unknown_params_and_oversized_messages ... ok
-test rejects_worker_supplied_authoritative_fields ... ok
 test rejects_unknown_protocol_and_identifiers ... ok
+test rejects_worker_supplied_authoritative_fields ... ok
 test permits_only_a_completion_proposal ... ok
 test rejects_absolute_and_traversing_action_paths ... ok
 
@@ -582,8 +1189,8 @@ test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 running 5 tests
 test superseded_revoked_and_expired_facts_are_not_active ... ok
 test context_budget_refuses_instead_of_omitting_mandatory_state ... ok
-test repository_index_binds_relative_files_and_rejects_traversal ... ok
 test capsule_signature_rejects_one_byte_mutation ... ok
+test repository_index_binds_relative_files_and_rejects_traversal ... ok
 test context_replacement_retains_obligations_and_visible_contradictions ... ok
 
 test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
@@ -591,8 +1198,8 @@ test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
      Running tests/evidence_replay.rs (runtime/target/debug/deps/evidence_replay-f1038b8e5fd24819)
 
 running 5 tests
-test old_source_and_unauthorized_verifier_cannot_complete_claims ... ok
 test changed_dependency_invalidates_accepted_evidence ... ok
+test old_source_and_unauthorized_verifier_cannot_complete_claims ... ok
 test causal_graph_returns_recorded_chain_not_retrospective_story ... ok
 test mission_fork_preserves_prefix_and_marks_model_reexecution_comparative ... ok
 test replay_reconstructs_hash_chain_and_rejects_mutation ... ok
@@ -619,7 +1226,7 @@ test ci_observation_is_accepted_only_for_current_source ... ok
 test path_traversal_and_git_metadata_staging_refuse ... ok
 test exact_lane_commit_leaves_default_branch_unchanged ... ok
 
-test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.54s
 
      Running tests/isolation.rs (runtime/target/debug/deps/isolation-fa1edbe03181970b)
 
@@ -630,7 +1237,7 @@ test sandbox_refuses_read_and_write_outside_lane ... ok
 test sandbox_refuses_a_reachable_loopback_connection ... ok
 test creates_an_isolated_git_worktree_without_moving_main ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
 
      Running tests/lifecycle.rs (runtime/target/debug/deps/lifecycle-b59f0704d19e53f4)
 
@@ -645,9 +1252,9 @@ test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 running 6 tests
 test builder_cannot_accept_own_elevated_evidence ... ok
 test scheduler_refuses_missing_worker_budget_and_cycles ... ok
-test conflicting_lane_patches_are_surfaced_not_merged ... ok
 test scheduler_records_explainable_decisions_and_preserves_authority ... ok
 test compatible_tasks_serialize_when_only_one_worker_is_available ... ok
+test conflicting_lane_patches_are_surfaced_not_merged ... ok
 test schedule_is_deterministic_across_input_order ... ok
 
 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s

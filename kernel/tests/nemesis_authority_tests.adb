@@ -129,6 +129,39 @@ begin
    Child.Scope := Scope_B;
    pragma Assert (not Is_Attenuation (Parent, Child));
 
+   declare
+      Derived : constant Capability_Grant :=
+        Derive_Child_Grant
+          (Parent        => Parent,
+           Child_Id      => "cap_2222222222222222222222",
+           Operation     => Modify_Data,
+           Expires_After => 9,
+           Maximum_Bytes => 512);
+   begin
+      pragma Assert (Is_Attenuation (Parent, Derived));
+      pragma Assert (Derived.Subject = Worker_A);
+      pragma Assert (Derived.Mission = Mission_A);
+      pragma Assert (Derived.Scope = Scope_A);
+      pragma Assert (Derived.Operations (Modify_Data));
+      pragma Assert (not Derived.Operations (Read_Data));
+      pragma Assert (not Derived.Operations (Delete_Data));
+      pragma Assert
+        (Authorize (Derived, Action, 5) = Authorized);
+      --  The derived child expires independently of the parent.
+      pragma Assert
+        (Authorize (Derived, Action, 10) = Refused_Capability);
+      --  The derived child budget binds below the parent budget.
+      pragma Assert
+        (Authorize
+           (Derived, (Action with delta Estimated_Bytes => 513), 5) =
+         Refused_Budget);
+      --  A subject mismatch still refuses at the derived child.
+      pragma Assert
+        (Authorize
+           (Derived, (Action with delta Subject => Worker_B), 5) =
+         Refused_Capability);
+   end;
+
    Consume (Budget, Request, Budget_Result);
    pragma Assert (Budget_Result = Budget_Authorized);
    pragma Assert (Budget.Storage_Bytes = 7_168);

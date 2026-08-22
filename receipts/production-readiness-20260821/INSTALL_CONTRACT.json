@@ -1,0 +1,68 @@
+{
+  "assets": {
+    "predecessor": {
+      "bytes": 4701016,
+      "path": "/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/release/v0.1.0/NEMESIS-Desktop-v0.1.0-macos-arm64.zip",
+      "sha256": "8efc91e06d5cb8a4282a479d93c80b8c8f0ca5a490298cb002c95e3333e850c7"
+    },
+    "successor": {
+      "bytes": 4713391,
+      "path": "/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/release/v0.2.0/NEMESIS-Desktop-v0.2.0-macos-arm64.zip",
+      "sha256": "41adf410250ade41c40eae7877e7561609fd023ccb5dc4f0ce97722ba59bab1d"
+    }
+  },
+  "contract_doc": "docs/release/SOURCE_INSTALL.md",
+  "environment": {
+    "console_locked": true,
+    "launch_criterion": "PROCESS_AND_ONSCREEN_WINDOW_LOCKED_CONSOLE",
+    "state_seed": "SYNTHETIC_SENTINEL_LOCKED_CONSOLE"
+  },
+  "install": {
+    "codesign": "adhoc-valid",
+    "version": "0.1.0"
+  },
+  "launch_predecessor": {
+    "criterion": "PROCESS_AND_ONSCREEN_WINDOW_LOCKED_CONSOLE",
+    "environment_note": "IOConsoleLocked=Yes: frontend JS (and thus local-home creation) is unobservable in a locked GUI session; window-server evidence matches the sealed LOCKED_SESSION.json precedent. The full UI-loop home-creation criterion applies automatically when the console is unlocked.",
+    "owned_onscreen_windows": 1,
+    "process_launched": true,
+    "terminated_cleanly": true
+  },
+  "launch_successor": {
+    "criterion": "PROCESS_AND_ONSCREEN_WINDOW_LOCKED_CONSOLE",
+    "environment_note": "IOConsoleLocked=Yes: frontend JS (and thus local-home creation) is unobservable in a locked GUI session; window-server evidence matches the sealed LOCKED_SESSION.json precedent. The full UI-loop home-creation criterion applies automatically when the console is unlocked.",
+    "owned_onscreen_windows": 1,
+    "process_launched": true,
+    "terminated_cleanly": true
+  },
+  "observed_at": "2026-08-22T14:21:57.220347Z",
+  "schema": "nemesis.install-contract/v1",
+  "subject": {
+    "commit": "402c9c46b3eaaa3039b121949131515fb5f23800",
+    "tree": "7c01384fa5faf4637353b11ca1e4529a9dc890c8"
+  },
+  "successor_sha256sums": "VERIFIED",
+  "terminal_marker": "PASS_INSTALL_CONTRACT",
+  "uninstall": {
+    "bundle_removed": true,
+    "no_launchd_jobs": true,
+    "no_privileged_helpers": true,
+    "residuals": {
+      "keychain_item": "dev.nemesis.receipt.seed.v1 (never touched by this gate; removal command documented in docs/release/SOURCE_INSTALL.md)",
+      "local_home": "/var/folders/bg/pt9l6y1j47q642kp3z5blrmh0000gn/T/nemesis-install-contract-7rckx1o2/home/Library/Application Support/com.anubisquantumcipher.nemesis",
+      "local_home_files": 2
+    }
+  },
+  "upgrade": {
+    "bundle_replaced": true,
+    "codesign": "adhoc-valid",
+    "preserved_files": 2,
+    "user_state_preserved": true,
+    "version": "0.2.0"
+  },
+  "versions": {
+    "distinct": true,
+    "predecessor": "0.1.0",
+    "successor": "0.2.0"
+  }
+}

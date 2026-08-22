@@ -1,0 +1,25 @@
+{
+  "coverage_summary": "LANE rust-process-path (RUST-) — VERDICT: CLEAN. subject_commit=fb321bb2320c8002032580bc44b04773c7e18cff. Confirmed the desktop/runtime Rust process and path handling is memory-safe and failure-bounded across all five assigned invariants; no gaps >= medium found; findings list is empty.\n\nBRIEF nemesis.hardening-audit.result/v1 mapping:\n- INV1 (no request-path panics/unwrap/expect/indexing on attacker data): CONFIRMED. Every external-input struct uses serde with deny_unknown_fields and explicit bound checks (production.rs:122-215 compile_local_contract; mission_runner.rs:722-745 required_string/required_u64; lib.rs:172-345 replay_from_value uses and_then/ok_or_else, no unwrap). String slicing on mission_id is safe because compile_local_contract enforces len==26 + 'mis_' prefix + ASCII-alphanumeric tail (production.rs:135-144) before slices [4..], [4..16], [..22] (mission_runner.rs). Ledger record slicing at fixed offsets [..17]/[18..38]/.../[240..304] is bounded by chunks_exact(305) after a len%305==0 check (evidence.rs:72-106). BoundedId slice value[prefix.len()..] guarded by len==26 + starts_with (nemesis-protocol/lib.rs:43-52). Only non-test unwrap on request path is mission_runner.rs:667 u64::try_from(MAX_CORE_MESSAGE_BYTES const usize).unwrap() — infallible on 64-bit host. All other unwrap/expect are #[cfg(test)] or serde_json::to_string of internal controlled Values in bin main() (nemesis-lane-create.rs:39, nemesis-replay.rs:60,68, nemesis-adapter-health.rs:79) — acceptable.\n- INV2 (child exec: absolute vetted executables, sanitized env, bounded output/runtime): CONFIRMED. MissionExecutables::validate rejects symlink/non-file/non-exec (mission_runner.rs:135-166). sanitize_environment does env_clear + fixed PATH=/usr/bin:/bin, LANG/LC_ALL/TMPDIR (mission_runner.rs:230-237). run_bounded enforces deadline kill + cancellation + per-stream read_bounded caps (mission_runner.rs:254-297). GIT and SANDBOX_EXEC are absolute constants (mission_runner.rs:23; runtime/lib.rs:50-51). SandboxedCommand canonicalizes executable+lane, env_clear, sandbox-exec workspace_safe profile (runtime/lib.rs:230-259, 162-203).\n- INV3 (path canonicalize; refuse symlink/parent/absolute escapes): CONFIRMED. validate_repository_relative_path rejects absolute, '.'/'..'/'.git'/empty components, NUL/%/backslash/control, >MAX (nemesis-protocol/lib.rs:147-167). inspect_workspace/write_lane_file canonicalize + symlink_metadata refusal + starts_with(workspace/lane) + O_NOFOLLOW open (mission_runner.rs:376-425, 500-527). load_last_mission rejects absolute/ParentDir result_path + symlink + bounds (mission_runner.rs:1244-1290). load_replay canonicalizes and enforces starts_with(canonical_home) (lib.rs:591-607). valid_branch blocks '..' and restricts charset (runtime/lib.rs:132-141).\n- INV4 (unsafe blocks sound/minimal): CONFIRMED. Zero `unsafe` blocks in desktop/src-tauri/src or runtime/crates (grep only matched the literal word 'unsafe' inside an error string, mission_runner.rs:1268).\n- INV5 (bounded reads cap before allocation): CONFIRMED. read_bounded uses take(limit+1) then rejects over-limit (mission_runner.rs:213-227). CoreProcess::request caps MAX_CORE_MESSAGE_BYTES both directions (mission_runner.rs:660-671). WorkerOutputAccumulator::push uses saturating_add vs limit (runtime/lib.rs:301-309). File reads gate on symlink_metadata len bounds before fs::read (lib.rs:378-393 read_local_contract; production.rs load_settings/initialize_local_home manifest; mission_runner.rs load_last_mission). AdaReplay::parse checks len%RECORD==0 and Vec::with_capacity(len/RECORD) (evidence.rs:70-77).\n\nInteractions with architect-gated residuals TS-001/TS-002: not re-litigated; no new path-handling exposure observed from them.",
+  "findings": [],
+  "reviewed_paths": [
+    "desktop/src-tauri/src/lib.rs",
+    "desktop/src-tauri/src/mission_runner.rs",
+    "desktop/src-tauri/src/production.rs",
+    "runtime/crates/nemesis-runtime/src/lib.rs",
+    "runtime/crates/nemesis-runtime/src/evidence.rs",
+    "runtime/crates/nemesis-runtime/src/git_workflows.rs",
+    "runtime/crates/nemesis-runtime/src/bin/nemesis-worker-runner.rs",
+    "runtime/crates/nemesis-runtime/src/bin/nemesis-lane-create.rs",
+    "runtime/crates/nemesis-runtime/src/bin/nemesis-replay.rs",
+    "runtime/crates/nemesis-protocol/src/lib.rs"
+  ],
+  "deferred": [
+    {
+      "reason": "Architect-gated hardening residuals per BRIEF ground rule 5; noted-only, not re-litigated; no rust-process-path memory/bounds interaction found.",
+      "paths": [
+        "config/formal-kernel-scope.json",
+        "docs/architecture/FORMAL_ASSURANCE.md"
+      ]
+    }
+  ]
+}

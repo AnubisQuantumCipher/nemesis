@@ -1,0 +1,13 @@
+2026-08-22T05:18:13Z HOSTILE_GATE date=2026-08-22T09:18:13Z head=bfa9e911c52a822fc9b1739d0049df3f44d7f8fa
+2026-08-22T05:18:13Z OK_ACCEPTED baseline-roster-valid
+2026-08-22T05:18:13Z OK_REFUSED L-01-empty-corpus
+2026-08-22T05:18:13Z OK_REFUSED L-02-duplicate-key
+2026-08-22T05:18:13Z OK_REFUSED L-02-contradictory-overall
+2026-08-22T05:18:13Z OK_REFUSED L-08-unsafe-artifact-path
+2026-08-22T05:18:14Z OK_REFUSED L-06-python-O-strips-assert
+2026-08-22T05:18:14Z OK_REFUSED L-05-stale-pass-ignored
+2026-08-22T05:18:14Z OK_REFUSED L-09-aba-exact-restore A=1 B=0 A2=1 bytes_restored=true
+2026-08-22T05:18:14Z OK_REFUSED L-07-inventory-change-detected
+2026-08-22T05:18:14Z NOTE L-03/L-04 enforced by scripts/verify_phase16_receipt.py (source/tree binding) and scripts/verify_evidence_bundle.py (unlisted/missing/stale reject)
+2026-08-22T05:18:14Z PASS_HOSTILE_CALIBRATION
+2026-08-22T05:18:14Z HOSTILE_GATE_EXIT_STATUS=0

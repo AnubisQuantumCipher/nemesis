@@ -1,0 +1,69 @@
+{
+ "all_valid": true,
+ "identity_note": "each receipt produced by a distinct isolated security-reviewer subagent process (separate context from lead), archived detached from INPUTS manifest",
+ "receipts": [
+  {
+   "findings": 1,
+   "path_citations": true,
+   "receipt": "ArchTrust2.arch-trust-boundary.json",
+   "reviewed_paths": true,
+   "severity_structured": true,
+   "subject_bound": true,
+   "valid": true,
+   "verdict": "CLEAN"
+  },
+  {
+   "findings": 1,
+   "path_citations": true,
+   "receipt": "KeychainSigning2.keychain-signing-secrets.json",
+   "reviewed_paths": true,
+   "severity_structured": true,
+   "subject_bound": true,
+   "valid": true,
+   "verdict": "CLEAN"
+  },
+  {
+   "findings": 3,
+   "path_citations": true,
+   "receipt": "ReleaseIntegrity2.release-integrity.json",
+   "reviewed_paths": true,
+   "severity_structured": true,
+   "subject_bound": true,
+   "valid": true,
+   "verdict": "CLEAN"
+  },
+  {
+   "findings": 0,
+   "path_citations": true,
+   "receipt": "RustSafety2.rust-process-path.json",
+   "reviewed_paths": true,
+   "severity_structured": true,
+   "subject_bound": true,
+   "valid": true,
+   "verdict": "CLEAN"
+  },
+  {
+   "findings": 2,
+   "path_citations": true,
+   "receipt": "SparkKernel2.spark-authority-kernel.json",
+   "reviewed_paths": true,
+   "severity_structured": true,
+   "subject_bound": true,
+   "valid": true,
+   "verdict": "CLEAN"
+  },
+  {
+   "findings": 1,
+   "path_citations": true,
+   "receipt": "TauriIpc2.tauri-webkit-ipc.json",
+   "reviewed_paths": true,
+   "severity_structured": true,
+   "subject_bound": true,
+   "valid": true,
+   "verdict": "CLEAN"
+  }
+ ],
+ "reviewer_lanes": 6,
+ "schema": "nemesis.review-validation/v1",
+ "validated_at": "2026-08-22T09:20:58Z"
+}

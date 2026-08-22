@@ -19,7 +19,7 @@ RELEASE_CONTRACT_SHA256 = (
 )
 RELEASE_CONTRACT_BYTES = 12_735
 RELEASE_CONTRACT_LINES = 137
-RELEASE_EPOCH = "v0.1.0-release-candidate"
+RELEASE_EPOCH = "v0.2.0-trust-surface"
 EXPECTED_SENTINELS = {
     "PASS_PHASE16_VZ_SECURITY_HARDENING",
     "PASS_PHASE16_VZ_SECURITY_HARDENING_ORCHESTRATOR",
@@ -109,25 +109,24 @@ def main() -> int:
     ):
         return fail("contract_identity")
     epoch = data.get("epoch")
-    if epoch is not None:
-        if epoch != RELEASE_EPOCH:
-            return fail("release_epoch")
-        release_contract = data.get("release_contract", {})
-        release_contract_path = ROOT / release_contract.get("path", "")
-        try:
-            release_contract_bytes = release_contract_path.read_bytes()
-        except OSError as error:
-            return fail(f"release_contract_unreadable={error}")
-        if (
-            hashlib.sha256(release_contract_bytes).hexdigest()
-            != RELEASE_CONTRACT_SHA256
-            or len(release_contract_bytes) != RELEASE_CONTRACT_BYTES
-            or len(release_contract_bytes.splitlines()) != RELEASE_CONTRACT_LINES
-            or release_contract.get("sha256") != RELEASE_CONTRACT_SHA256
-            or release_contract.get("bytes") != RELEASE_CONTRACT_BYTES
-            or release_contract.get("lines") != RELEASE_CONTRACT_LINES
-        ):
-            return fail("release_contract_identity")
+    if epoch != RELEASE_EPOCH:
+        return fail("release_epoch")
+    release_contract = data.get("release_contract", {})
+    release_contract_path = ROOT / release_contract.get("path", "")
+    try:
+        release_contract_bytes = release_contract_path.read_bytes()
+    except OSError as error:
+        return fail(f"release_contract_unreadable={error}")
+    if (
+        hashlib.sha256(release_contract_bytes).hexdigest()
+        != RELEASE_CONTRACT_SHA256
+        or len(release_contract_bytes) != RELEASE_CONTRACT_BYTES
+        or len(release_contract_bytes.splitlines()) != RELEASE_CONTRACT_LINES
+        or release_contract.get("sha256") != RELEASE_CONTRACT_SHA256
+        or release_contract.get("bytes") != RELEASE_CONTRACT_BYTES
+        or release_contract.get("lines") != RELEASE_CONTRACT_LINES
+    ):
+        return fail("release_contract_identity")
 
     repository = data.get("repository", {})
     subject = repository.get("subject_commit", "")
@@ -170,37 +169,36 @@ def main() -> int:
     guest = gate.get("guest", {})
     if guest.get("base_image") != "anubis-xcode" or guest.get("deleted_after_run") is not True:
         return fail("guest_cleanup")
-    if epoch is not None:
-        log = gate.get("log", {})
-        relative_log = log.get("file", "")
-        if (
-            not relative_log
-            or relative_log.startswith("/")
-            or ".." in Path(relative_log).parts
-        ):
-            return fail("gate_log_path")
-        try:
-            log_bytes = (ROOT / relative_log).read_bytes()
-            log_text = log_bytes.decode("utf-8")
-        except (OSError, UnicodeDecodeError) as error:
-            return fail(f"gate_log_unreadable={error}")
-        if (
-            hashlib.sha256(log_bytes).hexdigest() != log.get("sha256")
-            or len(log_bytes) != log.get("bytes")
-            or len(log_text.splitlines()) != log.get("line_count")
-        ):
-            return fail("gate_log_identity")
-        log_lines = log_text.splitlines()
-        if any(
-            not any(line == sentinel or line.startswith(f"{sentinel} ") for line in log_lines)
-            for sentinel in EXPECTED_SENTINELS
-        ):
-            return fail("gate_log_sentinel")
-        if any(
-            line.startswith(("FAIL_", "FATAL_", "REFUSED_"))
-            for line in log_lines
-        ):
-            return fail("gate_log_failure_marker")
+    log = gate.get("log", {})
+    relative_log = log.get("file", "")
+    if (
+        not relative_log
+        or relative_log.startswith("/")
+        or ".." in Path(relative_log).parts
+    ):
+        return fail("gate_log_path")
+    try:
+        log_bytes = (ROOT / relative_log).read_bytes()
+        log_text = log_bytes.decode("utf-8")
+    except (OSError, UnicodeDecodeError) as error:
+        return fail(f"gate_log_unreadable={error}")
+    if (
+        hashlib.sha256(log_bytes).hexdigest() != log.get("sha256")
+        or len(log_bytes) != log.get("bytes")
+        or len(log_text.splitlines()) != log.get("line_count")
+    ):
+        return fail("gate_log_identity")
+    log_lines = log_text.splitlines()
+    if any(
+        not any(line == sentinel or line.startswith(f"{sentinel} ") for line in log_lines)
+        for sentinel in EXPECTED_SENTINELS
+    ):
+        return fail("gate_log_sentinel")
+    if any(
+        line.startswith(("FAIL_", "FATAL_", "REFUSED_"))
+        for line in log_lines
+    ):
+        return fail("gate_log_failure_marker")
 
     dependencies = data.get("dependency_review", {})
     if dependencies.get("cargo_audit") != "PASS" or dependencies.get("npm_audit") != "PASS":

@@ -1,0 +1,49 @@
+{
+  "coverage_summary": "Lane accessibility-release (nemesis.hardening-audit.result/v1). subject_commit=47f6976332a41006718198f43844e9e4724c1fd8. VERDICT: CLEAN. Static DOM/ARIA/contrast audit only; native macOS VoiceOver/AX walkthrough is environment-blocked and out of scope. All six documented A11Y release-gate invariants are CONFIRMED in source; one informational semantic-refinement note (no gap >= medium).\n\nCONFIRMED INVARIANTS:\n(1) Keyboard nav + visible focus: Sidebar roving handler ArrowUp/Down/Home/End via moveFocus (desktop/src/components/Sidebar.tsx:13-58); skip-link to #workspace-content (Sidebar.tsx:22; CSS .skip-link off-screen + :focus reveal desktop/src/styles.css:132-146); App focus management — Cmd+1..5/',' accelerators + Escape (desktop/src/App.tsx:78-102), focusable workspace-content tabIndex=-1 (App.tsx:303), AuthorityReview heading programmatic focus (desktop/src/components/AuthorityReview.tsx:19-21,30); global focus-visible outline 2px var(--focus) (styles.css:63-73). Tests App.test.tsx:151-165,280-291.\n(2) ARIA roles/names/values/order for VoiceOver: aria-current=page on selected nav (Sidebar.tsx:36); aria-labelledby on every section (App.tsx onboarding-heading; MissionCockpit home-heading/missions-heading; EvidencePanel.tsx:20-24 court-heading; ReplayPanel.tsx:10-13 replay-heading; SettingsPanel.tsx:19-23 settings-heading; AuthorityReview.tsx:24-31 authority-heading); aria-label on controls/digests (App.tsx system-health; MissionCockpit textboxes; digest codes); aria-hidden on decorative glyphs (Sidebar.tsx:24,55,64; App.tsx command-chevron/health-dot; StatusMarker.tsx:14; EvidencePanel.tsx:63,71,73; ReplayPanel.tsx:23,29,38).\n(3) WCAG contrast >= threshold + no sub-10px load-bearing text: measure_contrast.py implements correct sRGB->linear luminance and WCAG ratio (scripts/measure_contrast.py:33-48), self-validates white/black==21.00 and fails closed on any pair below threshold (scripts/measure_contrast.py:51-111) covering all 18 semantic fg/bg pairs (scripts/measure_contrast.py:54-71). Tokens defined desktop/src/styles.css:6-24. Manually recomputed risky pairs pass: text-muted #9ea8b4 on graphite-2 #131820 ~7.4:1; red-bright #ff6972 on graphite-1 #0d1015 ~6.8:1. Text floor var(--font-min)=12px standard / 15px large (styles.css:20,27-29); every px font-size >=18px and every scalable label uses --font-min; <small> in Settings is explicitly pinned to --font-min (styles.css:967-970) so no sub-12px text exists.\n(4) Reduced motion honored via BOTH data-reduce-motion (styles.css:1024-1031) and prefers-reduced-motion (styles.css:1033-1042); applySettings writes documentElement.dataset.reduceMotion/textScale (App.tsx:33-35) and main mirrors it (App.tsx:298-300). Text scaling via data-text-scale token override (styles.css:27-29). Tests App.test.tsx:258-278.\n(5) Status not color-only: health-dot decorative with textual 'CORE {core}'/'CORE READY' (App.tsx:290-296); live-indicator shows runtime.phase text (MissionCockpit.tsx:151); AuthorityReview decision cells carry textual 'NETWORK DENY'/'PUSH DENY'/'SECRETS DENY'/'WRITE EXACT' (AuthorityReview.tsx:57-70); StatusMarker renders textual {status} beside aria-hidden glyph (StatusMarker.tsx:9-16); court-state/replay-check convey text ('MISSION VERIFIED','CHAIN VERIFIED','Exact state reconstruction'). Test App.test.tsx conveys-health-with-text.\n(6) Automated DOM a11y tests: arrow navigation + Settings accelerator (App.test.tsx:151-165), keyboard-reachable destinations by accessible name (App.test.tsx:280-291), health text-not-color-alone (App.test.tsx conveys-system-health), reduced-motion/text-scale on documentElement (App.test.tsx:258-267), authority-review heading focus + deny text (App.test.tsx:186-215).\n\nWINDOW BOUNDS: tauri.conf.json minWidth 980 / minHeight 680 exceed CSS content minimum 720x600 (styles.css:36-45), so large-text layout does not clip (desktop/src-tauri/tauri.conf.json:20-21).\n\nArchitect-gated residuals TS-001/TS-002 not in scope for this lane.",
+  "findings": [
+    {
+      "rule_id": "A11Y-01",
+      "title": "Authority table marks row-label cells as role=cell rather than role=rowheader",
+      "summary": "The Mission authority table (role=table) uses role=cell on the first column strong elements (FILESYSTEM/NETWORK/PUSH-PUBLISH/SECRETS) that semantically act as per-row headers. VoiceOver table navigation will announce them as plain data cells instead of row headers, a minor semantic-clarity weakness. Roles/name/order are otherwise present and the decision text is fully conveyed, so this does not break the documented invariant.",
+      "severity": "informational",
+      "confidence": "medium",
+      "category": "accessibility-semantics",
+      "locations": [
+        {
+          "path": "desktop/src/components/AuthorityReview.tsx",
+          "start_line": 50,
+          "end_line": 71,
+          "role": "authority table markup"
+        }
+      ],
+      "cwe": [],
+      "evidence": [
+        {
+          "label": "row-label cell",
+          "explanation": "First column of each authority row is a label/header for the row but is annotated role=cell, so assistive tech does not treat it as a rowheader.",
+          "excerpt": "<strong role=\"cell\">FILESYSTEM</strong> ... <strong role=\"cell\">NETWORK</strong>"
+        }
+      ],
+      "optionalProperties": {
+        "precondition": "VoiceOver user navigating the authority table in data-table mode",
+        "impact": "Slightly reduced row-context announcement; no loss of the textual deny/exact decisions",
+        "remediation": "Change the first-column strong role from \"cell\" to \"rowheader\" (and optionally add role=rowgroup) so VoiceOver announces the row label as the header.",
+        "cwe": null
+      }
+    }
+  ],
+  "reviewed_paths": [
+    "desktop/src/App.tsx",
+    "desktop/src/App.test.tsx",
+    "desktop/src/styles.css",
+    "desktop/src/components/Sidebar.tsx",
+    "desktop/src/components/StatusMarker.tsx",
+    "desktop/src/components/AuthorityReview.tsx",
+    "desktop/src/components/MissionCockpit.tsx",
+    "desktop/src/components/EvidencePanel.tsx",
+    "desktop/src/components/ReplayPanel.tsx",
+    "desktop/src/components/SettingsPanel.tsx",
+    "scripts/measure_contrast.py",
+    "desktop/src-tauri/tauri.conf.json"
+  ]
+}

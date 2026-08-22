@@ -1,0 +1,175 @@
+{
+  "coverage_summary": "{\"schema\":\"nemesis.hardening-audit.result/v1\",\"lane\":\"kernel_formal_surface\",\"reviewer_identity\":{\"context\":\"Independent defensive re-review of the kernel formal surface (SPARK capabilities/approvals kernel, formal scope config, proof verifier gate, kernel authority tests, FORMAL_ASSURANCE.md), read-only static analysis plus git read commands only\",\"model\":\"anthropic/claude-fable-5\",\"limitations\":[\"git rev-parse HEAD observed 9dd22f259d164ebb1afde3b8940a891161cad3f6 (branch production/desktop-v1-autonomous-recovery, tree 1532c116b1e2bf9ee23c38f159a615769f34f802) \u2014 the pinned subject; working-tree drift is confined to receipt artifacts (FORMAL_KERNEL.json modified, PROOF_ABA.json and two proof-aba logs deleted/modified), none of the audited source files\",\"INPUTS-20260822.json formal_report sha256 8fca1216\u2026 matches neither the committed FORMAL_KERNEL.json (ad24d9de\u2026, observed_at 2026-08-22T13:54:44Z) nor the current working-tree regeneration (3ae893df\u2026, observed_at 14:12:59Z, i.e. after the 14:09:25Z freeze); receipt facts were cross-checked in both variants and agree (KFS-02)\",\"No builds or provers were run; proof-discharge claims rest on committed gnatprove receipts whose 34 source_sha256 entries I recomputed and all match subject bytes\",\"Equivalence of the rewritten Is_Attenuation body (quantified expression vs baseline loop) was established by manual reasoning over git diff 4f0f387..9dd22f25, not by re-running the prover\"]},\"subject_commit\":\"9dd22f259d164ebb1afde3b8940a891161cad3f6\",\"coverage\":[{\"invariant\":\"Is_Attenuation's new iff postcondition exactly matches its body semantics and is not weaker than the prior one-directional contract\",\"files\":[\"kernel/src/nemesis-kernel-capabilities.ads\",\"kernel/src/nemesis-kernel-capabilities.adb\"],\"status\":\"CONFIRMED\"},{\"invariant\":\"Derive_Child_Grant Pre+Post cannot construct a child that widens the parent; Subject inheritance preserves the worker-mismatch refusal at Authorize\",\"files\":[\"kernel/src/nemesis-kernel-capabilities.ads\",\"kernel/src/nemesis-kernel-capabilities.adb\",\"kernel/tests/nemesis_authority_tests.adb\"],\"status\":\"CONFIRMED\"},{\"invariant\":\"The daemon's runtime use satisfies Derive_Child_Grant's precondition on every call path under -gnata assertion semantics\",\"files\":[\"daemon/src/nemesis_core_daemon.adb\",\"nemesis.gpr\",\"config/gnat.adc\"],\"status\":\"CONFIRMED\"},{\"invariant\":\"formal-kernel-scope.json truthfully lists Derive_Child_Grant, the new unproved authority_store boundary, and hash-anchored resolutions; verify_kernel_proof.py refuses silent trust-surface erasure and wrong contract hashes and derives the lane rather than asserting it\",\"files\":[\"config/formal-kernel-scope.json\",\"scripts/verify_kernel_proof.py\",\"tests/phase0/test_kernel_proof_manifest.py\"],\"status\":\"CONFIRMED\"},{\"invariant\":\"FORMAL_ASSURANCE.md claims match the receipt facts (81 obligations, proved operations list) and the non-extension section remains honest\",\"files\":[\"docs/architecture/FORMAL_ASSURANCE.md\",\"receipts/production-readiness-20260821/FORMAL_KERNEL.json\"],\"status\":\"CONFIRMED\"}],\"gaps\":[{\"id\":\"KFS-01\",\"severity\":\"low\",\"category\":\"gate_integrity\",\"cwe\":\"CWE-754\",\"path\":\"scripts/verify_kernel_proof.py\",\"line\":66,\"precondition\":\"A future kernel change adds a pragma Annotate (GNATprove, \u2026) justification (none exist anywhere in kernel/, daemon/, config/ today) so the gnatprove.out Total row carries a nonzero Justified column\",\"impact\":\"_total_row parses only fields[1] (Total) and fields[-1] (Unproved) of the Total row (scripts/verify_kernel_proof.py:61-68); the Justified column (second-to-last, visible in the fixture table at tests/phase0/test_kernel_proof_manifest.py:20-21) is never read, and WARNING_PATTERN (line 24) counts only warnings and pragma Assume statements. PASS_KERNEL_PROOF_MANIFEST and the '0 unproved' receipt claim would therefore stay green while obligations were manually waived rather than prover-discharged\",\"evidence\":\"scripts/verify_kernel_proof.py:61-68 (Total-row parse ignores interior columns), :24 (warning/Assume-only counters), :90-113 (validate_proof_summary has no justified check); grep across kernel/, daemon/, config/ found zero 'pragma Annotate' or 'pragma Assume' at the subject\",\"remediation\":\"Parse the Justified column explicitly in _total_row/parse_gnatprove_summary and append a validate_proof_summary error when nonzero (mirroring the assumptions check); optionally have validate_live_scope refuse 'pragma Annotate (GNATprove' in proved_units sources\",\"confidence\":\"high\"},{\"id\":\"KFS-02\",\"severity\":\"low\",\"category\":\"provenance\",\"cwe\":\"CWE-345\",\"path\":\"receipts/production-readiness-20260821/FORMAL_KERNEL.json\",\"line\":1,\"precondition\":\"A verifier attempts to bind the committed formal receipt to the subject commit or to reproduce the formal lane from the frozen inputs manifest\",\"impact\":\"The committed receipt records generation at baseline commit 4f0f387 on a dirty tree (subject.dirty_paths lists the trust-surface source files as modified/untracked, observed_at 13:54:44Z), and the freeze manifest's formal_report sha256 (8fca1216\u2026) matches no existing bytes: the working-tree copy was regenerated at 14:12:59Z, after the 14:09:25Z freeze. Commit-level anchoring of the doc-cited receipt is dangling; receipt identity currently rides only on its embedded source_sha256 set\",\"evidence\":\"git show HEAD:receipts/production-readiness-20260821/FORMAL_KERNEL.json \u2192 subject.commit=4f0f3879\u2026, dirty_paths=[' M kernel/src/nemesis-kernel-capabilities.ads', \u2026], sha256 ad24d9de\u2026; working-tree copy sha256 3ae893df\u2026 with subject.commit=9dd22f25\u2026, dirty_paths=[]; INPUTS-20260822.json formal_report.sha256=8fca1216\u2026 matches neither. Mitigating: all 34 source_sha256 entries in the committed receipt equal recomputed subject-byte hashes, and the summary facts (81 obligations, 8 units, 0 unproved, 0 warnings, 0 assumptions, no timeout) plus scope sha256 d283198f\u2026 are identical across both variants, so facts did not drift \u2014 only provenance\",\"remediation\":\"Regenerate FORMAL_KERNEL.json exactly once at the subject commit on a clean tree, commit those bytes, and freeze the inputs manifest against the committed hash; treat any post-freeze regeneration as invalidating the manifest. Flagged to the gates-integrity lane\",\"confidence\":\"high\"},{\"id\":\"KFS-03\",\"severity\":\"informational\",\"category\":\"defense_in_depth\",\"cwe\":\"CWE-863\",\"path\":\"kernel/src/nemesis-kernel-capabilities.ads\",\"line\":68,\"precondition\":\"A future non-daemon caller hand-constructs a child grant with a different Subject (or reuses an Id) and relies on Is_Attenuation alone as the widening check\",\"impact\":\"Is_Attenuation deliberately constrains neither Child.Subject nor Child.Id (unchanged since baseline \u2014 the old body checked neither), so the daemon's defense-in-depth re-check at daemon/src/nemesis_core_daemon.adb:391 would not catch subject rebinding on a hand-built child. Today this is fully closed: the only child constructor is Derive_Child_Grant, whose proved Post pins Subject = Parent.Subject (ads:99), and Authorize refuses any subject mismatch (adb:12,17), asserted at kernel/tests/nemesis_authority_tests.adb:159-162. Not a gap in the shipped flow; recorded so the boundary of the predicate is explicit\",\"evidence\":\"kernel/src/nemesis-kernel-capabilities.ads:68-77 (iff characterization has no Subject/Id conjunct); adb:25-41 (body identical); daemon single call site :377-390 always derives via Derive_Child_Grant\",\"remediation\":\"If Is_Attenuation is ever used as a standalone gate on externally supplied child grants, add a Child.Subject = Parent.Subject conjunct or document that subject binding is Authorize's responsibility\",\"confidence\":\"high\"}],\"confirmed_invariants\":[\"Is_Attenuation's Post (kernel/src/nemesis-kernel-capabilities.ads:68-77) is an exact iff: the body (kernel/src/nemesis-kernel-capabilities.adb:25-41) returns the identical eight-conjunct expression (baseline loop rewritten as an equivalent quantified expression), and the new contract strictly implies the prior one-directional Post \u2014 git diff 4f0f387..9dd22f25 shows the old '(if Result then \u2026)' lacked even the Parent/Child Status conjuncts, so the change strengthens, never widens; GNATprove records 'nemesis-kernel-capabilities.ads:69:08: postcondition proved' (receipts/phase-16-public/security-hardening.txt:733)\",\"Derive_Child_Grant (ads:82-107, adb:43-60) cannot widen: Pre (ads:90-94) demands an Active parent, a parent-held Operation, and parent-bounded Expires_After/Maximum_Bytes; Post (ads:95-107) pins Mission/Subject/Resource/Scope to the parent, Status=Active, expiry/bytes to the pre-bounded arguments, Operations to exactly the requested singleton, and asserts Is_Attenuation(Parent, Result) ('ads:96:08: postcondition proved', security-hardening.txt:736; Always_Terminates proved :734). Subject inheritance keeps Authorize's worker-mismatch refusal (adb:12,17) effective \u2014 kernel/tests/nemesis_authority_tests.adb:141-162 asserts attenuation, field inheritance, singleton operations, independent expiry (:151-152), sub-parent budget (:154-157), and derived-child subject-mismatch refusal (:159-162)\",\"The single runtime call site (daemon/src/nemesis_core_daemon.adb:377-390; repo-wide grep shows no other caller outside kernel tests) establishes every Pre conjunct before the call: Load_Parent_Grant failure refuses (:361-365), the Parent.Status /= Active or not Parent.Operations(Modify_Data) guard refuses 'parent_grant_inactive' (:366-372), Expires_After is Sequence_Number'Min(Clamped_Window(\u2026), Parent.Expires_After) (:387-389) hence \u2264 parent by construction, and Maximum_Bytes passes Parent.Maximum_Bytes verbatim (:390). With -gnata in both debug and release (nemesis.gpr:38,41) and pragma Assertion_Policy(Check) (config/gnat.adc:2) the contracts are also runtime-enforced, and no path can reach the call with a violated Pre; Clamped_Window is overflow-safe (daemon:133-139) and Valid_Digest/Valid_Id (:77-87) make the Capability_Id slice ('cap_' + 22 of 64 digest chars = 26) and Digest_256/Worker_Id conversions range-safe\",\"config/formal-kernel-scope.json:16 lists Derive_Child_Grant among capabilities public_operations; :46-49 records the new unproved nemesis-core-authority_store boundary with an explicit reason; :87 keeps trust_surface_blockers an explicit empty list and :88-131 records TS-001/TS-002 with authorized_by contract whose sha256 I recomputed from file bytes and matched (920900f3\u2026). scripts/verify_kernel_proof.py refuses empty blockers+resolutions ('trust surface state must remain explicit', :192-193), empty/duplicate ids (:194-196), and missing/64-char-malformed/mismatched contract hashes (:200-213), and derives PASS_BOUNDED vs BLOCKED_TRUST_SURFACE from the blockers list (:283-285 in the receipt, :379-381 at the gate print) rather than asserting it; validate_live_scope additionally pins the proved roster to the live kernel *.adb set (:127-137) and requires SPARK_Mode => On in every spec/body (:168). tests/phase0/test_kernel_proof_manifest.py:64-88 verifies the live scope, Derive_Child_Grant presence, empty blockers, and the exact contract hash; :90-131 exercises erasure, unanchored-hash, and duplicate-id refusals; :134-136 rejects duplicate JSON keys\",\"FORMAL_ASSURANCE.md:4 and :8 (PASS_KERNEL_PROOF_MANIFEST obligations=81 units=8; 81 VCs across 8 units, 0 unproved, 0 warnings, 0 assumptions, no timeouts; Alt-Ergo 2.4.0 / CVC5 1.1.2 / Why3 / alr 2.1.0) match the committed FORMAL_KERNEL.json summary and toolchain exactly; the proved-operations list (:10-17) matches the scope byte-for-byte; the iff description (:21) and attenuation-by-construction description (:22) match the shipped contracts; 'What is not proved' (:33-46) mirrors all ten scope boundaries including authority_store (:37); 'Non-extension of conclusions' (:57-59) still bounds the claim to PASS_BOUNDED and explicitly disclaims whole-system correctness, Rust/Tauri/WebKit/SQLite/Git/Keychain/macOS/compiler/prover extension\",\"All 34 source_sha256 entries in the committed FORMAL_KERNEL.json match recomputed hashes of the subject working-tree bytes, binding the proof run to exactly the shipped kernel and daemon sources; zero pragma Annotate or pragma Assume anywhere in kernel/, daemon/, config/\"],\"verdict\":\"CLEAN\"}",
+  "findings": [
+    {
+      "category": "gate_integrity",
+      "confidence": "high",
+      "cwe": [
+        "CWE-754"
+      ],
+      "evidence": [
+        {
+          "excerpt": "final = fields[-1]\nunproved = 0 if final == \".\" else int(final) if final.isdigit() else -1",
+          "explanation": "Only fields[1] and fields[-1] of the Total row are read; the second-to-last (Justified) column is never inspected.",
+          "label": "parser"
+        },
+        {
+          "excerpt": "WARNING_PATTERN = re.compile(r\"\\((?:[^)]*?)(\\d+) warnings and (\\d+) pragma Assume statements\\)\")",
+          "explanation": "WARNING_PATTERN counts only warnings and pragma Assume statements; pragma Annotate justifications produce neither.",
+          "label": "counters"
+        },
+        {
+          "explanation": "grep across kernel/, daemon/, config/ at the subject found zero 'pragma Annotate' or 'pragma Assume' occurrences, so no obligation is waived today.",
+          "label": "current-state"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 68,
+          "path": "scripts/verify_kernel_proof.py",
+          "role": "Total-row parser that skips interior columns",
+          "start_line": 61
+        },
+        {
+          "end_line": 24,
+          "path": "scripts/verify_kernel_proof.py",
+          "role": "counter pattern limited to warnings and pragma Assume",
+          "start_line": 24
+        },
+        {
+          "end_line": 113,
+          "path": "scripts/verify_kernel_proof.py",
+          "role": "validate_proof_summary with no justified check",
+          "start_line": 90
+        },
+        {
+          "end_line": 21,
+          "path": "tests/phase0/test_kernel_proof_manifest.py",
+          "role": "fixture showing the Justified column position",
+          "start_line": 20
+        }
+      ],
+      "optionalProperties": {
+        "gap_id": "KFS-01",
+        "remediation": "Parse the Justified column and refuse nonzero, mirroring the assumptions check; optionally refuse 'pragma Annotate (GNATprove' in proved_units sources within validate_live_scope."
+      },
+      "rule_id": "KFS-01",
+      "severity": "low",
+      "summary": "verify_kernel_proof.py's _total_row reads only the Total (fields[1]) and final Unproved (fields[-1]) columns of the gnatprove.out Total row; a nonzero Justified count (pragma Annotate manual waivers) would pass validate_proof_summary undetected because the warning/Assume counters do not cover justifications. No justification exists in the subject today, so this is a defense-in-depth gap in the gate, not a live fake-green.",
+      "title": "Proof-summary parser ignores the GNATprove Justified column"
+    },
+    {
+      "category": "provenance",
+      "confidence": "high",
+      "cwe": [
+        "CWE-345"
+      ],
+      "evidence": [
+        {
+          "explanation": "git show HEAD:\u2026/FORMAL_KERNEL.json \u2192 subject.commit=4f0f3879\u2026, dirty_paths includes ' M kernel/src/nemesis-kernel-capabilities.ads' and the other trust-surface files; sha256 ad24d9de\u2026, observed_at 2026-08-22T13:54:44Z.",
+          "label": "committed-receipt"
+        },
+        {
+          "explanation": "Working-tree copy sha256 3ae893df\u2026, subject.commit=9dd22f25\u2026, dirty_paths=[], observed_at 14:12:59Z \u2014 after the manifest's frozen_at 14:09:25Z; INPUTS formal_report.sha256=8fca1216\u2026 matches neither variant.",
+          "label": "post-freeze-regeneration"
+        },
+        {
+          "explanation": "All 34 source_sha256 entries in the committed receipt equal recomputed subject-byte hashes (0 mismatches), and summary facts plus scope sha256 d283198f\u2026 agree across both variants, so the proof demonstrably covered exactly the shipped sources.",
+          "label": "mitigation"
+        }
+      ],
+      "locations": [
+        {
+          "path": "receipts/production-readiness-20260821/FORMAL_KERNEL.json",
+          "role": "committed receipt with baseline subject.commit and non-empty dirty_paths",
+          "start_line": 1
+        },
+        {
+          "path": "receipts/production-readiness-20260821/security-review/INPUTS-20260822.json",
+          "role": "frozen manifest whose formal_report sha256 matches no existing bytes",
+          "start_line": 1
+        },
+        {
+          "end_line": 4,
+          "path": "docs/architecture/FORMAL_ASSURANCE.md",
+          "role": "document citing the receipt as its generation source",
+          "start_line": 3
+        }
+      ],
+      "optionalProperties": {
+        "coordination": "Reported to RevGatesIntegrity via hub during review.",
+        "gap_id": "KFS-02",
+        "remediation": "Regenerate the receipt once at the subject commit on a clean tree, commit those bytes, and freeze the manifest against the committed hash; treat post-freeze regeneration as invalidating the manifest."
+      },
+      "rule_id": "KFS-02",
+      "severity": "low",
+      "summary": "The committed FORMAL_KERNEL.json records subject.commit=4f0f387 (baseline) with the trust-surface files listed as dirty (generated 13:54:44Z, pre-commit), and INPUTS-20260822.json's formal_report sha256 (8fca1216\u2026) matches neither the committed bytes (ad24d9de\u2026) nor the post-freeze working-tree regeneration (3ae893df\u2026, 14:12:59Z). Facts did not drift \u2014 all 34 embedded source hashes match subject bytes and the 81/8/0/0/0 summary is identical across variants \u2014 but the commit-level provenance anchor for the doc-cited receipt is dangling.",
+      "title": "Committed formal receipt anchored to baseline dirty tree; freeze-manifest hash dangling"
+    },
+    {
+      "category": "defense_in_depth",
+      "confidence": "high",
+      "cwe": [
+        "CWE-863"
+      ],
+      "evidence": [
+        {
+          "explanation": "git diff 4f0f387..9dd22f25 shows the baseline body also never compared Subject; the new iff contract documents exactly the same predicate, so no widening occurred this epoch.",
+          "label": "unchanged-semantics"
+        },
+        {
+          "explanation": "The only runtime child constructor is Derive_Child_Grant (daemon:377-390), whose proved Post forces Subject = Parent.Subject; Authorize independently refuses any Grant.Subject /= Action.Subject, asserted at kernel/tests/nemesis_authority_tests.adb:159-162.",
+          "label": "live-path-closure"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 77,
+          "path": "kernel/src/nemesis-kernel-capabilities.ads",
+          "role": "iff characterization without Subject/Id conjuncts",
+          "start_line": 68
+        },
+        {
+          "end_line": 394,
+          "path": "daemon/src/nemesis_core_daemon.adb",
+          "role": "runtime re-check that inherits the predicate's boundary",
+          "start_line": 391
+        },
+        {
+          "end_line": 17,
+          "path": "kernel/src/nemesis-kernel-capabilities.adb",
+          "role": "Authorize subject-mismatch refusal closing the live path",
+          "start_line": 12
+        }
+      ],
+      "optionalProperties": {
+        "gap_id": "KFS-03",
+        "remediation": "If Is_Attenuation ever gates externally supplied child grants standalone, add a Child.Subject = Parent.Subject conjunct or document that subject binding is Authorize's responsibility."
+      },
+      "rule_id": "KFS-03",
+      "severity": "informational",
+      "summary": "The iff characterization (ads:68-77) has no Subject/Id conjunct \u2014 unchanged since baseline \u2014 so the daemon's defense-in-depth Is_Attenuation re-check would not catch a hand-built subject-rebound child. The shipped flow is fully closed: Derive_Child_Grant's proved Post pins Subject = Parent.Subject (ads:99) and Authorize refuses subject mismatch (adb:12,17; test :159-162). Informational boundary note only.",
+      "title": "Is_Attenuation intentionally does not constrain Child.Subject or Child.Id (closed on the live path)"
+    }
+  ],
+  "reviewed_paths": [
+    "kernel/src/nemesis-kernel-capabilities.ads",
+    "kernel/src/nemesis-kernel-capabilities.adb",
+    "kernel/src/nemesis-kernel-approvals.ads",
+    "kernel/src/nemesis-kernel-approvals.adb",
+    "kernel/src/nemesis-kernel-types.ads",
+    "kernel/tests/nemesis_authority_tests.adb",
+    "config/formal-kernel-scope.json",
+    "config/gnat.adc",
+    "nemesis.gpr",
+    "scripts/verify_kernel_proof.py",
+    "tests/phase0/test_kernel_proof_manifest.py",
+    "docs/architecture/FORMAL_ASSURANCE.md",
+    "daemon/src/nemesis_core_daemon.adb",
+    "receipts/production-readiness-20260821/FORMAL_KERNEL.json",
+    "receipts/production-readiness-20260821/security-review/BRIEF-20260822.md",
+    "receipts/production-readiness-20260821/security-review/INPUTS-20260822.json",
+    "receipts/production-readiness-20260821/trust-surface/TS_CONTINUATION_CONTRACT_2026-08-22.md",
+    "receipts/phase-16-public/security-hardening.txt"
+  ]
+}

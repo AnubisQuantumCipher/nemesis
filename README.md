@@ -25,6 +25,12 @@ The `v0.1.0` release line contains:
 
 Not shipped: iPhone/iPad, web, remote-public daemon, cloud service, Windows/Linux packages, App Store distribution, Developer ID signing, or notarization. The inherited multi-platform `1.0` blueprint remains future architecture, not the status of this release.
 
+## Current bounded desktop workflow
+
+The successor worktree adds a source-bound `nemesis.desktop-mission/v1` path without broadening authority: Desktop can draft or compile one exact local contract, show the normalized contract and action digests before authorization, execute one bounded existing-file replacement in an isolated Git worktree, recover Core at the declared restart boundary, verify current-source evidence, sign a local receipt, reject a one-byte mutation, and load the resulting authoritative replay.
+
+See [Bounded Local Desktop Mission](docs/architecture/LOCAL_DESKTOP_MISSION.md) and its [machine schema](protocols/schemas/nemesis.desktop-mission.v1.schema.json). The formerly recorded daemon approval/capability trust-surface blockers (TS-001/TS-002) were resolved on 2026-08-22 under exact architect authorization: `authorize_action` now consumes a persisted one-shot approval and derives an attenuated child from a persisted parent grant (see [config/formal-kernel-scope.json](config/formal-kernel-scope.json) trust_surface_resolutions and [docs/architecture/FORMAL_ASSURANCE.md](docs/architecture/FORMAL_ASSURANCE.md)). Developer ID signing and notarization are permanent non-claims of the supported source-install distribution ([docs/release/SOURCE_INSTALL.md](docs/release/SOURCE_INSTALL.md)), never prerequisites.
+
 ## Architecture and trust flow
 
 ```text
@@ -81,9 +87,10 @@ npm --prefix desktop ci
 ./scripts/build_ada.sh
 cargo build --manifest-path runtime/Cargo.toml --workspace
 ./script/build_and_run.sh --verify
+./scripts/test_production_desktop.sh
 ```
 
-`./script/build_and_run.sh` builds the renderer and native bridge, creates a local debug `.app`, launches it, and requires the `nemesis-desktop` process to appear.
+`./script/build_and_run.sh` builds the renderer and native bridge, creates a local debug `.app`, launches it, and requires the `nemesis-desktop` process to appear. `./scripts/test_production_desktop.sh` additionally exercises the real compiled local-mission path, receipt tamper rejection, replay persistence, renderer behavior, native tests, and standalone release-resource contract.
 
 Run the witnessed backend slice directly:
 
@@ -101,6 +108,8 @@ python3 scripts/verify_evidence_bundle.py receipts/desktop-latest
 
 ```sh
 python3 scripts/verify_contract.py
+python3 scripts/verify_production_contract.py
+python3 scripts/validate_production_readiness.py receipts/production-readiness-20260821/PRODUCTION_READINESS.json
 python3 scripts/verify_release_contract.py
 python3 -m unittest discover -s tests -p 'test_*.py'
 cargo fmt --manifest-path runtime/Cargo.toml --all -- --check
@@ -150,16 +159,16 @@ Historical machine receipts intentionally retain observed local tool paths becau
 From a clean committed macOS arm64 worktree:
 
 ```sh
-./scripts/package_release.sh 0.1.0
+./scripts/package_release.sh 0.2.0
 ```
 
-The packager builds the release runtime, audits accepted dependency licenses, generates and embeds third-party notices, removes private Mach-O RPATHs, strips local symbols, rejects private path/credential signatures, applies an ad-hoc signature, creates the app ZIP, and derives `release-manifest.json` plus `SHA256SUMS` from final bytes. Output is written under ignored `release/v0.1.0/`.
+The packager builds the release runtime, audits accepted dependency licenses, generates and embeds third-party notices, removes private Mach-O RPATHs, strips local symbols, rejects private path/credential signatures, applies an ad-hoc signature, creates the app ZIP, and derives `release-manifest.json` plus `SHA256SUMS` from final bytes. Output is written under ignored `release/v<version>/`.
 
 ## Install a GitHub release
 
 Download these assets from [GitHub Releases](https://github.com/AnubisQuantumCipher/nemesis/releases):
 
-- `NEMESIS-Desktop-v0.1.0-macos-arm64.zip`
+- `NEMESIS-Desktop-v<version>-macos-arm64.zip`
 - `release-manifest.json`
 - `SHA256SUMS`
 
@@ -167,11 +176,11 @@ Place them in one directory, then verify before extracting:
 
 ```sh
 shasum -a 256 -c SHA256SUMS
-ditto -x -k NEMESIS-Desktop-v0.1.0-macos-arm64.zip .
+ditto -x -k NEMESIS-Desktop-v<version>-macos-arm64.zip .
 codesign --verify --deep --strict --verbose=2 "NEMESIS Desktop.app"
 ```
 
-The app is **ad-hoc signed and not notarized** because an active Apple Developer membership is unavailable. Gatekeeper rejection is expected for downloaded bytes. Prefer building from reviewed source. If you deliberately trust the verified archive, use macOS **Privacy & Security → Open Anyway**; do not interpret that override as Developer ID or notarization evidence.
+The app is **ad-hoc signed and not notarized**. Per the supported distribution contract ([docs/release/SOURCE_INSTALL.md](docs/release/SOURCE_INSTALL.md)), Developer ID signing, notarization, and Gatekeeper acceptance are **not requirements** of this product: trust is established by hash verification against the release manifest, never by Apple code-signing identity. Gatekeeper rejection of a quarantined download is expected behavior for unsigned software, not a defect. Prefer building from reviewed source. If you deliberately trust the hash-verified archive, use macOS **Privacy & Security → Open Anyway** (or remove quarantine after `shasum -c` passes); do not interpret that override as Developer ID or notarization evidence. `scripts/verify_install_contract.py` proves the install → launch → upgrade → uninstall contract on real release bytes.
 
 ## Security reporting
 

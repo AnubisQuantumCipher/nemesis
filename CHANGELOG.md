@@ -2,9 +2,46 @@
 
 This file records user-visible NEMESIS changes. Verification status comes from the named gates and receipts, not from this summary.
 
-## Unreleased
+## 0.2.0 — 2026-08-22
 
-No user-visible changes are queued beyond the `v0.1.0` release line.
+Trust-surface integration release: the desktop authority review is now
+enforced by the kernel, not merely displayed.
+
+### Included
+
+- TS-001 (architect-authorized): `authorize_action` requires a persisted,
+  exact, unexpired, one-shot approval consumed by the SPARK-proved
+  `Consume_Approval` and made durable before the authorization event commits.
+  Replay refuses, including across daemon crash/restart.
+- TS-002 (architect-authorized): the synthesized per-request capability grant
+  is gone. One immutable persisted parent grant per mission is attenuated
+  per action through the new SPARK-proved `Derive_Child_Grant`, whose
+  postcondition guarantees `Is_Attenuation (Parent, Child)`.
+- New local protocol commands `create_grant` and `create_approval` (issued
+  only in `PLANNING`, driven by the explicit desktop authorization click);
+  typed refusal reasons on the authority path.
+- New durable authority store (`parent.grant`, `approval-<digest>.apr`) with
+  fixed-width strict parsing, `F_FULLFSYNC`, and atomic rename.
+- Kernel proof grew to 81 obligations across the same 8 units;
+  `Is_Attenuation` is now proved as an exact (iff) characterization.
+- Second A→B→A tamper gate on the daemon authority path
+  (`scripts/verify_authority_aba.py`): a compiling replay-widening variant is
+  rejected by the hostile daemon API test, then byte-identical restoration
+  returns the gate to green.
+- Authority review panel surfaces the one-shot approval and parent→child
+  grant lineage; hostile and crash-recovery authority tests across Ada and
+  Python suites.
+- Supported-distribution contract formalized around source install and
+  hash-verified unsigned artifacts (`docs/release/SOURCE_INSTALL.md`) with an
+  executable install/upgrade/uninstall proof
+  (`scripts/verify_install_contract.py`).
+
+### Distribution boundary
+
+- Unchanged from 0.1.0: ad-hoc signed, not Developer ID signed, not
+  notarized; Gatekeeper acceptance not claimed. Per the architect contract of
+  2026-08-22 these are permanent non-claims of the supported source-install
+  distribution, never blockers.
 
 ## 0.1.0 — 2026-08-20
 

@@ -1,0 +1,122 @@
+{
+  "coverage_summary": "Lane spark-authority-kernel. Subject commit 651e7d839bf1624df2c5e074c11a88a62f024e34. Reviewed every kernel/src/*.ads/*.adb, both kernel/tests/*.adb, config/formal-kernel-scope.json, docs/architecture/FORMAL_ASSURANCE.md, receipts/production-readiness-20260821/FORMAL_KERNEL.json, and the daemon authorize_action call site (daemon/src/nemesis_core_daemon.adb:200-263). Verdict: CLEAN — all seven assigned SPARK/Ada authority-kernel invariants are CONFIRMED enforced in source (not merely asserted), with no gap >= medium. Two informational items recorded (documentation phrasing precision; and the documented daemon-side non-integration of the kernel one-shot approval — TS-001/TS-002 — noted as interaction only, not re-litigated).\n\nCONFIRMED INVARIANTS (path:line):\n1. Approvals exact-digest/expiring/one-shot — kernel/src/nemesis-kernel-approvals.adb:11-32 (status checked first: Approval_Consumed->Approval_Replayed one-shot at :12-14; expiry Current_Sequence>Expires_After->Expired at :21-22; exact Mission match :23-24; exact Action_Digest match :25-26; on accept sets Approval_Consumed :28-29) with proved Post in kernel/src/nemesis-kernel-approvals.ads:29-42 (accept => Status=Consumed and Mission= and Action_Digest= and Current_Sequence<=Expires_After; else Approval=Approval'Old).\n2. Budgets cannot increase — kernel/src/nemesis-kernel-budgets.adb:20-36 (Consume only subtracts, guarded by Can_Allocate ensuring Requested<=Available; Budget_Unit range 0..2^63-1 at .ads:2 forbids underflow/negative) with Post in kernel/src/nemesis-kernel-budgets.ads:22-40 (refused=>unchanged; else each field = old - non-negative requested).\n3. Capabilities only attenuate — kernel/src/nemesis-kernel-capabilities.adb:26-49 Is_Attenuation (same mission/resource/scope, child Expires_After<=parent, child Maximum_Bytes<=parent, child operation set subset of parent) with Post in .ads:65-79; Authorize refuses outside grant at .adb:4-24 / Post .ads:44-58.\n4. Invalid states cannot transition/complete — kernel/src/nemesis-kernel-missions.adb:20-37 Apply (Is_Terminal->Refused_Terminal_State first, then Allowed check, then sequence-exhaustion) and Commit_Event :39-49; kernel/src/nemesis-kernel-transitions.ads:15-19 Post (if Is_Terminal(Source) then not Allowed) with body :4-15 enumerating legal edges and terminal states => False; kernel/src/nemesis-kernel-types.adb:11-12 Is_Terminal.\n5. Evidence cannot self-accept / completion needs current-source claims — kernel/src/nemesis-kernel-evidence.adb:4-32 (requires Status=Accepted, Source_Digest=Current_Source, Verifier_Authorized, Consequence>=Required, Strength/=Model_Assertion, and Verifier/=Builder for Decision_Boundary/Safety_Critical => builder cannot accept own evidence) with Post .ads:38-49; kernel/src/nemesis-kernel-completion.adb:4-20 Evaluate (accept only if Worker_Proposed, no blocker, every claim in Not_Required|Supported_Current => no stale/missing) with Post .ads:20-30.\n6. Doc postconditions match spec contracts — every postcondition named in docs/architecture/FORMAL_ASSURANCE.md maps to a real contract: Authorize/Is_Attenuation (capabilities.ads:44-79), Consume_Approval (approvals.ads:29-42), Budgets.Consume (budgets.ads:22-40), Transitions.Allowed (transitions.ads:15-19), Completion.Evaluate (completion.ads:20-30), Evidence.Acceptable (evidence.ads:38-49). Minor imprecision recorded as SPARK-INFO-01.\n7. No SPARK escapes in kernel — grep across kernel/ for SPARK_Mode=>Off, pragma Assume, pragma Annotate returned zero matches; every kernel unit is SPARK_Mode=>On (e.g. approvals.ads:3, budgets.ads:1, capabilities.ads:3, evidence.ads:3, completion.ads:1, missions.ads:5, transitions.ads:3, types.ads:1). config/formal-kernel-scope.json proved_units list and FORMAL_KERNEL.json (0 recorded assumptions, 78 obligations/8 units) corroborate.\n\nTests corroborate contracts: kernel/tests/nemesis_authority_tests.adb exercises replay, mismatch, expiry, budget monotonicity, attenuation subset, evidence self-accept refusal; kernel/tests/nemesis_kernel_tests.adb exercises terminal/illegal transitions and sequence handling.",
+  "findings": [
+    {
+      "rule_id": "SPARK-INFO-01",
+      "title": "FORMAL_ASSURANCE.md labels Missions.Apply/Commit_Event state guards as 'preconditions' and cites Can_Allocate 'postconditions' that do not exist as formal contracts",
+      "summary": "The assurance doc names the invalid-state protection as 'Missions.Apply/Commit_Event preconditions', but those subprograms carry no Ada precondition; the terminal-state guard is enforced by body logic plus their postconditions. Likewise the doc credits 'Budgets.Can_Allocate ... postconditions' although Can_Allocate is an expression function with no Post aspect (the monotonicity guarantee is carried by Consume's Post and the Budget_Unit non-negative range). The invariants are fully enforced; only the documentation's contract-kind labels are imprecise. No security impact.",
+      "severity": "informational",
+      "confidence": "high",
+      "category": "documentation-accuracy",
+      "locations": [
+        {
+          "path": "docs/architecture/FORMAL_ASSURANCE.md",
+          "start_line": 31,
+          "end_line": 33,
+          "role": "claim"
+        },
+        {
+          "path": "kernel/src/nemesis-kernel-missions.ads",
+          "start_line": 40,
+          "end_line": 63,
+          "role": "actual-contract"
+        },
+        {
+          "path": "kernel/src/nemesis-kernel-budgets.adb",
+          "start_line": 3,
+          "end_line": 13,
+          "role": "actual-contract"
+        }
+      ],
+      "cwe": [],
+      "evidence": [
+        {
+          "label": "doc phrasing",
+          "explanation": "FORMAL_ASSURANCE.md attributes invalid-state protection to 'Missions.Apply/Commit_Event preconditions' and budget monotonicity to Can_Allocate postconditions.",
+          "excerpt": "Invalid states cannot transition or complete: Transitions.Allowed, Missions.Apply/Commit_Event preconditions, and Completion.Evaluate postconditions."
+        },
+        {
+          "label": "actual contract",
+          "explanation": "Apply/Commit_Event declare only Global=>null and a Post; no Pre. The terminal guard is in the body (missions.adb:22). Can_Allocate (budgets.adb:3-13) is an expression function with no Post; monotonicity is carried by Consume.Post (budgets.ads:22-40) and Budget_Unit range 0..2^63-1 (budgets.ads:2)."
+        }
+      ],
+      "optionalProperties": {
+        "remediation": "Reword the doc to say Apply/Commit_Event enforce the guard via body checks and their postconditions, and that budget monotonicity is carried by Consume's postcondition plus the non-negative Budget_Unit subtype.",
+        "enforcement_status": "invariant enforced; doc-phrasing only"
+      }
+    },
+    {
+      "rule_id": "SPARK-INFO-02",
+      "title": "Kernel one-shot approval (Approvals.Consume_Approval) is never invoked by the daemon authorize path; capability grant is synthesized per-request (TS-001/TS-002 interaction)",
+      "summary": "The kernel proves an exact, expiring, one-shot approval and a parent/child attenuation relation, but daemon/src/nemesis_core_daemon.adb authorize_action synthesizes a fresh Capability_Grant in-line (fixed cap id, Operations=>Modify_Data, Maximum_Bytes=>4096, Expiry=Current+100) and calls only Capabilities.Authorize; it never calls Approvals.Consume_Approval nor Is_Attenuation. This is the already-documented, architect-gated residual pair TS-001 (approval not consumed in authorize) and TS-002 (synthesized rather than persisted-parent+attenuated-child grant), recorded in config/formal-kernel-scope.json:trust_surface_blockers and FORMAL_ASSURANCE.md. The daemon unit is SPARK_Mode Off and outside the proved kernel scope. Reported as interaction only per brief ground rule 5; not re-litigated and not scored as a kernel-lane gap. The kernel-side invariants themselves remain fully enforced.",
+      "severity": "informational",
+      "confidence": "high",
+      "category": "scope-interaction",
+      "locations": [
+        {
+          "path": "daemon/src/nemesis_core_daemon.adb",
+          "start_line": 200,
+          "end_line": 263,
+          "role": "call-site"
+        },
+        {
+          "path": "config/formal-kernel-scope.json",
+          "start_line": 74,
+          "end_line": 85,
+          "role": "documented-residual"
+        }
+      ],
+      "cwe": [],
+      "evidence": [
+        {
+          "label": "synthesized grant, no approval consume",
+          "explanation": "authorize_action builds Grant inline and calls Authorize(Grant,Action,Current); no Consume_Approval, no persisted parent + Is_Attenuation child.",
+          "excerpt": "Grant := (Id => \"cap_0000000000000000000000\", ... Operations => [Modify_Data => True, others => False], ... Maximum_Bytes => 4_096, Status => Active); ... Decision := Authorize (Grant, Action, Current);"
+        },
+        {
+          "label": "documented + gated",
+          "explanation": "config/formal-kernel-scope.json records TS-001 and TS-002 and marks nemesis_core_daemon 'Approvals is not called'; FORMAL_ASSURANCE.md keeps the production formal lane at BLOCKED_TRUST_SURFACE.",
+          "excerpt": "nemesis_core_daemon ... socket dispatch and Kernel composition boundary; Approvals is not called"
+        }
+      ],
+      "optionalProperties": {
+        "enforcement_status": "kernel invariant enforced; daemon integration is an architect-gated residual, noted not re-litigated"
+      }
+    }
+  ],
+  "reviewed_paths": [
+    "kernel/src/nemesis.ads",
+    "kernel/src/nemesis-kernel.ads",
+    "kernel/src/nemesis-kernel-types.ads",
+    "kernel/src/nemesis-kernel-types.adb",
+    "kernel/src/nemesis-kernel-approvals.ads",
+    "kernel/src/nemesis-kernel-approvals.adb",
+    "kernel/src/nemesis-kernel-budgets.ads",
+    "kernel/src/nemesis-kernel-budgets.adb",
+    "kernel/src/nemesis-kernel-capabilities.ads",
+    "kernel/src/nemesis-kernel-capabilities.adb",
+    "kernel/src/nemesis-kernel-completion.ads",
+    "kernel/src/nemesis-kernel-completion.adb",
+    "kernel/src/nemesis-kernel-evidence.ads",
+    "kernel/src/nemesis-kernel-evidence.adb",
+    "kernel/src/nemesis-kernel-missions.ads",
+    "kernel/src/nemesis-kernel-missions.adb",
+    "kernel/src/nemesis-kernel-transitions.ads",
+    "kernel/src/nemesis-kernel-transitions.adb",
+    "kernel/tests/nemesis_authority_tests.adb",
+    "kernel/tests/nemesis_kernel_tests.adb",
+    "config/formal-kernel-scope.json",
+    "docs/architecture/FORMAL_ASSURANCE.md",
+    "receipts/production-readiness-20260821/FORMAL_KERNEL.json",
+    "daemon/src/nemesis_core_daemon.adb"
+  ],
+  "deferred": [
+    {
+      "reason": "Daemon-side authority persistence/integration (TS-001 one-shot approval consumption in authorize; TS-002 persisted parent + attenuated child grants) is architect-gated and SPARK_Mode Off; per brief ground rule 5 noted as interaction only, not re-litigated in this lane.",
+      "paths": [
+        "daemon/src/nemesis_core_daemon.adb",
+        "daemon/src/nemesis-core-mission_store.adb"
+      ]
+    }
+  ]
+}

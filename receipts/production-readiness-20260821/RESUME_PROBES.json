@@ -1,0 +1,47 @@
+{
+ "baseline_rebind": {
+  "focused_desktop_gate": {
+   "exit_status": 0,
+   "focused_test": "executes_reviewed_contract_and_persists_current_receipt_and_replay ok",
+   "log": "receipts/production-readiness-20260821/production-desktop-resume-20260822.log",
+   "marker": "PASS_PRODUCTION_DESKTOP_AUTOMATED",
+   "sha256": "04186f15858b2515d0161b20e121a83e55e7b25cedfa7e50b159055f5d84a9f4"
+  },
+  "verify_complete": {
+   "classification": "KNOWN_SCAR_BY_DESIGN_SOURCE_BINDING",
+   "exit_status": 1,
+   "failure": "tests.integration.test_phase16_public_verification: covered_source_changed \u2014 v0.1.0-epoch phase-16 receipt is source-bound by design; successor VZ hardening re-seal scheduled at final candidate head",
+   "log": "receipts/production-readiness-20260821/verify-complete-resume-20260822.log",
+   "sha256": "257f30922d7a46f4b182ab4913eef899b36aa290a1e356d7aec9cb74d63d2a07"
+  }
+ },
+ "console_lock": {
+  "IOConsoleLocked": true,
+  "consequence": "native GUI/AX walkthroughs remain environment-blocked (C-13 native slice, G-10)",
+  "probed_at": "2026-08-22T06:15:54Z"
+ },
+ "continuation_contract": {
+  "path": "/tmp/NEMESIS_DESKTOP_PRODUCTION_RECOVERY_FABLE5_MISSION_2026-08-21.md",
+  "sha256": "ad54115ae3a6550ff65e9963a37be1ae4482257a48ebd344b88766068fc23518",
+  "verified": true
+ },
+ "head": "f36d84b267af73bc559b89a76ce6c9a6c57bb770",
+ "host_guard": {
+  "guard_visible_omp_count_at_probe": 1,
+  "label": "com.sicarii.omp-host-guard",
+  "loaded": true,
+  "log": "/Users/sicarii/Library/Logs/omp-host-guard.log",
+  "semantics": "kill-all at >=24 omp processes, or >=12 omp while free+speculative < 8192 MiB"
+ },
+ "omp_version": "17.4.2",
+ "original_contract_verified": {
+  "bytes": 26694,
+  "lines": 320,
+  "sha256": "2485cd682cdedfeb0bfd13ce2aabd51194c72204495de0c12058631cb7c92c87",
+  "words": 3417
+ },
+ "probed_at": "2026-08-22T06:15:54Z",
+ "provisional_binaries_note": "prebuilt Ada/Rust executables in tree are provisional cache evidence; exact rebuild from current source occurs at final seal via test_security_hardening.sh",
+ "schema": "nemesis.resume-probes/v1",
+ "session": "fable5-resume-20260822"
+}
