@@ -61,12 +61,12 @@
       "transport": "Tart over Apple Virtualization.framework"
     },
     "log": {
-      "bytes": 30756,
+      "bytes": 56510,
       "file": "receipts/phase-16-public/security-hardening.txt",
-      "line_count": 877,
-      "sha256": "81cfe9a98c4934ea6543303a9a8bd81fe26c48b9a016629fa064f94e02f74d30"
+      "line_count": 1335,
+      "sha256": "a95b5f0ef7ac4731603ca41b65bddbb4ae041903e9181f7d2ea6ec01b4fb8587"
     },
-    "observed_at": "2026-08-22T15:45:01Z",
+    "observed_at": "2026-08-22T17:01:16Z",
     "observed_warnings": [
       "Ada link steps reported a deployment-target override from 16.0 to the host target 26.0; every build, test, and bounded proof command still exited zero."
     ],
@@ -91,9 +91,9 @@
     "sha256": "8f62d762c30849ec6841b0fbde87004ced41365b456c98c79f6f1bf53c347ccc"
   },
   "repository": {
-    "branch": "production/terminator-matrix-cockpit",
-    "subject_commit": "909db2e79a0085b2ba77a292e50b2ce3789cb690",
-    "subject_tree": "d8dbb9f28c8fe903234853bcc696ab8ec49af9e2"
+    "branch": "production/boss-harness-completion",
+    "subject_commit": "c3984ce4e9065e83a0b5392cc73ef6eaea5333b8",
+    "subject_tree": "d6eb59bdd66f791bea847340cc613effb9baff74"
   },
   "residuals": [
     {

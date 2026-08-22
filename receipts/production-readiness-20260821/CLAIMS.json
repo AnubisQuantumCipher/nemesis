@@ -1,394 +1,653 @@
 {
-  "schema": "nemesis.production-claim-matrix/v1",
-  "subject": {
-    "commit": "d18cb7cc5bd918a6e9dd67aa99088dab9503e39b",
-    "tree": "80d1b4af38cecf97becca780b6094ab99dfbf0fd"
+ "schema": "nemesis.production-claim-matrix/v1",
+ "subject": {
+  "commit": "d18cb7cc5bd918a6e9dd67aa99088dab9503e39b",
+  "tree": "80d1b4af38cecf97becca780b6094ab99dfbf0fd"
+ },
+ "contract": {
+  "path": "docs/mission/NEMESIS_DESKTOP_PRODUCTION_READINESS_AUTONOMOUS_MISSION_2026-08-21.md",
+  "sha256": "2485cd682cdedfeb0bfd13ce2aabd51194c72204495de0c12058631cb7c92c87"
+ },
+ "inventoried_surfaces": [
+  "README.md",
+  "STATUS.md",
+  "CHANGELOG.md",
+  "SECURITY.md",
+  "THREAT_MODEL.md",
+  "TRUST_BOUNDARIES.md",
+  "docs/release/V0.1.0.md",
+  "desktop/package.json",
+  "desktop/src-tauri/Cargo.toml",
+  "desktop/src-tauri/tauri.conf.json",
+  "desktop/src-tauri/tauri.release.conf.json",
+  "desktop/src/App.tsx",
+  "desktop/src/components/AuthorityReview.tsx",
+  "desktop/src/components/EvidencePanel.tsx",
+  "desktop/src/components/MissionCockpit.tsx",
+  "desktop/src/components/ReplayPanel.tsx",
+  "desktop/src/components/Sidebar.tsx",
+  "desktop/src/data/navigation.ts"
+ ],
+ "screenshots": {
+  "count": 0,
+  "observation": "No tracked PNG/JPEG/WebP product screenshots exist; the only tracked raster image is desktop/src-tauri/icons/icon.png."
+ },
+ "claims": [
+  {
+   "id": "CLM-001",
+   "claim": "NEMESIS is a local-first system for durable autonomous missions.",
+   "sources": [
+    "README.md:7-9"
+   ],
+   "code": [
+    "scripts/run_vertical_slice.py:186-455",
+    "daemon/src/nemesis-core-mission_store.adb:1-574"
+   ],
+   "tests": [
+    "tests/end_to_end/test_vertical_slice.py",
+    "tests/integration/test_daemon_api.py"
+   ],
+   "receipts": [
+    "receipts/phase-6/MANIFEST.json",
+    "receipts/production-readiness-20260821/BASELINE.json"
+   ],
+   "evidence_status": "BELIEVED",
+   "claim_status": "PARTIAL",
+   "gap": "The installed desktop runs one fixed temporary fixture; it cannot create a user mission from an exact local contract, and active mission state is not restored into the UI after relaunch.",
+   "disposition": "NARROW_AND_IMPLEMENT"
   },
-  "contract": {
-    "path": "docs/mission/NEMESIS_DESKTOP_PRODUCTION_READINESS_AUTONOMOUS_MISSION_2026-08-21.md",
-    "sha256": "2485cd682cdedfeb0bfd13ce2aabd51194c72204495de0c12058631cb7c92c87"
+  {
+   "id": "CLM-002",
+   "claim": "Untrusted workers propose; bounded Ada/SPARK authority decides; deterministic verifiers decide completion.",
+   "sources": [
+    "README.md:7-9",
+    "THREAT_MODEL.md:8-8"
+   ],
+   "code": [
+    "kernel/src/nemesis-kernel-capabilities.adb",
+    "kernel/src/nemesis-kernel-completion.adb",
+    "daemon/src/nemesis_core_daemon.adb:200-353"
+   ],
+   "tests": [
+    "kernel/tests/nemesis_authority_tests.adb",
+    "tests/end_to_end/test_vertical_slice.py"
+   ],
+   "receipts": [
+    "receipts/production-readiness-20260821/baseline-verify-complete-attempt-2.log"
+   ],
+   "evidence_status": "VERIFIED",
+   "claim_status": "PARTIAL",
+   "gap": "The fixture path is exercised, but daemon action authorization synthesizes an ephemeral capability and never consumes Nemesis.Kernel.Approvals.",
+   "disposition": "TRUST_SURFACE_FINDING"
   },
-  "inventoried_surfaces": [
-    "README.md",
-    "STATUS.md",
-    "CHANGELOG.md",
-    "SECURITY.md",
-    "THREAT_MODEL.md",
-    "TRUST_BOUNDARIES.md",
-    "docs/release/V0.1.0.md",
-    "desktop/package.json",
-    "desktop/src-tauri/Cargo.toml",
-    "desktop/src-tauri/tauri.conf.json",
-    "desktop/src-tauri/tauri.release.conf.json",
-    "desktop/src/App.tsx",
-    "desktop/src/components/AuthorityReview.tsx",
-    "desktop/src/components/EvidencePanel.tsx",
-    "desktop/src/components/MissionCockpit.tsx",
-    "desktop/src/components/ReplayPanel.tsx",
-    "desktop/src/components/Sidebar.tsx",
-    "desktop/src/data/navigation.ts"
-  ],
-  "screenshots": {
-    "count": 0,
-    "observation": "No tracked PNG/JPEG/WebP product screenshots exist; the only tracked raster image is desktop/src-tauri/icons/icon.png."
+  {
+   "id": "CLM-003",
+   "claim": "The macOS desktop exposes mission authority, evidence state, replay, and the witnessed local vertical slice.",
+   "sources": [
+    "README.md:9-9"
+   ],
+   "code": [
+    "desktop/src/App.tsx:19-138",
+    "desktop/src/components/AuthorityReview.tsx:1-76",
+    "desktop/src/components/EvidencePanel.tsx:1-80",
+    "desktop/src/components/ReplayPanel.tsx:1-58"
+   ],
+   "tests": [
+    "desktop/src/App.test.tsx:64-131"
+   ],
+   "receipts": [
+    "receipts/phase-7-desktop/MANIFEST.json"
+   ],
+   "evidence_status": "BELIEVED",
+   "claim_status": "PARTIAL",
+   "gap": "Authority data and progress are hardcoded, evidence survives only in React memory, and Replay always loads the static phase-11 fixture instead of the last desktop mission.",
+   "disposition": "IMPLEMENT"
   },
-  "claims": [
-    {
-      "id": "CLM-001",
-      "claim": "NEMESIS is a local-first system for durable autonomous missions.",
-      "sources": ["README.md:7-9"],
-      "code": ["scripts/run_vertical_slice.py:186-455", "daemon/src/nemesis-core-mission_store.adb:1-574"],
-      "tests": ["tests/end_to_end/test_vertical_slice.py", "tests/integration/test_daemon_api.py"],
-      "receipts": ["receipts/phase-6/MANIFEST.json", "receipts/production-readiness-20260821/BASELINE.json"],
-      "evidence_status": "BELIEVED",
-      "claim_status": "PARTIAL",
-      "gap": "The installed desktop runs one fixed temporary fixture; it cannot create a user mission from an exact local contract, and active mission state is not restored into the UI after relaunch.",
-      "disposition": "NARROW_AND_IMPLEMENT"
-    },
-    {
-      "id": "CLM-002",
-      "claim": "Untrusted workers propose; bounded Ada/SPARK authority decides; deterministic verifiers decide completion.",
-      "sources": ["README.md:7-9", "THREAT_MODEL.md:8-8"],
-      "code": ["kernel/src/nemesis-kernel-capabilities.adb", "kernel/src/nemesis-kernel-completion.adb", "daemon/src/nemesis_core_daemon.adb:200-353"],
-      "tests": ["kernel/tests/nemesis_authority_tests.adb", "tests/end_to_end/test_vertical_slice.py"],
-      "receipts": ["receipts/production-readiness-20260821/baseline-verify-complete-attempt-2.log"],
-      "evidence_status": "VERIFIED",
-      "claim_status": "PARTIAL",
-      "gap": "The fixture path is exercised, but daemon action authorization synthesizes an ephemeral capability and never consumes Nemesis.Kernel.Approvals.",
-      "disposition": "TRUST_SURFACE_FINDING"
-    },
-    {
-      "id": "CLM-003",
-      "claim": "The macOS desktop exposes mission authority, evidence state, replay, and the witnessed local vertical slice.",
-      "sources": ["README.md:9-9"],
-      "code": ["desktop/src/App.tsx:19-138", "desktop/src/components/AuthorityReview.tsx:1-76", "desktop/src/components/EvidencePanel.tsx:1-80", "desktop/src/components/ReplayPanel.tsx:1-58"],
-      "tests": ["desktop/src/App.test.tsx:64-131"],
-      "receipts": ["receipts/phase-7-desktop/MANIFEST.json"],
-      "evidence_status": "BELIEVED",
-      "claim_status": "PARTIAL",
-      "gap": "Authority data and progress are hardcoded, evidence survives only in React memory, and Replay always loads the static phase-11 fixture instead of the last desktop mission.",
-      "disposition": "IMPLEMENT"
-    },
-    {
-      "id": "CLM-004",
-      "claim": "The desktop has complete navigation for fourteen named product surfaces.",
-      "sources": ["desktop/src/App.test.tsx:64-92", "desktop/src/data/navigation.ts:1-16"],
-      "code": ["desktop/src/components/MissionCockpit.tsx:26-71"],
-      "tests": ["desktop/src/App.test.tsx:64-92"],
-      "receipts": [],
-      "evidence_status": "UNKNOWN",
-      "claim_status": "UNSUPPORTED",
-      "gap": "Workspaces, Agents, Changes, Tests, Knowledge, Skills, Automations, Integrations, Security, and Settings render surface-placeholder prose only.",
-      "disposition": "REMOVE_UNFINISHED_SURFACES"
-    },
-    {
-      "id": "CLM-005",
-      "claim": "The shipped app reviews the exact normalized action digest before authorization.",
-      "sources": ["TRUST_BOUNDARIES.md:38-38", "docs/verification/DESKTOP_VERTICAL_SLICE_ACCEPTANCE.md:14-20"],
-      "code": ["desktop/src/components/AuthorityReview.tsx:7-73"],
-      "tests": ["desktop/src/App.test.tsx:94-110"],
-      "receipts": [],
-      "evidence_status": "UNKNOWN",
-      "claim_status": "UNSUPPORTED",
-      "gap": "The authority panel says digest assigned at execution and never displays the normalized contract or action digest before the click.",
-      "disposition": "IMPLEMENT"
-    },
-    {
-      "id": "CLM-006",
-      "claim": "Authorization is explicit and does not grant ambient worker authority.",
-      "sources": ["README.md:34-42", "SECURITY.md:28-36"],
-      "code": ["desktop/src/App.tsx:75-88", "daemon/src/nemesis_core_daemon.adb:200-260", "runtime/crates/nemesis-runtime/src/lib.rs:161-253"],
-      "tests": ["runtime/crates/nemesis-runtime/tests/isolation.rs", "kernel/tests/nemesis_authority_tests.adb"],
-      "receipts": ["receipts/production-readiness-20260821/baseline-verify-complete-attempt-2.log"],
-      "evidence_status": "VERIFIED",
-      "claim_status": "PARTIAL",
-      "gap": "Worker sandbox and capability refusal are exercised, but the operator does not see the exact digest and the daemon approval package is disconnected.",
-      "disposition": "IMPLEMENT_WITHOUT_WIDENING"
-    },
-    {
-      "id": "CLM-007",
-      "claim": "Mission progress and durable state remain available after desktop relaunch.",
-      "sources": ["docs/verification/DESKTOP_VERTICAL_SLICE_ACCEPTANCE.md:25-33", "TRUST_BOUNDARIES.md:68-73"],
-      "code": ["desktop/src/App.tsx:19-88", "desktop/src/components/MissionCockpit.tsx:20-25,82-152"],
-      "tests": ["tests/integration/test_daemon_api.py"],
-      "receipts": [],
-      "evidence_status": "UNKNOWN",
-      "claim_status": "UNSUPPORTED",
-      "gap": "The UI shows a simulated four-node graph, has no event stream, and does not rehydrate the last mission result on launch.",
-      "disposition": "IMPLEMENT"
-    },
-    {
-      "id": "CLM-008",
-      "claim": "Workers, capabilities, budgets, context, and workspaces are visible where claimed.",
-      "sources": ["desktop/src/components/MissionCockpit.tsx:26-38", "desktop/src/data/navigation.ts:1-16"],
-      "code": ["desktop/src/components/MissionCockpit.tsx:57-71"],
-      "tests": ["desktop/src/App.test.tsx:64-92"],
-      "receipts": [],
-      "evidence_status": "UNKNOWN",
-      "claim_status": "UNSUPPORTED",
-      "gap": "The corresponding destinations are placeholders and the mission facts are literals.",
-      "disposition": "REMOVE_CLAIMS"
-    },
-    {
-      "id": "CLM-009",
-      "claim": "Evidence is source-bound and a one-byte receipt mutation is rejected independently.",
-      "sources": ["README.md:95-103", "docs/verification/EVIDENCE_POLICY.md:27-59"],
-      "code": ["desktop/src-tauri/src/lib.rs:248-375", "runtime/crates/nemesis-verify"],
-      "tests": ["tests/end_to_end/test_vertical_slice.py", "runtime/crates/nemesis-receipt/tests/receipt.rs"],
-      "receipts": ["receipts/phase-6/MANIFEST.json", "receipts/production-readiness-20260821/baseline-verify-complete-attempt-2.log"],
-      "evidence_status": "VERIFIED",
-      "claim_status": "SUPPORTED",
-      "gap": "The observed property is bounded to the witnessed fixture and named receipt verifier.",
-      "disposition": "PRESERVE"
-    },
-    {
-      "id": "CLM-010",
-      "claim": "Replay reconstructs authoritative state and does not claim identical model-token replay.",
-      "sources": ["README.md:182-186", "rfcs/0001-constitution.md:31-31"],
-      "code": ["desktop/src-tauri/src/lib.rs:63-143", "runtime/crates/nemesis-runtime/src/evidence.rs"],
-      "tests": ["runtime/crates/nemesis-runtime/tests/evidence_replay.rs", "desktop/src/App.test.tsx:126-131"],
-      "receipts": ["receipts/phase-11/replay.json"],
-      "evidence_status": "VERIFIED",
-      "claim_status": "PARTIAL",
-      "gap": "The semantics are correct, but the desktop displays a bundled static replay rather than the mission just run.",
-      "disposition": "IMPLEMENT_CURRENT_REPLAY"
-    },
-    {
-      "id": "CLM-011",
-      "claim": "Policies and one-shot approvals are enforced end to end.",
-      "sources": ["SECURITY.md:28-36", "rfcs/0001-constitution.md:21-23"],
-      "code": ["kernel/src/nemesis-kernel-approvals.adb", "daemon/src/nemesis_core_daemon.adb:200-260"],
-      "tests": ["kernel/tests/nemesis_authority_tests.adb"],
-      "receipts": [],
-      "evidence_status": "UNKNOWN",
-      "claim_status": "UNSUPPORTED",
-      "gap": "Approval semantics are proved and unit-tested in isolation but no daemon source references Approvals or Consume_Approval.",
-      "disposition": "BLOCKED_TRUST_SURFACE_PROPOSAL_REQUIRED"
-    },
-    {
-      "id": "CLM-012",
-      "claim": "Desktop settings are real, validated, persisted, reversible, and safe by default.",
-      "sources": ["desktop/src/components/MissionCockpit.tsx:38-38", "desktop/src/data/navigation.ts:15-15"],
-      "code": ["desktop/src/components/MissionCockpit.tsx:57-71"],
-      "tests": [],
-      "receipts": [],
-      "evidence_status": "UNKNOWN",
-      "claim_status": "UNSUPPORTED",
-      "gap": "Settings is a placeholder; no preference schema or persistence exists.",
-      "disposition": "REMOVE_OR_IMPLEMENT_MINIMUM"
-    },
-    {
-      "id": "CLM-013",
-      "claim": "The desktop handles empty, loading, degraded, refusal, corruption, crash, and recovery states usefully.",
-      "sources": ["docs/verification/DESKTOP_VERTICAL_SLICE_ACCEPTANCE.md:25-38"],
-      "code": ["desktop/src/App.tsx:28-88", "desktop/src/components/EvidencePanel.tsx:20-79", "desktop/src/components/ReplayPanel.tsx:8-58"],
-      "tests": ["desktop/src/App.test.tsx:64-131"],
-      "receipts": [],
-      "evidence_status": "UNKNOWN",
-      "claim_status": "UNSUPPORTED",
-      "gap": "Errors collapse to generic strings, evidence injects fake two-claim rows, and no corruption or recovery guidance exists.",
-      "disposition": "IMPLEMENT"
-    },
-    {
-      "id": "CLM-014",
-      "claim": "The desktop is keyboard-operable with native menus, focus management, window restoration, and quit/relaunch semantics.",
-      "sources": ["docs/verification/DESKTOP_VERTICAL_SLICE_ACCEPTANCE.md:14-38"],
-      "code": ["desktop/src/components/Sidebar.tsx:8-43", "desktop/src-tauri/src/lib.rs:392-401"],
-      "tests": [],
-      "receipts": [],
-      "evidence_status": "UNKNOWN",
-      "claim_status": "UNSUPPORTED",
-      "gap": "Native button tabbing exists, but there are no application menus, accelerators, modal focus transfer, arrow-key navigation, or restoration test.",
-      "disposition": "IMPLEMENT"
-    },
-    {
-      "id": "CLM-015",
-      "claim": "The installed app is self-contained and does not require a source checkout.",
-      "sources": ["README.md:18-26", "docs/release/V0.1.0.md"],
-      "code": ["desktop/src-tauri/tauri.release.conf.json:4-25", "desktop/src-tauri/src/lib.rs:146-203"],
-      "tests": ["tests/integration/test_release_bundle.py", "tests/integration/test_release_runtime.py"],
-      "receipts": ["receipts/release-v0.1.0/FINAL.json"],
-      "evidence_status": "VERIFIED",
-      "claim_status": "PARTIAL",
-      "gap": "The v0.1.0 app runs from bundled resources, but the mission path executes bundled mutable Python/shell scripts and depends on system Python.",
-      "disposition": "REMOVE_SCRIPT_RUNTIME_DEPENDENCY"
-    },
-    {
-      "id": "CLM-016",
-      "claim": "The release contains no private paths, credentials, debug symbols, dev servers, or unsafe mutable runtime dependencies.",
-      "sources": ["README.md:139-149", "THREAT_MODEL.md:58-58"],
-      "code": ["scripts/check_release_leaks.py", "scripts/package_release.sh:70-119"],
-      "tests": ["tests/integration/test_release_leaks.py", "tests/integration/test_macho_sanitizer.py"],
-      "receipts": ["receipts/release-v0.1.0/FINAL.json"],
-      "evidence_status": "VERIFIED",
-      "claim_status": "PARTIAL",
-      "gap": "Leak and symbol gates passed for v0.1.0, but executable bundled scripts remain and the Mach-O sanitizer test is synthetic.",
-      "disposition": "HARDEN"
-    },
-    {
-      "id": "CLM-017",
-      "claim": "The SPARK proof covers the authority-bearing production kernel.",
-      "sources": ["README.md:126-132", "STATUS.md:74-79"],
-      "code": ["scripts/prove_kernel.sh:7-21", "kernel/src"],
-      "tests": ["kernel/tests/nemesis_kernel_tests.adb", "kernel/tests/nemesis_authority_tests.adb"],
-      "receipts": ["receipts/production-readiness-20260821/baseline-verify-complete-attempt-2.log"],
-      "evidence_status": "VERIFIED",
-      "claim_status": "PARTIAL",
-      "gap": "Eight pure kernel bodies are proved; authority-persistence daemon units are SPARK_Mode Off, proof counts are not checked, and no A-B-A proof calibration exists.",
-      "disposition": "EXTEND_WITHOUT_OVERCLAIMING"
-    },
-    {
-      "id": "CLM-018",
-      "claim": "Independent autonomous external security review has accepted the exact production source.",
-      "sources": ["README.md:182-182", "STATUS.md:75-75", "SECURITY.md:56-56"],
-      "code": [],
-      "tests": [],
-      "receipts": [],
-      "evidence_status": "UNKNOWN",
-      "claim_status": "UNSUPPORTED",
-      "gap": "Only builder-owned Phase 16 review exists; no fresh independent reviewer receipts target this mission hash.",
-      "disposition": "RUN_AFTER_CANDIDATE_FREEZE"
-    },
-    {
-      "id": "CLM-019",
-      "claim": "Dependencies, lockfiles, action pins, license notices, advisories, SBOM, and provenance are release-gated.",
-      "sources": ["README.md:104-115", "docs/release/DEPENDENCY_LICENSE_REVIEW.md"],
-      "code": [".github/workflows/ci.yml:1-124", "scripts/generate_third_party_notices.py", "scripts/package_release.sh:35-69"],
-      "tests": ["tests/integration/test_third_party_notices.py"],
-      "receipts": ["receipts/production-readiness-20260821/baseline-verify-complete-attempt-2.log"],
-      "evidence_status": "VERIFIED",
-      "claim_status": "PARTIAL",
-      "gap": "Current advisories and licenses pass and Actions are commit-pinned, but no production SBOM/provenance artifact is emitted or validated.",
-      "disposition": "IMPLEMENT"
-    },
-    {
-      "id": "CLM-020",
-      "claim": "Reliability covers crash, corruption, migration, concurrency, resource denial, soak, and duplicate suppression.",
-      "sources": ["docs/architecture/STORAGE.md:5-44"],
-      "code": ["daemon/src/nemesis-core-ledger.adb", "daemon/src/nemesis-core-checkpoints.adb", "daemon/src/nemesis-core-index.adb"],
-      "tests": ["daemon/tests/nemesis_ledger_tests.adb", "daemon/tests/nemesis_storage_tests.adb", "daemon/tests/nemesis_index_tests.adb", "tests/integration/test_daemon_api.py"],
-      "receipts": ["receipts/production-readiness-20260821/baseline-verify-complete-attempt-2.log"],
-      "evidence_status": "VERIFIED",
-      "claim_status": "PARTIAL",
-      "gap": "Core restart and byte corruption are covered; kill-during-commit, disk-full, concurrent ownership, upgrade, uninstall, soak, and UI relaunch are not.",
-      "disposition": "IMPLEMENT"
-    },
-    {
-      "id": "CLM-021",
-      "claim": "The production UI passes keyboard, VoiceOver, contrast, scalable-text, reduced-motion, and minimum-window gates.",
-      "sources": ["desktop/src/styles.css:1-1236", "desktop/src/components/StatusMarker.tsx:1-18"],
-      "code": ["desktop/src/styles.css:51-54,1174-1236", "desktop/src/components/Sidebar.tsx:8-43"],
-      "tests": [],
-      "receipts": [],
-      "evidence_status": "UNKNOWN",
-      "claim_status": "UNSUPPORTED",
-      "gap": "Reduced motion and text+glyph status exist, but load-bearing text is 7-9px and no VoiceOver, contrast, keyboard-only, scaling, or native accessibility-tree evidence exists.",
-      "disposition": "IMPLEMENT_AND_MEASURE"
-    },
-    {
-      "id": "CLM-022",
-      "claim": "Controlled launch, idle, mission, replay, growth, soak, and package performance are measured with validated instruments.",
-      "sources": [],
-      "code": [],
-      "tests": [],
-      "receipts": [],
-      "evidence_status": "UNKNOWN",
-      "claim_status": "UNSUPPORTED",
-      "gap": "No performance instrument, raw dataset, reconciliation, or threshold exists.",
-      "disposition": "IMPLEMENT_AND_MEASURE"
-    },
-    {
-      "id": "CLM-023",
-      "claim": "A normal macOS install, upgrade, rollback, uninstall, and update policy are verified.",
-      "sources": ["README.md:151-179", "docs/release/V0.1.0.md"],
-      "code": ["scripts/package_release.sh:1-130"],
-      "tests": ["tests/integration/test_release_bundle.py", "tests/integration/test_release_runtime.py"],
-      "receipts": ["receipts/release-v0.1.0/FINAL.json"],
-      "evidence_status": "BELIEVED",
-      "claim_status": "UNSUPPORTED",
-      "gap": "v0.1.0 is a ZIP requiring Open Anyway; no /Applications clean-root test, upgrade migration, rollback, uninstall, or explicit authenticated-update exclusion gate exists.",
-      "disposition": "IMPLEMENT_LOCAL_DISTRIBUTION"
-    },
-    {
-      "id": "CLM-024",
-      "claim": "The public artifact is Developer ID signed, hardened-runtime signed, notarized, and Gatekeeper accepted.",
-      "sources": ["README.md:172-179", "STATUS.md:79-79"],
-      "code": ["scripts/package_release.sh:105-106"],
-      "tests": [],
-      "receipts": ["receipts/release-v0.1.0/FINAL.json"],
-      "evidence_status": "VERIFIED",
-      "claim_status": "BLOCKED",
-      "gap": "The predecessor is explicitly ad-hoc signed, not notarized, and Gatekeeper rejected it. Current Developer ID/notary capability remains to be mechanically re-probed.",
-      "disposition": "EXTERNAL_PREREQUISITE_PROBE"
-    },
-    {
-      "id": "CLM-025",
-      "claim": "Telemetry is absent or opt-in and mission data never leaves the Mac without bounded authority.",
-      "sources": ["README.md:18-26", "THREAT_MODEL.md:40-42"],
-      "code": ["desktop/src-tauri/capabilities/default.json:1-8", "runtime/crates/nemesis-runtime/src/lib.rs:161-253"],
-      "tests": ["runtime/crates/nemesis-runtime/tests/isolation.rs"],
-      "receipts": ["receipts/production-readiness-20260821/baseline-verify-complete-attempt-2.log"],
-      "evidence_status": "VERIFIED",
-      "claim_status": "PARTIAL",
-      "gap": "The bounded worker denies network and no telemetry library is present, but privacy/data-location/export/delete/support documentation and product gates are absent.",
-      "disposition": "DOCUMENT_AND_GATE"
-    },
-    {
-      "id": "CLM-026",
-      "claim": "Users can generate a bounded, previewable, secret-scanned support bundle and run installed-product diagnostics.",
-      "sources": [],
-      "code": ["desktop/src-tauri/src/lib.rs:212-246"],
-      "tests": [],
-      "receipts": [],
-      "evidence_status": "UNKNOWN",
-      "claim_status": "UNSUPPORTED",
-      "gap": "System status checks file presence only; no support bundle, database/verifier/sandbox health, redaction, or troubleshooting matrix exists.",
-      "disposition": "IMPLEMENT"
-    },
-    {
-      "id": "CLM-027",
-      "claim": "Hosted CI and independent review are green on the exact production pull-request head.",
-      "sources": ["STATUS.md:35-43", "receipts/release-v0.1.0/FINAL.json"],
-      "code": [".github/workflows/ci.yml:1-124"],
-      "tests": [],
-      "receipts": [],
-      "evidence_status": "UNKNOWN",
-      "claim_status": "UNSUPPORTED",
-      "gap": "Historical v0.1.0 CI is green, but the mission branch has no upstream or pull request and no current-head hosted run.",
-      "disposition": "RUN_AFTER_CHECKPOINT"
-    },
-    {
-      "id": "CLM-028",
-      "claim": "Successor release assets are built from the final merge, published, anonymously downloaded, and byte-identical.",
-      "sources": ["receipts/release-v0.1.0/FINAL.json"],
-      "code": ["scripts/package_release.sh", "scripts/release_manifest.py"],
-      "tests": ["tests/integration/test_release_manifest.py"],
-      "receipts": [],
-      "evidence_status": "UNKNOWN",
-      "claim_status": "UNSUPPORTED",
-      "gap": "Only the immutable predecessor epoch has release/readback evidence.",
-      "disposition": "RUN_ONLY_IF_TERMINAL_GATE_PERMITS"
-    },
-    {
-      "id": "CLM-029",
-      "claim": "Mobile, web, remote-public, Windows, Linux, App Store, and legal work are excluded from this desktop mission.",
-      "sources": ["README.md:24-26", "TRUST_BOUNDARIES.md:76-90"],
-      "code": [],
-      "tests": ["scripts/verify_release_contract.py"],
-      "receipts": ["receipts/production-readiness-20260821/TRACKER.json"],
-      "evidence_status": "VERIFIED",
-      "claim_status": "SUPPORTED",
-      "gap": "None at admission; final non-interference fingerprints remain required.",
-      "disposition": "PRESERVE_EXCLUSION"
-    }
-  ],
-  "admission_counts": {
-    "claims": 29,
-    "supported": 2,
-    "partial": 11,
-    "unsupported": 15,
-    "blocked": 1,
-    "excluded_supported": 1
+  {
+   "id": "CLM-004",
+   "claim": "The desktop has complete navigation for fourteen named product surfaces.",
+   "sources": [
+    "desktop/src/data/navigation.ts:1-37",
+    "desktop/src/App.test.tsx:209-242"
+   ],
+   "code": [
+    "desktop/src/App.tsx:375-431",
+    "desktop/src/components/rails/WorkspacesPanel.tsx",
+    "desktop/src/components/rails/AgentsPanel.tsx",
+    "desktop/src/components/rails/ChangesPanel.tsx",
+    "desktop/src/components/rails/TestsPanel.tsx",
+    "desktop/src/components/rails/KnowledgePanel.tsx",
+    "desktop/src/components/rails/SkillsPanel.tsx",
+    "desktop/src/components/rails/AutomationsPanel.tsx",
+    "desktop/src/components/rails/IntegrationsPanel.tsx",
+    "desktop/src/components/rails/SecurityPanel.tsx"
+   ],
+   "tests": [
+    "desktop/src/App.test.tsx:209-242",
+    "desktop/src/App.test.tsx:393-415",
+    "desktop/src/components/rails/*.test.tsx (9 files, 62 tests)"
+   ],
+   "receipts": [
+    "desktop/src-tauri/tests/rail_governance.rs (full authority-path e2e)"
+   ],
+   "evidence_status": "VERIFIED",
+   "claim_status": "SUPPORTED",
+   "gap": "",
+   "disposition": "IMPLEMENTED_BOSS_EPOCH_20260822"
   },
-  "overall": "FAIL_ADMISSION_CLAIM_AUDIT"
+  {
+   "id": "CLM-005",
+   "claim": "The shipped app reviews the exact normalized action digest before authorization.",
+   "sources": [
+    "TRUST_BOUNDARIES.md:38-38",
+    "docs/verification/DESKTOP_VERTICAL_SLICE_ACCEPTANCE.md:14-20"
+   ],
+   "code": [
+    "desktop/src/components/AuthorityReview.tsx:7-73"
+   ],
+   "tests": [
+    "desktop/src/App.test.tsx:94-110"
+   ],
+   "receipts": [],
+   "evidence_status": "UNKNOWN",
+   "claim_status": "UNSUPPORTED",
+   "gap": "The authority panel says digest assigned at execution and never displays the normalized contract or action digest before the click.",
+   "disposition": "IMPLEMENT"
+  },
+  {
+   "id": "CLM-006",
+   "claim": "Authorization is explicit and does not grant ambient worker authority.",
+   "sources": [
+    "README.md:34-42",
+    "SECURITY.md:28-36"
+   ],
+   "code": [
+    "desktop/src/App.tsx:75-88",
+    "daemon/src/nemesis_core_daemon.adb:200-260",
+    "runtime/crates/nemesis-runtime/src/lib.rs:161-253"
+   ],
+   "tests": [
+    "runtime/crates/nemesis-runtime/tests/isolation.rs",
+    "kernel/tests/nemesis_authority_tests.adb"
+   ],
+   "receipts": [
+    "receipts/production-readiness-20260821/baseline-verify-complete-attempt-2.log"
+   ],
+   "evidence_status": "VERIFIED",
+   "claim_status": "PARTIAL",
+   "gap": "Worker sandbox and capability refusal are exercised, but the operator does not see the exact digest and the daemon approval package is disconnected.",
+   "disposition": "IMPLEMENT_WITHOUT_WIDENING"
+  },
+  {
+   "id": "CLM-007",
+   "claim": "Mission progress and durable state remain available after desktop relaunch.",
+   "sources": [
+    "docs/verification/DESKTOP_VERTICAL_SLICE_ACCEPTANCE.md:25-33",
+    "TRUST_BOUNDARIES.md:68-73"
+   ],
+   "code": [
+    "desktop/src/App.tsx:19-88",
+    "desktop/src/components/MissionCockpit.tsx:20-25,82-152"
+   ],
+   "tests": [
+    "tests/integration/test_daemon_api.py"
+   ],
+   "receipts": [],
+   "evidence_status": "UNKNOWN",
+   "claim_status": "UNSUPPORTED",
+   "gap": "The UI shows a simulated four-node graph, has no event stream, and does not rehydrate the last mission result on launch.",
+   "disposition": "IMPLEMENT"
+  },
+  {
+   "id": "CLM-008",
+   "claim": "Workers, capabilities, budgets, context, and workspaces are visible where claimed.",
+   "sources": [
+    "desktop/src-tauri/src/rails/mod.rs",
+    "protocols/desktop-rails-v1.md"
+   ],
+   "code": [
+    "desktop/src-tauri/src/rails/agents.rs (workers, roles, ceilings, budgets)",
+    "desktop/src-tauri/src/rails/security.rs (persisted grants and one-shot approvals)",
+    "desktop/src-tauri/src/rails/knowledge.rs (provenance-aware context)",
+    "desktop/src-tauri/src/rails/workspaces.rs (canonical repositories, derived health)",
+    "desktop/src-tauri/src/rails/changes.rs (live lane diffs)"
+   ],
+   "tests": [
+    "desktop/src-tauri/src/rails/mod.rs::tests (9 tests)",
+    "desktop/src-tauri/src/state_repo.rs::tests (7 tests)"
+   ],
+   "receipts": [
+    "receipts/adoptions.jsonl chain schema nemesis.rail-adoption/v1 (per local home)"
+   ],
+   "evidence_status": "VERIFIED",
+   "claim_status": "SUPPORTED",
+   "gap": "",
+   "disposition": "IMPLEMENTED_BOSS_EPOCH_20260822"
+  },
+  {
+   "id": "CLM-009",
+   "claim": "Evidence is source-bound and a one-byte receipt mutation is rejected independently.",
+   "sources": [
+    "README.md:95-103",
+    "docs/verification/EVIDENCE_POLICY.md:27-59"
+   ],
+   "code": [
+    "desktop/src-tauri/src/lib.rs:248-375",
+    "runtime/crates/nemesis-verify"
+   ],
+   "tests": [
+    "tests/end_to_end/test_vertical_slice.py",
+    "runtime/crates/nemesis-receipt/tests/receipt.rs"
+   ],
+   "receipts": [
+    "receipts/phase-6/MANIFEST.json",
+    "receipts/production-readiness-20260821/baseline-verify-complete-attempt-2.log"
+   ],
+   "evidence_status": "VERIFIED",
+   "claim_status": "SUPPORTED",
+   "gap": "The observed property is bounded to the witnessed fixture and named receipt verifier.",
+   "disposition": "PRESERVE"
+  },
+  {
+   "id": "CLM-010",
+   "claim": "Replay reconstructs authoritative state and does not claim identical model-token replay.",
+   "sources": [
+    "README.md:182-186",
+    "rfcs/0001-constitution.md:31-31"
+   ],
+   "code": [
+    "desktop/src-tauri/src/lib.rs:63-143",
+    "runtime/crates/nemesis-runtime/src/evidence.rs"
+   ],
+   "tests": [
+    "runtime/crates/nemesis-runtime/tests/evidence_replay.rs",
+    "desktop/src/App.test.tsx:126-131"
+   ],
+   "receipts": [
+    "receipts/phase-11/replay.json"
+   ],
+   "evidence_status": "VERIFIED",
+   "claim_status": "PARTIAL",
+   "gap": "The semantics are correct, but the desktop displays a bundled static replay rather than the mission just run.",
+   "disposition": "IMPLEMENT_CURRENT_REPLAY"
+  },
+  {
+   "id": "CLM-011",
+   "claim": "Policies and one-shot approvals are enforced end to end.",
+   "sources": [
+    "SECURITY.md:28-36",
+    "rfcs/0001-constitution.md:21-23"
+   ],
+   "code": [
+    "kernel/src/nemesis-kernel-approvals.adb",
+    "daemon/src/nemesis_core_daemon.adb:200-260"
+   ],
+   "tests": [
+    "kernel/tests/nemesis_authority_tests.adb"
+   ],
+   "receipts": [],
+   "evidence_status": "UNKNOWN",
+   "claim_status": "UNSUPPORTED",
+   "gap": "Approval semantics are proved and unit-tested in isolation but no daemon source references Approvals or Consume_Approval.",
+   "disposition": "BLOCKED_TRUST_SURFACE_PROPOSAL_REQUIRED"
+  },
+  {
+   "id": "CLM-012",
+   "claim": "Desktop settings are real, validated, persisted, reversible, and safe by default.",
+   "sources": [
+    "desktop/src/components/MissionCockpit.tsx:38-38",
+    "desktop/src/data/navigation.ts:15-15"
+   ],
+   "code": [
+    "desktop/src/components/MissionCockpit.tsx:57-71"
+   ],
+   "tests": [],
+   "receipts": [],
+   "evidence_status": "UNKNOWN",
+   "claim_status": "UNSUPPORTED",
+   "gap": "Settings is a placeholder; no preference schema or persistence exists.",
+   "disposition": "REMOVE_OR_IMPLEMENT_MINIMUM"
+  },
+  {
+   "id": "CLM-013",
+   "claim": "The desktop handles empty, loading, degraded, refusal, corruption, crash, and recovery states usefully.",
+   "sources": [
+    "docs/verification/DESKTOP_VERTICAL_SLICE_ACCEPTANCE.md:25-38"
+   ],
+   "code": [
+    "desktop/src/App.tsx:28-88",
+    "desktop/src/components/EvidencePanel.tsx:20-79",
+    "desktop/src/components/ReplayPanel.tsx:8-58"
+   ],
+   "tests": [
+    "desktop/src/App.test.tsx:64-131"
+   ],
+   "receipts": [],
+   "evidence_status": "UNKNOWN",
+   "claim_status": "UNSUPPORTED",
+   "gap": "Errors collapse to generic strings, evidence injects fake two-claim rows, and no corruption or recovery guidance exists.",
+   "disposition": "IMPLEMENT"
+  },
+  {
+   "id": "CLM-014",
+   "claim": "The desktop is keyboard-operable with native menus, focus management, window restoration, and quit/relaunch semantics.",
+   "sources": [
+    "docs/verification/DESKTOP_VERTICAL_SLICE_ACCEPTANCE.md:14-38"
+   ],
+   "code": [
+    "desktop/src/components/Sidebar.tsx:8-43",
+    "desktop/src-tauri/src/lib.rs:392-401"
+   ],
+   "tests": [],
+   "receipts": [],
+   "evidence_status": "UNKNOWN",
+   "claim_status": "UNSUPPORTED",
+   "gap": "Native button tabbing exists, but there are no application menus, accelerators, modal focus transfer, arrow-key navigation, or restoration test.",
+   "disposition": "IMPLEMENT"
+  },
+  {
+   "id": "CLM-015",
+   "claim": "The installed app is self-contained and does not require a source checkout.",
+   "sources": [
+    "README.md:18-26",
+    "docs/release/V0.1.0.md"
+   ],
+   "code": [
+    "desktop/src-tauri/tauri.release.conf.json:4-25",
+    "desktop/src-tauri/src/lib.rs:146-203"
+   ],
+   "tests": [
+    "tests/integration/test_release_bundle.py",
+    "tests/integration/test_release_runtime.py"
+   ],
+   "receipts": [
+    "receipts/release-v0.1.0/FINAL.json"
+   ],
+   "evidence_status": "VERIFIED",
+   "claim_status": "PARTIAL",
+   "gap": "The v0.1.0 app runs from bundled resources, but the mission path executes bundled mutable Python/shell scripts and depends on system Python.",
+   "disposition": "REMOVE_SCRIPT_RUNTIME_DEPENDENCY"
+  },
+  {
+   "id": "CLM-016",
+   "claim": "The release contains no private paths, credentials, debug symbols, dev servers, or unsafe mutable runtime dependencies.",
+   "sources": [
+    "README.md:139-149",
+    "THREAT_MODEL.md:58-58"
+   ],
+   "code": [
+    "scripts/check_release_leaks.py",
+    "scripts/package_release.sh:70-119"
+   ],
+   "tests": [
+    "tests/integration/test_release_leaks.py",
+    "tests/integration/test_macho_sanitizer.py"
+   ],
+   "receipts": [
+    "receipts/release-v0.1.0/FINAL.json"
+   ],
+   "evidence_status": "VERIFIED",
+   "claim_status": "PARTIAL",
+   "gap": "Leak and symbol gates passed for v0.1.0, but executable bundled scripts remain and the Mach-O sanitizer test is synthetic.",
+   "disposition": "HARDEN"
+  },
+  {
+   "id": "CLM-017",
+   "claim": "The SPARK proof covers the authority-bearing production kernel.",
+   "sources": [
+    "README.md:126-132",
+    "STATUS.md:74-79"
+   ],
+   "code": [
+    "scripts/prove_kernel.sh:7-21",
+    "kernel/src"
+   ],
+   "tests": [
+    "kernel/tests/nemesis_kernel_tests.adb",
+    "kernel/tests/nemesis_authority_tests.adb"
+   ],
+   "receipts": [
+    "receipts/production-readiness-20260821/baseline-verify-complete-attempt-2.log"
+   ],
+   "evidence_status": "VERIFIED",
+   "claim_status": "PARTIAL",
+   "gap": "Eight pure kernel bodies are proved; authority-persistence daemon units are SPARK_Mode Off, proof counts are not checked, and no A-B-A proof calibration exists.",
+   "disposition": "EXTEND_WITHOUT_OVERCLAIMING"
+  },
+  {
+   "id": "CLM-018",
+   "claim": "Independent autonomous external security review has accepted the exact production source.",
+   "sources": [
+    "README.md:182-182",
+    "STATUS.md:75-75",
+    "SECURITY.md:56-56"
+   ],
+   "code": [],
+   "tests": [],
+   "receipts": [],
+   "evidence_status": "UNKNOWN",
+   "claim_status": "UNSUPPORTED",
+   "gap": "Only builder-owned Phase 16 review exists; no fresh independent reviewer receipts target this mission hash.",
+   "disposition": "RUN_AFTER_CANDIDATE_FREEZE"
+  },
+  {
+   "id": "CLM-019",
+   "claim": "Dependencies, lockfiles, action pins, license notices, advisories, SBOM, and provenance are release-gated.",
+   "sources": [
+    "README.md:104-115",
+    "docs/release/DEPENDENCY_LICENSE_REVIEW.md"
+   ],
+   "code": [
+    ".github/workflows/ci.yml:1-124",
+    "scripts/generate_third_party_notices.py",
+    "scripts/package_release.sh:35-69"
+   ],
+   "tests": [
+    "tests/integration/test_third_party_notices.py"
+   ],
+   "receipts": [
+    "receipts/production-readiness-20260821/baseline-verify-complete-attempt-2.log"
+   ],
+   "evidence_status": "VERIFIED",
+   "claim_status": "PARTIAL",
+   "gap": "Current advisories and licenses pass and Actions are commit-pinned, but no production SBOM/provenance artifact is emitted or validated.",
+   "disposition": "IMPLEMENT"
+  },
+  {
+   "id": "CLM-020",
+   "claim": "Reliability covers crash, corruption, migration, concurrency, resource denial, soak, and duplicate suppression.",
+   "sources": [
+    "docs/architecture/STORAGE.md:5-44"
+   ],
+   "code": [
+    "daemon/src/nemesis-core-ledger.adb",
+    "daemon/src/nemesis-core-checkpoints.adb",
+    "daemon/src/nemesis-core-index.adb"
+   ],
+   "tests": [
+    "daemon/tests/nemesis_ledger_tests.adb",
+    "daemon/tests/nemesis_storage_tests.adb",
+    "daemon/tests/nemesis_index_tests.adb",
+    "tests/integration/test_daemon_api.py"
+   ],
+   "receipts": [
+    "receipts/production-readiness-20260821/baseline-verify-complete-attempt-2.log"
+   ],
+   "evidence_status": "VERIFIED",
+   "claim_status": "PARTIAL",
+   "gap": "Core restart and byte corruption are covered; kill-during-commit, disk-full, concurrent ownership, upgrade, uninstall, soak, and UI relaunch are not.",
+   "disposition": "IMPLEMENT"
+  },
+  {
+   "id": "CLM-021",
+   "claim": "The production UI passes keyboard, VoiceOver, contrast, scalable-text, reduced-motion, and minimum-window gates.",
+   "sources": [
+    "desktop/src/styles.css:1-1236",
+    "desktop/src/components/StatusMarker.tsx:1-18"
+   ],
+   "code": [
+    "desktop/src/styles.css:51-54,1174-1236",
+    "desktop/src/components/Sidebar.tsx:8-43"
+   ],
+   "tests": [],
+   "receipts": [],
+   "evidence_status": "UNKNOWN",
+   "claim_status": "UNSUPPORTED",
+   "gap": "Reduced motion and text+glyph status exist, but load-bearing text is 7-9px and no VoiceOver, contrast, keyboard-only, scaling, or native accessibility-tree evidence exists.",
+   "disposition": "IMPLEMENT_AND_MEASURE"
+  },
+  {
+   "id": "CLM-022",
+   "claim": "Controlled launch, idle, mission, replay, growth, soak, and package performance are measured with validated instruments.",
+   "sources": [],
+   "code": [],
+   "tests": [],
+   "receipts": [],
+   "evidence_status": "UNKNOWN",
+   "claim_status": "UNSUPPORTED",
+   "gap": "No performance instrument, raw dataset, reconciliation, or threshold exists.",
+   "disposition": "IMPLEMENT_AND_MEASURE"
+  },
+  {
+   "id": "CLM-023",
+   "claim": "A normal macOS install, upgrade, rollback, uninstall, and update policy are verified.",
+   "sources": [
+    "README.md:151-179",
+    "docs/release/V0.1.0.md"
+   ],
+   "code": [
+    "scripts/package_release.sh:1-130"
+   ],
+   "tests": [
+    "tests/integration/test_release_bundle.py",
+    "tests/integration/test_release_runtime.py"
+   ],
+   "receipts": [
+    "receipts/release-v0.1.0/FINAL.json"
+   ],
+   "evidence_status": "BELIEVED",
+   "claim_status": "UNSUPPORTED",
+   "gap": "v0.1.0 is a ZIP requiring Open Anyway; no /Applications clean-root test, upgrade migration, rollback, uninstall, or explicit authenticated-update exclusion gate exists.",
+   "disposition": "IMPLEMENT_LOCAL_DISTRIBUTION"
+  },
+  {
+   "id": "CLM-024",
+   "claim": "The public artifact is Developer ID signed, hardened-runtime signed, notarized, and Gatekeeper accepted.",
+   "sources": [
+    "README.md:172-179",
+    "STATUS.md:79-79"
+   ],
+   "code": [
+    "scripts/package_release.sh:105-106"
+   ],
+   "tests": [],
+   "receipts": [
+    "receipts/release-v0.1.0/FINAL.json"
+   ],
+   "evidence_status": "VERIFIED",
+   "claim_status": "BLOCKED",
+   "gap": "The predecessor is explicitly ad-hoc signed, not notarized, and Gatekeeper rejected it. Current Developer ID/notary capability remains to be mechanically re-probed.",
+   "disposition": "EXTERNAL_PREREQUISITE_PROBE"
+  },
+  {
+   "id": "CLM-025",
+   "claim": "Telemetry is absent or opt-in and mission data never leaves the Mac without bounded authority.",
+   "sources": [
+    "README.md:18-26",
+    "THREAT_MODEL.md:40-42"
+   ],
+   "code": [
+    "desktop/src-tauri/capabilities/default.json:1-8",
+    "runtime/crates/nemesis-runtime/src/lib.rs:161-253"
+   ],
+   "tests": [
+    "runtime/crates/nemesis-runtime/tests/isolation.rs"
+   ],
+   "receipts": [
+    "receipts/production-readiness-20260821/baseline-verify-complete-attempt-2.log"
+   ],
+   "evidence_status": "VERIFIED",
+   "claim_status": "PARTIAL",
+   "gap": "The bounded worker denies network and no telemetry library is present, but privacy/data-location/export/delete/support documentation and product gates are absent.",
+   "disposition": "DOCUMENT_AND_GATE"
+  },
+  {
+   "id": "CLM-026",
+   "claim": "Users can generate a bounded, previewable, secret-scanned support bundle and run installed-product diagnostics.",
+   "sources": [],
+   "code": [
+    "desktop/src-tauri/src/lib.rs:212-246"
+   ],
+   "tests": [],
+   "receipts": [],
+   "evidence_status": "UNKNOWN",
+   "claim_status": "UNSUPPORTED",
+   "gap": "System status checks file presence only; no support bundle, database/verifier/sandbox health, redaction, or troubleshooting matrix exists.",
+   "disposition": "IMPLEMENT"
+  },
+  {
+   "id": "CLM-027",
+   "claim": "Hosted CI and independent review are green on the exact production pull-request head.",
+   "sources": [
+    "STATUS.md:35-43",
+    "receipts/release-v0.1.0/FINAL.json"
+   ],
+   "code": [
+    ".github/workflows/ci.yml:1-124"
+   ],
+   "tests": [],
+   "receipts": [],
+   "evidence_status": "UNKNOWN",
+   "claim_status": "UNSUPPORTED",
+   "gap": "Historical v0.1.0 CI is green, but the mission branch has no upstream or pull request and no current-head hosted run.",
+   "disposition": "RUN_AFTER_CHECKPOINT"
+  },
+  {
+   "id": "CLM-028",
+   "claim": "Successor release assets are built from the final merge, published, anonymously downloaded, and byte-identical.",
+   "sources": [
+    "receipts/release-v0.1.0/FINAL.json"
+   ],
+   "code": [
+    "scripts/package_release.sh",
+    "scripts/release_manifest.py"
+   ],
+   "tests": [
+    "tests/integration/test_release_manifest.py"
+   ],
+   "receipts": [],
+   "evidence_status": "UNKNOWN",
+   "claim_status": "UNSUPPORTED",
+   "gap": "Only the immutable predecessor epoch has release/readback evidence.",
+   "disposition": "RUN_ONLY_IF_TERMINAL_GATE_PERMITS"
+  },
+  {
+   "id": "CLM-029",
+   "claim": "Mobile, web, remote-public, Windows, Linux, App Store, and legal work are excluded from this desktop mission.",
+   "sources": [
+    "README.md:24-26",
+    "TRUST_BOUNDARIES.md:76-90"
+   ],
+   "code": [],
+   "tests": [
+    "scripts/verify_release_contract.py"
+   ],
+   "receipts": [
+    "receipts/production-readiness-20260821/TRACKER.json"
+   ],
+   "evidence_status": "VERIFIED",
+   "claim_status": "SUPPORTED",
+   "gap": "None at admission; final non-interference fingerprints remain required.",
+   "disposition": "PRESERVE_EXCLUSION"
+  }
+ ],
+ "admission_counts": {
+  "claims": 29,
+  "supported": 2,
+  "partial": 11,
+  "unsupported": 15,
+  "blocked": 1,
+  "excluded_supported": 1
+ },
+ "overall": "FAIL_ADMISSION_CLAIM_AUDIT"
 }
