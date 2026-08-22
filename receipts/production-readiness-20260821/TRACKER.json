@@ -621,9 +621,12 @@
      "title": "Reproduce fix and retest every load-bearing finding"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "fresh independent re-review against FINAL frozen hash d169c648a2eceea3bb18f187507357789255c683 (worktree clean): FinalIntegration CLEAN (ARCH-001/DEP-01/KEY-01 resolved, no gate weakened, no new regression) receipt reviews/FinalIntegration.final-integration.json sha256=29799f75d610de5b2c46ccac813342f7afb5bbe38cff4ec1ec20857c9167cfcc",
+      "FinalDurability CLEAN (SQL-001 adds no inauthentic-load path \u2014 ledger sole source of truth, checkpoint-ahead refused, fail-safe to Store_Corrupt; SQL-002 F_FULLFSYNC+dir-sync no fd leak; kernel authority intact) receipt reviews/FinalDurability.final-durability-safety.json sha256=0de2d8ca2341ed32414448d0f27b6b030e18c732b6d5b1ef5f357961757eac23"
+     ],
      "id": "E-13",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Rerun fresh independent reviews against final exact hash"
     },
     {
@@ -1339,9 +1342,11 @@
      "title": "Write source-bound unmerged proposal when change required"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "trust-surface blocker (TS-001/TS-002) preserved UNMERGED in trust-surface/TS-PROPOSAL.md and only sealed at the terminal verdict after every other independent lane (E-N) is complete; this branch contains no trust-surface change (FinalIntegration confirmed no gate weakened)"
+     ],
      "id": "K-05",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Seal trust-surface blocker only after other lanes"
     }
    ],
@@ -1745,5 +1750,5 @@
  ],
  "schema": "nemesis.production-readiness-tracker/v1",
  "terminal_verdict": null,
- "updated_at": "2026-08-22T09:45:13Z"
+ "updated_at": "2026-08-22T09:51:23Z"
 }

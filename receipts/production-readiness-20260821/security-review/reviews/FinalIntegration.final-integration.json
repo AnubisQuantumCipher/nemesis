@@ -1,0 +1,40 @@
+{
+  "coverage_summary": "Lane final-integration (FIN-) FINAL re-review at frozen commit d169c648a2eceea3bb18f187507357789255c683. Worktree verified clean (git status --porcelain empty; git rev-parse HEAD == subject). Full baseline..HEAD diff reviewed (git diff d18cb7c..HEAD --stat: 103 files) plus the delta from the prior-reviewed commit f36d84b..HEAD (49 files) to isolate what changed since the last CLEAN round. VERDICT: CLEAN — every checked invariant CONFIRMED, no gaps.\n\nBRIEF-schema result (nemesis.hardening-audit.result/v1):\n{\n  \"schema\": \"nemesis.hardening-audit.result/v1\",\n  \"lane\": \"final-integration\",\n  \"reviewer_identity\": {\"context\": \"isolated subagent, separate process/context from lead\", \"model\": \"anthropic/claude-opus-4\", \"limitations\": [\"static-only\", \"read-only git diff/show via node child_process; no build/execute/network\"]},\n  \"subject_commit\": \"d169c648a2eceea3bb18f187507357789255c683\",\n  \"coverage\": [\n    {\"invariant\": \"ARCH-001 daemon self-enforces 0700 on its home after Create_Path\", \"files\": [\"daemon/src/nemesis_core_daemon.adb\"], \"status\": \"CONFIRMED\"},\n    {\"invariant\": \"ARCH-001 desktop Core home chain self-enforces private 0700 via ensure_private_dir (incl. intermediates), not inherited umask; regression test present\", \"files\": [\"desktop/src-tauri/src/mission_runner.rs\"], \"status\": \"CONFIRMED\"},\n    {\"invariant\": \"DEP-01 cargo audit covers desktop/src-tauri/Cargo.lock in CI and hardening gate\", \"files\": [\".github/workflows/ci.yml\", \"scripts/test_security_hardening.sh\"], \"status\": \"CONFIRMED\"},\n    {\"invariant\": \"DEP-01 advisory upgrades landed in desktop lock (plist 1.10, quick-xml 0.41, time 0.3.55); no new advisory crate introduced\", \"files\": [\"desktop/src-tauri/Cargo.lock\"], \"status\": \"CONFIRMED\"},\n    {\"invariant\": \"KEY-01 ed25519-dalek pins features=[zeroize]\", \"files\": [\"runtime/Cargo.toml\"], \"status\": \"CONFIRMED\"},\n    {\"invariant\": \"verify_complete.sh retains every original gate plus new orthogonal gates (no gate removed/weakened)\", \"files\": [\"scripts/verify_complete.sh\"], \"status\": \"CONFIRMED\"},\n    {\"invariant\": \"Release bundle privacy: RUSTFLAGS path-remap + sanitize_macho + check_release_leaks; replay binary added to leak-scan set; source scripts removed from bundle resources\", \"files\": [\"scripts/package_release.sh\", \"desktop/src-tauri/tauri.release.conf.json\"], \"status\": \"CONFIRMED\"},\n    {\"invariant\": \"No new trust-boundary/IPC/CSP/CI regression across baseline..HEAD; IPC command surface unchanged since prior clean review; CSP intact\", \"files\": [\"desktop/src-tauri/src/lib.rs\", \"desktop/src-tauri/src/main.rs\", \"desktop/src-tauri/tauri.conf.json\", \".github/workflows/ci.yml\", \"desktop/src-tauri/src/production.rs\"], \"status\": \"CONFIRMED\"}\n  ],\n  \"gaps\": [],\n  \"confirmed_invariants\": [\n    \"ARCH-001 daemon: Ada.Directories.Create_Path then C_Chmod(home, 16#1C0#=0o700) with raise-on-failure — daemon/src/nemesis_core_daemon.adb:440-451; socket restricted to 16#180#=0o600 at :470-474\",\n    \"ARCH-001 desktop: ensure_private_dir create_dir_all+set_permissions(0o700) — desktop/src-tauri/src/mission_runner.rs:64-68; applied to CoreProcess home :593, .core parent :801 and core_home :802; regression test core_home_chain_is_private_0700 asserts 0o700 incl. idempotency — :1298-1330\",\n    \"DEP-01 CI: 'cargo audit --file desktop/src-tauri/Cargo.lock' — .github/workflows/ci.yml:116; hardening gate — scripts/test_security_hardening.sh:10\",\n    \"DEP-01 lock: plist 1.10.0 (Cargo.lock:2154), quick-xml 0.41.0 (:2276), time 0.3.55 (:3218) — clears the quick-xml/time advisories; diff introduces only version bumps, no new advisory-bearing dependency\",\n    \"KEY-01: ed25519-dalek = { version = \\\"2.1\\\", features = [\\\"zeroize\\\"] } — runtime/Cargo.toml:24; zeroize = \\\"1.8\\\" :29\",\n    \"verify_complete.sh: diff is additive only (+verify_production_contract.py, +tests.phase0.test_production_contract, +test_production_desktop/reliability/accessibility/performance/operations/hostile_calibration); every pre-existing gate retained — scripts/verify_complete.sh:7-45\",\n    \"Release privacy: RUSTFLAGS --remap-path-prefix $ROOT->/build/nemesis and $HOME->/build/home; sanitize_macho.py + strip -x + check_release_leaks.py run over RELEASE_BINARIES (now incl. nemesis-replay) — scripts/package_release.sh; tauri.release.conf.json drops run_vertical_slice/verify_contract/verify_evidence_bundle scripts and phase-11 receipt from bundle resources (reduced surface)\",\n    \"CSP unchanged and locked: default-src 'self' with ipc/asset allowances only — desktop/src-tauri/tauri.conf.json:14 (file not in diff); main.rs change is only Result-propagation of run() at main.rs:1-6; IPC handler set (system_status/draft_mission/compile_mission/run_mission/mission_status/cancel_mission/load_replay/get_settings/update_settings) unchanged since prior clean review (lib.rs absent from f36d84b..HEAD)\",\n    \"production.rs sweep_stale_temporaries only removes regular files matching '.<name>.tmp-<ascii-digits>', skips symlinks/dirs via non-following entry.file_type(), bounded to 4096 entries — desktop/src-tauri/src/production.rs:294-316; no symlink-follow delete\"\n  ],\n  \"verdict\": \"CLEAN\"\n}\n\nInteraction notes: architect-gated residuals TS-001 (daemon does not consume kernel one-shot approval in authorize path) and TS-002 (synthesized rather than persisted parent+attenuated capability grants — visible at nemesis_core_daemon.adb:~250 Grant literal) remain recorded in config/formal-kernel-scope.json and docs/architecture/FORMAL_ASSURANCE.md; not re-litigated per BRIEF ground rule 5. Daemon SQL/ledger/checkpoint changes (SQL-001/SQL-002) belong to the SqliteDurability lane; spot-read shows only durability hardening, no release-integrity regression.",
+  "findings": [],
+  "reviewed_paths": [
+    "daemon/src/nemesis_core_daemon.adb",
+    "desktop/src-tauri/src/mission_runner.rs",
+    "desktop/src-tauri/src/production.rs",
+    "desktop/src-tauri/src/lib.rs",
+    "desktop/src-tauri/src/main.rs",
+    "desktop/src-tauri/Cargo.lock",
+    "desktop/src-tauri/Cargo.toml",
+    "desktop/src-tauri/tauri.conf.json",
+    "desktop/src-tauri/tauri.release.conf.json",
+    "runtime/Cargo.toml",
+    ".github/workflows/ci.yml",
+    "scripts/test_security_hardening.sh",
+    "scripts/verify_complete.sh",
+    "scripts/package_release.sh",
+    "scripts/prove_kernel.sh",
+    "scripts/test_authority.sh",
+    "scripts/verify_phase0.sh"
+  ],
+  "deferred": [
+    {
+      "reason": "SQLite/ledger durability (SQL-001/SQL-002) is the SqliteDurability lane's scope; spot-read only for release-integrity regression, no full durability re-audit.",
+      "paths": [
+        "daemon/src/nemesis-core-checkpoints.adb",
+        "daemon/src/nemesis-core-ledger.adb",
+        "daemon/src/nemesis-core-mission_store.adb",
+        "daemon/src/nemesis-core-objects.adb"
+      ]
+    },
+    {
+      "reason": "A11Y-01 rowheaders belong to the Accessibility lane; not re-audited here.",
+      "paths": [
+        "desktop/src/components/AuthorityReview.tsx"
+      ]
+    }
+  ]
+}
