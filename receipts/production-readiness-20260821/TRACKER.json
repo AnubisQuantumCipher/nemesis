@@ -539,9 +539,11 @@
      "title": "Run independent architecture and trust-boundary reviewer"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "ReleaseIntegrity2 (isolated security-reviewer, anthropic/claude-opus-4-8, separate process) verdict CLEAN; 5/5 release-integrity invariants CONFIRMED (verifiers reject stale/unlisted/mismatch; source/tree binding; release archive path-remap+sanitize+leak-scan; injection-safe set -euo pipefail scripts; CI SHA-pinned actions, pull_request trigger, no untrusted interpolation); residuals REL-01(low)/REL-02(info)/REL-03(info) accepted <medium; receipt security-review/reviews/ReleaseIntegrity2.release-integrity.json sha256=cc4e4f04ac3219b5ab2dad65ad0238d7aee201afd5481ba8e480d90d0187e821"
+     ],
      "id": "E-03",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Run independent adversarial code and release reviewer"
     },
     {
@@ -1238,27 +1240,35 @@
   {
    "gates": [
     {
-     "evidence": [],
+     "evidence": [
+      "trust-surface change detection: TS-001 (authorize accept condition) + TS-002 (capability issuance/replay) mechanically detected and recorded in config/formal-kernel-scope.json:trust_surface_blockers and docs/architecture/FORMAL_ASSURANCE.md; SparkKernel2/ArchTrust2 independently confirmed the daemon authorize path as the locus"
+     ],
      "id": "K-01",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Detect every proposed trust-surface semantic change"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "all existing gates/assertions/thresholds preserved: git diff d18cb7c..HEAD scripts/verify_complete.sh shows NO_REMOVALS; every original gate (verify_contract, verify_production_contract, verify_release_contract, verify_phase0, test_authority, test_production_desktop, test_security_hardening, verify_phase16_receipt) still present; F/G/H/J/L gates appended orthogonally"
+     ],
      "id": "K-02",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Preserve all existing gates assertions and thresholds"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "product fixed without weakening verifier accept conditions: ARCH-001 (0700 self-enforce), KEY-01 (zeroize pin), contrast, temp-sweep, SPARK doc are all product/orthogonal changes; no PASS semantic, threshold, or accept condition relaxed"
+     ],
      "id": "K-03",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Fix product without weakening verifier accept conditions"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "source-bound unmerged proposal preserved: receipts/production-readiness-20260821/trust-surface/TS-PROPOSAL.md (exact daemon authorize_action transformation for TS-001/TS-002, explicitly UNMERGED/UNVERIFIED, architect sign-off required)"
+     ],
      "id": "K-04",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Write source-bound unmerged proposal when change required"
     },
     {
@@ -1275,63 +1285,93 @@
   {
    "gates": [
     {
-     "evidence": [],
+     "evidence": [
+      "zero-work/empty-corpus refused: test_hostile_calibration L-01-empty-corpus (roster with lanes:[] -> FAIL_PRODUCTION_ROSTER)",
+      "hostile-20260822.log sha256=0b4d19207c808ea14fee6e1a81e9eb7bea591f832d63e90877dd04fbd72996cc exit=0 marker=PASS_HOSTILE_CALIBRATION"
+     ],
      "id": "L-01",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Reject zero-work and empty-corpus gate runs"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "malformed/duplicate/contradictory refused: L-02-duplicate-key (strict JSON duplicate-key reject) + L-02-contradictory-overall (SKIPPED lane vs overall PASS fail-closed)",
+      "hostile-20260822.log sha256=0b4d19207c808ea14fee6e1a81e9eb7bea591f832d63e90877dd04fbd72996cc exit=0 marker=PASS_HOSTILE_CALIBRATION"
+     ],
      "id": "L-02",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Reject malformed duplicate contradictory gate results"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "missing/stale/unlisted artifact refused: scripts/verify_evidence_bundle.py rejects any file outside allowlist + recomputes manifest vs committed (ReleaseIntegrity2 CONFIRMED verify_evidence_bundle.py:75-85); exercised in verify_complete",
+      "hostile-20260822.log sha256=0b4d19207c808ea14fee6e1a81e9eb7bea591f832d63e90877dd04fbd72996cc exit=0 marker=PASS_HOSTILE_CALIBRATION"
+     ],
      "id": "L-03",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Reject missing stale and unlisted gate artifacts"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "source/commit/tree mismatch refused: scripts/verify_phase16_receipt.py subject commit/ancestor/tree + covered-source diff + dirty-covered checks (ReleaseIntegrity2 CONFIRMED :145-160,220-227); contract SHA/byte/line pins",
+      "hostile-20260822.log sha256=0b4d19207c808ea14fee6e1a81e9eb7bea591f832d63e90877dd04fbd72996cc exit=0 marker=PASS_HOSTILE_CALIBRATION"
+     ],
      "id": "L-04",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Reject source commit and tree identity mismatches"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "interrupted-run stale PASS cleared: L-05-stale-pass-ignored (a stale PASS marker file does not make a poison roster pass; validator recomputes)",
+      "hostile-20260822.log sha256=0b4d19207c808ea14fee6e1a81e9eb7bea591f832d63e90877dd04fbd72996cc exit=0 marker=PASS_HOSTILE_CALIBRATION"
+     ],
      "id": "L-05",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Clear stale pass state after interrupted gate runs"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "alternate optimized interpreter: L-06-python-O-strips-assert (validate_production_readiness under python3 -O still refuses poison; no load-bearing assert; grep confirms no assert-based checks in verifiers)",
+      "hostile-20260822.log sha256=0b4d19207c808ea14fee6e1a81e9eb7bea591f832d63e90877dd04fbd72996cc exit=0 marker=PASS_HOSTILE_CALIBRATION"
+     ],
      "id": "L-06",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Test alternate optimized interpreter invocations"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "changed tracked/untracked inventory detected: L-07-inventory-change-detected (git status --porcelain --untracked-files=all flags a new receipt-path probe)",
+      "hostile-20260822.log sha256=0b4d19207c808ea14fee6e1a81e9eb7bea591f832d63e90877dd04fbd72996cc exit=0 marker=PASS_HOSTILE_CALIBRATION"
+     ],
      "id": "L-07",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Detect changed tracked and untracked inventories"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "symlink/path-substitution refused: L-08-unsafe-artifact-path (../../ evidence artifact path -> _safe_relative reject) + _validate_artifact per-component symlink refusal (validate_production_readiness.py:118-126)",
+      "hostile-20260822.log sha256=0b4d19207c808ea14fee6e1a81e9eb7bea591f832d63e90877dd04fbd72996cc exit=0 marker=PASS_HOSTILE_CALIBRATION"
+     ],
      "id": "L-08",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Test symlink and path-substitution gate behavior"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "exact-byte A-B-A: L-09-aba-exact-restore (A=pass, single-byte B=fail, exact restore, A2=pass, hash restored) + kernel A-B-A scripts/verify_proof_aba.py (D-14 PASS_KERNEL_PROOF_ABA)",
+      "hostile-20260822.log sha256=0b4d19207c808ea14fee6e1a81e9eb7bea591f832d63e90877dd04fbd72996cc exit=0 marker=PASS_HOSTILE_CALIBRATION"
+     ],
      "id": "L-09",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Run exact-byte A-B-A tamper restoration gates"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "statuses/timestamps/tools/hashes/markers captured: every gate log ts-timestamped with originating exit + terminal marker + sha256; hostile-20260822.log records per-probe OK_REFUSED/OK_ACCEPTED",
+      "hostile-20260822.log sha256=0b4d19207c808ea14fee6e1a81e9eb7bea591f832d63e90877dd04fbd72996cc exit=0 marker=PASS_HOSTILE_CALIBRATION"
+     ],
      "id": "L-10",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Capture statuses timestamps tools hashes and markers"
     }
    ],
@@ -1638,5 +1678,5 @@
  ],
  "schema": "nemesis.production-readiness-tracker/v1",
  "terminal_verdict": null,
- "updated_at": "2026-08-22T09:14:51Z"
+ "updated_at": "2026-08-22T09:19:09Z"
 }
