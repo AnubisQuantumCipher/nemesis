@@ -43,7 +43,7 @@
     "scripts/security_hardening_guest.sh": "abc8b62cf70acda898e0e57d281e9e4e5c51c59ae7b340ec0d1ca2b5108a4875",
     "scripts/test_phase16_receipt.py": "2590a673c265030f41b4f7466d7fb1c17943c7e736fe91262e454c48bb0913fa",
     "scripts/test_security_hardening.sh": "3f8bf77f23e7ad7d5cac62e09b2ce357c222e030ec090a9bd66975ba32ad21b6",
-    "scripts/verify_phase16_receipt.py": "8a569735be184bf206ead5949d13ff55c74e6cf8dcc9d2c5f83153c1b8bef34b"
+    "scripts/verify_phase16_receipt.py": "40dc2b902fe76eeaf02987e5c2664ca553c368ff3e0ee26e9143a72095f9a1e2"
   },
   "dependency_review": {
     "cargo_audit": "PASS",
@@ -51,7 +51,7 @@
     "wasmtime": "47.0.3",
     "wasmtime_wasi": "47.0.3"
   },
-  "epoch": "v0.1.0-release-candidate",
+  "epoch": "v0.2.0-trust-surface",
   "gate": {
     "command": "./scripts/test_security_hardening.sh",
     "guest": {
@@ -61,12 +61,12 @@
       "transport": "Tart over Apple Virtualization.framework"
     },
     "log": {
-      "bytes": 55570,
+      "bytes": 56454,
       "file": "receipts/phase-16-public/security-hardening.txt",
-      "line_count": 1322,
-      "sha256": "bd19c5305728f92ab3d69863007ce1b22a69e05c2f6efb1aeb809c00565a5962"
+      "line_count": 1333,
+      "sha256": "168e19f16be189a2299e7d48471291cc8de5dc5ac54b81633d194165c6f0cba5"
     },
-    "observed_at": "2026-08-22T10:00:16Z",
+    "observed_at": "2026-08-22T14:07:50Z",
     "observed_warnings": [
       "Ada link steps reported a deployment-target override from 16.0 to the host target 26.0; every build, test, and bounded proof command still exited zero."
     ],
@@ -92,8 +92,8 @@
   },
   "repository": {
     "branch": "production/desktop-v1-autonomous-recovery",
-    "subject_commit": "b68901a8b9ce8747e26e0955df75c7387849d18a",
-    "subject_tree": "eb644ff82a4776fa8200ceafdb78293d363d0798"
+    "subject_commit": "9dd22f259d164ebb1afde3b8940a891161cad3f6",
+    "subject_tree": "1532c116b1e2bf9ee23c38f159a615769f34f802"
   },
   "residuals": [
     {
