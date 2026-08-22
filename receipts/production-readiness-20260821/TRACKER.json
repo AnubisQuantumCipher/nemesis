@@ -521,9 +521,12 @@
   {
    "gates": [
     {
-     "evidence": [],
+     "evidence": [
+      "security-review/INPUTS.json frozen 2026-08-22T04:14:04Z; subject commit f36d84b267af73bc559b89a76ce6c9a6c57bb770 tree 88f83b2e4aa52176bc104e1fa1596b9fa04e5cd4 re-verified equal to live HEAD/tree this session; all referenced inputs exist",
+      "fresh rebind: production-desktop-resume-20260822.log sha256=04186f15858b2515d0161b20e121a83e55e7b25cedfa7e50b159055f5d84a9f4 exit=0 marker=PASS_PRODUCTION_DESKTOP_AUTOMATED"
+     ],
      "id": "E-01",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Freeze candidate source hash and review input bundle"
     },
     {
@@ -1480,5 +1483,5 @@
  ],
  "schema": "nemesis.production-readiness-tracker/v1",
  "terminal_verdict": null,
- "updated_at": "2026-08-22T04:10:26Z"
+ "updated_at": "2026-08-22T06:15:54Z"
 }
