@@ -6,7 +6,7 @@
     "SPARK conclusions do not extend to Rust, Tauri/WebKit, SQLite, Git, Keychain, macOS, compilers, provers, or dependencies.",
     "Unproved authority boundaries and trust-surface blockers keep the production formal lane non-PASS."
   ],
-  "observed_at": "2026-08-22T04:08:43.220989Z",
+  "observed_at": "2026-08-22T09:54:48.959546Z",
   "production_formal_lane": "BLOCKED_TRUST_SURFACE",
   "schema": "nemesis.kernel-proof/v1",
   "scope": {
@@ -155,22 +155,22 @@
     }
   },
   "source_sha256": {
-    "daemon/src/nemesis-core-checkpoints.adb": "67fc4e983b41103e995c3083d473178774a0705935a3c93d2156a79fdd94c455",
+    "daemon/src/nemesis-core-checkpoints.adb": "08d693cdb716f2ea1ad06a2b17d5e622bc9cd26a5b57074c7654791343723c38",
     "daemon/src/nemesis-core-checkpoints.ads": "44b83af97b70fd590a2548090519261e6bff74c8ed8862b2ff099a50b04d4b3a",
     "daemon/src/nemesis-core-index.adb": "0d3df75f830a61f7c8ecc7a6b5967801d495fccd206c7022ee1f81f2001da698",
     "daemon/src/nemesis-core-index.ads": "e28e3a6b38cc29f57d9b1cb75bbdda30f8f82914499311f56fc507a221358010",
     "daemon/src/nemesis-core-json.adb": "5789d30d7654ec3a195c038886b12d10eda45705faed0a5ce8064b5146810bb6",
     "daemon/src/nemesis-core-json.ads": "2fd83f966334186e9f13aa7c55cc628f9b10ca5c6490d62b51ef02d230f3ee3c",
-    "daemon/src/nemesis-core-ledger.adb": "c01db54d916992738e675c463c74379f098bd6311a3c9285fe5039e55dd8d334",
-    "daemon/src/nemesis-core-ledger.ads": "31fa4dfbf612e7d13a4b8be22c48a3bdfed619d3fd6667107eb09f60a4df9c5b",
-    "daemon/src/nemesis-core-mission_store.adb": "28f826ec7dd9b71b08f83fd03fb397c517fab2845d9e2c88ea3fe0e3b1cea8b7",
+    "daemon/src/nemesis-core-ledger.adb": "d1ac3459ab1b7fb0c636d7546f3af84f48d29f4ac8153cefd4fa7cfe1d47f767",
+    "daemon/src/nemesis-core-ledger.ads": "b2294e0fb0037c52149569290cbef29b4e72b5134d61cb4fe238274c449eeb71",
+    "daemon/src/nemesis-core-mission_store.adb": "1b0d0d6f13610cc1590713a86e1db3fef9f08caa23f9850891cbcb5ae90feca7",
     "daemon/src/nemesis-core-mission_store.ads": "90619574a926068be6564982f55cbac1de64e90e8dbaeca853e53e593807a250",
-    "daemon/src/nemesis-core-objects.adb": "655a163574244b2d642993dc87a6743098506e603b3e9b1275ce046c95226859",
+    "daemon/src/nemesis-core-objects.adb": "d4e9beaf6675b242ebd53438064cde8df7d33d79ad35e117de2a247ba89192b7",
     "daemon/src/nemesis-core-objects.ads": "260acd9861765240f93019bd59de8a2ae9cfd6548dafd7343a90c8f05ff8cc12",
     "daemon/src/nemesis-core-paths.adb": "0c84521f2f9c7cb56777f5d72e01a420e3787f67eb6c60ecf7298fafff08b167",
     "daemon/src/nemesis-core-paths.ads": "8139c7fd1b8c4d02c05e3525c6988453edf2c5304518f3a87c7849010390bf2d",
     "daemon/src/nemesis-core.ads": "08fda74f7be0196f01352a39004ce39aca57a5f4a40ec3ee143bd9f591782546",
-    "daemon/src/nemesis_core_daemon.adb": "c67490cd6d879ae14a508ca55f389568d01701304f90cf616e9f08503489e974",
+    "daemon/src/nemesis_core_daemon.adb": "b905713a66e6993af129922b3aa2c81bda96d2f38068134092d09be76e00f0c6",
     "kernel/src/nemesis-kernel-approvals.adb": "9a8dab8e841d148e60e71b82661efdc39676a8470c5dd609f82c831d4753dc33",
     "kernel/src/nemesis-kernel-approvals.ads": "82cd6ae358d772da13ecdc337157c139688494e0cc31bc1bcd416783daff57c0",
     "kernel/src/nemesis-kernel-budgets.adb": "cf1cd09dbf1383733fe0488d65f9c8fc15b02f397944f6bb22c1c76f0b4fcdd5",
@@ -190,15 +190,10 @@
   },
   "status": "PARTIAL",
   "subject": {
-    "commit": "d18cb7cc5bd918a6e9dd67aa99088dab9503e39b",
-    "dirty_paths": [
-      "M kernel/src/nemesis-kernel-capabilities.ads",
-      " M scripts/prove_kernel.sh",
-      "?? config/formal-kernel-scope.json",
-      "?? scripts/verify_kernel_proof.py"
-    ],
-    "source_set_sha256": "6f2a90d1a75e465080717efc8b384e5a984b01af926624f472ac1e325003f6de",
-    "tree": "80d1b4af38cecf97becca780b6094ab99dfbf0fd"
+    "commit": "7bd5737b5b663781cf824288f43ecf483f1d43bf",
+    "dirty_paths": [],
+    "source_set_sha256": "7bed85883e96fb5932b83bd6904bd831d7deadb4f0c1452a190cd908b5099e18",
+    "tree": "31018e923849bdbd5aa01ff9c1effb0a6c135572"
   },
   "summary": {
     "analyzed_units": 8,

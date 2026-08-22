@@ -30,7 +30,7 @@
   "artifact_sha256": {
     "docs/verification/PHASE16_SECURITY_REVIEW.md": "d6fad2d6be2a120ac5d5006adc663f7d85041821ee115228f293b57b8a9a9da1",
     "runtime/Cargo.lock": "a6c8fd40d64f4f751f23c1e982d915c690f8fa8d282198131b4c4dd82e7f3d57",
-    "runtime/Cargo.toml": "e112c3904ce2c50f6e06b25f259272a890720398b2d7715d756f6f81e44f04ea",
+    "runtime/Cargo.toml": "651920ece5ce44f714835acb3991cdf6b08cdf5bd16c69eb2d8dad02f938a29a",
     "runtime/crates/nemesis-protocol/src/lib.rs": "6e4d2c26aa1391caab8b2135befdde3550a13185af6342b15705ebfc20d1026f",
     "runtime/crates/nemesis-runtime/src/context.rs": "0c5a3da13685694106cbee28f200d4b150782e266771edcb588b44d3c5b0b86c",
     "runtime/crates/nemesis-runtime/src/git_workflows.rs": "f77dfaa9eefaf75d3265b39e6f9a0d4595170a3f4ae8b087ef074405d74b7b31",
@@ -42,7 +42,7 @@
     "scripts/run_security_hardening.sh": "de288e91da5ded4708eec1c409de64883e5bcee9fcad0e09584df6a161f5d83a",
     "scripts/security_hardening_guest.sh": "abc8b62cf70acda898e0e57d281e9e4e5c51c59ae7b340ec0d1ca2b5108a4875",
     "scripts/test_phase16_receipt.py": "2590a673c265030f41b4f7466d7fb1c17943c7e736fe91262e454c48bb0913fa",
-    "scripts/test_security_hardening.sh": "60f37b8e0c070e83299c8c1ae285f0dd1aafc67e258ee08048f40d98c176ac1d",
+    "scripts/test_security_hardening.sh": "3f8bf77f23e7ad7d5cac62e09b2ce357c222e030ec090a9bd66975ba32ad21b6",
     "scripts/verify_phase16_receipt.py": "8a569735be184bf206ead5949d13ff55c74e6cf8dcc9d2c5f83153c1b8bef34b"
   },
   "dependency_review": {
@@ -61,12 +61,12 @@
       "transport": "Tart over Apple Virtualization.framework"
     },
     "log": {
-      "bytes": 35133,
-      "file": "receipts/phase-16-public/security-hardening.txt",
-      "line_count": 726,
-      "sha256": "63200915d61af19d8b1e1fab48b2d176d6acd6280fd52b450ef2a7ba66c1b004"
+      "bytes": 55570,
+      "file": "receipts/production-readiness-20260821/phase16-reseal-20260822.log",
+      "line_count": 1322,
+      "sha256": "bd19c5305728f92ab3d69863007ce1b22a69e05c2f6efb1aeb809c00565a5962"
     },
-    "observed_at": "2026-08-21T03:56:54Z",
+    "observed_at": "2026-08-22T09:56:51Z",
     "observed_warnings": [
       "Ada link steps reported a deployment-target override from 16.0 to the host target 26.0; every build, test, and bounded proof command still exited zero."
     ],
@@ -91,9 +91,9 @@
     "sha256": "8f62d762c30849ec6841b0fbde87004ced41365b456c98c79f6f1bf53c347ccc"
   },
   "repository": {
-    "branch": "build/desktop-local",
-    "subject_commit": "443258079b996ad4c6bff209b93df51c59b23a3d",
-    "subject_tree": "b056224168006041affc029cd5cfef815f5628c1"
+    "branch": "production/desktop-v1-autonomous-recovery",
+    "subject_commit": "7bd5737b5b663781cf824288f43ecf483f1d43bf",
+    "subject_tree": "31018e923849bdbd5aa01ff9c1effb0a6c135572"
   },
   "residuals": [
     {
