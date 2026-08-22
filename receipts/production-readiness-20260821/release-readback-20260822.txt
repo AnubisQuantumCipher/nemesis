@@ -1,0 +1,6 @@
+NEMESIS-Desktop-v0.2.0-macos-arm64.zip: local=53c61efa1df7480854890efe40ace4e37dacfb38ec82b5ee016c2377350572b5 downloaded=53c61efa1df7480854890efe40ace4e37dacfb38ec82b5ee016c2377350572b5 bytes=4713265 match=True
+release-manifest.json: local=698c0cd706196baf85d03718820a6fe2ef190f711c62baa6694239a201675be2 downloaded=698c0cd706196baf85d03718820a6fe2ef190f711c62baa6694239a201675be2 bytes=1067 match=True
+SHA256SUMS: local=9809b60010b4b1217d5fae90fd9f3e70c4697b7472096744f45dd23e4dce6805 downloaded=9809b60010b4b1217d5fae90fd9f3e70c4697b7472096744f45dd23e4dce6805 bytes=193 match=True
+tag v0.2.0 -> ed5c06f64798e59c288929a987114e4c507c249a (merge ed5c06f64798e59c288929a987114e4c507c249a) bound=True
+shasum -a 256 -c SHA256SUMS: OK
+PASS_RELEASE_READBACK tag=v0.2.0 assets=3 all_match=True
