@@ -1,0 +1,96 @@
+npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+
+added 164 packages in 854ms
+npm warn install-scripts 2 packages had install scripts blocked because they are not covered by allowScripts:
+npm warn install-scripts   esbuild@0.28.2 (postinstall: node install.js)
+npm warn install-scripts   fsevents@2.3.3 (install: (install scripts present))
+npm warn install-scripts
+npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+npm notice run nemesis-desktop@0.1.0 test
+npm notice run vitest run --configLoader=runner
+
+ RUN  v3.2.7 /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop
+
+ ✓ src/App.test.tsx (8 tests) 598ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  00:01:39
+   Duration  992ms (transform 57ms, setup 44ms, collect 81ms, tests 598ms, environment 119ms, prepare 23ms)
+
+npm notice run nemesis-desktop@0.1.0 build
+npm notice run tsc -b && vite build --configLoader native
+vite v7.3.6 building client environment for production...
+transforming...
+✓ 40 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                   0.45 kB │ gzip:  0.29 kB
+dist/assets/index-CJ0cpqPF.css   15.41 kB │ gzip:  3.84 kB
+dist/assets/index-DsVNRuLu.js   217.97 kB │ gzip: 67.23 kB │ map: 988.71 kB
+✓ built in 366ms
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.35s
+     Running unittests src/lib.rs (desktop/src-tauri/target/debug/deps/nemesis_desktop-8f53608fceaebdcb)
+
+running 5 tests
+test tests::rejects_empty_or_model_exact_replay ... ok
+test tests::maps_only_exact_verified_replay ... ok
+test tests::rejects_bundled_support_root_with_wrong_contract ... ok
+test tests::selects_bundled_support_root_when_contract_matches ... ok
+test tests::discovers_development_source_root_from_runtime_ancestors ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (desktop/src-tauri/target/debug/deps/nemesis_desktop-02b71a01e98b593a)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running tests/mission_execution.rs (desktop/src-tauri/target/debug/deps/mission_execution-95ca4f938d7689b9)
+
+running 7 tests
+test executes_reviewed_contract_and_persists_current_receipt_and_replay ... ignored, requires built Ada and Rust runtime executables plus macOS Keychain
+test executable_symlink_substitution_is_refused_before_lane_creation ... ok
+test pre_cancelled_mission_refuses_before_creating_a_lane ... ok
+test reviewed_digest_mismatch_refuses_before_creating_a_lane ... ok
+test drafts_an_exact_source_bound_contract_inside_the_private_local_home ... ok
+test preflight_binds_clean_workspace_head_and_expected_target_bytes ... ok
+test child_process_environment_is_sanitized_before_lane_creation ... ok
+
+test result: ok. 6 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.53s
+
+     Running tests/production_mission.rs (desktop/src-tauri/target/debug/deps/production_mission-76d08499b983fb04)
+
+running 4 tests
+test compiles_equivalent_json_to_one_normalized_digest_and_exact_action ... ok
+test rejects_duplicate_unknown_unsafe_or_authority_widening_contract_fields ... ok
+test initializes_private_versioned_local_home_idempotently ... ok
+test settings_are_safe_persisted_and_reversible ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+   Doc-tests nemesis_desktop
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s
+     Running tests/mission_execution.rs (desktop/src-tauri/target/debug/deps/mission_execution-95ca4f938d7689b9)
+
+running 1 test
+test executes_reviewed_contract_and_persists_current_receipt_and_replay ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.44s
+
+test_release_config_bundles_complete_standalone_runtime (tests.integration.test_release_bundle.ReleaseBundleTests) ... ok
+test_release_contract_with_private_paths_is_not_bundled (tests.integration.test_release_bundle.ReleaseBundleTests) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+OK
+PASS_PRODUCTION_DESKTOP_AUTOMATED
+DESKTOP_GATE_FINISHED_AT=2026-08-22T04:01:44Z
+DESKTOP_GATE_EXIT_STATUS=0

@@ -1,0 +1,95 @@
+{
+  "schema": "nemesis.production-baseline/v1",
+  "contract": {
+    "path": "docs/mission/NEMESIS_DESKTOP_PRODUCTION_READINESS_AUTONOMOUS_MISSION_2026-08-21.md",
+    "sha256": "2485cd682cdedfeb0bfd13ce2aabd51194c72204495de0c12058631cb7c92c87",
+    "bytes": 26694,
+    "lines": 320,
+    "words": 3417
+  },
+  "subject": {
+    "branch": "production/desktop-v1-autonomous",
+    "commit": "d18cb7cc5bd918a6e9dd67aa99088dab9503e39b",
+    "tree": "80d1b4af38cecf97becca780b6094ab99dfbf0fd"
+  },
+  "attempts": [
+    {
+      "classification": "CANONICAL",
+      "command": "./scripts/verify_complete.sh",
+      "wrapper": "/usr/bin/caffeinate -dimsu /bin/bash -lc 'set -o pipefail; ./scripts/verify_complete.sh 2>&1 | tee ...'",
+      "started_at": "2026-08-21T06:10:38Z",
+      "finished_at": "2026-08-21T06:11:40Z",
+      "exit_status": 127,
+      "status": "FAIL",
+      "failure_seam": "npm --prefix desktop test",
+      "cause": "desktop/node_modules was absent in the fresh mission worktree, so the shell could not resolve vitest",
+      "log": {
+        "path": "receipts/production-readiness-20260821/baseline-verify-complete.log",
+        "sha256": "2ddf5c5d7974536c242643732bd2d00f23525b3d0d31f6e1b21138842391cc0f",
+        "bytes": 45116,
+        "lines": 827
+      },
+      "limitations": [
+        "The first wrapper retained process exit status in the supervised-process receipt but not inside the log, so the log alone is supporting evidence."
+      ]
+    },
+    {
+      "classification": "FOCUSED",
+      "command": "npm --prefix desktop ci",
+      "exit_status": 0,
+      "status": "PASS",
+      "tool": "npm 12.0.2",
+      "lockfile_sha256": "95e9b1e1e777739cd4f34214053208be3664cca5caf70ac17c5ef5a754f29b50",
+      "observations": [
+        "164 locked packages installed.",
+        "npm 12 reported blocked install scripts for esbuild 0.28.2 and fsevents 2.3.3; subsequent build and test behavior is authoritative for this baseline."
+      ]
+    },
+    {
+      "classification": "CANONICAL",
+      "command": "./scripts/verify_complete.sh",
+      "wrapper": "/usr/bin/caffeinate -dimsu /bin/bash -lc '(metadata; ./scripts/verify_complete.sh; retained exit) 2>&1 | tee ...'",
+      "started_at": "2026-08-21T06:13:56Z",
+      "finished_at": "2026-08-21T06:16:10Z",
+      "exit_status": 0,
+      "status": "PASS",
+      "terminal_marker": "PASS_NEMESIS_DESKTOP_COMPLETE",
+      "log": {
+        "path": "receipts/production-readiness-20260821/baseline-verify-complete-attempt-2.log",
+        "sha256": "3a43a0d5d5868cf6241d6c12e42b5e83dfdfb3241ce075e95a2d0b02bbfdc345",
+        "bytes": 91805,
+        "lines": 1811
+      },
+      "instrument_validation": {
+        "cwd_retained": true,
+        "timestamps_retained": true,
+        "subject_commit_retained": true,
+        "subject_tree_retained": true,
+        "exit_status_retained": true,
+        "failure_markers": [],
+        "terminal_markers": [
+          "PASS_PHASE16_VZ_SECURITY_HARDENING",
+          "PASS_PHASE16_VZ_SECURITY_HARDENING_ORCHESTRATOR",
+          "PASS_PHASE16_SECURITY_HARDENING",
+          "PASS_PHASE16_RECEIPT_TAMPER_REJECTION",
+          "PASS_NEMESIS_DESKTOP_COMPLETE"
+        ]
+      },
+      "cleanup": {
+        "desktop_process": "NOT_RUNNING",
+        "tart_local_vms": [
+          {
+            "name": "anubis-xcode",
+            "state": "stopped"
+          }
+        ],
+        "disposable_security_guest_remaining": false
+      }
+    }
+  ],
+  "verdict": "PASS_BASELINE_AFTER_LOCKED_DEPENDENCY_INSTALL",
+  "nonclaims": [
+    "This establishes only the properties directly exercised by the pre-production baseline gates.",
+    "It does not satisfy the expanded production-readiness contract or cure the audited product, proof, review, accessibility, reliability, performance, installation, signing, or support gaps."
+  ]
+}

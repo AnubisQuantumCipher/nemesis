@@ -71,5 +71,9 @@ package Nemesis.Kernel.Capabilities with SPARK_Mode => On is
           and then Child.Resource = Parent.Resource
           and then Child.Scope = Parent.Scope
           and then Child.Expires_After <= Parent.Expires_After
-          and then Child.Maximum_Bytes <= Parent.Maximum_Bytes);
+          and then Child.Maximum_Bytes <= Parent.Maximum_Bytes
+          and then
+            (for all Operation in Operation_Kind =>
+               (if Child.Operations (Operation) then
+                    Parent.Operations (Operation))));
 end Nemesis.Kernel.Capabilities;

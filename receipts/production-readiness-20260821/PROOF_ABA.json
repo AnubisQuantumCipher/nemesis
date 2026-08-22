@@ -1,0 +1,46 @@
+{
+  "mutation": {
+    "expected_reason": "GNATprove postcondition failure",
+    "landed_in_subject": false,
+    "new": "return Authorized;",
+    "old": "return Refused_Capability;",
+    "path": "kernel/src/nemesis-kernel-capabilities.adb"
+  },
+  "observed_at": "2026-08-22T04:09:03.449686Z",
+  "restoration": {
+    "copy_inventory_equal": true,
+    "subject_inventory_equal": true,
+    "temporary_copy_removed": true
+  },
+  "runs": {
+    "A": {
+      "bytes": 8452,
+      "exit_status": 0,
+      "lines": 87,
+      "path": "receipts/production-readiness-20260821/proof-aba/A.log",
+      "sha256": "273a745c9376929ada9607ab34aaff9f866938d0ec1d2798b31ab87d3abfde1d"
+    },
+    "A2": {
+      "bytes": 8399,
+      "exit_status": 0,
+      "lines": 84,
+      "path": "receipts/production-readiness-20260821/proof-aba/A2.log",
+      "sha256": "803a53159c9cc79ff27802740ce5a52a3811213d25110e16b713258462673abe"
+    },
+    "B": {
+      "bytes": 9174,
+      "exit_status": 1,
+      "lines": 93,
+      "path": "receipts/production-readiness-20260821/proof-aba/B.log",
+      "sha256": "827ec6a28eb3a28d6d94f5686e0e9fef3c8e014b3a86d3c830cd1d28e949a43a"
+    }
+  },
+  "schema": "nemesis.kernel-proof-aba/v1",
+  "status": "PASS",
+  "subject": {
+    "commit": "d18cb7cc5bd918a6e9dd67aa99088dab9503e39b",
+    "source_inventory_sha256": "e5ec93f60f4aebd9577e57aa7a1479f24a02d44dc24b4dd6d962e51a25a0077a",
+    "tree": "80d1b4af38cecf97becca780b6094ab99dfbf0fd"
+  },
+  "terminal_marker": "PASS_KERNEL_PROOF_ABA"
+}

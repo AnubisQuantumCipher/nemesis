@@ -1,0 +1,1484 @@
+{
+ "contract": {
+  "archive_path": "docs/mission/NEMESIS_DESKTOP_PRODUCTION_READINESS_AUTONOMOUS_MISSION_2026-08-21.md",
+  "bytes": 26694,
+  "lines": 320,
+  "sha256": "2485cd682cdedfeb0bfd13ce2aabd51194c72204495de0c12058631cb7c92c87",
+  "source_locator": "/tmp/NEMESIS_DESKTOP_PRODUCTION_READINESS_AUTONOMOUS_MISSION_2026-08-21.md",
+  "words": 3417
+ },
+ "github": {
+  "branch_deletion": false,
+  "conversation_resolution": true,
+  "default_branch": "main",
+  "force_pushes": false,
+  "open_pull_requests": [],
+  "repository": "AnubisQuantumCipher/nemesis",
+  "required_checks": [
+   "Contract and evidence",
+   "Dependency audit",
+   "Rust and Desktop (macos-14)",
+   "Rust and Desktop (macos-15)"
+  ],
+  "strict_checks": true
+ },
+ "mission_state": "IN_PROGRESS",
+ "non_interference_baseline": [
+  {
+   "branch": "main",
+   "clean": true,
+   "head": "d18cb7cc5bd918a6e9dd67aa99088dab9503e39b",
+   "path": "/Users/sicarii/Desktop/Projects/nemesis",
+   "tree": "80d1b4af38cecf97becca780b6094ab99dfbf0fd"
+  },
+  {
+   "branch": "build/desktop-local",
+   "clean": true,
+   "head": "9bf535d98c5b7dd27aa4f1acf4d4f3dcda0744d6",
+   "path": "/Users/sicarii/Desktop/Projects/nemesis/.worktrees/desktop-local",
+   "tree": "e6a3a6f2aeac1eea53dc2ec089f6156e174c5746"
+  },
+  {
+   "branch": "mission/jackal-unified-completion-20260820",
+   "clean": true,
+   "head": "d25bcd9818e0d106f337798f80527ae611cc3acc",
+   "path": "/Users/sicarii/Worktrees/jackal-unified-completion-20260820",
+   "tree": "a9b074363a200325625281b95ffeaaedb20cba9d"
+  }
+ ],
+ "ownership": {
+  "branch": "production/desktop-v1-autonomous-recovery",
+  "coexisting_worktrees": [
+   {
+    "branch": "main",
+    "head": "d18cb7cc5bd918a6e9dd67aa99088dab9503e39b",
+    "path": "/Users/sicarii/Desktop/Projects/nemesis"
+   },
+   {
+    "branch": "build/desktop-local",
+    "head": "9bf535d98c5b7dd27aa4f1acf4d4f3dcda0744d6",
+    "path": "/Users/sicarii/Desktop/Projects/nemesis/.worktrees/desktop-local"
+   },
+   {
+    "branch": "release/v0.1.0-evidence",
+    "head": "d61922f27b6db84648c186d75cbf4c54d9048bcf",
+    "path": "/Users/sicarii/Desktop/Projects/nemesis/.worktrees/release-v0.1.0"
+   }
+  ],
+  "concurrent_writer_probe": "only lead process matched worktree path; no git lockfiles",
+  "note": "recovered after 2026-08-21 kernel panic; prior worktree is read-only rollback evidence",
+  "worktree": "/Users/sicarii/Worktrees/nemesis-desktop-production-recovered",
+  "writer": "OMP lead process 24972"
+ },
+ "phases": [
+  {
+   "gates": [
+    {
+     "evidence": [
+      "shasum -a 256 and wc observed exact locator values"
+     ],
+     "id": "A-01",
+     "status": "PASS",
+     "title": "Verify binding contract hash and byte metrics"
+    },
+    {
+     "evidence": [
+      "clean branch production/desktop-v1-autonomous at baseline d18cb7c; origin/main identical; no upstream or remote mission branch"
+     ],
+     "id": "A-02",
+     "status": "PASS",
+     "title": "Re-probe owned worktree branch head and upstream"
+    },
+    {
+     "evidence": [
+      "git worktree roster captured; pgrep matched lead only; no .git lockfiles"
+     ],
+     "id": "A-03",
+     "status": "PASS",
+     "title": "Confirm worktree roster and concurrent writer absence"
+    },
+    {
+     "evidence": [
+      "GitHub default main; strict four-check protection; conversation resolution; no force push/deletion"
+     ],
+     "id": "A-04",
+     "status": "PASS",
+     "title": "Probe GitHub default branch and protection state"
+    },
+    {
+     "evidence": [
+      "one v0.1.0 prerelease; no open pull requests"
+     ],
+     "id": "A-05",
+     "status": "PASS",
+     "title": "Probe releases open pull requests and required checks"
+    },
+    {
+     "evidence": [
+      "annotated tag target, release metadata, three asset digests, and FINAL.json hash re-probed"
+     ],
+     "id": "A-06",
+     "status": "PASS",
+     "title": "Freeze predecessor tag release and receipt identities"
+    },
+    {
+     "evidence": [
+      "clean baseline fingerprints captured for main, desktop-local, and jackal-unified-completion worktrees; final receipt must compare them"
+     ],
+     "id": "A-07",
+     "status": "PASS",
+     "title": "Preserve excluded platforms and unrelated repositories untouched"
+    },
+    {
+     "evidence": [
+      "architect prohibitions encoded fail-closed in this tracker"
+     ],
+     "id": "A-08",
+     "status": "PASS",
+     "title": "Enforce credential spending legal and account prohibitions"
+    },
+    {
+     "evidence": [
+      "archived contract remains byte-identical; tracker has 182 unique gate identifiers"
+     ],
+     "id": "A-09",
+     "status": "PASS",
+     "title": "Create restart-safe durable repository mission tracker"
+    }
+   ],
+   "id": "A",
+   "status": "PASS",
+   "title": "Contract and boundaries"
+  },
+  {
+   "gates": [
+    {
+     "evidence": [
+      "CLAIMS.json inventories 29 user-visible claims across docs, metadata, UI, menus, onboarding, and screenshots"
+     ],
+     "id": "B-01",
+     "status": "PASS",
+     "title": "Inventory all user-visible desktop product claims"
+    },
+    {
+     "evidence": [
+      "receipts/production-readiness-20260821/CLAIMS.json sha256=24e16774f243cf5690641fa0e3fc76baa23f4104cdcc12e7f0b3f8771049be7e"
+     ],
+     "id": "B-02",
+     "status": "PASS",
+     "title": "Build claim-code-test-receipt evidence matrix"
+    },
+    {
+     "evidence": [
+      "CLAIMS.json identifies ten surface-placeholder destinations plus simulated telemetry, authority, progress, and replay"
+     ],
+     "id": "B-03",
+     "status": "PASS",
+     "title": "Find placeholders dead controls simulations and dev paths"
+    },
+    {
+     "evidence": [
+      "CLAIMS.json identifies bundled script/system-Python dependencies, missing settings/recovery paths, and generic error collapse"
+     ],
+     "id": "B-04",
+     "status": "PASS",
+     "title": "Find unhandled errors and source-tree dependencies"
+    },
+    {
+     "evidence": [
+      "PRODUCTION_READINESS.json defines sixteen required typed lanes and rejects implicit aggregate PASS"
+     ],
+     "id": "B-05",
+     "status": "PASS",
+     "title": "Define machine-readable typed production readiness roster"
+    },
+    {
+     "evidence": [
+      "validate_production_readiness.py derives FAIL from lane states; UNKNOWN, INDETERMINATE, SKIPPED, and BLOCKED never become PASS"
+     ],
+     "id": "B-06",
+     "status": "PASS",
+     "title": "Derive overall readiness fail-closed from lane states"
+    },
+    {
+     "evidence": [
+      "nine unittest poisons plus standard and Python -O validation passed; duplicate keys, lanes, contradictory state, stale subject, missing artifact, and symlink substitution reject"
+     ],
+     "id": "B-07",
+     "status": "PASS",
+     "title": "Build independent roster validator with poison controls"
+    },
+    {
+     "evidence": [
+      "BASELINE.json records ./scripts/verify_complete.sh exit=0 marker=PASS_NEMESIS_DESKTOP_COMPLETE log sha256=3a43a0d5d5868cf6241d6c12e42b5e83dfdfb3241ce075e95a2d0b02bbfdc345"
+     ],
+     "id": "B-08",
+     "status": "PASS",
+     "title": "Run existing canonical baseline gates before edits"
+    },
+    {
+     "evidence": [
+      "BASELINE.json preserves exit=127 missing-vitest attempt, locked dependency install, calibrated timestamps/cwd/subject/exit, guest and process cleanup"
+     ],
+     "id": "B-09",
+     "status": "PASS",
+     "title": "Calibrate baseline instruments and preserve failures"
+    }
+   ],
+   "id": "B",
+   "status": "PASS",
+   "title": "Admission and claims"
+  },
+  {
+   "gates": [
+    {
+     "evidence": [
+      "cargo test production_mission::initializes_private_versioned_local_home_idempotently ok; vitest 'shows a first-launch local-home initialization boundary' ok",
+      "receipts/production-readiness-20260821/production-desktop-recovered.log sha256=65829556934d5f4cb18a064fcafe763bb5547fc0407852a816500a03b6bd7ff8 exit=0 marker=PASS_PRODUCTION_DESKTOP_AUTOMATED"
+     ],
+     "id": "C-01",
+     "status": "PASS",
+     "title": "Verify clean first launch and local-home initialization"
+    },
+    {
+     "evidence": [
+      "cargo test mission_execution::drafts_an_exact_source_bound_contract_inside_the_private_local_home ok; production_mission::rejects_duplicate_unknown_unsafe_or_authority_widening_contract_fields ok; vitest 'drafts an exact local contract without a terminal prerequisite' ok; schema protocols/schemas/nemesis.desktop-mission.v1.schema.json validated by tests/phase0/test_production_contract.py",
+      "receipts/production-readiness-20260821/production-desktop-recovered.log sha256=65829556934d5f4cb18a064fcafe763bb5547fc0407852a816500a03b6bd7ff8 exit=0 marker=PASS_PRODUCTION_DESKTOP_AUTOMATED"
+     ],
+     "id": "C-02",
+     "status": "PASS",
+     "title": "Implement exact local-contract mission creation workflow"
+    },
+    {
+     "evidence": [
+      "cargo test production_mission::compiles_equivalent_json_to_one_normalized_digest_and_exact_action ok; vitest 'compiles, reviews, and authorizes the exact normalized digests' ok; AuthorityReview.tsx renders contract+action SHA-256 digests and denial table before authorization",
+      "receipts/production-readiness-20260821/production-desktop-recovered.log sha256=65829556934d5f4cb18a064fcafe763bb5547fc0407852a816500a03b6bd7ff8 exit=0 marker=PASS_PRODUCTION_DESKTOP_AUTOMATED"
+     ],
+     "id": "C-03",
+     "status": "PASS",
+     "title": "Implement normalized-digest authority review workflow"
+    },
+    {
+     "evidence": [
+      "cargo test mission_execution::reviewed_digest_mismatch_refuses_before_creating_a_lane ok and child_process_environment_is_sanitized_before_lane_creation ok; run_mission requires explicit reviewedContractDigest+reviewedActionDigest; residual: daemon one-shot Approvals consumption is trust-surface blocker TS-001 tracked at C-10/K-04",
+      "receipts/production-readiness-20260821/production-desktop-recovered.log sha256=65829556934d5f4cb18a064fcafe763bb5547fc0407852a816500a03b6bd7ff8 exit=0 marker=PASS_PRODUCTION_DESKTOP_AUTOMATED"
+     ],
+     "id": "C-04",
+     "status": "PASS",
+     "title": "Enforce explicit authorization without ambient authority"
+    },
+    {
+     "evidence": [
+      "Ada and Rust runtime executables rebuilt from current recovered source (scripts/build_ada.sh + cargo build runtime workspace, REBUILD_EXIT_STATUS=0); focused gate rerun on rebuilt binaries: executes_reviewed_contract_and_persists_current_receipt_and_replay ok, receipts/production-readiness-20260821/focused-mission-rebuilt.log sha256=1a2e08005a14e3f6febf2de7786da5335d604071d616c1fd163bb911d6b641ff exit=0"
+     ],
+     "id": "C-05",
+     "status": "PASS",
+     "title": "Execute missions through bundled Core Kernel Runtime"
+    },
+    {
+     "evidence": [
+      "cargo test mission_execution::executes_reviewed_contract_and_persists_current_receipt_and_replay ok (persists current receipt+replay, reload via load_last_mission); lib.rs mission_status polling snapshot; systemStatus.lastMission restored after relaunch",
+      "receipts/production-readiness-20260821/production-desktop-recovered.log sha256=65829556934d5f4cb18a064fcafe763bb5547fc0407852a816500a03b6bd7ff8 exit=0 marker=PASS_PRODUCTION_DESKTOP_AUTOMATED"
+     ],
+     "id": "C-06",
+     "status": "PASS",
+     "title": "Persist live progress and durable relaunch state"
+    },
+    {
+     "evidence": [
+      "vitest 'exposes only complete destinations and truthful component state' ok (no PROVED_LOCAL overclaim); AuthorityReview capability/denial table; EvidencePanel lane path, ledger head, evidence directory; MissionCockpit workspace+digests; no inferred worker/claim numbers before compilation",
+      "receipts/production-readiness-20260821/production-desktop-recovered.log sha256=65829556934d5f4cb18a064fcafe763bb5547fc0407852a816500a03b6bd7ff8 exit=0 marker=PASS_PRODUCTION_DESKTOP_AUTOMATED"
+     ],
+     "id": "C-07",
+     "status": "PASS",
+     "title": "Expose truthful workers capabilities budgets context workspace"
+    },
+    {
+     "evidence": [
+      "mission_execution ignored-exact test verifies receipt persistence and tamper rejection (tamperVerdict REJECTED); vitest asserts 'TAMPER REJECTED' and 'MISSION VERIFIED'; EvidencePanel binds sourceDigest and per-claim evidence digests",
+      "receipts/production-readiness-20260821/production-desktop-recovered.log sha256=65829556934d5f4cb18a064fcafe763bb5547fc0407852a816500a03b6bd7ff8 exit=0 marker=PASS_PRODUCTION_DESKTOP_AUTOMATED"
+     ],
+     "id": "C-08",
+     "status": "PASS",
+     "title": "Inspect evidence source bindings receipts and tamper rejection"
+    },
+    {
+     "evidence": [
+      "cargo test tests::maps_only_exact_verified_replay ok and tests::rejects_empty_or_model_exact_replay ok; bridge.ts types exactModelReexecution as literal false; vitest 'loads current authoritative replay and labels model reruns comparative' ok",
+      "receipts/production-readiness-20260821/production-desktop-recovered.log sha256=65829556934d5f4cb18a064fcafe763bb5547fc0407852a816500a03b6bd7ff8 exit=0 marker=PASS_PRODUCTION_DESKTOP_AUTOMATED"
+     ],
+     "id": "C-09",
+     "status": "PASS",
+     "title": "Implement authoritative state replay with token distinction"
+    },
+    {
+     "evidence": [
+      "TS-001-daemon-approval-integration: daemon authorizes without consuming Nemesis.Kernel.Approvals; wiring one-shot approval consumption into authorize_action changes the authorization accept condition and requires exact architect sign-off; desktop-side explicit review workflow is truthful and README documents the unresolved blocker"
+     ],
+     "id": "C-10",
+     "status": "BLOCKED",
+     "title": "Implement truthful policies and approval workflows"
+    },
+    {
+     "evidence": [
+      "cargo test production_mission::settings_are_safe_persisted_and_reversible ok; vitest 'persists validated reversible settings' ok (no inert retention control submitted)",
+      "receipts/production-readiness-20260821/production-desktop-recovered.log sha256=65829556934d5f4cb18a064fcafe763bb5547fc0407852a816500a03b6bd7ff8 exit=0 marker=PASS_PRODUCTION_DESKTOP_AUTOMATED"
+     ],
+     "id": "C-11",
+     "status": "PASS",
+     "title": "Make settings validated persistent reversible and safe"
+    },
+    {
+     "evidence": [
+      "vitest 'renders typed refusal and concrete recovery guidance' ok; bridge normalizeFailure fail-closed BLOCKED_DESKTOP_BRIDGE; loading boundary before system status; EvidencePanel empty state; runner REFUSED phases with typed recovery text",
+      "receipts/production-readiness-20260821/production-desktop-recovered.log sha256=65829556934d5f4cb18a064fcafe763bb5547fc0407852a816500a03b6bd7ff8 exit=0 marker=PASS_PRODUCTION_DESKTOP_AUTOMATED"
+     ],
+     "id": "C-12",
+     "status": "PASS",
+     "title": "Handle empty loading degraded refusal crash corruption recovery"
+    },
+    {
+     "evidence": [
+      "PARTIAL: vitest 'supports arrow navigation and the native Settings accelerator' ok; authority heading receives focus; native menu/quit/relaunch/window-restoration walkthrough BLOCKED by IOConsoleLocked=Yes (re-probed 2026-08-22T04:01Z, receipts LOCKED_SESSION.json)"
+     ],
+     "id": "C-13",
+     "status": "PENDING",
+     "title": "Support keyboard menus focus restoration quit and relaunch"
+    },
+    {
+     "evidence": [
+      "cargo test tests::selects_bundled_support_root_when_contract_matches ok and rejects_bundled_support_root_with_wrong_contract ok; tests.integration.test_release_bundle.test_release_config_bundles_complete_standalone_runtime ok; tauri.release.conf.json bundles nemesis-replay and drops mutable scripts and phase-11 fixture",
+      "receipts/production-readiness-20260821/production-desktop-recovered.log sha256=65829556934d5f4cb18a064fcafe763bb5547fc0407852a816500a03b6bd7ff8 exit=0 marker=PASS_PRODUCTION_DESKTOP_AUTOMATED"
+     ],
+     "id": "C-14",
+     "status": "PASS",
+     "title": "Remove source-checkout dependency from installed application"
+    },
+    {
+     "evidence": [
+      "tests.integration.test_release_bundle.test_release_contract_with_private_paths_is_not_bundled ok; tests.integration.test_release_leaks.test_private_build_path_and_token_are_rejected ok (verify-complete-recovered.log)",
+      "receipts/production-readiness-20260821/production-desktop-recovered.log sha256=65829556934d5f4cb18a064fcafe763bb5547fc0407852a816500a03b6bd7ff8 exit=0 marker=PASS_PRODUCTION_DESKTOP_AUTOMATED"
+     ],
+     "id": "C-15",
+     "status": "PASS",
+     "title": "Exclude paths credentials symbols servers mutable scripts"
+    },
+    {
+     "evidence": [
+      "vitest asserts 9 placeholder destinations (Workspaces, Agents, Changes, Tests, Knowledge, Skills, Automations, Integrations, Security) absent and 5 complete destinations present; navigation.ts contains exactly Home/Missions/Evidence/Replay/Settings",
+      "receipts/production-readiness-20260821/production-desktop-recovered.log sha256=65829556934d5f4cb18a064fcafe763bb5547fc0407852a816500a03b6bd7ff8 exit=0 marker=PASS_PRODUCTION_DESKTOP_AUTOMATED"
+     ],
+     "id": "C-16",
+     "status": "PASS",
+     "title": "Remove every unfinished production-visible control or destination"
+    }
+   ],
+   "id": "C",
+   "status": "PENDING",
+   "title": "Desktop product"
+  },
+  {
+   "gates": [
+    {
+     "evidence": [
+      "config/formal-kernel-scope.json inventories 8 proved units and 9 SPARK_Mode-Off authority boundaries with reasons; completeness enforced by tests/phase0/test_kernel_proof_manifest.py::test_live_scope_covers_every_kernel_body_and_public_operation",
+      "receipts/production-readiness-20260821/authority-recovered.log sha256=d1a0765ee33753d4b4562f302b370729eaa56bc960d3b87571e27289b06d534b exit=0 marker=PASS_PHASE4_CAPABILITY_POLICY"
+     ],
+     "id": "D-01",
+     "status": "PASS",
+     "title": "Inventory every authority-bearing Ada and SPARK unit"
+    },
+    {
+     "evidence": [
+      "public_operations mapped per unit in config/formal-kernel-scope.json; 78 obligations generated across every public operation",
+      "receipts/production-readiness-20260821/authority-recovered.log sha256=d1a0765ee33753d4b4562f302b370729eaa56bc960d3b87571e27289b06d534b exit=0 marker=PASS_PHASE4_CAPABILITY_POLICY"
+     ],
+     "id": "D-02",
+     "status": "PASS",
+     "title": "Map every public authority operation into obligations"
+    },
+    {
+     "evidence": [
+      "FORMAL_KERNEL.json regenerated on current recovered bytes (observed_at 2026-08-22T04:08:43Z) with per-file source_sha256 for kernel and daemon units; verified by scripts/verify_kernel_proof.py exit 0",
+      "receipts/production-readiness-20260821/authority-recovered.log sha256=d1a0765ee33753d4b4562f302b370729eaa56bc960d3b87571e27289b06d534b exit=0 marker=PASS_PHASE4_CAPABILITY_POLICY"
+     ],
+     "id": "D-03",
+     "status": "PASS",
+     "title": "Generate source-bound checked proof obligation manifest"
+    },
+    {
+     "evidence": [
+      "FORMAL_KERNEL.json records alr 2.1.0, Why3/gnatprove, Alt-Ergo 2.4.0, CVC5 1.1.2, obligations=78 discharged=78 unproved=0 warnings=0 assumptions=0 timeout_observed=false, plus unproved-boundary exclusions with reasons",
+      "receipts/production-readiness-20260821/authority-recovered.log sha256=d1a0765ee33753d4b4562f302b370729eaa56bc960d3b87571e27289b06d534b exit=0 marker=PASS_PHASE4_CAPABILITY_POLICY"
+     ],
+     "id": "D-04",
+     "status": "PASS",
+     "title": "Record toolchain options counts timeouts assumptions exclusions"
+    },
+    {
+     "evidence": [
+      "all 8 scoped units prove absence of run-time errors: 0 unproved checks, 0 warnings across 78 VCs on current bytes (kernel-proof-recovered.log sha256=b664054c93f2fe4f32f3acba491696d388cea3fd6867d7922dabfe4ca832a5c6 exit=0)",
+      "receipts/production-readiness-20260821/authority-recovered.log sha256=d1a0765ee33753d4b4562f302b370729eaa56bc960d3b87571e27289b06d534b exit=0 marker=PASS_PHASE4_CAPABILITY_POLICY"
+     ],
+     "id": "D-05",
+     "status": "PASS",
+     "title": "Strengthen run-time-error proofs across all scoped units"
+    },
+    {
+     "evidence": [
+      "postconditions proved on every public operation incl. strengthened Is_Attenuation operation-subset clause added this mission; further contract depth on daemon units is bounded by TS-001/TS-002",
+      "receipts/production-readiness-20260821/authority-recovered.log sha256=d1a0765ee33753d4b4562f302b370729eaa56bc960d3b87571e27289b06d534b exit=0 marker=PASS_PHASE4_CAPABILITY_POLICY"
+     ],
+     "id": "D-06",
+     "status": "PASS",
+     "title": "Add strongest feasible functional contracts across units"
+    },
+    {
+     "evidence": [
+      "Capabilities.Authorize postcondition: Authorized requires active unexpired grant with exact mission/subject/resource/scope, operation membership, and byte bound; Is_Attenuation forbids child operations absent from parent (kernel/src/nemesis-kernel-capabilities.ads:47-78, proved)",
+      "receipts/production-readiness-20260821/authority-recovered.log sha256=d1a0765ee33753d4b4562f302b370729eaa56bc960d3b87571e27289b06d534b exit=0 marker=PASS_PHASE4_CAPABILITY_POLICY"
+     ],
+     "id": "D-07",
+     "status": "PASS",
+     "title": "Prove authorization cannot widen across transitions"
+    },
+    {
+     "evidence": [
+      "Approvals.Consume_Approval postcondition proved: accepted only on exact mission+action digest before expiry, record becomes Approval_Consumed, refusals leave record unchanged, Approval_Replayed covers double consumption (kernel/src/nemesis-kernel-approvals.ads:25-39); daemon-side consumption integration remains TS-001",
+      "receipts/production-readiness-20260821/authority-recovered.log sha256=d1a0765ee33753d4b4562f302b370729eaa56bc960d3b87571e27289b06d534b exit=0 marker=PASS_PHASE4_CAPABILITY_POLICY"
+     ],
+     "id": "D-08",
+     "status": "PASS",
+     "title": "Prove approvals exact expiring one-shot consumption"
+    },
+    {
+     "evidence": [
+      "Budgets.Can_Allocate/Consume postconditions with overflow/range checks proved; Is_Attenuation attenuation subset proved",
+      "receipts/production-readiness-20260821/authority-recovered.log sha256=d1a0765ee33753d4b4562f302b370729eaa56bc960d3b87571e27289b06d534b exit=0 marker=PASS_PHASE4_CAPABILITY_POLICY"
+     ],
+     "id": "D-09",
+     "status": "PASS",
+     "title": "Prove budgets monotone and capabilities attenuated"
+    },
+    {
+     "evidence": [
+      "Transitions.Allowed postcondition, Missions.Apply/Commit_Event proved preconditions, Completion.Evaluate postcondition proved on current bytes",
+      "receipts/production-readiness-20260821/authority-recovered.log sha256=d1a0765ee33753d4b4562f302b370729eaa56bc960d3b87571e27289b06d534b exit=0 marker=PASS_PHASE4_CAPABILITY_POLICY"
+     ],
+     "id": "D-10",
+     "status": "PASS",
+     "title": "Prove invalid states cannot transition or complete"
+    },
+    {
+     "evidence": [
+      "Evidence.Acceptable postcondition proved; receipt/evidence acceptance requires exact source binding (nemesis-kernel-evidence.ads:36-43)",
+      "receipts/production-readiness-20260821/authority-recovered.log sha256=d1a0765ee33753d4b4562f302b370729eaa56bc960d3b87571e27289b06d534b exit=0 marker=PASS_PHASE4_CAPABILITY_POLICY"
+     ],
+     "id": "D-11",
+     "status": "PASS",
+     "title": "Prove evidence cannot self-accept or invent authority"
+    },
+    {
+     "evidence": [
+      "Ada hostile tests nemesis_kernel_tests + nemesis_authority_tests + nemesis_path_tests all green inside test_authority.sh; daemon hostile integration tests: partial reads + ambiguous duplicate-key JSON refusal, concurrent create single-owner no-duplicate-events, lifecycle recovery + stale-evidence completion rejection (tests/integration/test_daemon_api.py)",
+      "receipts/production-readiness-20260821/authority-recovered.log sha256=d1a0765ee33753d4b4562f302b370729eaa56bc960d3b87571e27289b06d534b exit=0 marker=PASS_PHASE4_CAPABILITY_POLICY"
+     ],
+     "id": "D-12",
+     "status": "PASS",
+     "title": "Add hostile boundary conversion replay and exception tests"
+    },
+    {
+     "evidence": [
+      "tests/phase0/test_kernel_proof_manifest.py rejects zero-work, missing units, warnings, assumptions, and timeouts; strict scope parser rejects duplicate keys; verify_kernel_proof.py requires nonzero obligation and unit counts",
+      "receipts/production-readiness-20260821/authority-recovered.log sha256=d1a0765ee33753d4b4562f302b370729eaa56bc960d3b87571e27289b06d534b exit=0 marker=PASS_PHASE4_CAPABILITY_POLICY"
+     ],
+     "id": "D-13",
+     "status": "PASS",
+     "title": "Reject empty stale excluded timed-out proof evidence"
+    },
+    {
+     "evidence": [
+      "fresh A\u2192B\u2192A on current recovered bytes: PASS_KERNEL_PROOF_ABA A=0 B=nonzero A2=0 bytes_restored=true (proof-aba-recovered.log sha256=0e1f35f7931fe843104d6ef88d4135da48224d8b51e7f3e1ae07295c7376808d exit=0); B mutation widens Authorize and fails for the intended GNATprove postcondition reason",
+      "receipts/production-readiness-20260821/authority-recovered.log sha256=d1a0765ee33753d4b4562f302b370729eaa56bc960d3b87571e27289b06d534b exit=0 marker=PASS_PHASE4_CAPABILITY_POLICY"
+     ],
+     "id": "D-14",
+     "status": "PASS",
+     "title": "Run semantic SPARK A-B-A tamper calibration gate"
+    },
+    {
+     "evidence": [
+      "docs/architecture/FORMAL_ASSURANCE.md published: source-bound, names proved units/operations, unproved SPARK_Mode-Off boundaries, TS-001/TS-002 blockers, and explicit non-extension of SPARK conclusions; formal lane stays fail-closed BLOCKED_TRUST_SURFACE"
+     ],
+     "id": "D-15",
+     "status": "PASS",
+     "title": "Publish bounded formal assurance report without overclaiming"
+    }
+   ],
+   "id": "D",
+   "status": "PASS",
+   "title": "Formal SPARK kernel"
+  },
+  {
+   "gates": [
+    {
+     "evidence": [],
+     "id": "E-01",
+     "status": "PENDING",
+     "title": "Freeze candidate source hash and review input bundle"
+    },
+    {
+     "evidence": [],
+     "id": "E-02",
+     "status": "PENDING",
+     "title": "Run independent architecture and trust-boundary reviewer"
+    },
+    {
+     "evidence": [],
+     "id": "E-03",
+     "status": "PENDING",
+     "title": "Run independent adversarial code and release reviewer"
+    },
+    {
+     "evidence": [],
+     "id": "E-04",
+     "status": "PENDING",
+     "title": "Run specialist SPARK authority boundary review"
+    },
+    {
+     "evidence": [],
+     "id": "E-05",
+     "status": "PENDING",
+     "title": "Run specialist Tauri WebKit IPC security review"
+    },
+    {
+     "evidence": [],
+     "id": "E-06",
+     "status": "PENDING",
+     "title": "Run specialist Rust process path handling review"
+    },
+    {
+     "evidence": [],
+     "id": "E-07",
+     "status": "PENDING",
+     "title": "Run specialist Keychain signing secrets review"
+    },
+    {
+     "evidence": [],
+     "id": "E-08",
+     "status": "PENDING",
+     "title": "Run specialist SQLite event durability review"
+    },
+    {
+     "evidence": [],
+     "id": "E-09",
+     "status": "PENDING",
+     "title": "Run specialist dependency supply-chain and license review"
+    },
+    {
+     "evidence": [],
+     "id": "E-10",
+     "status": "PENDING",
+     "title": "Run specialist accessibility release review"
+    },
+    {
+     "evidence": [],
+     "id": "E-11",
+     "status": "PENDING",
+     "title": "Require structured severity paths impact and reproduction"
+    },
+    {
+     "evidence": [],
+     "id": "E-12",
+     "status": "PENDING",
+     "title": "Reproduce fix and retest every load-bearing finding"
+    },
+    {
+     "evidence": [],
+     "id": "E-13",
+     "status": "PENDING",
+     "title": "Rerun fresh independent reviews against final exact hash"
+    },
+    {
+     "evidence": [],
+     "id": "E-14",
+     "status": "PENDING",
+     "title": "Archive detached validated reviewer identity receipts"
+    },
+    {
+     "evidence": [],
+     "id": "E-15",
+     "status": "PENDING",
+     "title": "Review Tauri commands CSP origins navigation injection"
+    },
+    {
+     "evidence": [],
+     "id": "E-16",
+     "status": "PENDING",
+     "title": "Review traversal symlink TOCTOU Unicode separators"
+    },
+    {
+     "evidence": [],
+     "id": "E-17",
+     "status": "PENDING",
+     "title": "Review process argv environment executable substitution"
+    },
+    {
+     "evidence": [],
+     "id": "E-18",
+     "status": "PENDING",
+     "title": "Review local protocol framing malformed duplicate partial reads"
+    },
+    {
+     "evidence": [],
+     "id": "E-19",
+     "status": "PENDING",
+     "title": "Review approval replay confused deputy authority widening"
+    },
+    {
+     "evidence": [],
+     "id": "E-20",
+     "status": "PENDING",
+     "title": "Review evidence substitution stale pass source mismatches"
+    },
+    {
+     "evidence": [],
+     "id": "E-21",
+     "status": "PENDING",
+     "title": "Review Keychain controls zeroization leakage inheritance"
+    },
+    {
+     "evidence": [],
+     "id": "E-22",
+     "status": "PENDING",
+     "title": "Review SQLite corruption migrations concurrency durability"
+    },
+    {
+     "evidence": [],
+     "id": "E-23",
+     "status": "PENDING",
+     "title": "Review prompt injection plugins build scripts tool outputs"
+    },
+    {
+     "evidence": [],
+     "id": "E-24",
+     "status": "PENDING",
+     "title": "Review VZ sandbox enforcement and bypass resistance"
+    },
+    {
+     "evidence": [],
+     "id": "E-25",
+     "status": "PENDING",
+     "title": "Review advisories lockfiles actions SBOM licenses provenance"
+    },
+    {
+     "evidence": [],
+     "id": "E-26",
+     "status": "PENDING",
+     "title": "Review release privacy Mach-O entitlements signatures updates"
+    },
+    {
+     "evidence": [],
+     "id": "E-27",
+     "status": "PENDING",
+     "title": "Review denial-of-service bounds cleanup and disk exhaustion"
+    },
+    {
+     "evidence": [],
+     "id": "E-28",
+     "status": "PENDING",
+     "title": "Run crash-capable work only inside guarded Tart guest"
+    }
+   ],
+   "id": "E",
+   "status": "PENDING",
+   "title": "Independent security review"
+  },
+  {
+   "gates": [
+    {
+     "evidence": [],
+     "id": "F-01",
+     "status": "PENDING",
+     "title": "Test clean installation and first application run"
+    },
+    {
+     "evidence": [],
+     "id": "F-02",
+     "status": "PENDING",
+     "title": "Test normal quit force quit crash recovery"
+    },
+    {
+     "evidence": [],
+     "id": "F-03",
+     "status": "PENDING",
+     "title": "Test kill-during-commit and host-restart recovery"
+    },
+    {
+     "evidence": [],
+     "id": "F-04",
+     "status": "PENDING",
+     "title": "Test corrupted truncated duplicate events and records"
+    },
+    {
+     "evidence": [],
+     "id": "F-05",
+     "status": "PENDING",
+     "title": "Test interrupted migration rollback and recovery"
+    },
+    {
+     "evidence": [],
+     "id": "F-06",
+     "status": "PENDING",
+     "title": "Test concurrent clients and single authority ownership"
+    },
+    {
+     "evidence": [],
+     "id": "F-07",
+     "status": "PENDING",
+     "title": "Test disk-full and read-only filesystem behavior"
+    },
+    {
+     "evidence": [],
+     "id": "F-08",
+     "status": "PENDING",
+     "title": "Test missing resources permissions Keychain sandbox network denials"
+    },
+    {
+     "evidence": [],
+     "id": "F-09",
+     "status": "PENDING",
+     "title": "Test stale sources deleted workspaces renamed paths symlinks"
+    },
+    {
+     "evidence": [],
+     "id": "F-10",
+     "status": "PENDING",
+     "title": "Test bounded redacted logs caches evidence cleanup"
+    },
+    {
+     "evidence": [],
+     "id": "F-11",
+     "status": "PENDING",
+     "title": "Test long mission soak and repeated launch cycles"
+    },
+    {
+     "evidence": [],
+     "id": "F-12",
+     "status": "PENDING",
+     "title": "Test predecessor upgrade rollback downgrade and uninstall"
+    },
+    {
+     "evidence": [],
+     "id": "F-13",
+     "status": "PENDING",
+     "title": "Prevent duplicate actions authority events receipts notifications"
+    },
+    {
+     "evidence": [],
+     "id": "F-14",
+     "status": "PENDING",
+     "title": "Confirm failures reach intended semantic seams"
+    }
+   ],
+   "id": "F",
+   "status": "PENDING",
+   "title": "Reliability and recovery"
+  },
+  {
+   "gates": [
+    {
+     "evidence": [],
+     "id": "G-01",
+     "status": "PENDING",
+     "title": "Verify full keyboard navigation and visible focus"
+    },
+    {
+     "evidence": [],
+     "id": "G-02",
+     "status": "PENDING",
+     "title": "Verify VoiceOver names roles values groups ordering"
+    },
+    {
+     "evidence": [],
+     "id": "G-03",
+     "status": "PENDING",
+     "title": "Measure contrast for every semantic interface state"
+    },
+    {
+     "evidence": [],
+     "id": "G-04",
+     "status": "PENDING",
+     "title": "Verify scalable text and supported display scaling"
+    },
+    {
+     "evidence": [],
+     "id": "G-05",
+     "status": "PENDING",
+     "title": "Honor reduced motion for every pulse and animation"
+    },
+    {
+     "evidence": [],
+     "id": "G-06",
+     "status": "PENDING",
+     "title": "Eliminate color-only status distinctions throughout interface"
+    },
+    {
+     "evidence": [],
+     "id": "G-07",
+     "status": "PENDING",
+     "title": "Verify minimum window bounds without clipped controls"
+    },
+    {
+     "evidence": [],
+     "id": "G-08",
+     "status": "PENDING",
+     "title": "Clarify destructive authority refusal recovery and undo"
+    },
+    {
+     "evidence": [],
+     "id": "G-09",
+     "status": "PENDING",
+     "title": "Add automated accessibility and DOM contract tests"
+    },
+    {
+     "evidence": [],
+     "id": "G-10",
+     "status": "PENDING",
+     "title": "Capture native accessibility-tree and keyboard walkthrough"
+    },
+    {
+     "evidence": [],
+     "id": "G-11",
+     "status": "PENDING",
+     "title": "Preserve readable graphite crimson cockpit identity"
+    }
+   ],
+   "id": "G",
+   "status": "PENDING",
+   "title": "Accessibility and usability"
+  },
+  {
+   "gates": [
+    {
+     "evidence": [],
+     "id": "H-01",
+     "status": "PENDING",
+     "title": "Validate every performance measurement instrument first"
+    },
+    {
+     "evidence": [],
+     "id": "H-02",
+     "status": "PENDING",
+     "title": "Record machine OS build tools and workloads"
+    },
+    {
+     "evidence": [],
+     "id": "H-03",
+     "status": "PENDING",
+     "title": "Measure cold and warm launch to usable state"
+    },
+    {
+     "evidence": [],
+     "id": "H-04",
+     "status": "PENDING",
+     "title": "Measure bounded idle CPU RSS and wakeups"
+    },
+    {
+     "evidence": [],
+     "id": "H-05",
+     "status": "PENDING",
+     "title": "Measure mission start latency and UI responsiveness"
+    },
+    {
+     "evidence": [],
+     "id": "H-06",
+     "status": "PENDING",
+     "title": "Measure replay loads across declared event limits"
+    },
+    {
+     "evidence": [],
+     "id": "H-07",
+     "status": "PENDING",
+     "title": "Measure database evidence log and cache growth"
+    },
+    {
+     "evidence": [],
+     "id": "H-08",
+     "status": "PENDING",
+     "title": "Run sustained mission and launch-cycle soak"
+    },
+    {
+     "evidence": [],
+     "id": "H-09",
+     "status": "PENDING",
+     "title": "Measure package size and resource availability"
+    },
+    {
+     "evidence": [],
+     "id": "H-10",
+     "status": "PENDING",
+     "title": "Assert supported product resource limits in code"
+    },
+    {
+     "evidence": [],
+     "id": "H-11",
+     "status": "PENDING",
+     "title": "Set justified fail-closed regression thresholds"
+    },
+    {
+     "evidence": [],
+     "id": "H-12",
+     "status": "PENDING",
+     "title": "Publish only bounded reconciled repeated measurements"
+    }
+   ],
+   "id": "H",
+   "status": "PENDING",
+   "title": "Performance and resources"
+  },
+  {
+   "gates": [
+    {
+     "evidence": [],
+     "id": "I-01",
+     "status": "PENDING",
+     "title": "Produce authoritative normal macOS installation artifact"
+    },
+    {
+     "evidence": [],
+     "id": "I-02",
+     "status": "PENDING",
+     "title": "Verify installed app using isolated user-data root"
+    },
+    {
+     "evidence": [],
+     "id": "I-03",
+     "status": "PENDING",
+     "title": "Verify resources architecture minimum OS and entitlements"
+    },
+    {
+     "evidence": [],
+     "id": "I-04",
+     "status": "PENDING",
+     "title": "Verify Mach-O dependencies RPATHs privacy notices SBOM"
+    },
+    {
+     "evidence": [],
+     "id": "I-05",
+     "status": "PENDING",
+     "title": "Implement secure updater or explicitly exclude updates"
+    },
+    {
+     "evidence": [],
+     "id": "I-06",
+     "status": "PENDING",
+     "title": "Test signed metadata rollback replay and channel controls"
+    },
+    {
+     "evidence": [],
+     "id": "I-07",
+     "status": "PENDING",
+     "title": "Verify predecessor upgrade migration rollback and uninstall"
+    },
+    {
+     "evidence": [],
+     "id": "I-08",
+     "status": "PENDING",
+     "title": "Probe Developer ID signing capability without secrets"
+    },
+    {
+     "evidence": [],
+     "id": "I-09",
+     "status": "PENDING",
+     "title": "Probe notarization capability without account mutation"
+    },
+    {
+     "evidence": [],
+     "id": "I-10",
+     "status": "PENDING",
+     "title": "Verify hardened runtime signature when capability exists"
+    },
+    {
+     "evidence": [],
+     "id": "I-11",
+     "status": "PENDING",
+     "title": "Verify Gatekeeper on freshly downloaded exact bytes"
+    },
+    {
+     "evidence": [],
+     "id": "I-12",
+     "status": "PENDING",
+     "title": "Treat ad-hoc signing as local validation only"
+    },
+    {
+     "evidence": [],
+     "id": "I-13",
+     "status": "PENDING",
+     "title": "Download published assets anonymously and compare hashes"
+    }
+   ],
+   "id": "I",
+   "status": "PENDING",
+   "title": "Installation and distribution"
+  },
+  {
+   "gates": [
+    {
+     "evidence": [],
+     "id": "J-01",
+     "status": "PENDING",
+     "title": "Keep telemetry absent or explicit opt-in and deletable"
+    },
+    {
+     "evidence": [],
+     "id": "J-02",
+     "status": "PENDING",
+     "title": "Prevent unauthorized outbound prompts secrets and evidence"
+    },
+    {
+     "evidence": [],
+     "id": "J-03",
+     "status": "PENDING",
+     "title": "Document privacy data locations backup export deletion"
+    },
+    {
+     "evidence": [],
+     "id": "J-04",
+     "status": "PENDING",
+     "title": "Document diagnostics redaction and vulnerability reporting"
+    },
+    {
+     "evidence": [],
+     "id": "J-05",
+     "status": "PENDING",
+     "title": "Generate bounded previewable secret-scanned support bundle"
+    },
+    {
+     "evidence": [],
+     "id": "J-06",
+     "status": "PENDING",
+     "title": "Disable automatic support bundle transmission"
+    },
+    {
+     "evidence": [],
+     "id": "J-07",
+     "status": "PENDING",
+     "title": "Expose secret-safe component and resource diagnostics"
+    },
+    {
+     "evidence": [],
+     "id": "J-08",
+     "status": "PENDING",
+     "title": "Expose database verifier and sandbox diagnostics"
+    },
+    {
+     "evidence": [],
+     "id": "J-09",
+     "status": "PENDING",
+     "title": "Build runnable installed-product troubleshooting matrix"
+    }
+   ],
+   "id": "J",
+   "status": "PENDING",
+   "title": "Privacy and operations"
+  },
+  {
+   "gates": [
+    {
+     "evidence": [],
+     "id": "K-01",
+     "status": "PENDING",
+     "title": "Detect every proposed trust-surface semantic change"
+    },
+    {
+     "evidence": [],
+     "id": "K-02",
+     "status": "PENDING",
+     "title": "Preserve all existing gates assertions and thresholds"
+    },
+    {
+     "evidence": [],
+     "id": "K-03",
+     "status": "PENDING",
+     "title": "Fix product without weakening verifier accept conditions"
+    },
+    {
+     "evidence": [],
+     "id": "K-04",
+     "status": "PENDING",
+     "title": "Write source-bound unmerged proposal when change required"
+    },
+    {
+     "evidence": [],
+     "id": "K-05",
+     "status": "PENDING",
+     "title": "Seal trust-surface blocker only after other lanes"
+    }
+   ],
+   "id": "K",
+   "status": "PENDING",
+   "title": "Trust-surface guard"
+  },
+  {
+   "gates": [
+    {
+     "evidence": [],
+     "id": "L-01",
+     "status": "PENDING",
+     "title": "Reject zero-work and empty-corpus gate runs"
+    },
+    {
+     "evidence": [],
+     "id": "L-02",
+     "status": "PENDING",
+     "title": "Reject malformed duplicate contradictory gate results"
+    },
+    {
+     "evidence": [],
+     "id": "L-03",
+     "status": "PENDING",
+     "title": "Reject missing stale and unlisted gate artifacts"
+    },
+    {
+     "evidence": [],
+     "id": "L-04",
+     "status": "PENDING",
+     "title": "Reject source commit and tree identity mismatches"
+    },
+    {
+     "evidence": [],
+     "id": "L-05",
+     "status": "PENDING",
+     "title": "Clear stale pass state after interrupted gate runs"
+    },
+    {
+     "evidence": [],
+     "id": "L-06",
+     "status": "PENDING",
+     "title": "Test alternate optimized interpreter invocations"
+    },
+    {
+     "evidence": [],
+     "id": "L-07",
+     "status": "PENDING",
+     "title": "Detect changed tracked and untracked inventories"
+    },
+    {
+     "evidence": [],
+     "id": "L-08",
+     "status": "PENDING",
+     "title": "Test symlink and path-substitution gate behavior"
+    },
+    {
+     "evidence": [],
+     "id": "L-09",
+     "status": "PENDING",
+     "title": "Run exact-byte A-B-A tamper restoration gates"
+    },
+    {
+     "evidence": [],
+     "id": "L-10",
+     "status": "PENDING",
+     "title": "Capture statuses timestamps tools hashes and markers"
+    }
+   ],
+   "id": "L",
+   "status": "PENDING",
+   "title": "Hostile gate calibration"
+  },
+  {
+   "gates": [
+    {
+     "evidence": [],
+     "id": "M-01",
+     "status": "PENDING",
+     "title": "Commit and push verified non-final coherent checkpoints"
+    },
+    {
+     "evidence": [],
+     "id": "M-02",
+     "status": "PENDING",
+     "title": "Open one mission-owned production readiness pull request"
+    },
+    {
+     "evidence": [],
+     "id": "M-03",
+     "status": "PENDING",
+     "title": "Require terminal-green checks on exact pull-request head"
+    },
+    {
+     "evidence": [],
+     "id": "M-04",
+     "status": "PENDING",
+     "title": "Address all load-bearing hosted review findings"
+    },
+    {
+     "evidence": [],
+     "id": "M-05",
+     "status": "PENDING",
+     "title": "Avoid merging any trust-surface semantic change"
+    },
+    {
+     "evidence": [],
+     "id": "M-06",
+     "status": "PENDING",
+     "title": "Merge ordinary work only through protected pull request"
+    },
+    {
+     "evidence": [],
+     "id": "M-07",
+     "status": "PENDING",
+     "title": "Build successor assets from exact final merge commit"
+    },
+    {
+     "evidence": [],
+     "id": "M-08",
+     "status": "PENDING",
+     "title": "Choose truthful semantic successor version and status"
+    },
+    {
+     "evidence": [],
+     "id": "M-09",
+     "status": "PENDING",
+     "title": "Preserve immutable predecessor tag and release assets"
+    },
+    {
+     "evidence": [],
+     "id": "M-10",
+     "status": "PENDING",
+     "title": "Publish only bounded release supported by passing gates"
+    },
+    {
+     "evidence": [],
+     "id": "M-11",
+     "status": "PENDING",
+     "title": "Create detached post-release evidence pull request if needed"
+    },
+    {
+     "evidence": [],
+     "id": "M-12",
+     "status": "PENDING",
+     "title": "Read back hosted checks pull request and release state"
+    }
+   ],
+   "id": "M",
+   "status": "PENDING",
+   "title": "GitHub and release"
+  },
+  {
+   "gates": [
+    {
+     "evidence": [],
+     "id": "N-01",
+     "status": "PENDING",
+     "title": "Record baseline final commit tree upstream dirtiness"
+    },
+    {
+     "evidence": [],
+     "id": "N-02",
+     "status": "PENDING",
+     "title": "Record changed-file manifest and diff statistics"
+    },
+    {
+     "evidence": [],
+     "id": "N-03",
+     "status": "PENDING",
+     "title": "Record exact typed roster statuses and evidence"
+    },
+    {
+     "evidence": [],
+     "id": "N-04",
+     "status": "PENDING",
+     "title": "Record SPARK unit obligations and assumptions"
+    },
+    {
+     "evidence": [],
+     "id": "N-05",
+     "status": "PENDING",
+     "title": "Record reviewer identities hashes findings dispositions"
+    },
+    {
+     "evidence": [],
+     "id": "N-06",
+     "status": "PENDING",
+     "title": "Record classified command table statuses markers hashes"
+    },
+    {
+     "evidence": [],
+     "id": "N-07",
+     "status": "PENDING",
+     "title": "Record hostile controls and A-B-A receipts"
+    },
+    {
+     "evidence": [],
+     "id": "N-08",
+     "status": "PENDING",
+     "title": "Record accessibility observations and captured artifacts"
+    },
+    {
+     "evidence": [],
+     "id": "N-09",
+     "status": "PENDING",
+     "title": "Record controlled performance raw data and conclusions"
+    },
+    {
+     "evidence": [],
+     "id": "N-10",
+     "status": "PENDING",
+     "title": "Record install upgrade rollback uninstall evidence"
+    },
+    {
+     "evidence": [],
+     "id": "N-11",
+     "status": "PENDING",
+     "title": "Record signing notarization Gatekeeper evidence or blocker"
+    },
+    {
+     "evidence": [],
+     "id": "N-12",
+     "status": "PENDING",
+     "title": "Record pull-request checks releases URLs and SHAs"
+    },
+    {
+     "evidence": [],
+     "id": "N-13",
+     "status": "PENDING",
+     "title": "Record anonymous asset readback identities"
+    },
+    {
+     "evidence": [],
+     "id": "N-14",
+     "status": "PENDING",
+     "title": "Preserve failed attempts as exact causal scars"
+    },
+    {
+     "evidence": [],
+     "id": "N-15",
+     "status": "PENDING",
+     "title": "Record residuals blockers and explicit non-claims"
+    },
+    {
+     "evidence": [],
+     "id": "N-16",
+     "status": "PENDING",
+     "title": "Prove excluded worktrees and platforms stayed untouched"
+    },
+    {
+     "evidence": [],
+     "id": "N-17",
+     "status": "PENDING",
+     "title": "Validate machine-readable final receipt independently"
+    },
+    {
+     "evidence": [],
+     "id": "N-18",
+     "status": "PENDING",
+     "title": "Publish human report with gate-coupled status language"
+    },
+    {
+     "evidence": [],
+     "id": "N-19",
+     "status": "PENDING",
+     "title": "Seal exactly one authorized terminal verdict"
+    }
+   ],
+   "id": "N",
+   "status": "PENDING",
+   "title": "Final evidence"
+  }
+ ],
+ "predecessor": {
+  "assets": [
+   {
+    "name": "NEMESIS-Desktop-v0.1.0-macos-arm64.zip",
+    "sha256": "6496b646043face3c0e907dcc7a01ca4a2b049a637b3b62743545bc674f22753",
+    "size": 4330327
+   },
+   {
+    "name": "release-manifest.json",
+    "sha256": "dda0e7ea4261a8400f1d986ffbb62a1ef0a25907363471c983508596ade3c08e",
+    "size": 1067
+   },
+   {
+    "name": "SHA256SUMS",
+    "sha256": "cfa14179a19ed33fbc4504af1a72b4e709431d0eb0ccfc4c515c7e92ba487db1",
+    "size": 193
+   }
+  ],
+  "final_receipt": "receipts/release-v0.1.0/FINAL.json",
+  "final_receipt_sha256": "96b444a7c4e8c7f987a3edbf51d28f54cfca8f24e8082f161f045ea493f66f9c",
+  "kind": "annotated",
+  "release_draft": false,
+  "release_prerelease": true,
+  "tag": "v0.1.0",
+  "target": "4e10cfcfeb3adf20ced7a01309ac0b2fb028373b"
+ },
+ "prohibitions": {
+  "apple_account_mutation": false,
+  "credentials": false,
+  "excluded_platform_work": false,
+  "legal_filings": false,
+  "questions_or_manual_actions": false,
+  "spending": false,
+  "trust_surface_weakening": false,
+  "unrelated_worktree_mutation": false
+ },
+ "recovery": {
+  "baseline_head": "d18cb7cc5bd918a6e9dd67aa99088dab9503e39b",
+  "continuation_contract": {
+   "bytes": 10081,
+   "lines": 189,
+   "path": "/tmp/NEMESIS_DESKTOP_PRODUCTION_RECOVERY_FABLE5_MISSION_2026-08-21.md",
+   "sha256": "ad54115ae3a6550ff65e9963a37be1ae4482257a48ebd344b88766068fc23518",
+   "words": 1245
+  },
+  "host_guards": {
+   "launch_agent": "com.sicarii.omp-host-guard",
+   "omp": "17.4.2",
+   "task.maxConcurrency": 5,
+   "task.maxRecursionDepth": 1
+  },
+  "manifest_receipt": "receipts/production-readiness-20260821/RECOVERY_MANIFEST.json",
+  "panic_artifact": "/Library/Logs/DiagnosticReports/panic-full-2026-08-21-224948.000.panic",
+  "panic_string": "watchdog timeout: no checkins from watchdogd in 94 seconds",
+  "prior_journal_sha256": "da7e18d5419d176b8d6c40e4277a7e1b2bca0786fc1af0b862c16ae77154d77e",
+  "recovered_branch": "production/desktop-v1-autonomous-recovery",
+  "recovered_worktree": "/Users/sicarii/Worktrees/nemesis-desktop-production-recovered"
+ },
+ "repository": {
+  "branch": "production/desktop-v1-autonomous",
+  "dirty_at_admission": false,
+  "head": "d18cb7cc5bd918a6e9dd67aa99088dab9503e39b",
+  "origin": "https://github.com/AnubisQuantumCipher/nemesis.git",
+  "origin_main": "d18cb7cc5bd918a6e9dd67aa99088dab9503e39b",
+  "remote_mission_branch": null,
+  "root": "/Users/sicarii/Worktrees/nemesis-desktop-production",
+  "tree": "80d1b4af38cecf97becca780b6094ab99dfbf0fd",
+  "upstream": null
+ },
+ "scars": [
+  {
+   "cause": "gh release list does not expose a url JSON field; retried with supported fields and direct release API",
+   "command": "gh release list --repo AnubisQuantumCipher/nemesis --limit 20 --json name,tagName,isDraft,isPrerelease,publishedAt,url",
+   "exit_status": 1
+  },
+  {
+   "cause": "mission branch has no configured upstream at admission; remote mission branch is absent",
+   "command": "git rev-parse --verify @{upstream}",
+   "exit_status": 128
+  },
+  {
+   "cause": "initial jq uniqueness expression iterated scalar gate identifiers; corrected expression binds the gate array before mapping ids",
+   "command": "jq '[.phases[].gates[]] | {count:length, ids_unique:([.[].id]|length == ([.[].id]|unique|length)), pending:map(select(.status == \"PENDING\"))|length, pass:map(select(.status == \"PASS\"))|length}' receipts/production-readiness-20260821/TRACKER.json",
+   "exit_status": 5
+  },
+  {
+   "cause": "macOS kernel panic 'watchdog timeout: no checkins from watchdogd in 94 seconds' with 1677 omp processes and 14.25 MiB free memory ended the prior lead session; no mission verdict was reached; work recovered by fresh clone plus byte-identical eligible-file copy",
+   "command": "prior OMP session 2026-08-21T05-59-18-838Z_01a022e6 (journal sha256 da7e18d5\u2026)",
+   "exit_status": "KERNEL_PANIC"
+  }
+ ],
+ "schema": "nemesis.production-readiness-tracker/v1",
+ "terminal_verdict": null,
+ "updated_at": "2026-08-22T04:10:26Z"
+}

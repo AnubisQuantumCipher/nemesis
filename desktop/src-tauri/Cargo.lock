@@ -1763,11 +1763,22 @@ name = "nemesis-desktop"
 version = "0.1.0"
 dependencies = [
  "hex",
+ "libc",
+ "nemesis-protocol",
  "serde",
  "serde_json",
  "sha2",
  "tauri",
  "tauri-build",
+]
+
+[[package]]
+name = "nemesis-protocol"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+ "thiserror 2.0.20",
 ]
 
 [[package]]

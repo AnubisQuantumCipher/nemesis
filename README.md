@@ -25,6 +25,12 @@ The `v0.1.0` release line contains:
 
 Not shipped: iPhone/iPad, web, remote-public daemon, cloud service, Windows/Linux packages, App Store distribution, Developer ID signing, or notarization. The inherited multi-platform `1.0` blueprint remains future architecture, not the status of this release.
 
+## Current bounded desktop workflow
+
+The successor worktree adds a source-bound `nemesis.desktop-mission/v1` path without broadening authority: Desktop can draft or compile one exact local contract, show the normalized contract and action digests before authorization, execute one bounded existing-file replacement in an isolated Git worktree, recover Core at the declared restart boundary, verify current-source evidence, sign a local receipt, reject a one-byte mutation, and load the resulting authoritative replay.
+
+See [Bounded Local Desktop Mission](docs/architecture/LOCAL_DESKTOP_MISSION.md) and its [machine schema](protocols/schemas/nemesis.desktop-mission.v1.schema.json). This workflow does not resolve the recorded daemon approval/capability trust-surface blockers or public signing/notarization prerequisites.
+
 ## Architecture and trust flow
 
 ```text
@@ -81,9 +87,10 @@ npm --prefix desktop ci
 ./scripts/build_ada.sh
 cargo build --manifest-path runtime/Cargo.toml --workspace
 ./script/build_and_run.sh --verify
+./scripts/test_production_desktop.sh
 ```
 
-`./script/build_and_run.sh` builds the renderer and native bridge, creates a local debug `.app`, launches it, and requires the `nemesis-desktop` process to appear.
+`./script/build_and_run.sh` builds the renderer and native bridge, creates a local debug `.app`, launches it, and requires the `nemesis-desktop` process to appear. `./scripts/test_production_desktop.sh` additionally exercises the real compiled local-mission path, receipt tamper rejection, replay persistence, renderer behavior, native tests, and standalone release-resource contract.
 
 Run the witnessed backend slice directly:
 
@@ -101,6 +108,8 @@ python3 scripts/verify_evidence_bundle.py receipts/desktop-latest
 
 ```sh
 python3 scripts/verify_contract.py
+python3 scripts/verify_production_contract.py
+python3 scripts/validate_production_readiness.py receipts/production-readiness-20260821/PRODUCTION_READINESS.json
 python3 scripts/verify_release_contract.py
 python3 -m unittest discover -s tests -p 'test_*.py'
 cargo fmt --manifest-path runtime/Cargo.toml --all -- --check

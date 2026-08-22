@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+import concurrent.futures
 import json
 import socket
 import subprocess
 import tempfile
+import threading
 import time
 import unittest
 from pathlib import Path
@@ -95,6 +97,67 @@ class DaemonApiTests(unittest.TestCase):
                 self.assertLessEqual(len(response), 65_536)
         return json.loads(response)
 
+    def raw_request(self, chunks: list[bytes], *, shutdown: bool = False) -> dict[str, object]:
+        with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as client:
+            client.settimeout(2)
+            client.connect(str(self.socket_path))
+            for chunk in chunks:
+                client.sendall(chunk)
+            if shutdown:
+                client.shutdown(socket.SHUT_WR)
+            response = bytearray()
+            while not response.endswith(b"\n"):
+                part = client.recv(4096)
+                self.assertTrue(part, "daemon closed before typed response")
+                response.extend(part)
+                self.assertLessEqual(len(response), 65_536)
+        return json.loads(response)
+
+    def test_protocol_handles_partial_reads_and_refuses_ambiguous_json(self) -> None:
+        ping = b'{"command":"ping","schema":"nemesis.local/v1"}\n'
+        partial = self.raw_request([ping[:13], ping[13:31], ping[31:]])
+        self.assertEqual(partial["status"], "OK")
+
+        duplicate = self.raw_request(
+            [b'{"schema":"nemesis.local/v1","command":"ping","command":"create"}\n']
+        )
+        self.assertEqual(duplicate["status"], "INVALID_REQUEST")
+
+        unknown = self.raw_request(
+            [b'{"schema":"nemesis.local/v1","command":"ping","ambient":true}\n']
+        )
+        self.assertEqual(unknown["status"], "INVALID_REQUEST")
+
+        incomplete = self.raw_request(
+            [b'{"schema":"nemesis.local/v1","command":"ping"}'],
+            shutdown=True,
+        )
+        self.assertEqual(incomplete["status"], "INVALID_REQUEST")
+
+    def test_concurrent_create_has_one_authoritative_owner_and_no_duplicate_events(self) -> None:
+        barrier = threading.Barrier(2)
+
+        def create() -> dict[str, object]:
+            barrier.wait()
+            return self.request(
+                "create",
+                mission_id=MISSION,
+                worker_id=WORKER,
+                contract_digest=CONTRACT,
+                scope_digest=SCOPE,
+                source_digest=SOURCE_INITIAL,
+            )
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+            responses = list(executor.map(lambda _: create(), range(2)))
+
+        self.assertEqual(sum(response["status"] == "OK" for response in responses), 1)
+        self.assertEqual(sum(response["status"] != "OK" for response in responses), 1)
+        inspected = self.request("inspect", mission_id=MISSION)
+        self.assertEqual(inspected["sequence"], 2)
+        ledger = self.home / "missions" / MISSION / "events.ledger"
+        self.assertEqual(len(ledger.read_bytes().splitlines()), 2)
+
     def test_lifecycle_recovers_and_completion_rejects_stale_evidence(self) -> None:
         self.assertEqual(self.request("ping")["status"], "OK")
         created = self.request(
@@ -184,6 +247,18 @@ class DaemonApiTests(unittest.TestCase):
         final = self.request("inspect", mission_id=MISSION)
         self.assertEqual(final["state"], "COMPLETE")
         self.assertEqual(final["sequence"], complete["sequence"])
+
+        terminal_retry = self.request(
+            "authorize_action",
+            mission_id=MISSION,
+            worker_id=WORKER,
+            scope_digest=SCOPE,
+            action_digest=ACTION,
+            estimated_bytes=1,
+        )
+        self.assertEqual(terminal_retry["status"], "REFUSED")
+        unchanged = self.request("inspect", mission_id=MISSION)
+        self.assertEqual(unchanged["sequence"], complete["sequence"])
 
 
 if __name__ == "__main__":

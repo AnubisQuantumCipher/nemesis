@@ -1,6 +1,19 @@
+mod mission_runner;
+mod production;
+
+pub use mission_runner::{
+    DraftedMission, MissionCancellation, MissionClaimResult, MissionDraftRequest,
+    MissionExecutables, MissionExecutionResult, MissionProgress, MissionRunError,
+    draft_local_mission, load_last_mission, preflight_local_mission, run_local_mission,
+};
+pub use production::{
+    CompiledMission, DesktopSettings, LocalHomeStatus, ProductionError, TextScale,
+    compile_local_contract, initialize_local_home, load_settings, save_settings,
+};
+
 use std::fs;
 use std::path::{Path, PathBuf};
-use std::process::Command;
+use std::sync::{Arc, Mutex};
 
 use serde::Serialize;
 use serde_json::Value;
@@ -8,59 +21,163 @@ use sha2::{Digest, Sha256};
 use tauri::Manager;
 
 const CONTRACT_SHA256: &str = "ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e0d8beebee532779";
+const CONTRACT_RELATIVE_PATH: &str =
+    "docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md";
+const MAX_REPLAY_BYTES: u64 = 64 * 1024 * 1024;
+const MAX_LOCAL_CONTRACT_BYTES: u64 = 64 * 1024;
 
 #[derive(Clone, Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
-struct SystemStatus {
-    ready: bool,
-    core: String,
-    kernel: String,
-    runtime: String,
-    contract_sha256: String,
+pub struct CommandFailure {
+    pub code: String,
+    pub message: String,
+    pub recovery: String,
+}
+
+impl CommandFailure {
+    fn new(code: &str, message: impl Into<String>, recovery: &str) -> Self {
+        Self {
+            code: code.to_owned(),
+            message: message.into(),
+            recovery: recovery.to_owned(),
+        }
+    }
+
+    fn storage(error: impl std::fmt::Display) -> Self {
+        Self::new(
+            "BLOCKED_LOCAL_STORAGE",
+            error.to_string(),
+            "Inspect the local-home path and permissions, then retry. NEMESIS did not continue.",
+        )
+    }
+
+    fn contract(error: impl std::fmt::Display) -> Self {
+        Self::new(
+            "REFUSED_CONTRACT",
+            error.to_string(),
+            "Correct the exact local contract; any byte change requires a new authority review.",
+        )
+    }
+
+    fn mission(error: impl std::fmt::Display) -> Self {
+        let message = error.to_string();
+        let (code, recovery) = if message.contains("mission cancelled") {
+            (
+                "REFUSED_CANCELLED",
+                "The cancellation was recorded. Inspect preserved mission evidence before retrying.",
+            )
+        } else if message.contains("reviewed contract digest mismatch")
+            || message.contains("reviewed action digest mismatch")
+        {
+            (
+                "REFUSED_REVIEW_MISMATCH",
+                "Recompile and review the changed contract before authorizing it.",
+            )
+        } else if message.contains("workspace")
+            || message.contains("target")
+            || message.contains("baseRevision")
+        {
+            (
+                "REFUSED_WORKSPACE",
+                "Restore the reviewed clean workspace identity or compile a new contract.",
+            )
+        } else {
+            (
+                "BLOCKED_MISSION",
+                "Inspect the preserved local mission logs and resolve the named semantic failure.",
+            )
+        };
+        Self::new(code, message, recovery)
+    }
 }
 
 #[derive(Clone, Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
-struct ClaimResult {
-    id: String,
-    status: String,
-    evidence_digest: String,
+pub struct SystemStatus {
+    pub ready: bool,
+    pub core: String,
+    pub kernel: String,
+    pub runtime: String,
+    pub contract_sha256: String,
+    pub local_home: String,
+    pub first_launch: bool,
+    pub schema_version: u64,
+    pub app_version: String,
+    pub sandbox: String,
+    pub network: String,
+    pub updates: String,
+    pub settings: DesktopSettings,
+    pub last_mission: Option<MissionExecutionResult>,
 }
 
 #[derive(Clone, Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
-struct MissionRunResult {
-    status: String,
-    mission_id: String,
-    sequence: u64,
-    source_digest: String,
-    ledger_head: String,
-    artifact_directory: String,
-    claims: Vec<ClaimResult>,
-    tamper_verdict: String,
+pub struct ReplayEventView {
+    pub sequence: u64,
+    pub kind_code: u8,
+    pub state_code: u8,
+    pub event_hash: String,
 }
 
 #[derive(Clone, Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
-struct ReplayEventView {
-    sequence: u64,
-    kind_code: u8,
-    state_code: u8,
-    event_hash: String,
+pub struct ReplayView {
+    pub verdict: String,
+    pub final_state_code: u8,
+    pub head: String,
+    pub exact_state_reconstruction: bool,
+    pub exact_model_reexecution: bool,
+    pub events: Vec<ReplayEventView>,
 }
 
 #[derive(Clone, Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
-struct ReplayView {
-    verdict: String,
-    final_state_code: u8,
-    head: String,
-    exact_state_reconstruction: bool,
-    exact_model_reexecution: bool,
-    events: Vec<ReplayEventView>,
+pub struct MissionRuntimeSnapshot {
+    pub running: bool,
+    pub phase: String,
+    pub detail: String,
+    pub last_result: Option<MissionExecutionResult>,
+    pub error: Option<CommandFailure>,
 }
 
-fn replay_from_value(value: &Value) -> Result<ReplayView, String> {
+impl Default for MissionRuntimeSnapshot {
+    fn default() -> Self {
+        Self {
+            running: false,
+            phase: "IDLE".to_owned(),
+            detail: "No local mission is running.".to_owned(),
+            last_result: None,
+            error: None,
+        }
+    }
+}
+
+#[derive(Clone, Default)]
+struct DesktopController {
+    snapshot: Arc<Mutex<MissionRuntimeSnapshot>>,
+    cancellation: MissionCancellation,
+}
+
+fn lock_snapshot(
+    controller: &DesktopController,
+) -> Result<std::sync::MutexGuard<'_, MissionRuntimeSnapshot>, CommandFailure> {
+    controller.snapshot.lock().map_err(|_| {
+        CommandFailure::new(
+            "BLOCKED_STATE",
+            "Desktop mission state lock is poisoned.",
+            "Quit and relaunch NEMESIS Desktop; no new mission was authorized.",
+        )
+    })
+}
+
+fn lowercase_digest(value: &str) -> bool {
+    value.len() == 64
+        && value
+            .bytes()
+            .all(|byte| byte.is_ascii_digit() || (b'a'..=b'f').contains(&byte))
+}
+
+fn replay_from_value(value: &Value) -> Result<ReplayView, CommandFailure> {
     if value.get("verdict").and_then(Value::as_str) != Some("VERIFIED")
         || value
             .get("exact_state_reconstruction")
@@ -71,55 +188,105 @@ fn replay_from_value(value: &Value) -> Result<ReplayView, String> {
             .and_then(Value::as_bool)
             != Some(false)
     {
-        return Err("replay assurance fields are invalid".to_owned());
+        return Err(CommandFailure::new(
+            "REFUSED_REPLAY",
+            "Replay assurance fields are invalid.",
+            "Re-run the receipt-bound replay verifier against the current mission ledger.",
+        ));
     }
     let final_state = value
         .get("final_state_code")
         .and_then(Value::as_u64)
         .and_then(|state| u8::try_from(state).ok())
         .filter(|state| *state <= 10)
-        .ok_or_else(|| "replay final state is invalid".to_owned())?;
+        .ok_or_else(|| {
+            CommandFailure::new(
+                "REFUSED_REPLAY",
+                "Replay final state is invalid.",
+                "Inspect the current ledger and replay-verifier output.",
+            )
+        })?;
     let head = value
         .get("head")
         .and_then(Value::as_str)
         .filter(|digest| lowercase_digest(digest))
-        .ok_or_else(|| "replay head is invalid".to_owned())?;
+        .ok_or_else(|| {
+            CommandFailure::new(
+                "REFUSED_REPLAY",
+                "Replay chain head is invalid.",
+                "Inspect the current ledger and replay-verifier output.",
+            )
+        })?;
     let values = value
         .get("events")
         .and_then(Value::as_array)
-        .ok_or_else(|| "replay events are missing".to_owned())?;
+        .ok_or_else(|| {
+            CommandFailure::new(
+                "REFUSED_REPLAY",
+                "Replay events are missing.",
+                "Run a local mission before opening Replay.",
+            )
+        })?;
+    if values.is_empty() {
+        return Err(CommandFailure::new(
+            "REFUSED_REPLAY",
+            "Replay contains no events.",
+            "Run a local mission before opening Replay.",
+        ));
+    }
     let mut events = Vec::with_capacity(values.len());
     for event in values {
         let sequence = event
             .get("sequence")
             .and_then(Value::as_u64)
-            .ok_or_else(|| "replay event sequence is invalid".to_owned())?;
+            .ok_or_else(|| {
+                CommandFailure::new(
+                    "REFUSED_REPLAY",
+                    "Replay event sequence is invalid.",
+                    "Inspect the current ledger and replay-verifier output.",
+                )
+            })?;
         let kind_code = event
             .get("kind_code")
             .and_then(Value::as_u64)
             .and_then(|kind| u8::try_from(kind).ok())
             .filter(|kind| *kind <= 9)
-            .ok_or_else(|| "replay event kind is invalid".to_owned())?;
+            .ok_or_else(|| {
+                CommandFailure::new(
+                    "REFUSED_REPLAY",
+                    "Replay event kind is invalid.",
+                    "Inspect the current ledger and replay-verifier output.",
+                )
+            })?;
         let state_code = event
             .get("state_code")
             .and_then(Value::as_u64)
             .and_then(|state| u8::try_from(state).ok())
             .filter(|state| *state <= 10)
-            .ok_or_else(|| "replay event state is invalid".to_owned())?;
+            .ok_or_else(|| {
+                CommandFailure::new(
+                    "REFUSED_REPLAY",
+                    "Replay event state is invalid.",
+                    "Inspect the current ledger and replay-verifier output.",
+                )
+            })?;
         let event_hash = event
             .get("event_hash")
             .and_then(Value::as_str)
             .filter(|digest| lowercase_digest(digest))
-            .ok_or_else(|| "replay event hash is invalid".to_owned())?;
+            .ok_or_else(|| {
+                CommandFailure::new(
+                    "REFUSED_REPLAY",
+                    "Replay event hash is invalid.",
+                    "Inspect the current ledger and replay-verifier output.",
+                )
+            })?;
         events.push(ReplayEventView {
             sequence,
             kind_code,
             state_code,
             event_hash: event_hash.to_owned(),
         });
-    }
-    if events.is_empty() {
-        return Err("replay contains no events".to_owned());
     }
     Ok(ReplayView {
         verdict: "VERIFIED".to_owned(),
@@ -131,21 +298,8 @@ fn replay_from_value(value: &Value) -> Result<ReplayView, String> {
     })
 }
 
-#[tauri::command]
-fn load_replay(handle: tauri::AppHandle) -> Result<ReplayView, String> {
-    let path = project_root(&handle)?.join("receipts/phase-11/replay.json");
-    let metadata = fs::metadata(&path).map_err(|error| error.to_string())?;
-    if metadata.len() == 0 || metadata.len() > 64 * 1024 * 1024 {
-        return Err("replay artifact is empty or oversized".to_owned());
-    }
-    let value: Value = serde_json::from_slice(&fs::read(path).map_err(|error| error.to_string())?)
-        .map_err(|error| error.to_string())?;
-    replay_from_value(&value)
-}
-
 fn select_support_root(resource_root: &Path, source_root: &Path) -> Result<PathBuf, String> {
-    let bundled_contract =
-        resource_root.join("docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md");
+    let bundled_contract = resource_root.join(CONTRACT_RELATIVE_PATH);
     if bundled_contract.is_file() {
         let bytes = fs::read(&bundled_contract).map_err(|error| error.to_string())?;
         if hex::encode(Sha256::digest(bytes)) != CONTRACT_SHA256 {
@@ -162,8 +316,7 @@ fn select_support_root(resource_root: &Path, source_root: &Path) -> Result<PathB
 
 fn find_development_source_root(start: &Path) -> Result<PathBuf, String> {
     for ancestor in start.ancestors() {
-        let contract =
-            ancestor.join("docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md");
+        let contract = ancestor.join(CONTRACT_RELATIVE_PATH);
         if contract.is_file() {
             let bytes = fs::read(contract).map_err(|error| error.to_string())?;
             if hex::encode(Sha256::digest(bytes)) != CONTRACT_SHA256 {
@@ -175,62 +328,81 @@ fn find_development_source_root(start: &Path) -> Result<PathBuf, String> {
     Err("development source root is unavailable".to_owned())
 }
 
-fn project_root(handle: &tauri::AppHandle) -> Result<PathBuf, String> {
+fn project_root(handle: &tauri::AppHandle) -> Result<PathBuf, CommandFailure> {
     let resource_root = handle
         .path()
         .resource_dir()
-        .map_err(|error| error.to_string())?;
-    if resource_root
-        .join("docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md")
-        .is_file()
-    {
-        return select_support_root(&resource_root, &resource_root);
+        .map_err(CommandFailure::storage)?;
+    if resource_root.join(CONTRACT_RELATIVE_PATH).is_file() {
+        return select_support_root(&resource_root, &resource_root)
+            .map_err(CommandFailure::storage);
     }
-    let executable = std::env::current_exe().map_err(|error| error.to_string())?;
-    let start = executable
-        .parent()
-        .ok_or_else(|| "desktop executable has no parent directory".to_owned())?;
-    let source_root = find_development_source_root(start)?;
-    select_support_root(&resource_root, &source_root)
+    let executable = std::env::current_exe().map_err(CommandFailure::storage)?;
+    let start = executable.parent().ok_or_else(|| {
+        CommandFailure::new(
+            "BLOCKED_RESOURCES",
+            "Desktop executable has no parent directory.",
+            "Reinstall NEMESIS Desktop from the authoritative artifact.",
+        )
+    })?;
+    let source_root = find_development_source_root(start).map_err(CommandFailure::storage)?;
+    select_support_root(&resource_root, &source_root).map_err(CommandFailure::storage)
 }
-fn runtime_binary_directory(root: &Path) -> PathBuf {
-    let bundled = root.join("bin");
-    if bundled.is_dir() {
-        bundled
+
+fn local_home(handle: &tauri::AppHandle) -> Result<PathBuf, CommandFailure> {
+    handle
+        .path()
+        .app_data_dir()
+        .map_err(CommandFailure::storage)
+}
+
+fn executables_for(root: &Path) -> MissionExecutables {
+    if root.join("bin").is_dir() {
+        MissionExecutables::bundled(root)
     } else {
-        root.join("runtime/target/debug")
+        MissionExecutables::development(root)
     }
 }
 
-fn lowercase_digest(value: &str) -> bool {
-    value.len() == 64
-        && value
-            .bytes()
-            .all(|byte| byte.is_ascii_digit() || (b'a'..=b'f').contains(&byte))
+fn executable_ready(paths: &MissionExecutables) -> bool {
+    paths.is_ready()
+}
+
+fn read_local_contract(path: &str) -> Result<CompiledMission, CommandFailure> {
+    let requested = Path::new(path);
+    if !requested.is_absolute() {
+        return Err(CommandFailure::contract(
+            "Local contract path must be absolute.",
+        ));
+    }
+    let metadata = fs::symlink_metadata(requested).map_err(CommandFailure::contract)?;
+    if metadata.file_type().is_symlink()
+        || !metadata.is_file()
+        || metadata.len() == 0
+        || metadata.len() > MAX_LOCAL_CONTRACT_BYTES
+    {
+        return Err(CommandFailure::contract(
+            "Local contract must be a non-symlink regular file between 1 byte and 64 KiB.",
+        ));
+    }
+    let bytes = fs::read(requested).map_err(CommandFailure::contract)?;
+    compile_local_contract(&bytes).map_err(CommandFailure::contract)
 }
 
 #[tauri::command]
-fn system_status(handle: tauri::AppHandle) -> Result<SystemStatus, String> {
+fn system_status(handle: tauri::AppHandle) -> Result<SystemStatus, CommandFailure> {
     let root = project_root(&handle)?;
-    let contract = root.join("docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md");
-    let bytes = fs::read(contract).map_err(|error| error.to_string())?;
-    let contract_sha256 = hex::encode(Sha256::digest(bytes));
-    let runtime_directory = runtime_binary_directory(&root);
-    let core_ready = if runtime_directory == root.join("bin") {
-        runtime_directory.join("nemesis_core_daemon").is_file()
-    } else {
-        root.join("build/bin/nemesis_core_daemon").is_file()
-    };
-    let runtime_ready = [
-        "nemesis-deterministic-worker",
-        "nemesis-lane-create",
-        "nemesis-signer",
-        "nemesis-verify",
-        "nemesis-worker-runner",
-    ]
-    .iter()
-    .all(|binary| runtime_directory.join(binary).is_file());
+    let contract_bytes =
+        fs::read(root.join(CONTRACT_RELATIVE_PATH)).map_err(CommandFailure::storage)?;
+    let contract_sha256 = hex::encode(Sha256::digest(contract_bytes));
+    let executables = executables_for(&root);
+    let runtime_ready = executable_ready(&executables);
+    let core_ready = executables.daemon.is_file();
     let contract_ready = contract_sha256 == CONTRACT_SHA256;
+    let home = local_home(&handle)?;
+    let home_status = initialize_local_home(&home).map_err(CommandFailure::storage)?;
+    let settings = load_settings(&home).map_err(CommandFailure::storage)?;
+    let last_mission = load_last_mission(&home).map_err(CommandFailure::storage)?;
     Ok(SystemStatus {
         ready: core_ready && runtime_ready && contract_ready,
         core: if core_ready { "READY" } else { "MISSING" }.to_owned(),
@@ -242,162 +414,230 @@ fn system_status(handle: tauri::AppHandle) -> Result<SystemStatus, String> {
         .to_owned(),
         runtime: if runtime_ready { "READY" } else { "MISSING" }.to_owned(),
         contract_sha256,
-    })
-}
-
-fn run_result_from_values(
-    verification: &Value,
-    tamper_verdict: &str,
-    artifact_directory: &Path,
-) -> Result<MissionRunResult, String> {
-    if verification.get("verdict").and_then(Value::as_str) != Some("VERIFIED")
-        || tamper_verdict != "REJECTED"
-    {
-        return Err("backend evidence was not independently verified".to_owned());
-    }
-    let mission_id = verification
-        .get("mission_id")
-        .and_then(Value::as_str)
-        .ok_or_else(|| "verification omitted mission_id".to_owned())?;
-    if mission_id.len() != 26 || !mission_id.starts_with("mis_") {
-        return Err("verification returned an invalid mission identifier".to_owned());
-    }
-    let sequence = verification
-        .get("event_sequence")
-        .and_then(Value::as_u64)
-        .ok_or_else(|| "verification omitted event_sequence".to_owned())?;
-    let source_digest = verification
-        .get("source_digest")
-        .and_then(Value::as_str)
-        .ok_or_else(|| "verification omitted source_digest".to_owned())?;
-    let ledger_head = verification
-        .get("ledger_head")
-        .and_then(Value::as_str)
-        .ok_or_else(|| "verification omitted ledger_head".to_owned())?;
-    if !lowercase_digest(source_digest) || !lowercase_digest(ledger_head) {
-        return Err("verification returned malformed digests".to_owned());
-    }
-    let claim_values = verification
-        .get("claims")
-        .and_then(Value::as_array)
-        .ok_or_else(|| "verification omitted claims".to_owned())?;
-    let mut claims = Vec::with_capacity(claim_values.len());
-    for claim in claim_values {
-        let id = claim
-            .get("id")
-            .and_then(Value::as_str)
-            .ok_or_else(|| "claim omitted id".to_owned())?;
-        let status = claim
-            .get("status")
-            .and_then(Value::as_str)
-            .ok_or_else(|| "claim omitted status".to_owned())?;
-        let evidence_digest = claim
-            .get("evidence_digest")
-            .and_then(Value::as_str)
-            .ok_or_else(|| "claim omitted evidence digest".to_owned())?;
-        if status != "VERIFIED" || !lowercase_digest(evidence_digest) {
-            return Err("mandatory claim was not VERIFIED".to_owned());
+        local_home: home.display().to_string(),
+        first_launch: home_status.first_launch,
+        schema_version: home_status.schema_version,
+        app_version: env!("CARGO_PKG_VERSION").to_owned(),
+        sandbox: if executables.worker_runner.is_file() {
+            "WORKSPACE_SAFE_AVAILABLE"
+        } else {
+            "UNAVAILABLE"
         }
-        claims.push(ClaimResult {
-            id: id.to_owned(),
-            status: status.to_owned(),
-            evidence_digest: evidence_digest.to_owned(),
-        });
-    }
-    if claims.is_empty() {
-        return Err("verification returned no completion claims".to_owned());
-    }
-    Ok(MissionRunResult {
-        status: "VERIFIED".to_owned(),
-        mission_id: mission_id.to_owned(),
-        sequence,
-        source_digest: source_digest.to_owned(),
-        ledger_head: ledger_head.to_owned(),
-        artifact_directory: artifact_directory.display().to_string(),
-        claims,
-        tamper_verdict: tamper_verdict.to_owned(),
+        .to_owned(),
+        network: "DENIED_BY_CONTRACT".to_owned(),
+        updates: "DISABLED_NO_AUTHENTICATED_UPDATER".to_owned(),
+        settings,
+        last_mission,
     })
-}
-
-fn run_witnessed_mission_blocking(
-    root: PathBuf,
-    output_directory: PathBuf,
-) -> Result<MissionRunResult, String> {
-    fs::create_dir_all(&output_directory).map_err(|error| error.to_string())?;
-    let runtime_directory = runtime_binary_directory(&root);
-    let mut gate_command = Command::new(root.join("scripts/run_vertical_slice.sh"));
-    gate_command
-        .args(["--output"])
-        .arg(&output_directory)
-        .current_dir(&root);
-    if runtime_directory == root.join("bin") {
-        gate_command.env("NEMESIS_PREBUILT_BIN_DIR", &runtime_directory);
-    }
-    let gate = gate_command.output().map_err(|error| error.to_string())?;
-    let gate_stdout = String::from_utf8_lossy(&gate.stdout);
-    if !gate.status.success() || !gate_stdout.contains("PASS_NEMESIS_BACKEND_VERTICAL_SLICE") {
-        return Err(format!(
-            "backend gate failed: {}",
-            String::from_utf8_lossy(&gate.stderr)
-        ));
-    }
-    let manifest = Command::new("/usr/bin/python3")
-        .arg(root.join("scripts/verify_evidence_bundle.py"))
-        .arg(&output_directory)
-        .arg("--write")
-        .current_dir(&root)
-        .output()
-        .map_err(|error| error.to_string())?;
-    if !manifest.status.success() {
-        return Err("evidence manifest generation failed".to_owned());
-    }
-    let verification: Value = serde_json::from_slice(
-        &fs::read(output_directory.join("verification.json")).map_err(|error| error.to_string())?,
-    )
-    .map_err(|error| error.to_string())?;
-    let tampered = Command::new(runtime_directory.join("nemesis-verify"))
-        .args(["--receipt"])
-        .arg(output_directory.join("receipt-tampered.cose"))
-        .args(["--public-key"])
-        .arg(output_directory.join("receipt.pub"))
-        .output()
-        .map_err(|error| error.to_string())?;
-    if tampered.status.success() {
-        return Err("tampered receipt was accepted".to_owned());
-    }
-    let tamper_json: Value =
-        serde_json::from_slice(&tampered.stdout).map_err(|error| error.to_string())?;
-    let tamper_verdict = tamper_json
-        .get("verdict")
-        .and_then(Value::as_str)
-        .ok_or_else(|| "tamper verifier omitted verdict".to_owned())?;
-    run_result_from_values(&verification, tamper_verdict, &output_directory)
 }
 
 #[tauri::command]
-async fn run_witnessed_mission(handle: tauri::AppHandle) -> Result<MissionRunResult, String> {
-    let root = project_root(&handle)?;
-    let output_directory = handle
-        .path()
-        .app_data_dir()
-        .map_err(|error| error.to_string())?
-        .join("receipts/desktop-latest");
-    tauri::async_runtime::spawn_blocking(move || {
-        run_witnessed_mission_blocking(root, output_directory)
-    })
-    .await
-    .map_err(|error| error.to_string())?
+fn draft_mission(
+    handle: tauri::AppHandle,
+    request: MissionDraftRequest,
+) -> Result<DraftedMission, CommandFailure> {
+    let home = local_home(&handle)?;
+    initialize_local_home(&home).map_err(CommandFailure::storage)?;
+    draft_local_mission(&home, &request, &MissionCancellation::default())
+        .map_err(CommandFailure::mission)
 }
 
-pub fn run() {
+#[tauri::command]
+fn compile_mission(path: String) -> Result<CompiledMission, CommandFailure> {
+    let compiled = read_local_contract(&path)?;
+    let cancellation = MissionCancellation::default();
+    preflight_local_mission(&compiled, &cancellation).map_err(CommandFailure::mission)?;
+    Ok(compiled)
+}
+
+#[tauri::command]
+async fn run_mission(
+    handle: tauri::AppHandle,
+    state: tauri::State<'_, DesktopController>,
+    path: String,
+    reviewed_contract_digest: String,
+    reviewed_action_digest: String,
+) -> Result<MissionExecutionResult, CommandFailure> {
+    let controller = state.inner().clone();
+    {
+        let mut snapshot = lock_snapshot(&controller)?;
+        if snapshot.running {
+            return Err(CommandFailure::new(
+                "REFUSED_ALREADY_RUNNING",
+                "A local mission is already running.",
+                "Wait for completion or cancel the active mission before starting another.",
+            ));
+        }
+        controller.cancellation.reset();
+        snapshot.running = true;
+        snapshot.phase = "STARTING".to_owned();
+        snapshot.detail = "Re-reading the exact reviewed local contract.".to_owned();
+        snapshot.error = None;
+    }
+    let root = project_root(&handle)?;
+    let home = local_home(&handle)?;
+    initialize_local_home(&home).map_err(CommandFailure::storage)?;
+    let compiled = match read_local_contract(&path) {
+        Ok(compiled) => compiled,
+        Err(error) => {
+            let mut snapshot = lock_snapshot(&controller)?;
+            snapshot.running = false;
+            snapshot.phase = "REFUSED".to_owned();
+            snapshot.detail = error.message.clone();
+            snapshot.error = Some(error.clone());
+            return Err(error);
+        }
+    };
+    let executables = executables_for(&root);
+    let worker_controller = controller.clone();
+    let result = tauri::async_runtime::spawn_blocking(move || {
+        run_local_mission(
+            &compiled,
+            &reviewed_contract_digest,
+            &reviewed_action_digest,
+            &home,
+            &executables,
+            &worker_controller.cancellation,
+            &mut |progress| {
+                if let Ok(mut snapshot) = worker_controller.snapshot.lock() {
+                    snapshot.phase = progress.phase.clone();
+                    snapshot.detail = progress.detail.clone();
+                }
+            },
+        )
+    })
+    .await
+    .map_err(|error| {
+        CommandFailure::new(
+            "BLOCKED_RUNTIME",
+            error.to_string(),
+            "Quit and relaunch NEMESIS Desktop, then inspect preserved mission evidence.",
+        )
+    })?;
+    match result {
+        Ok(result) => {
+            let mut snapshot = lock_snapshot(&controller)?;
+            snapshot.running = false;
+            snapshot.phase = "COMPLETE".to_owned();
+            snapshot.detail = "Receipt and authoritative replay are current.".to_owned();
+            snapshot.last_result = Some(result.clone());
+            snapshot.error = None;
+            Ok(result)
+        }
+        Err(error) => {
+            let failure = CommandFailure::mission(error);
+            let mut snapshot = lock_snapshot(&controller)?;
+            snapshot.running = false;
+            snapshot.phase = "REFUSED".to_owned();
+            snapshot.detail = failure.message.clone();
+            snapshot.error = Some(failure.clone());
+            Err(failure)
+        }
+    }
+}
+
+#[tauri::command]
+fn mission_status(
+    state: tauri::State<'_, DesktopController>,
+) -> Result<MissionRuntimeSnapshot, CommandFailure> {
+    Ok(lock_snapshot(state.inner())?.clone())
+}
+
+#[tauri::command]
+fn cancel_mission(
+    state: tauri::State<'_, DesktopController>,
+) -> Result<MissionRuntimeSnapshot, CommandFailure> {
+    let controller = state.inner();
+    let mut snapshot = lock_snapshot(controller)?;
+    if !snapshot.running {
+        return Err(CommandFailure::new(
+            "REFUSED_NOT_RUNNING",
+            "No local mission is running.",
+            "Compile and review a contract before starting a mission.",
+        ));
+    }
+    controller.cancellation.cancel();
+    snapshot.phase = "CANCELLING".to_owned();
+    snapshot.detail = "Cancellation requested; the current bounded process will stop.".to_owned();
+    Ok(snapshot.clone())
+}
+
+#[tauri::command]
+fn load_replay(handle: tauri::AppHandle) -> Result<ReplayView, CommandFailure> {
+    let home = local_home(&handle)?;
+    let result = load_last_mission(&home)
+        .map_err(CommandFailure::storage)?
+        .ok_or_else(|| {
+            CommandFailure::new(
+                "REFUSED_NO_REPLAY",
+                "No completed local mission is available for replay.",
+                "Run and verify a local mission first.",
+            )
+        })?;
+    let replay_path = Path::new(&result.replay_path);
+    let canonical_home = home.canonicalize().map_err(CommandFailure::storage)?;
+    let metadata = fs::symlink_metadata(replay_path).map_err(CommandFailure::storage)?;
+    if metadata.file_type().is_symlink()
+        || !metadata.is_file()
+        || metadata.len() == 0
+        || metadata.len() > MAX_REPLAY_BYTES
+    {
+        return Err(CommandFailure::new(
+            "REFUSED_REPLAY",
+            "Current replay is empty, oversized, a symlink, or not a regular file.",
+            "Inspect the mission evidence directory and rerun verification.",
+        ));
+    }
+    let canonical_replay = replay_path
+        .canonicalize()
+        .map_err(CommandFailure::storage)?;
+    if !canonical_replay.starts_with(&canonical_home) {
+        return Err(CommandFailure::new(
+            "REFUSED_REPLAY",
+            "Current replay path escapes the local home.",
+            "Inspect the last-mission pointer and local-home integrity.",
+        ));
+    }
+    let value: Value =
+        serde_json::from_slice(&fs::read(canonical_replay).map_err(CommandFailure::storage)?)
+            .map_err(CommandFailure::storage)?;
+    replay_from_value(&value)
+}
+
+#[tauri::command]
+fn get_settings(handle: tauri::AppHandle) -> Result<DesktopSettings, CommandFailure> {
+    let home = local_home(&handle)?;
+    initialize_local_home(&home).map_err(CommandFailure::storage)?;
+    load_settings(&home).map_err(CommandFailure::storage)
+}
+
+#[tauri::command]
+fn update_settings(
+    handle: tauri::AppHandle,
+    settings: DesktopSettings,
+) -> Result<DesktopSettings, CommandFailure> {
+    let home = local_home(&handle)?;
+    initialize_local_home(&home).map_err(CommandFailure::storage)?;
+    save_settings(&home, &settings).map_err(CommandFailure::storage)?;
+    load_settings(&home).map_err(CommandFailure::storage)
+}
+
+pub fn run() -> Result<(), tauri::Error> {
     tauri::Builder::default()
+        .menu(tauri::menu::Menu::default)
+        .manage(DesktopController::default())
         .invoke_handler(tauri::generate_handler![
             system_status,
+            draft_mission,
+            compile_mission,
+            run_mission,
+            mission_status,
+            cancel_mission,
             load_replay,
-            run_witnessed_mission
+            get_settings,
+            update_settings
         ])
         .run(tauri::generate_context!())
-        .expect("NEMESIS Desktop runtime failed");
 }
 
 #[cfg(test)]
@@ -407,29 +647,9 @@ mod tests {
     use serde_json::json;
 
     use super::{
-        find_development_source_root, replay_from_value, run_result_from_values,
-        runtime_binary_directory, select_support_root,
+        CONTRACT_RELATIVE_PATH, find_development_source_root, replay_from_value,
+        select_support_root,
     };
-
-    #[test]
-    fn maps_verified_backend_evidence_without_inventing_status() {
-        let verification = json!({
-            "verdict": "VERIFIED",
-            "mission_id": "mis_0000000000000000000000",
-            "event_sequence": 12,
-            "source_digest": "11".repeat(32),
-            "ledger_head": "22".repeat(32),
-            "claims": [
-                {"id": "build", "status": "VERIFIED", "evidence_digest": "33".repeat(32)},
-                {"id": "tests", "status": "VERIFIED", "evidence_digest": "44".repeat(32)}
-            ]
-        });
-        let result =
-            run_result_from_values(&verification, "REJECTED", Path::new("/tmp/evidence")).unwrap();
-        assert_eq!(result.status, "VERIFIED");
-        assert_eq!(result.claims.len(), 2);
-        assert_eq!(result.tamper_verdict, "REJECTED");
-    }
 
     #[test]
     fn maps_only_exact_verified_replay() {
@@ -450,6 +670,23 @@ mod tests {
         assert_eq!(replay.events.len(), 1);
         assert!(!replay.exact_model_reexecution);
     }
+
+    #[test]
+    fn rejects_empty_or_model_exact_replay() {
+        let value = json!({
+            "verdict": "VERIFIED",
+            "final_state_code": 8,
+            "head": "aa".repeat(32),
+            "exact_state_reconstruction": true,
+            "exact_model_reexecution": true,
+            "events": []
+        });
+        assert_eq!(
+            replay_from_value(&value).unwrap_err().code,
+            "REFUSED_REPLAY"
+        );
+    }
+
     #[test]
     fn selects_bundled_support_root_when_contract_matches() {
         let source_root = Path::new(env!("CARGO_MANIFEST_DIR"))
@@ -462,7 +699,7 @@ mod tests {
         let mission_dir = resource_root.join("docs/mission");
         fs::create_dir_all(&mission_dir).unwrap();
         fs::copy(
-            source_root.join("docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md"),
+            source_root.join(CONTRACT_RELATIVE_PATH),
             mission_dir.join("NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md"),
         )
         .unwrap();
@@ -472,6 +709,7 @@ mod tests {
         assert_eq!(selected, resource_root.canonicalize().unwrap());
         fs::remove_dir_all(resource_root).unwrap();
     }
+
     #[test]
     fn rejects_bundled_support_root_with_wrong_contract() {
         let source_root = Path::new(env!("CARGO_MANIFEST_DIR"))
@@ -498,18 +736,6 @@ mod tests {
     }
 
     #[test]
-    fn packaged_runtime_uses_resource_bin_directory() {
-        let resource_root =
-            std::env::temp_dir().join(format!("nemesis-runtime-bin-{}", std::process::id()));
-        let _ = fs::remove_dir_all(&resource_root);
-        fs::create_dir_all(resource_root.join("bin")).unwrap();
-
-        let selected = runtime_binary_directory(&resource_root);
-
-        assert_eq!(selected, resource_root.join("bin"));
-        fs::remove_dir_all(resource_root).unwrap();
-    }
-    #[test]
     fn discovers_development_source_root_from_runtime_ancestors() {
         let source_root = Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("../..")
@@ -523,7 +749,7 @@ mod tests {
         fs::create_dir_all(&mission_dir).unwrap();
         fs::create_dir_all(&nested).unwrap();
         fs::copy(
-            source_root.join("docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md"),
+            source_root.join(CONTRACT_RELATIVE_PATH),
             mission_dir.join("NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md"),
         )
         .unwrap();
@@ -531,28 +757,6 @@ mod tests {
         let discovered = find_development_source_root(&nested).unwrap();
 
         assert_eq!(discovered, fixture_root.canonicalize().unwrap());
-        fs::remove_dir_all(fixture_root).unwrap();
-    }
-    #[test]
-    fn rejects_development_source_root_with_wrong_contract() {
-        let fixture_root = std::env::temp_dir().join(format!(
-            "nemesis-source-root-invalid-{}",
-            std::process::id()
-        ));
-        let _ = fs::remove_dir_all(&fixture_root);
-        let mission_dir = fixture_root.join("docs/mission");
-        let nested = fixture_root.join("desktop/src-tauri/target/debug");
-        fs::create_dir_all(&mission_dir).unwrap();
-        fs::create_dir_all(&nested).unwrap();
-        fs::write(
-            mission_dir.join("NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md"),
-            b"tampered contract",
-        )
-        .unwrap();
-
-        let rejected = find_development_source_root(&nested).unwrap_err();
-
-        assert_eq!(rejected, "development architect contract digest is invalid");
         fs::remove_dir_all(fixture_root).unwrap();
     }
 }

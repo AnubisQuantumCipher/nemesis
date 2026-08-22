@@ -1,0 +1,24 @@
+{
+ "extra": [],
+ "mismatched": [],
+ "missing": [
+  ".git"
+ ],
+ "note": "sole missing entry is the git-worktree pointer file '.git' in the old worktree; every eligible content file is byte-identical",
+ "observed_at": "2026-08-22T04:01:15.142305+00:00",
+ "prior_recovery_manifest": {
+  "files": 322,
+  "sha256_both": "120a86be79385422b5cb3d4ce90d899f2eebdfbf6861b96dc333bbde949708d9",
+  "status": "rule not preserved; equivalence re-established under the rule above"
+ },
+ "recovered_files": 307,
+ "recovered_manifest_sha256": "590656350e60ab6f72d1125390be5e081a5b57e9dfb2481c8d51e9a00fb8fc51",
+ "recovered_root": "/Users/sicarii/Worktrees/nemesis-desktop-production-recovered",
+ "rule": "os.walk both trees; exclude dirs .git,node_modules,target,build,dist,.worktrees,__pycache__,.pytest_cache,alire and .DS_Store files; sha256 per file; manifest hash = sha256 of newline-joined 'hash  relpath' sorted walk order",
+ "schema": "nemesis.recovery-manifest/v1",
+ "source_files": 308,
+ "source_manifest_sha256": "903fc0a81408389889c362df8f45df190299f1ef68f50fe1adf89f1bf98dfa4b",
+ "source_root": "/Users/sicarii/Worktrees/nemesis-desktop-production",
+ "tracked_files": 259,
+ "tracked_missing_from_manifest": []
+}

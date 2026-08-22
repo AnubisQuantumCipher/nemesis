@@ -1,0 +1,185 @@
+Compile
+   [Ada]          nemesis_core_daemon.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis_kernel_tests.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis_authority_tests.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis_path_tests.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis_ledger_tests.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis_storage_tests.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis_index_tests.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis.ads
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-core.ads
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-core-json.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-core-ledger.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-core-mission_store.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-kernel.ads
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-kernel-capabilities.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-kernel-completion.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-kernel-missions.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-kernel-types.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-kernel-transitions.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-kernel-approvals.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-kernel-budgets.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-kernel-evidence.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-core-paths.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-core-checkpoints.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-core-objects.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [Ada]          nemesis-core-index.adb
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+Bind
+   [gprbind]      nemesis_core_daemon.bexch
+   [Ada]          nemesis_core_daemon.ali
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [gprbind]      nemesis_kernel_tests.bexch
+   [Ada]          nemesis_kernel_tests.ali
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [gprbind]      nemesis_authority_tests.bexch
+   [Ada]          nemesis_authority_tests.ali
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [gprbind]      nemesis_path_tests.bexch
+   [Ada]          nemesis_path_tests.ali
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [gprbind]      nemesis_ledger_tests.bexch
+   [Ada]          nemesis_ledger_tests.ali
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [gprbind]      nemesis_storage_tests.bexch
+   [Ada]          nemesis_storage_tests.ali
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+   [gprbind]      nemesis_index_tests.bexch
+   [Ada]          nemesis_index_tests.ali
+clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+Link
+   [link]         nemesis_core_daemon.adb
+   [link]         nemesis_kernel_tests.adb
+   [link]         nemesis_authority_tests.adb
+   [link]         nemesis_path_tests.adb
+   [link]         nemesis_ledger_tests.adb
+   [link]         nemesis_storage_tests.adb
+   [link]         nemesis_index_tests.adb
+PASS_KERNEL_TYPES
+PASS_MISSION_TRANSITIONS
+PASS_HOSTILE_CONTROLS
+PASS_COMPLETION_COURT
+PASS_PATH_TRAVERSAL_AND_SYMLINK_GATES
+test_counts_nonblank_noncomment_lines_only (tests.phase0.test_tcb_budget.TrustedComputingBaseCounterTests) ... ok
+test_rejects_missing_source (tests.phase0.test_tcb_budget.TrustedComputingBaseCounterTests) ... ok
+test_live_scope_covers_every_kernel_body_and_public_operation (tests.phase0.test_kernel_proof_manifest.KernelProofManifestTests) ... ok
+test_parses_nonzero_proved_summary_without_warnings_or_assumptions (tests.phase0.test_kernel_proof_manifest.KernelProofManifestTests) ... ok
+test_rejects_zero_work_missing_units_warnings_assumptions_and_timeouts (tests.phase0.test_kernel_proof_manifest.KernelProofManifestTests) ... ok
+test_strict_scope_parser_rejects_duplicate_keys (tests.phase0.test_kernel_proof_manifest.KernelProofManifestTests) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.002s
+
+OK
+PASS_TCB_BUDGET sloc=566 budget=2500 files=17
+Phase 1 of 3: generation of data representation information ...
+Phase 2 of 3: generation of Global contracts ...
+Phase 3 of 3: flow analysis and proof ...
+nemesis-kernel-approvals.ads:30:07: info: initialization of "Decision" proved
+nemesis-kernel-approvals.ads:32:06: info: data dependencies proved
+nemesis-kernel-approvals.ads:34:08: info: postcondition proved (CVC5: 5 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:25:35: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:25:35: info: range check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:26:44: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:26:44: info: range check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:27:54: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:27:54: info: range check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:28:50: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:28:50: info: range check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:30:33: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:30:33: info: range check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:32:33: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:32:33: info: range check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.ads:16:13: info: implicit aspect Always_Terminates on "Can_Allocate" has been proved, subprogram will terminate
+nemesis-kernel-budgets.ads:18:09: info: data dependencies proved
+nemesis-kernel-budgets.ads:23:07: info: initialization of "Decision" proved
+nemesis-kernel-budgets.ads:25:06: info: data dependencies proved
+nemesis-kernel-budgets.ads:27:08: info: postcondition proved (CVC5: 7 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.ads:30:43: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.ads:32:34: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.ads:34:39: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.ads:36:37: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.ads:38:41: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.ads:40:41: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-capabilities.ads:47:13: info: implicit aspect Always_Terminates on "Authorize" has been proved, subprogram will terminate
+nemesis-kernel-capabilities.ads:52:06: info: data dependencies proved
+nemesis-kernel-capabilities.ads:54:08: info: postcondition proved (CVC5: 8 VC in max 0.0 seconds and 1 step; Trivial: 1 VC in max 0.0 seconds and 2 steps)
+nemesis-kernel-capabilities.ads:64:13: info: implicit aspect Always_Terminates on "Is_Attenuation" has been proved, subprogram will terminate
+nemesis-kernel-capabilities.ads:67:06: info: data dependencies proved
+nemesis-kernel-capabilities.ads:69:08: info: postcondition proved (CVC5: 6 VC in max 0.0 seconds and 1 step; Trivial: 2 VC in max 0.0 seconds and 2 steps)
+nemesis-kernel-completion.adb:12:22: info: index check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-completion.adb:18:22: info: index check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-completion.ads:17:13: info: implicit aspect Always_Terminates on "Evaluate" has been proved, subprogram will terminate
+nemesis-kernel-completion.ads:22:06: info: data dependencies proved
+nemesis-kernel-completion.ads:24:08: info: postcondition proved (CVC5: 3 VC in max 0.0 seconds and 1 step; Trivial: 1 VC in max 0.0 seconds and 2 steps)
+nemesis-kernel-completion.ads:29:24: info: index check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-evidence.ads:36:13: info: implicit aspect Always_Terminates on "Acceptable" has been proved, subprogram will terminate
+nemesis-kernel-evidence.ads:41:06: info: data dependencies proved
+nemesis-kernel-evidence.ads:43:08: info: postcondition proved (CVC5: 5 VC in max 0.0 seconds and 1 step; Trivial: 1 VC in max 0.0 seconds and 2 steps)
+nemesis-kernel-missions.adb:32:36: info: precondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.adb:46:36: info: precondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.ads:11:13: info: implicit aspect Always_Terminates on "Create" has been proved, subprogram will terminate
+nemesis-kernel-missions.ads:13:06: info: data dependencies proved
+nemesis-kernel-missions.ads:15:08: info: postcondition proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.ads:18:13: info: implicit aspect Always_Terminates on "Restore" has been proved, subprogram will terminate
+nemesis-kernel-missions.ads:21:06: info: data dependencies proved
+nemesis-kernel-missions.ads:23:08: info: postcondition proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.ads:26:13: info: implicit aspect Always_Terminates on "State_Of" has been proved, subprogram will terminate
+nemesis-kernel-missions.ads:27:09: info: data dependencies proved
+nemesis-kernel-missions.ads:29:13: info: implicit aspect Always_Terminates on "Sequence_Of" has been proved, subprogram will terminate
+nemesis-kernel-missions.ads:30:09: info: data dependencies proved
+nemesis-kernel-missions.ads:35:07: info: initialization of "Decision" proved
+nemesis-kernel-missions.ads:37:06: info: data dependencies proved
+nemesis-kernel-missions.ads:39:08: info: postcondition proved (CVC5: 4 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.ads:41:70: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.ads:47:40: info: initialization of "Decision" proved
+nemesis-kernel-missions.ads:49:06: info: data dependencies proved
+nemesis-kernel-missions.ads:51:08: info: postcondition proved (CVC5: 3 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.ads:54:63: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-transitions.ads:13:13: info: implicit aspect Always_Terminates on "Allowed" has been proved, subprogram will terminate
+nemesis-kernel-transitions.ads:16:06: info: data dependencies proved
+nemesis-kernel-transitions.ads:17:14: info: postcondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step; Trivial: 1 VC in max 0.0 seconds and 2 steps)
+nemesis-kernel-types.adb:13:13: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-types.ads:26:13: info: implicit aspect Always_Terminates on "Encode_State" has been proved, subprogram will terminate
+nemesis-kernel-types.ads:28:06: info: data dependencies proved
+nemesis-kernel-types.ads:29:14: info: postcondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-types.ads:31:13: info: implicit aspect Always_Terminates on "Decode_State" has been proved, subprogram will terminate
+nemesis-kernel-types.ads:33:06: info: data dependencies proved
+nemesis-kernel-types.ads:34:14: info: postcondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-types.ads:48:13: info: implicit aspect Always_Terminates on "Is_Terminal" has been proved, subprogram will terminate
+nemesis-kernel-types.ads:50:06: info: data dependencies proved
+nemesis-kernel-types.ads:52:08: info: postcondition proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-types.ads:55:13: info: implicit aspect Always_Terminates on "Next" has been proved, subprogram will terminate
+nemesis-kernel-types.ads:57:06: info: data dependencies proved
+nemesis-kernel-types.ads:59:14: info: postcondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-types.ads:59:34: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+Summary logged in /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/build/obj/debug/gnatprove/gnatprove.out
+PASS_KERNEL_PROOF_MANIFEST obligations=78 units=8 production_lane=BLOCKED_TRUST_SURFACE
+PASS_KERNEL_PROOF_BASELINE
+PASS_KERNEL_PROOF_ABA A=0 B=nonzero A2=0 bytes_restored=true
+PASS_PHASE4_CAPABILITY_POLICY
+AUTHORITY_EXIT_STATUS=0

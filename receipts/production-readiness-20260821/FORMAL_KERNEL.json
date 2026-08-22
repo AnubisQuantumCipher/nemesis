@@ -1,0 +1,272 @@
+{
+  "bounded_proof_status": "PASS",
+  "command": "./scripts/prove_kernel.sh",
+  "limitations": [
+    "The bounded proof applies only to proved_units and their named obligations.",
+    "SPARK conclusions do not extend to Rust, Tauri/WebKit, SQLite, Git, Keychain, macOS, compilers, provers, or dependencies.",
+    "Unproved authority boundaries and trust-surface blockers keep the production formal lane non-PASS."
+  ],
+  "observed_at": "2026-08-22T04:08:43.220989Z",
+  "production_formal_lane": "BLOCKED_TRUST_SURFACE",
+  "schema": "nemesis.kernel-proof/v1",
+  "scope": {
+    "path": "config/formal-kernel-scope.json",
+    "proved_units": {
+      "nemesis-kernel-approvals": {
+        "body": "kernel/src/nemesis-kernel-approvals.adb",
+        "public_operations": [
+          "Consume_Approval"
+        ],
+        "spec": "kernel/src/nemesis-kernel-approvals.ads"
+      },
+      "nemesis-kernel-budgets": {
+        "body": "kernel/src/nemesis-kernel-budgets.adb",
+        "public_operations": [
+          "Can_Allocate",
+          "Consume"
+        ],
+        "spec": "kernel/src/nemesis-kernel-budgets.ads"
+      },
+      "nemesis-kernel-capabilities": {
+        "body": "kernel/src/nemesis-kernel-capabilities.adb",
+        "public_operations": [
+          "Authorize",
+          "Is_Attenuation"
+        ],
+        "spec": "kernel/src/nemesis-kernel-capabilities.ads"
+      },
+      "nemesis-kernel-completion": {
+        "body": "kernel/src/nemesis-kernel-completion.adb",
+        "public_operations": [
+          "Evaluate"
+        ],
+        "spec": "kernel/src/nemesis-kernel-completion.ads"
+      },
+      "nemesis-kernel-evidence": {
+        "body": "kernel/src/nemesis-kernel-evidence.adb",
+        "public_operations": [
+          "Acceptable"
+        ],
+        "spec": "kernel/src/nemesis-kernel-evidence.ads"
+      },
+      "nemesis-kernel-missions": {
+        "body": "kernel/src/nemesis-kernel-missions.adb",
+        "public_operations": [
+          "Create",
+          "Restore",
+          "State_Of",
+          "Sequence_Of",
+          "Apply",
+          "Commit_Event"
+        ],
+        "spec": "kernel/src/nemesis-kernel-missions.ads"
+      },
+      "nemesis-kernel-transitions": {
+        "body": "kernel/src/nemesis-kernel-transitions.adb",
+        "public_operations": [
+          "Allowed"
+        ],
+        "spec": "kernel/src/nemesis-kernel-transitions.ads"
+      },
+      "nemesis-kernel-types": {
+        "body": "kernel/src/nemesis-kernel-types.adb",
+        "public_operations": [
+          "Encode_State",
+          "Decode_State",
+          "Is_Terminal",
+          "Next"
+        ],
+        "spec": "kernel/src/nemesis-kernel-types.ads"
+      }
+    },
+    "sha256": "ef2ffc4ec239efd6f80599049a0aa3579ece29a0a7f1ac902cd110b4dffe2847",
+    "trust_surface_blockers": [
+      {
+        "description": "Requiring persisted exact one-shot approvals in authorize_action changes the current authorization accept condition.",
+        "id": "TS-001"
+      },
+      {
+        "description": "Replacing the synthesized capability grant with persisted parent and attenuated child grants changes capability issuance and replay semantics.",
+        "id": "TS-002"
+      }
+    ],
+    "unproved_authority_boundaries": {
+      "nemesis-core-checkpoints": {
+        "paths": [
+          "daemon/src/nemesis-core-checkpoints.ads",
+          "daemon/src/nemesis-core-checkpoints.adb"
+        ],
+        "reason": "SPARK_Mode Off; durable checkpoint parsing, fsync, and atomic rename boundary"
+      },
+      "nemesis-core-index": {
+        "paths": [
+          "daemon/src/nemesis-core-index.ads",
+          "daemon/src/nemesis-core-index.adb"
+        ],
+        "reason": "SPARK_Mode Off; derived SQLite migration and index boundary"
+      },
+      "nemesis-core-json": {
+        "paths": [
+          "daemon/src/nemesis-core-json.ads",
+          "daemon/src/nemesis-core-json.adb"
+        ],
+        "reason": "SPARK_Mode Off; bounded local protocol parser"
+      },
+      "nemesis-core-ledger": {
+        "paths": [
+          "daemon/src/nemesis-core-ledger.ads",
+          "daemon/src/nemesis-core-ledger.adb"
+        ],
+        "reason": "SPARK_Mode Off; authoritative event framing, hashing, append, and recovery boundary"
+      },
+      "nemesis-core-mission_store": {
+        "paths": [
+          "daemon/src/nemesis-core-mission_store.ads",
+          "daemon/src/nemesis-core-mission_store.adb"
+        ],
+        "reason": "SPARK_Mode Off; primary authority-persistence and evidence-freshness boundary"
+      },
+      "nemesis-core-objects": {
+        "paths": [
+          "daemon/src/nemesis-core-objects.ads",
+          "daemon/src/nemesis-core-objects.adb"
+        ],
+        "reason": "SPARK_Mode Off; content-addressed evidence object boundary"
+      },
+      "nemesis-core-paths": {
+        "paths": [
+          "daemon/src/nemesis-core-paths.ads",
+          "daemon/src/nemesis-core-paths.adb"
+        ],
+        "reason": "SPARK_Mode Off; canonical path and symlink authorization boundary"
+      },
+      "nemesis-core-root": {
+        "paths": [
+          "daemon/src/nemesis-core.ads"
+        ],
+        "reason": "SPARK_Mode Off root package"
+      },
+      "nemesis_core_daemon": {
+        "paths": [
+          "daemon/src/nemesis_core_daemon.adb"
+        ],
+        "reason": "SPARK_Mode Off; socket dispatch and Kernel composition boundary; Approvals is not called"
+      }
+    }
+  },
+  "source_sha256": {
+    "daemon/src/nemesis-core-checkpoints.adb": "67fc4e983b41103e995c3083d473178774a0705935a3c93d2156a79fdd94c455",
+    "daemon/src/nemesis-core-checkpoints.ads": "44b83af97b70fd590a2548090519261e6bff74c8ed8862b2ff099a50b04d4b3a",
+    "daemon/src/nemesis-core-index.adb": "0d3df75f830a61f7c8ecc7a6b5967801d495fccd206c7022ee1f81f2001da698",
+    "daemon/src/nemesis-core-index.ads": "e28e3a6b38cc29f57d9b1cb75bbdda30f8f82914499311f56fc507a221358010",
+    "daemon/src/nemesis-core-json.adb": "5789d30d7654ec3a195c038886b12d10eda45705faed0a5ce8064b5146810bb6",
+    "daemon/src/nemesis-core-json.ads": "2fd83f966334186e9f13aa7c55cc628f9b10ca5c6490d62b51ef02d230f3ee3c",
+    "daemon/src/nemesis-core-ledger.adb": "c01db54d916992738e675c463c74379f098bd6311a3c9285fe5039e55dd8d334",
+    "daemon/src/nemesis-core-ledger.ads": "31fa4dfbf612e7d13a4b8be22c48a3bdfed619d3fd6667107eb09f60a4df9c5b",
+    "daemon/src/nemesis-core-mission_store.adb": "28f826ec7dd9b71b08f83fd03fb397c517fab2845d9e2c88ea3fe0e3b1cea8b7",
+    "daemon/src/nemesis-core-mission_store.ads": "90619574a926068be6564982f55cbac1de64e90e8dbaeca853e53e593807a250",
+    "daemon/src/nemesis-core-objects.adb": "655a163574244b2d642993dc87a6743098506e603b3e9b1275ce046c95226859",
+    "daemon/src/nemesis-core-objects.ads": "260acd9861765240f93019bd59de8a2ae9cfd6548dafd7343a90c8f05ff8cc12",
+    "daemon/src/nemesis-core-paths.adb": "0c84521f2f9c7cb56777f5d72e01a420e3787f67eb6c60ecf7298fafff08b167",
+    "daemon/src/nemesis-core-paths.ads": "8139c7fd1b8c4d02c05e3525c6988453edf2c5304518f3a87c7849010390bf2d",
+    "daemon/src/nemesis-core.ads": "08fda74f7be0196f01352a39004ce39aca57a5f4a40ec3ee143bd9f591782546",
+    "daemon/src/nemesis_core_daemon.adb": "c67490cd6d879ae14a508ca55f389568d01701304f90cf616e9f08503489e974",
+    "kernel/src/nemesis-kernel-approvals.adb": "9a8dab8e841d148e60e71b82661efdc39676a8470c5dd609f82c831d4753dc33",
+    "kernel/src/nemesis-kernel-approvals.ads": "82cd6ae358d772da13ecdc337157c139688494e0cc31bc1bcd416783daff57c0",
+    "kernel/src/nemesis-kernel-budgets.adb": "cf1cd09dbf1383733fe0488d65f9c8fc15b02f397944f6bb22c1c76f0b4fcdd5",
+    "kernel/src/nemesis-kernel-budgets.ads": "a4507191b71387bab4edece42fe47d7386dcb118f10d36e7abfe3bc658a141e3",
+    "kernel/src/nemesis-kernel-capabilities.adb": "32f91643b0f3f48262ccd13814e1a76a6049e9c657de53b9d62e06a0dd1fa291",
+    "kernel/src/nemesis-kernel-capabilities.ads": "bb89f7e447c0ae2ea85bc5d552129afd38fd8f1842d61ad74191d0e4aef3e834",
+    "kernel/src/nemesis-kernel-completion.adb": "cc9b3b046d41bb10ba31a67b04d463cbfdfcfcc2dba9e98d04fe5f52eb3b60ff",
+    "kernel/src/nemesis-kernel-completion.ads": "e5d4aae801ba0f1c99b3f738a1a466587f18318fb93941c517accb2f7363bc0c",
+    "kernel/src/nemesis-kernel-evidence.adb": "72bfef06e5af02ba621c2172bb252816580e9692ca63664a1359255b1173201c",
+    "kernel/src/nemesis-kernel-evidence.ads": "f86e748508d891f463e2cff7551032ed7c742f08fbd2378d413771c8f2d45ae4",
+    "kernel/src/nemesis-kernel-missions.adb": "921109ffb414c61b211aba252d5e1578326ffd4a069b428c3a3ddaa5ea564f8a",
+    "kernel/src/nemesis-kernel-missions.ads": "e265a942847ef5bdd2a3bf9ca0b4205d00dcee98ec54c8ec7bd9d72d38f14199",
+    "kernel/src/nemesis-kernel-transitions.adb": "fdeb71b88d25e3b695d726edf465b4d29d5ff2b351d814d7c51a7f4106216515",
+    "kernel/src/nemesis-kernel-transitions.ads": "a0e6fd11da9b7a41a7aa757a32b17009825017013c706e5b187eae64ebab546c",
+    "kernel/src/nemesis-kernel-types.adb": "557cf6b8d7c202cffa4a96b4a230525d9cd39ad8e840fcfddf17a1a4bb1a0d29",
+    "kernel/src/nemesis-kernel-types.ads": "3a5db84a4466cd1bc24f7e4bd67a38695970521e3ee865ff78078fb4eabe4e15"
+  },
+  "status": "PARTIAL",
+  "subject": {
+    "commit": "d18cb7cc5bd918a6e9dd67aa99088dab9503e39b",
+    "dirty_paths": [
+      "M kernel/src/nemesis-kernel-capabilities.ads",
+      " M scripts/prove_kernel.sh",
+      "?? config/formal-kernel-scope.json",
+      "?? scripts/verify_kernel_proof.py"
+    ],
+    "source_set_sha256": "6f2a90d1a75e465080717efc8b384e5a984b01af926624f472ac1e325003f6de",
+    "tree": "80d1b4af38cecf97becca780b6094ab99dfbf0fd"
+  },
+  "summary": {
+    "analyzed_units": 8,
+    "assumptions": 0,
+    "bytes": 6786,
+    "path": "build/obj/debug/gnatprove/gnatprove.out",
+    "sha256": "f2139a204d295885bf241aa3abcc509641724a991fb848444aba198f0cc8b6af",
+    "timeout_observed": false,
+    "total_obligations": 78,
+    "units": [
+      "nemesis-kernel-approvals",
+      "nemesis-kernel-budgets",
+      "nemesis-kernel-capabilities",
+      "nemesis-kernel-completion",
+      "nemesis-kernel-evidence",
+      "nemesis-kernel-missions",
+      "nemesis-kernel-transitions",
+      "nemesis-kernel-types"
+    ],
+    "unproved": 0,
+    "warnings": 0
+  },
+  "toolchain": {
+    "alire": [
+      "alr 2.1.0"
+    ],
+    "gnatprove_and_provers": [
+      "0.0w",
+      "Why3 for gnatprove version 1.6.0+git",
+      "/Users/sicarii/.alire/libexec/spark/bin/alt-ergo: Alt-Ergo version 2.4.0",
+      "/Users/sicarii/.alire/libexec/spark/bin/cvc5: This is cvc5 version 1.1.2 [git tag 1.1.2 branch HEAD]",
+      "compiled with GCC version Apple LLVM 13.0.0 (clang-1300.0.29.30)",
+      "on Mar  1 2024 17:31:47",
+      "Copyright (c) 2009-2023 by the authors and their institutional",
+      "affiliations listed at https://cvc5.github.io/people.html",
+      "cvc5 is open-source and is covered by the BSD license (modified).",
+      "THIS SOFTWARE IS PROVIDED AS-IS, WITHOUT ANY WARRANTIES.",
+      "USE AT YOUR OWN RISK.",
+      "This version of cvc5 is linked against the following non-(L)GPL'ed",
+      "third party libraries.",
+      "CaDiCaL - Simplified Satisfiability Solver",
+      "See https://github.com/arminbiere/cadical for copyright information.",
+      "Editline Library",
+      "See https://thrysoee.dk/editline",
+      "for copyright information.",
+      "SymFPU - The Symbolic Floating Point Unit",
+      "See https://github.com/martin-cs/symfpu/tree/CVC4 for copyright information.",
+      "This version of cvc5 is linked against the following third party",
+      "libraries covered by the LGPLv3 license.",
+      "See licenses/lgpl-3.0.txt for more information.",
+      "GMP - Gnu Multi Precision Arithmetic Library",
+      "See http://gmplib.org for copyright information.",
+      "LibPoly polynomial library",
+      "See https://github.com/SRI-CSL/libpoly for copyright and",
+      "licensing information.",
+      "cvc5 is statically linked against these libraries. To recompile",
+      "this version of cvc5 with different versions of these libraries",
+      "follow the instructions on https://github.com/cvc5/cvc5/blob/main/INSTALL.md",
+      "See the file COPYING (distributed with the source code, and with",
+      "all binaries) for the full cvc5 copyright, licensing, and (lack of)",
+      "warranty information.",
+      "/Users/sicarii/.alire/libexec/spark/bin/z3: Z3 version 4.13.0 - 64 bit"
+    ],
+    "gprbuild": [
+      "GPRBUILD 24.0.0 (2024-03-14) (aarch64-apple-darwin21)",
+      "Copyright (C) 2004-2024, AdaCore",
+      "This is free software; see the source for copying conditions.",
+      "There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE."
+    ]
+  }
+}

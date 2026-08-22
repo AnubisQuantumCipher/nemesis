@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/AnubisQuantumCipher/nemesis/protocols/schemas/nemesis.desktop-mission.v1.schema.json",
+  "title": "NEMESIS bounded local desktop mission",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "missionId",
+    "goal",
+    "workspace",
+    "baseRevision",
+    "action",
+    "authority",
+    "budgets",
+    "completion"
+  ],
+  "properties": {
+    "schema": { "const": "nemesis.desktop-mission/v1" },
+    "missionId": {
+      "type": "string",
+      "pattern": "^mis_[A-Za-z0-9]{22}$"
+    },
+    "goal": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "workspace": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^/"
+    },
+    "baseRevision": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "action": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "relativePath", "expectedSha256", "replacement"],
+      "properties": {
+        "kind": { "const": "replace_utf8" },
+        "relativePath": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "expectedSha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "replacement": {
+          "type": "string",
+          "maxLength": 4096
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["network", "push", "publish", "secrets"],
+      "properties": {
+        "network": { "const": false },
+        "push": { "const": false },
+        "publish": { "const": false },
+        "secrets": { "const": false }
+      }
+    },
+    "budgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["maxWriteBytes", "maxRuntimeSeconds", "maxOutputBytes"],
+      "properties": {
+        "maxWriteBytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4096
+        },
+        "maxRuntimeSeconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 900
+        },
+        "maxOutputBytes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 16777216
+        }
+      }
+    },
+    "completion": {
+      "const": ["git_diff_check", "content_match"]
+    }
+  }
+}

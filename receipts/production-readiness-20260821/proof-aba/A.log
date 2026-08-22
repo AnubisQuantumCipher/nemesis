@@ -1,0 +1,87 @@
+Note: Synchronizing workspace...
+Nothing to update.
+
+Phase 1 of 3: generation of data representation information ...
+Phase 2 of 3: generation of Global contracts ...
+Phase 3 of 3: flow analysis and proof ...
+nemesis-kernel-approvals.ads:30:07: info: initialization of "Decision" proved
+nemesis-kernel-approvals.ads:32:06: info: data dependencies proved
+nemesis-kernel-approvals.ads:34:08: info: postcondition proved (CVC5: 5 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:25:35: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:25:35: info: range check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:26:44: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:26:44: info: range check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:27:54: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:27:54: info: range check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:28:50: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:28:50: info: range check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:30:33: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:30:33: info: range check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:32:33: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.adb:32:33: info: range check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.ads:16:13: info: implicit aspect Always_Terminates on "Can_Allocate" has been proved, subprogram will terminate
+nemesis-kernel-budgets.ads:18:09: info: data dependencies proved
+nemesis-kernel-budgets.ads:23:07: info: initialization of "Decision" proved
+nemesis-kernel-budgets.ads:25:06: info: data dependencies proved
+nemesis-kernel-budgets.ads:27:08: info: postcondition proved (CVC5: 7 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.ads:30:43: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.ads:32:34: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.ads:34:39: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.ads:36:37: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.ads:38:41: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-budgets.ads:40:41: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-capabilities.ads:47:13: info: implicit aspect Always_Terminates on "Authorize" has been proved, subprogram will terminate
+nemesis-kernel-capabilities.ads:52:06: info: data dependencies proved
+nemesis-kernel-capabilities.ads:54:08: info: postcondition proved (CVC5: 8 VC in max 0.0 seconds and 1 step; Trivial: 1 VC in max 0.0 seconds and 2 steps)
+nemesis-kernel-capabilities.ads:64:13: info: implicit aspect Always_Terminates on "Is_Attenuation" has been proved, subprogram will terminate
+nemesis-kernel-capabilities.ads:67:06: info: data dependencies proved
+nemesis-kernel-capabilities.ads:69:08: info: postcondition proved (CVC5: 6 VC in max 0.0 seconds and 1 step; Trivial: 2 VC in max 0.0 seconds and 2 steps)
+nemesis-kernel-completion.adb:12:22: info: index check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-completion.adb:18:22: info: index check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-completion.ads:17:13: info: implicit aspect Always_Terminates on "Evaluate" has been proved, subprogram will terminate
+nemesis-kernel-completion.ads:22:06: info: data dependencies proved
+nemesis-kernel-completion.ads:24:08: info: postcondition proved (CVC5: 3 VC in max 0.0 seconds and 1 step; Trivial: 1 VC in max 0.0 seconds and 2 steps)
+nemesis-kernel-completion.ads:29:24: info: index check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-evidence.ads:36:13: info: implicit aspect Always_Terminates on "Acceptable" has been proved, subprogram will terminate
+nemesis-kernel-evidence.ads:41:06: info: data dependencies proved
+nemesis-kernel-evidence.ads:43:08: info: postcondition proved (CVC5: 5 VC in max 0.0 seconds and 1 step; Trivial: 1 VC in max 0.0 seconds and 2 steps)
+nemesis-kernel-missions.adb:32:36: info: precondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.adb:46:36: info: precondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.ads:11:13: info: implicit aspect Always_Terminates on "Create" has been proved, subprogram will terminate
+nemesis-kernel-missions.ads:13:06: info: data dependencies proved
+nemesis-kernel-missions.ads:15:08: info: postcondition proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.ads:18:13: info: implicit aspect Always_Terminates on "Restore" has been proved, subprogram will terminate
+nemesis-kernel-missions.ads:21:06: info: data dependencies proved
+nemesis-kernel-missions.ads:23:08: info: postcondition proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.ads:26:13: info: implicit aspect Always_Terminates on "State_Of" has been proved, subprogram will terminate
+nemesis-kernel-missions.ads:27:09: info: data dependencies proved
+nemesis-kernel-missions.ads:29:13: info: implicit aspect Always_Terminates on "Sequence_Of" has been proved, subprogram will terminate
+nemesis-kernel-missions.ads:30:09: info: data dependencies proved
+nemesis-kernel-missions.ads:35:07: info: initialization of "Decision" proved
+nemesis-kernel-missions.ads:37:06: info: data dependencies proved
+nemesis-kernel-missions.ads:39:08: info: postcondition proved (CVC5: 4 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.ads:41:70: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.ads:47:40: info: initialization of "Decision" proved
+nemesis-kernel-missions.ads:49:06: info: data dependencies proved
+nemesis-kernel-missions.ads:51:08: info: postcondition proved (CVC5: 3 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-missions.ads:54:63: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-transitions.ads:13:13: info: implicit aspect Always_Terminates on "Allowed" has been proved, subprogram will terminate
+nemesis-kernel-transitions.ads:16:06: info: data dependencies proved
+nemesis-kernel-transitions.ads:17:14: info: postcondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step; Trivial: 1 VC in max 0.0 seconds and 2 steps)
+nemesis-kernel-types.adb:13:13: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-types.ads:26:13: info: implicit aspect Always_Terminates on "Encode_State" has been proved, subprogram will terminate
+nemesis-kernel-types.ads:28:06: info: data dependencies proved
+nemesis-kernel-types.ads:29:14: info: postcondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-types.ads:31:13: info: implicit aspect Always_Terminates on "Decode_State" has been proved, subprogram will terminate
+nemesis-kernel-types.ads:33:06: info: data dependencies proved
+nemesis-kernel-types.ads:34:14: info: postcondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-types.ads:48:13: info: implicit aspect Always_Terminates on "Is_Terminal" has been proved, subprogram will terminate
+nemesis-kernel-types.ads:50:06: info: data dependencies proved
+nemesis-kernel-types.ads:52:08: info: postcondition proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-types.ads:55:13: info: implicit aspect Always_Terminates on "Next" has been proved, subprogram will terminate
+nemesis-kernel-types.ads:57:06: info: data dependencies proved
+nemesis-kernel-types.ads:59:14: info: postcondition proved (CVC5: 1 VC in max 0.0 seconds and 1 step)
+nemesis-kernel-types.ads:59:34: info: overflow check proved (CVC5: 2 VC in max 0.0 seconds and 1 step)
+Summary logged in /private/var/folders/bg/pt9l6y1j47q642kp3z5blrmh0000gn/T/nemesis-proof-aba-3ihhjp3f/repo/build/obj/debug/gnatprove/gnatprove.out
+PASS_KERNEL_PROOF_MANIFEST obligations=78 units=8 production_lane=BLOCKED_TRUST_SURFACE
+PASS_KERNEL_PROOF_BASELINE

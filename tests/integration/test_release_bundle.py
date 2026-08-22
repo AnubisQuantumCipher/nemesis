@@ -14,12 +14,8 @@ EXPECTED_RESOURCES = {
     "../../runtime/target/release/nemesis-signer": "bin/nemesis-signer",
     "../../runtime/target/release/nemesis-verify": "bin/nemesis-verify",
     "../../runtime/target/release/nemesis-worker-runner": "bin/nemesis-worker-runner",
-    "../../scripts/run_vertical_slice.py": "scripts/run_vertical_slice.py",
-    "../../scripts/run_vertical_slice.sh": "scripts/run_vertical_slice.sh",
-    "../../scripts/verify_contract.py": "scripts/verify_contract.py",
-    "../../scripts/verify_evidence_bundle.py": "scripts/verify_evidence_bundle.py",
+    "../../runtime/target/release/nemesis-replay": "bin/nemesis-replay",
     "../../docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md": "docs/mission/NEMESIS_DESKTOP_MASTER_BUILD_MISSION_2026-08-20.md",
-    "../../receipts/phase-11/replay.json": "receipts/phase-11/replay.json",
     "../../LICENSE": "LICENSE",
     "../../build/release/THIRD_PARTY_NOTICES.txt": "THIRD_PARTY_NOTICES.txt",
 }

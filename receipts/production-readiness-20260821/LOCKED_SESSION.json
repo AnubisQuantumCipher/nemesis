@@ -1,0 +1,54 @@
+{
+  "schema": "nemesis.external-session-blocker/v1",
+  "observed_at": "2026-08-21T07:03:00Z",
+  "state_probe": {
+    "command": "ioreg -n Root -d1",
+    "exit_status": 0,
+    "observed": [
+      "IOConsoleLocked = Yes",
+      "CGSSessionScreenIsLocked = Yes"
+    ],
+    "redaction": "User, session, UUID, and secure-input fields were not retained."
+  },
+  "native_app": {
+    "build_command": "npm --prefix desktop run tauri -- build --debug --bundles app",
+    "build_exit_status": 0,
+    "process_probe": "nemesis-desktop process and a 1440x900 onscreen CoreGraphics window were observed",
+    "pixel_capture": {
+      "path": "receipts/production-readiness-20260821/desktop-home.png",
+      "sha256": "093780c1767c48cbbd3afc3b92b3c5368a56477d493e1eadb8cf24398fa77ca6",
+      "bytes": 407228,
+      "result": "INDETERMINATE_LOCKED_SESSION"
+    }
+  },
+  "accessibility_attempts": [
+    {
+      "status": "INVALIDATED",
+      "cause": "The first capture traversed only the accessibility-safe application menu projection while the console was locked; its node count did not reconcile with visible window content, so the artifact was deleted and no number was published."
+    },
+    {
+      "command": "./scripts/capture_macos_accessibility.swift <pid> <output.json>",
+      "exit_status": 1,
+      "terminal_marker": "FAIL_NATIVE_ACCESSIBILITY session_locked",
+      "status": "BLOCKED"
+    }
+  ],
+  "blocker": {
+    "id": "external-unlocked-console",
+    "kind": "EXTERNAL",
+    "prerequisite": "An already-unlocked macOS console session is required for native pixel, keyboard, VoiceOver, focus, and accessibility-tree observation.",
+    "prohibited_actions": [
+      "The mission will not request or type a login password.",
+      "The mission will not bypass the lock screen or alter account state."
+    ]
+  },
+  "completed_despite_blocker": [
+    "Renderer DOM tests",
+    "TypeScript production build",
+    "Native Rust tests",
+    "Real compiled local mission smoke",
+    "Tauri app bundle construction",
+    "CoreGraphics window existence and bounds probe"
+  ],
+  "verdict": "BLOCKED_NATIVE_OBSERVATION_ONLY"
+}

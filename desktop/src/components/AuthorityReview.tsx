@@ -1,72 +1,103 @@
+import { useEffect, useRef } from "react";
+
+import type { CompiledMission } from "../lib/bridge";
+
 interface AuthorityReviewProps {
+  compiled: CompiledMission;
   running: boolean;
   onAuthorize: () => void;
   onClose: () => void;
 }
 
-const authorityRows = [
-  ["Filesystem", "One disposable Git worktree", "WRITE / BOUNDED"],
-  ["Network", "No worker egress", "DENY"],
-  ["Secrets", "No worker secret view", "DENY"],
-  ["Process", "Exact sandboxed worker and verifiers", "EXECUTE / EXACT"],
-] as const;
+export function AuthorityReview({
+  compiled,
+  running,
+  onAuthorize,
+  onClose,
+}: AuthorityReviewProps) {
+  const headingRef = useRef<HTMLHeadingElement>(null);
 
-export function AuthorityReview({ running, onAuthorize, onClose }: AuthorityReviewProps) {
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
+
   return (
     <section className="authority-review" aria-labelledby="authority-heading">
       <header className="panel-heading authority-heading">
         <div>
-          <span className="section-index">AUTH / 01</span>
-          <h2 id="authority-heading">Authority review</h2>
+          <span className="section-index">AUTH / EXACT LOCAL CONTRACT</span>
+          <h2 id="authority-heading" ref={headingRef} tabIndex={-1}>
+            Authority review
+          </h2>
         </div>
-        <button type="button" className="text-button" onClick={onClose}>
+        <button type="button" className="text-button" onClick={onClose} disabled={running}>
           Close
         </button>
       </header>
 
-      <div className="contract-hash">
-        <span>CONTRACT</span>
-        <code>nemesis.mission/v1 · digest assigned at execution</code>
+      <div className="digest-grid">
+        <div>
+          <span>CONTRACT SHA-256</span>
+          <code aria-label="Contract SHA-256 digest">{compiled.contractDigest}</code>
+        </div>
+        <div>
+          <span>ACTION SHA-256</span>
+          <code aria-label="Action SHA-256 digest">{compiled.actionDigest}</code>
+        </div>
       </div>
 
       <div className="authority-table" role="table" aria-label="Mission authority">
-        {authorityRows.map(([resource, scope, decision]) => (
-          <div className="authority-row" role="row" key={resource}>
-            <strong role="cell">{resource}</strong>
-            <span role="cell">{scope}</span>
-            <b role="cell" className={decision === "DENY" ? "decision-deny" : "decision-exact"}>
-              {decision}
-            </b>
-          </div>
-        ))}
+        <div className="authority-row" role="row">
+          <strong role="cell">FILESYSTEM</strong>
+          <span role="cell">{compiled.relativePath}</span>
+          <b role="cell" className="decision-exact">WRITE EXACT</b>
+        </div>
+        <div className="authority-row" role="row">
+          <strong role="cell">NETWORK</strong>
+          <span role="cell">No worker egress</span>
+          <b role="cell" className="decision-deny">NETWORK DENY</b>
+        </div>
+        <div className="authority-row" role="row">
+          <strong role="cell">PUSH / PUBLISH</strong>
+          <span role="cell">No remote mutation</span>
+          <b role="cell" className="decision-deny">PUSH DENY</b>
+        </div>
+        <div className="authority-row" role="row">
+          <strong role="cell">SECRETS</strong>
+          <span role="cell">No worker secret view</span>
+          <b role="cell" className="decision-deny">SECRETS DENY</b>
+        </div>
       </div>
 
       <div className="invariant-grid">
         <div>
-          <span className="invariant-icon" aria-hidden="true">×</span>
-          <strong>Push disabled</strong>
-          <p>No remote mutation authority.</p>
+          <span>WORKSPACE</span>
+          <strong>{compiled.workspace}</strong>
+          <p>Base {compiled.baseRevision}</p>
         </div>
         <div>
-          <span className="invariant-icon" aria-hidden="true">×</span>
-          <strong>Publish disabled</strong>
-          <p>No release or registry authority.</p>
+          <span>WRITE BUDGET</span>
+          <strong>{compiled.replacementBytes} / {compiled.maxWriteBytes} bytes</strong>
+          <p>One existing regular UTF-8 file.</p>
         </div>
         <div>
-          <span className="invariant-icon" aria-hidden="true">◇</span>
-          <strong>Worker cannot mark complete</strong>
-          <p>Completion belongs to Kernel predicates.</p>
+          <span>RUNTIME BUDGET</span>
+          <strong>{compiled.maxRuntimeSeconds} seconds</strong>
+          <p>Output capped at {compiled.maxOutputBytes} bytes.</p>
         </div>
       </div>
 
+      <details className="normalized-contract">
+        <summary>Inspect normalized contract bytes</summary>
+        <pre>{compiled.normalizedContract}</pre>
+      </details>
+
       <footer className="authority-actions">
-        <p>Authorization binds this exact local mission contract. Any mutation requires review again.</p>
-        <button
-          type="button"
-          className="primary-action"
-          onClick={onAuthorize}
-          disabled={running}
-        >
+        <p>
+          Authorization binds both digests above. The backend re-reads the file and refuses any
+          changed byte before creating a lane.
+        </p>
+        <button type="button" className="primary-action" onClick={onAuthorize} disabled={running}>
           {running ? "MISSION RUNNING" : "Authorize and run"}
         </button>
       </footer>

@@ -1,0 +1,206 @@
+{
+  "schema": "nemesis.production-readiness/v1",
+  "generated_at": "2026-08-21T06:20:00Z",
+  "contract": {
+    "path": "docs/mission/NEMESIS_DESKTOP_PRODUCTION_READINESS_AUTONOMOUS_MISSION_2026-08-21.md",
+    "sha256": "2485cd682cdedfeb0bfd13ce2aabd51194c72204495de0c12058631cb7c92c87"
+  },
+  "subject": {
+    "commit": "d18cb7cc5bd918a6e9dd67aa99088dab9503e39b",
+    "tree": "80d1b4af38cecf97becca780b6094ab99dfbf0fd"
+  },
+  "overall": "FAIL",
+  "automatable_complete": false,
+  "terminal_verdict": null,
+  "external_blockers": [],
+  "lanes": [
+    {
+      "id": "function",
+      "required": true,
+      "status": "FAIL",
+      "evidence": [],
+      "blockers": [],
+      "findings": [
+        "Ten visible navigation destinations are placeholders.",
+        "The desktop runs one fixed witnessed fixture rather than an exact user-selected local contract.",
+        "Mission progress, relaunch state, settings, and typed recovery states are absent or simulated."
+      ]
+    },
+    {
+      "id": "authority",
+      "required": true,
+      "status": "FAIL",
+      "evidence": [],
+      "blockers": [],
+      "findings": [
+        "AuthorityReview does not display the normalized contract or action digest before authorization.",
+        "daemon/src/nemesis_core_daemon.adb synthesizes an ephemeral capability grant and never consumes Nemesis.Kernel.Approvals."
+      ]
+    },
+    {
+      "id": "evidence_replay",
+      "required": true,
+      "status": "FAIL",
+      "evidence": [],
+      "blockers": [],
+      "findings": [
+        "Receipt verification and tamper rejection pass for the witnessed fixture.",
+        "Desktop replay always loads the bundled phase-11 fixture rather than the most recent desktop mission."
+      ]
+    },
+    {
+      "id": "formal_kernel",
+      "required": true,
+      "status": "FAIL",
+      "evidence": [],
+      "blockers": [],
+      "findings": [
+        "GNATprove covers eight named kernel bodies only.",
+        "Authority-persistence daemon units remain SPARK_Mode Off.",
+        "The proof gate has no nonzero obligation count, coverage completeness, stale-artifact rejection, or semantic A-B-A calibration."
+      ]
+    },
+    {
+      "id": "independent_autonomous_external_review",
+      "required": true,
+      "status": "UNKNOWN",
+      "evidence": [],
+      "blockers": [],
+      "findings": [
+        "No fresh independent reviewer receipt targets a frozen production candidate hash."
+      ]
+    },
+    {
+      "id": "dependency_supply_chain",
+      "required": true,
+      "status": "FAIL",
+      "evidence": [],
+      "blockers": [],
+      "findings": [
+        "Baseline advisory and license gates pass, and GitHub Actions are commit-pinned.",
+        "No production SBOM or build provenance artifact is generated and validated."
+      ]
+    },
+    {
+      "id": "accessibility",
+      "required": true,
+      "status": "FAIL",
+      "evidence": [],
+      "blockers": [],
+      "findings": [
+        "Load-bearing text is rendered at seven to nine pixels.",
+        "No automated keyboard, VoiceOver, contrast, scaling, or native accessibility-tree gate exists."
+      ]
+    },
+    {
+      "id": "performance",
+      "required": true,
+      "status": "UNKNOWN",
+      "evidence": [],
+      "blockers": [],
+      "findings": [
+        "No validated launch, idle, mission, replay, growth, soak, or package measurement instrument exists."
+      ]
+    },
+    {
+      "id": "reliability_recovery",
+      "required": true,
+      "status": "FAIL",
+      "evidence": [],
+      "blockers": [],
+      "findings": [
+        "Core restart and byte-corruption behavior are exercised.",
+        "Force quit, kill-during-commit, disk-full, concurrent ownership, upgrade, uninstall, soak, and duplicate-notification cases are not covered."
+      ]
+    },
+    {
+      "id": "install_upgrade_uninstall",
+      "required": true,
+      "status": "FAIL",
+      "evidence": [],
+      "blockers": [],
+      "findings": [
+        "The predecessor ships as an ad-hoc ZIP requiring Open Anyway.",
+        "No clean /Applications-style install, migration, rollback, downgrade refusal, uninstall, or data-retention gate exists."
+      ]
+    },
+    {
+      "id": "privacy",
+      "required": true,
+      "status": "FAIL",
+      "evidence": [],
+      "blockers": [],
+      "findings": [
+        "No telemetry dependency was found and the witnessed worker denies network.",
+        "Privacy, data-location, backup, export, deletion, diagnostics, and log-redaction product documentation and gates are absent."
+      ]
+    },
+    {
+      "id": "packaging_signing_notarization",
+      "required": true,
+      "status": "UNKNOWN",
+      "evidence": [],
+      "blockers": [],
+      "findings": [
+        "v0.1.0 is ad-hoc signed, not hardened-runtime Developer ID signed, not notarized, and Gatekeeper rejected it.",
+        "Current account and identity capability has not yet been re-probed without exposing identities."
+      ]
+    },
+    {
+      "id": "hosted_ci",
+      "required": true,
+      "status": "UNKNOWN",
+      "evidence": [],
+      "blockers": [],
+      "findings": [
+        "Historical predecessor checks are green; the mission branch has no upstream, pull request, or exact-head hosted run."
+      ]
+    },
+    {
+      "id": "release_readback",
+      "required": true,
+      "status": "UNKNOWN",
+      "evidence": [],
+      "blockers": [],
+      "findings": [
+        "Only immutable v0.1.0 assets have published anonymous byte-readback evidence."
+      ]
+    },
+    {
+      "id": "supportability",
+      "required": true,
+      "status": "FAIL",
+      "evidence": [],
+      "blockers": [],
+      "findings": [
+        "No bounded previewable secret-scanned support bundle exists.",
+        "Desktop diagnostics check binary presence only; database, verifier, sandbox, version, and resource identity health are absent."
+      ]
+    },
+    {
+      "id": "trust_surface",
+      "required": true,
+      "status": "BLOCKED",
+      "evidence": [],
+      "blockers": [
+        {
+          "id": "TS-001-daemon-approval-integration",
+          "kind": "TRUST_SURFACE",
+          "command": "python3 -c 'scan daemon/src/*.ad? for Nemesis.Kernel.Approvals or Consume_Approval; exit 42 when absent'",
+          "exit_status": 42,
+          "finding": "Wiring one-shot approvals into authorize_action changes the existing authorization accept condition and requires an exact architect-approved patch."
+        }
+      ],
+      "findings": [
+        "The production contract requires exact expiring one-shot approvals end to end, while the current daemon authorizes without the Approvals package.",
+        "The trust-surface prohibition forbids landing that accept-condition change under broad autonomy."
+      ]
+    }
+  ],
+  "claim_matrix": "receipts/production-readiness-20260821/CLAIMS.json",
+  "baseline_receipt": "receipts/production-readiness-20260821/BASELINE.json",
+  "nonclaims": [
+    "A valid admission roster proves schema consistency, not production readiness.",
+    "Historical v0.1.0 PASS evidence does not close successor production lanes."
+  ]
+}

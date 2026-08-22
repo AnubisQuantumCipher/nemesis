@@ -1,0 +1,9 @@
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.33s
+     Running tests/mission_execution.rs (desktop/src-tauri/target/debug/deps/mission_execution-95ca4f938d7689b9)
+
+running 1 test
+test executes_reviewed_contract_and_persists_current_receipt_and_replay ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 1.66s
+
+FOCUSED_EXIT_STATUS=0

@@ -83,7 +83,8 @@ for binary in \
   nemesis-lane-create \
   nemesis-signer \
   nemesis-verify \
-  nemesis-worker-runner
+  nemesis-worker-runner \
+  nemesis-replay
 do
   if [[ ! -x "$APP/Contents/Resources/bin/$binary" ]]; then
     printf '%s\n' "FAIL_RELEASE_RESOURCE_MISSING name=$binary" >&2
@@ -98,6 +99,7 @@ RELEASE_BINARIES=(
   "$APP/Contents/Resources/bin/nemesis-signer"
   "$APP/Contents/Resources/bin/nemesis-verify"
   "$APP/Contents/Resources/bin/nemesis-worker-runner"
+  "$APP/Contents/Resources/bin/nemesis-replay"
 )
 python3 scripts/sanitize_macho.py "${RELEASE_BINARIES[@]}"
 for release_binary in "${RELEASE_BINARIES[@]}"; do
