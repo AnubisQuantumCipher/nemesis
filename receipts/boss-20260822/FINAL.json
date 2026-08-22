@@ -54,7 +54,7 @@
     },
     "Review": "Independent defensive review SOUND (REVIEW_RACE_FIX.json). Independent HUMAN external review remains NEEDS-HUMAN.",
     "Release": {
-      "RL-01_checkpoint_and_PR": "PASS \u2014 branch production/boss-harness-completion pushed to origin; PR https://github.com/AnubisQuantumCipher/nemesis/pull/7 opened (base main, MERGEABLE). Merge is an operator gate (not merged this session).",
+      "RL-01_checkpoint_and_PR": "PASS \u2014 PR #7 pushed; all required hosted checks GREEN (run 32594083144); mergeStateStatus=CLEAN. Not merged (operator gate).",
       "RL-02_successor_archive_readback": "PASS (v0.3.1 built via package_release.sh -> PASS_RELEASE_PACKAGE; hash-bound archive + readback in RELEASE_v0.3.1.json; v0.1.0/v0.2.0 tags untouched; no new tag published this session)"
     }
   },
@@ -71,5 +71,19 @@
     "release/ archives and the v0.3.1 binary are local artifacts (release/ is gitignored); the in-git hash binding is RELEASE_v0.3.1.json.",
     "No git tag was created or pushed for v0.3.1 in this session."
   ],
-  "integration_pr": "https://github.com/AnubisQuantumCipher/nemesis/pull/7"
+  "integration_pr": "https://github.com/AnubisQuantumCipher/nemesis/pull/7",
+  "hosted_checks": {
+    "run": "https://github.com/AnubisQuantumCipher/nemesis/actions/runs/32594083144",
+    "result": "all required checks green",
+    "checks": {
+      "Contract and evidence": "pass",
+      "Dependency audit": "pass",
+      "Rust and Desktop (macos-14)": "pass",
+      "Rust and Desktop (macos-15)": "pass",
+      "CodeRabbit": "pass (skipped, manual review)"
+    },
+    "pr_merge_state": "MERGEABLE / mergeStateStatus=CLEAN",
+    "merged": false,
+    "merge_gate": "operator (the human presses send) \u2014 not merged this session"
+  }
 }

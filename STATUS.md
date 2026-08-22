@@ -11,6 +11,8 @@ Verdict: `SEALED_LOCAL_BOSS`. Built on the sealed v0.2.0 trust surface and the b
 
 Boss receipts: [`receipts/boss-20260822/FINAL.json`](receipts/boss-20260822/FINAL.json), [`receipts/boss-20260822/TRACKER.json`](receipts/boss-20260822/TRACKER.json). Integration PR: [#7](https://github.com/AnubisQuantumCipher/nemesis/pull/7) (base `main`, `MERGEABLE`; merge is an operator gate — not merged this session). `v0.1.0`/`v0.2.0` tags remain immutable; no `v0.3.1` tag was published this session (operator gate: the human presses send). Independent **human** external security review remains `[NEEDS-HUMAN]`.
 
+Hosted checks (PR #7, run [32594083144](https://github.com/AnubisQuantumCipher/nemesis/actions/runs/32594083144)): **all required checks green** — Contract and evidence, Dependency audit, Rust and Desktop (macos-14 + macos-15). `mergeStateStatus=CLEAN`. Merge is the operator's gate.
+
 ---
 
 ## Verdict
