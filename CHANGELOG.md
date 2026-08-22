@@ -3,6 +3,27 @@
 This file records user-visible NEMESIS changes. Verification status comes from the named gates and receipts, not from this summary.
 
 
+## 0.3.1 — 2026-08-22
+
+Concurrency hardening for the governed hash-chained logs.
+
+### Fixed
+
+- Governed-write race (independent code-review finding): concurrent
+  `adopt_mission` / `append_receipt` read-modify-write of the adoption and
+  receipt chains was guarded only by `atomic_write` (last-writer-wins) with no
+  lock. Two concurrent adoptions could produce two git commits but a single
+  surviving chain record — a governed state change with no receipt — or fail on
+  git `index.lock` contention. A per-home advisory lock
+  (`GovernedWriteLock`, `flock(LOCK_EX)` on `<home>/.governed-write.lock`) now
+  serializes the whole load→verify→commit→append critical section across
+  threads and across app instances sharing a home. Hostile concurrent tests
+  (`concurrent_adoptions_serialize_and_lose_no_chain_record`,
+  `concurrent_receipt_appends_preserve_every_record`) verify N concurrent
+  writers yield exactly N linked records and N adoption commits; verified to
+  fail with the lock neutered. Independent defensive review: SOUND
+  (`receipts/boss-20260822/REVIEW_RACE_FIX.json`).
+
 ## 0.3.0 — 2026-08-22
 
 Boss-harness completion: the cockpit becomes a fourteen-rail product with a
