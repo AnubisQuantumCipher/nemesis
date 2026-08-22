@@ -1454,75 +1454,99 @@
   {
    "gates": [
     {
-     "evidence": [],
+     "evidence": [
+      "verified non-final checkpoints committed+pushed throughout to origin/production/desktop-v1-autonomous-recovery (ea1ff77->651e7d8->a1d89df->fb321bb->47f6976->2f78bf1->d169c64->7bd5737->b68901a->3ad557c)"
+     ],
      "id": "M-01",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Commit and push verified non-final coherent checkpoints"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "one mission-owned production-readiness PR opened: https://github.com/AnubisQuantumCipher/nemesis/pull/4 head=3ad557caeea762e33ae94273ac35a345735825ec base=main"
+     ],
      "id": "M-02",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Open one mission-owned production readiness pull request"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "all required current-head checks terminal GREEN on exact head 3ad557c: Contract and evidence + Dependency audit + Rust and Desktop (macos-14) + Rust and Desktop (macos-15); PR mergeStateStatus=CLEAN mergeable=MERGEABLE"
+     ],
      "id": "M-03",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Require terminal-green checks on exact pull-request head"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "load-bearing hosted finding addressed: initial 'Contract and evidence' failure (phase-16 covered_source_changed on mission branch) resolved by a fresh VZ security-hardening re-seal at the mission head (3 sentinels, gate log committed as tracked .txt); CodeRabbit is advisory manual-review, not a required check"
+     ],
      "id": "M-04",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Address all load-bearing hosted review findings"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "no trust-surface semantic change merged: branch contains none (FinalIntegration CLEAN, K-02 no gate removed); TS-001/TS-002 preserved unmerged in trust-surface/TS-PROPOSAL.md"
+     ],
      "id": "M-05",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Avoid merging any trust-surface semantic change"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "merge through the protected PR is human/policy-gated in this session (bash merge tool denied by user policy; production default-branch merge is a send-class action). PR #4 is CLEAN/MERGEABLE with all required checks green and no trust-surface change \u2014 the merge is ready for the architect to press; recorded as a residual human decision, not performed autonomously"
+     ],
      "id": "M-06",
-     "status": "PENDING",
+     "status": "BLOCKED",
      "title": "Merge ordinary work only through protected pull request"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "successor release assets from the exact final merge commit NOT built: depends on (a) the gated merge and (b) a production-final decision that is itself blocked by unavailable Developer ID signing/notarization"
+     ],
      "id": "M-07",
-     "status": "PENDING",
+     "status": "BLOCKED",
      "title": "Build successor assets from exact final merge commit"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "truthful successor status chosen: NOT production-final and NOT 1.0.0 (COMPLETE_PRODUCTION_PUBLIC unreachable without Developer ID/notarization); no new production release published; a labeled prerelease/RC is the only honest option and is withheld to avoid an unsigned artifact implying readiness"
+     ],
      "id": "M-08",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Choose truthful semantic successor version and status"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "immutable predecessor preserved: remote tag v0.1.0=616c78508b754081bb77fab63e6665d16f47d84d intact; release non-draft with 3 assets (zip, release-manifest.json, SHA256SUMS) untouched; local verification build under gitignored release/ did not touch published assets"
+     ],
      "id": "M-09",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Preserve immutable predecessor tag and release assets"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "published no release unsupported by passing gates: production-final blocked by signing; no successor tag/release created; predecessor untouched -> the 'publish only bounded' constraint holds vacuously"
+     ],
      "id": "M-10",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Publish only bounded release supported by passing gates"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "detached post-release evidence PR not required: no successor release was tagged/published"
+     ],
      "id": "M-11",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Create detached post-release evidence pull request if needed"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "hosted state read back: PR #4 OPEN/MERGEABLE/CLEAN, 4/4 required checks pass on 3ad557c; v0.1.0 tag+release+assets confirmed intact"
+     ],
      "id": "M-12",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Read back hosted checks pull request and release state"
     }
    ],
@@ -1533,117 +1557,155 @@
   {
    "gates": [
     {
-     "evidence": [],
+     "evidence": [
+      "baseline d18cb7c / final commit+tree / upstream / clean dirty state recorded \u2014 FINAL.json sha256=b9f58e4110e5e2c2c262da7fe2c82945d84ad715efd7012853880c7b46eacbbd; FINAL_REPORT.md sha256=4cf92785d3d72b043d25fd847717ca05e3d99b2919a313321dc01b0d174d6d92"
+     ],
      "id": "N-01",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Record baseline final commit tree upstream dirtiness"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "changed-file manifest + diffstat (119 files, +19240/-1650 baseline..HEAD) \u2014 FINAL.json sha256=b9f58e4110e5e2c2c262da7fe2c82945d84ad715efd7012853880c7b46eacbbd; FINAL_REPORT.md sha256=4cf92785d3d72b043d25fd847717ca05e3d99b2919a313321dc01b0d174d6d92"
+     ],
      "id": "N-02",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Record changed-file manifest and diff statistics"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "exact typed roster with per-lane status+evidence (fail-closed; packaging_signing_notarization=BLOCKED) \u2014 FINAL.json.typed_roster"
+     ],
      "id": "N-03",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Record exact typed roster statuses and evidence"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "SPARK unit/obligation manifest + assumptions (8 units, 78 obligations, 0 unproved/0 assumptions, A-B-A) \u2014 FINAL.json.spark + FORMAL_KERNEL.json"
+     ],
      "id": "N-04",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Record SPARK unit obligations and assumptions"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "independent reviewer identities/receipt hashes/verdicts/dispositions (9 lanes + 2 final, all CLEAN; findings fixed) \u2014 FINAL.json.independent_reviews + REVIEW_VALIDATION.json"
+     ],
      "id": "N-05",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Record reviewer identities hashes findings dispositions"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "classified command table (CANONICAL/FOCUSED/VZ/HOSTED/BLOCKED) with exit/marker/log-hash \u2014 FINAL.json.command_table"
+     ],
      "id": "N-06",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Record classified command table statuses markers hashes"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "hostile-control + A-B-A receipts \u2014 FINAL.json.hostile_controls (hostile-20260822.log + kernel PROOF_ABA)"
+     ],
      "id": "N-07",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Record hostile controls and A-B-A receipts"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "accessibility observations + native-blocked artifact \u2014 FINAL.json.accessibility + ACCESSIBILITY_NATIVE.json"
+     ],
      "id": "N-08",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Record accessibility observations and captured artifacts"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "controlled performance raw data + instrument validation + bounded conclusions \u2014 FINAL.json.performance + PERFORMANCE.json"
+     ],
      "id": "N-09",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Record controlled performance raw data and conclusions"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "install/upgrade/rollback/uninstall evidence \u2014 FINAL.json.install + INSTALL_VERIFICATION.json + reliability F-12"
+     ],
      "id": "N-10",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Record install upgrade rollback uninstall evidence"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "signing/notarization/Gatekeeper recorded as external blocker \u2014 FINAL.json.signing + SIGNING_CAPABILITY.json"
+     ],
      "id": "N-11",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Record signing notarization Gatekeeper evidence or blocker"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "PR/check/release URLs + exact SHAs \u2014 FINAL.json.github (PR #4 head 3ad557c, 4/4 checks, v0.1.0 intact)"
+     ],
      "id": "N-12",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Record pull-request checks releases URLs and SHAs"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "anonymous asset readback: N/A (no successor production release published; blocked on signing); predecessor v0.1.0 assets immutable+untouched \u2014 FINAL.json.anonymous_asset_readback"
+     ],
      "id": "N-13",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Record anonymous asset readback identities"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "failures preserved as causal scars (reviewer refusal recovery, phase-16 CI re-seal, gitignored-log fix, disk-full test fix) \u2014 FINAL.json.scars + TRACKER.scars"
+     ],
      "id": "N-14",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Preserve failed attempts as exact causal scars"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "residuals + explicit non-claims recorded \u2014 FINAL.json.residuals + non_claims"
+     ],
      "id": "N-15",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Record residuals blockers and explicit non-claims"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "excluded platforms + unrelated worktrees proven untouched; predecessor immutable \u2014 FINAL.json.excluded_untouched"
+     ],
      "id": "N-16",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Prove excluded worktrees and platforms stayed untouched"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "machine-readable final receipt independently validated (required keys, fail-closed roster, exactly one terminal verdict) \u2014 validation errors: NONE"
+     ],
      "id": "N-17",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Validate machine-readable final receipt independently"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "human report published with gate-coupled status language (no bare production-ready/complete/verified) \u2014 FINAL_REPORT.md"
+     ],
      "id": "N-18",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Publish human report with gate-coupled status language"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "exactly one authorized terminal verdict sealed: BLOCKED_PRODUCTION_PUBLIC \u2014 FINAL.json sha256=b9f58e4110e5e2c2c262da7fe2c82945d84ad715efd7012853880c7b46eacbbd; FINAL_REPORT.md sha256=4cf92785d3d72b043d25fd847717ca05e3d99b2919a313321dc01b0d174d6d92"
+     ],
      "id": "N-19",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Seal exactly one authorized terminal verdict"
     }
    ],
@@ -1749,6 +1811,11 @@
   }
  ],
  "schema": "nemesis.production-readiness-tracker/v1",
- "terminal_verdict": null,
- "updated_at": "2026-08-22T09:51:23Z"
+ "terminal_final_receipt": {
+  "path": "receipts/production-readiness-20260821/FINAL.json",
+  "sha256": "b9f58e4110e5e2c2c262da7fe2c82945d84ad715efd7012853880c7b46eacbbd"
+ },
+ "terminal_verdict": "BLOCKED_PRODUCTION_PUBLIC",
+ "terminal_verdict_sealed_at": "2026-08-22T10:11:44Z",
+ "updated_at": "2026-08-22T10:11:44Z"
 }

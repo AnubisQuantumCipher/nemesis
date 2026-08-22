@@ -1,0 +1,343 @@
+{
+ "accessibility": {
+  "contrast": "scripts/measure_contrast.py PASS_CONTRAST_WCAG_AA",
+  "native_walkthrough": "ENVIRONMENT_BLOCKED (IOConsoleLocked) \u2014 receipts/.../ACCESSIBILITY_NATIVE.json"
+ },
+ "anonymous_asset_readback": "N/A \u2014 no successor production release published (blocked on signing); immutable predecessor v0.1.0 assets untouched, not republished",
+ "baseline_commit": "d18cb7cc5bd918a6e9dd67aa99088dab9503e39b",
+ "branch": "production/desktop-v1-autonomous-recovery",
+ "changed_file_count": 119,
+ "command_table": [
+  {
+   "classification": "CANONICAL",
+   "gate": "verify_complete (canonical aggregate)",
+   "marker": "PASS_NEMESIS_DESKTOP_COMPLETE (component gates individually green)",
+   "note": "aggregate; phase-16 lane green after re-seal"
+  },
+  {
+   "classification": "FOCUSED",
+   "exit_status": 0,
+   "gate": "focused production desktop",
+   "log": "receipts/production-readiness-20260821/production-desktop-postE-20260822.log",
+   "marker": "PASS_PRODUCTION_DESKTOP_AUTOMATED",
+   "sha256": "3f1a4d43e6639239cb1f74a15c46d276e461762d0be40171a80ab0ad12206891"
+  },
+  {
+   "classification": "FOCUSED",
+   "exit_status": 0,
+   "gate": "reliability/recovery (F)",
+   "log": "receipts/production-readiness-20260821/reliability-postE-20260822.log",
+   "marker": "PASS_PRODUCTION_RELIABILITY",
+   "sha256": "cf98281927c267c3eb98d369efa5810b2dbae5c869952352dc00e37c691bfa92"
+  },
+  {
+   "classification": "FOCUSED",
+   "exit_status": 0,
+   "gate": "accessibility (G)",
+   "log": "receipts/production-readiness-20260821/accessibility-20260822.log",
+   "marker": "PASS_PRODUCTION_ACCESSIBILITY",
+   "sha256": "c39539719fb0babe8f6344b369ef73f4634d15f35832a78e21d642b6ee63041f"
+  },
+  {
+   "classification": "FOCUSED",
+   "exit_status": 0,
+   "gate": "performance (H)",
+   "log": "receipts/production-readiness-20260821/performance-20260822.log",
+   "marker": "PASS_PRODUCTION_PERFORMANCE",
+   "sha256": "0dc960fe9fe69a03606e3995bbf2a872d7a577ada122730774e4805f9a50f414"
+  },
+  {
+   "classification": "FOCUSED",
+   "exit_status": 0,
+   "gate": "operations/privacy (J)",
+   "log": "receipts/production-readiness-20260821/operations-20260822.log",
+   "marker": "PASS_PRODUCTION_OPERATIONS",
+   "sha256": "da39ecff73bf82f45210415a6989606dffb7bb34f206fcefc4fec61447929b5f"
+  },
+  {
+   "classification": "FOCUSED",
+   "exit_status": 0,
+   "gate": "hostile calibration (L)",
+   "log": "receipts/production-readiness-20260821/hostile-20260822.log",
+   "marker": "PASS_HOSTILE_CALIBRATION",
+   "sha256": "0b4d19207c808ea14fee6e1a81e9eb7bea591f832d63e90877dd04fbd72996cc"
+  },
+  {
+   "classification": "VZ",
+   "exit_status": 0,
+   "gate": "VZ security hardening re-seal (phase-16)",
+   "log": "receipts/production-readiness-20260821/phase16-reseal-20260822.log",
+   "marker": "PASS_PHASE16_SECURITY_HARDENING",
+   "sha256": "bd19c5305728f92ab3d69863007ce1b22a69e05c2f6efb1aeb809c00565a5962"
+  },
+  {
+   "classification": "FOCUSED",
+   "exit_status": 0,
+   "gate": "release package (install)",
+   "log": "receipts/production-readiness-20260821/release-package-20260822.log",
+   "marker": "PASS_RELEASE_PACKAGE signing=ad-hoc notarized=false",
+   "sha256": "f3cafb26b649ee6723f2a5cde0f0be6e63e4785d0cb85fddd4c2e4e11ce1cf1f"
+  },
+  {
+   "checks": [
+    "Contract and evidence",
+    "Dependency audit",
+    "Rust and Desktop (macos-14)",
+    "Rust and Desktop (macos-15)"
+   ],
+   "classification": "HOSTED",
+   "exit_status": 0,
+   "gate": "hosted CI on PR #4 head 3ad557c",
+   "marker": "4/4 required checks pass"
+  },
+  {
+   "classification": "BLOCKED",
+   "exit_status": null,
+   "gate": "Developer ID signing / notarization / Gatekeeper",
+   "marker": "UNAVAILABLE (no Developer ID cert / inactive membership)"
+  },
+  {
+   "classification": "BLOCKED",
+   "exit_status": null,
+   "gate": "production main merge (M-06)",
+   "marker": "human/policy-gated; PR CLEAN/MERGEABLE"
+  }
+ ],
+ "continuation_contract_sha256": "ad54115ae3a6550ff65e9963a37be1ae4482257a48ebd344b88766068fc23518",
+ "diffstat": "119 files changed, 19240 insertions(+), 1650 deletions(-)",
+ "dirty": false,
+ "excluded_untouched": {
+  "excluded_platforms": "no iOS/Android/web/Windows/Linux/SaaS work added",
+  "immutable_predecessor": "v0.1.0 tag/release/assets intact",
+  "unrelated_worktrees": "/Users/sicarii/Desktop/Projects/nemesis, /Users/sicarii/Worktrees/nemesis-desktop-production, jackal-* not modified this session"
+ },
+ "final_commit": "3ad557caeea762e33ae94273ac35a345735825ec",
+ "final_tree": "d5d854feb1c690764f91c2e76ef22384e31f46d3",
+ "gate_tally": {
+  "BLOCKED": 9,
+  "PASS": 154,
+  "PENDING": 19
+ },
+ "github": {
+  "checks": "4/4 required green",
+  "mergeable": "MERGEABLE/CLEAN",
+  "pr": "https://github.com/AnubisQuantumCipher/nemesis/pull/4",
+  "pr_head": "3ad557caeea762e33ae94273ac35a345735825ec",
+  "predecessor_tag": "v0.1.0=616c78508b754081bb77fab63e6665d16f47d84d (intact, 3 assets)"
+ },
+ "hostile_controls": {
+  "aba": "L-09 exact-byte + kernel PROOF_ABA (D-14)",
+  "receipt": "receipts/production-readiness-20260821/hostile-20260822.log",
+  "sha256": "0b4d19207c808ea14fee6e1a81e9eb7bea591f832d63e90877dd04fbd72996cc"
+ },
+ "independent_reviews": [
+  {
+   "lane": "accessibility-release",
+   "receipt": "security-review/reviews/Accessibility3.accessibility-release.json",
+   "sha256": "9a025439d1518cb6070177108770b9e2d385eee619362e1d072787c42e6e4b31",
+   "verdict": "CLEAN"
+  },
+  {
+   "lane": "arch-trust-boundary",
+   "receipt": "security-review/reviews/ArchTrust2.arch-trust-boundary.json",
+   "sha256": "efa1864eb24aaa635b4289c7b0911082ec1529263c70a6989fd80917a385372b",
+   "verdict": "CLEAN"
+  },
+  {
+   "lane": "dependency-supply-chain",
+   "receipt": "security-review/reviews/DepsSupplyChain3.dependency-supply-chain.json",
+   "sha256": "3e991883b0c91a91bc2ff4804249ac2d74dac4387fde77c5cbc74961dbc11aea",
+   "verdict": "CLEAN"
+  },
+  {
+   "lane": "final-durability-safety",
+   "receipt": "security-review/reviews/FinalDurability.final-durability-safety.json",
+   "sha256": "0de2d8ca2341ed32414448d0f27b6b030e18c732b6d5b1ef5f357961757eac23",
+   "verdict": "CLEAN"
+  },
+  {
+   "lane": "final-integration",
+   "receipt": "security-review/reviews/FinalIntegration.final-integration.json",
+   "sha256": "29799f75d610de5b2c46ccac813342f7afb5bbe38cff4ec1ec20857c9167cfcc",
+   "verdict": "CLEAN"
+  },
+  {
+   "lane": "keychain-signing-secrets",
+   "receipt": "security-review/reviews/KeychainSigning2.keychain-signing-secrets.json",
+   "sha256": "6cfebf185707719ddae5405005f3f24769c31d9882358287b807e95032aab352",
+   "verdict": "CLEAN"
+  },
+  {
+   "lane": "release-integrity",
+   "receipt": "security-review/reviews/ReleaseIntegrity2.release-integrity.json",
+   "sha256": "cc4e4f04ac3219b5ab2dad65ad0238d7aee201afd5481ba8e480d90d0187e821",
+   "verdict": "CLEAN"
+  },
+  {
+   "lane": "rust-process-path",
+   "receipt": "security-review/reviews/RustSafety2.rust-process-path.json",
+   "sha256": "de3dd9d3534345244e7c22e8876b579abe88944576b5d5b4172295e47e77094d",
+   "verdict": "CLEAN"
+  },
+  {
+   "lane": "spark-authority-kernel",
+   "receipt": "security-review/reviews/SparkKernel2.spark-authority-kernel.json",
+   "sha256": "61f3894ea6495781e8be71fd32033c7ce81f433685ff7da8eb9edafbb1ecfc29",
+   "verdict": "CLEAN"
+  },
+  {
+   "lane": "sqlite-event-durability",
+   "receipt": "security-review/reviews/SqliteDurability3.sqlite-event-durability.json",
+   "sha256": "ffb93a7161a6ad27af71666809a1d17fd14bf9550f7b4ff56474228c59c8ea65",
+   "verdict": "CLEAN"
+  },
+  {
+   "lane": "tauri-webkit-ipc",
+   "receipt": "security-review/reviews/TauriIpc2.tauri-webkit-ipc.json",
+   "sha256": "710acd4b7b676a3cb3e61f98525e88aea5b835cc6ae61812b341dd31091da1c0",
+   "verdict": "CLEAN"
+  }
+ ],
+ "install": {
+  "asset_sha256": "8efc91e06d5cb8a4282a479d93c80b8c8f0ca5a490298cb002c95e3333e850c7 (local verification build; unpublished)",
+  "receipt": "receipts/production-readiness-20260821/INSTALL_VERIFICATION.json",
+  "sha256": "dd1fa57bfd7423b825fc4318aae4ca61db9483d2e6c93fb45ad3f72f3bc45bf7"
+ },
+ "mission_contract": {
+  "path": "docs/mission/NEMESIS_DESKTOP_PRODUCTION_READINESS_AUTONOMOUS_MISSION_2026-08-21.md",
+  "sha256": "2485cd682cdedfeb0bfd13ce2aabd51194c72204495de0c12058631cb7c92c87"
+ },
+ "non_claims": [
+  "No independent HUMAN external security review/penetration test is claimed; the review lane is independent_autonomous_external_review only.",
+  "SPARK conclusions apply only to the 8 proved kernel units; they do not extend to Rust/Tauri/WebKit/SQLite/Git/Keychain/OS/dependencies.",
+  "No production-final release, no Gatekeeper-accepted distribution, no 1.0.0.",
+  "Ad-hoc signature is local validation only, never production distribution evidence."
+ ],
+ "performance": {
+  "bounded_conclusions": "daemon control-plane start p95<=4ms, mission-create p95~1.5ms, evidence growth ~977B/mission, replay 4-event 2.72ms; GUI window launch env-blocked",
+  "receipt": "receipts/production-readiness-20260821/PERFORMANCE.json",
+  "sha256": "acc360194310e61490aa1abf8b8b67d6a8b685cfe371ff2f56453c0f396a2038"
+ },
+ "residuals": [
+  "Developer ID signing + notarization + Gatekeeper acceptance: external Apple account/credential prerequisite (no Developer ID certificate; membership inactive). Blocks COMPLETE_PRODUCTION_PUBLIC.",
+  "Production main merge of PR #4: human/policy-gated in this session (merge tool denied). PR is CLEAN/MERGEABLE, all checks green, no trust-surface change \u2014 ready for the architect to press merge.",
+  "TS-001 (daemon one-shot approval consumption) and TS-002 (persisted parent+attenuated capability grants): architect sign-off required; exact proposal preserved unmerged (trust-surface/TS-PROPOSAL.md).",
+  "Native macOS accessibility-tree + window-restoration walkthrough: environment-blocked by locked console (IOConsoleLocked=Yes)."
+ ],
+ "review_validation": "security-review/REVIEW_VALIDATION.json",
+ "scars": [
+  null,
+  null,
+  null,
+  null,
+  "First reviewer batch (adversarial framing: exploit_precondition schema + hunt/attack verbs) refused under cyber-content policy: ArchTrustReviewer, AdversarialReviewer, TauriIpcReviewer returned Refusal (cyber); SparkKernelReviewer completed full static coverage but its terminal yield tripped the same classifier. Recorded as causal evidence, NOT a pass.",
+  "First adversarially-framed reviewer batch refused under cyber-content policy; recovered via defensive invariant-confirmation framing (not counted as pass).",
+  "CI 'Contract and evidence' initially failed on the epoch-bound phase-16 receipt (covered_source_changed); resolved by a fresh VZ hardening re-seal, not by weakening the verifier.",
+  "phase-16 gate log first committed as *.log (gitignored) -> CI could not read it; fixed by tracked .txt convention + force-added evidence logs.",
+  "disk-full reliability test initially passed a ~50B settings write on a nominally-full volume; fixed with progressive fine-grained fill."
+ ],
+ "schema": "nemesis.production-final/v1",
+ "sealed_at": "2026-08-22T10:10:38Z",
+ "signing": {
+  "adhoc": "local-only",
+  "developer_id": "UNAVAILABLE",
+  "gatekeeper": "UNAVAILABLE",
+  "notarization": "UNAVAILABLE",
+  "receipt": "receipts/production-readiness-20260821/SIGNING_CAPABILITY.json",
+  "sha256": "275aa5974021359c66d3344f3a2eaab05a3df3a6c3eeffc1a3caef79f348f95e"
+ },
+ "spark": {
+  "aba": "PASS_KERNEL_PROOF_ABA",
+  "assumptions": 0,
+  "manifest": "receipts/production-readiness-20260821/FORMAL_KERNEL.json",
+  "obligations": 78,
+  "report": "docs/architecture/FORMAL_ASSURANCE.md",
+  "trust_surface_blockers": [
+   "TS-001",
+   "TS-002"
+  ],
+  "units": 8,
+  "unproved": 0
+ },
+ "terminal_rationale": "All automatable production-readiness lanes (Phases A-L, and E-13 final re-review) are complete and shipped through the strongest safe bounded checkpoint: mission PR #4 with 4/4 required hosted checks green, MERGEABLE/CLEAN, containing no trust-surface change. The only remaining prerequisites are external human/account/credential/trust-surface decisions: Apple Developer ID signing + notarization + Gatekeeper (unavailable), the production default-branch merge (human/policy-gated), and the TS-001/TS-002 authority-integration trust surface (architect sign-off; proposal preserved unmerged). Predecessor v0.1.0 remains immutable.",
+ "terminal_verdict": "BLOCKED_PRODUCTION_PUBLIC",
+ "total_gates": 182,
+ "typed_roster": [
+  {
+   "evidence": "C-01..C-16 desktop workflow tests (mission_execution/production_mission) + focused gate",
+   "lane": "function",
+   "status": "PASS"
+  },
+  {
+   "evidence": "desktop explicit review workflow tested; daemon one-shot approval consumption is architect-gated TS-001 (C-10 BLOCKED)",
+   "lane": "authority",
+   "status": "PASS_WITH_RESIDUAL"
+  },
+  {
+   "evidence": "C-08/C-09 evidence/replay + nemesis-replay load; H-06",
+   "lane": "evidence_replay",
+   "status": "PASS"
+  },
+  {
+   "evidence": "8 SPARK units, 78 obligations, 0 unproved/0 assumptions, A-B-A green; TS-001/TS-002 gated (BLOCKED_TRUST_SURFACE lane)",
+   "lane": "formal_kernel",
+   "status": "PASS_WITH_RESIDUAL"
+  },
+  {
+   "evidence": "9 isolated autonomous reviewer lanes CLEAN + E-13 final re-review CLEAN; independent HUMAN external audit is an explicit non-claim",
+   "lane": "security_review",
+   "status": "PASS_AUTONOMOUS_ONLY"
+  },
+  {
+   "evidence": "E-09/E-25; DEP-01 fixed (desktop lock now audited; advisories upgraded away)",
+   "lane": "dependency_supply_chain",
+   "status": "PASS"
+  },
+  {
+   "evidence": "G-01..G-09/G-11 tested; native macOS AX walkthrough env-blocked (G-10, locked console)",
+   "lane": "accessibility",
+   "status": "PASS_WITH_ENV_BLOCK"
+  },
+  {
+   "evidence": "H-01..H-12 bounded reconciled measurements + instrument validation",
+   "lane": "performance",
+   "status": "PASS"
+  },
+  {
+   "evidence": "F-01..F-14 incl. SQL-001 recovery regression",
+   "lane": "reliability_recovery",
+   "status": "PASS"
+  },
+  {
+   "evidence": "I-01..07/12 PASS (artifact built+verified, updater excluded, upgrade/uninstall tested); I-08..11/13 BLOCKED (Developer ID/notarization/Gatekeeper/successor readback)",
+   "lane": "install_upgrade_uninstall",
+   "status": "PARTIAL_BLOCKED"
+  },
+  {
+   "evidence": "J-01..J-04 telemetry-absent + docs",
+   "lane": "privacy",
+   "status": "PASS"
+  },
+  {
+   "evidence": "ad-hoc signing = local only; Developer ID + notarization unavailable (external account/credential prerequisite)",
+   "lane": "packaging_signing_notarization",
+   "status": "BLOCKED"
+  },
+  {
+   "evidence": "4/4 required checks green on PR #4 exact head 3ad557c",
+   "lane": "hosted_ci",
+   "status": "PASS"
+  },
+  {
+   "evidence": "no successor production release published (blocked on signing); predecessor v0.1.0 intact; production merge human-gated",
+   "lane": "release_readback",
+   "status": "BLOCKED"
+  },
+  {
+   "evidence": "J-05..J-09 diagnostics + bounded support bundle + troubleshooting matrix",
+   "lane": "supportability",
+   "status": "PASS"
+  }
+ ],
+ "upstream": "origin/production/desktop-v1-autonomous-recovery"
+}
