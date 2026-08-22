@@ -76,6 +76,7 @@ export function MissionCockpit({
     relativePath: "",
     replacement: "",
   });
+  const [compose, setCompose] = useState(false);
   if (selected === "Evidence") {
     return <EvidencePanel result={result} />;
   }
@@ -91,7 +92,7 @@ export function MissionCockpit({
       />
     );
   }
-  if (selected === "Home") {
+  if ((selected === "Home" || selected === "Missions") && !compose) {
     const activity = [
       ["01", "CONTRACT", "Structured mission waits for exact authorization"],
       ["02", "LANE", "Disposable Git worktree; worker authority attenuated"],
@@ -132,7 +133,18 @@ export function MissionCockpit({
               <dd>Disabled</dd>
             </div>
           </dl>
-          <button type="button" className="review-button" onClick={onReview} disabled={running}>
+          <button
+            type="button"
+            className="review-button"
+            onClick={() => {
+              if (compiled) {
+                onReview();
+                return;
+              }
+              setCompose(true);
+            }}
+            disabled={running}
+          >
             Review contract
           </button>
           <div className="epistemic-legend" aria-label="Evidence legend">
@@ -205,6 +217,9 @@ export function MissionCockpit({
         <div>
           <span className="section-index">MISSION / EXACT LOCAL CONTRACT</span>
           <h2 id="missions-heading">Local missions</h2>
+          <button type="button" className="live-indicator" onClick={() => setCompose(false)}>
+            Return to cockpit
+          </button>
         </div>
         <span className={runtime.running ? "live-indicator is-running" : "live-indicator"} aria-live="polite">
           {runtime.running ? runtime.phase : compiled ? "READY FOR REVIEW" : "NO CONTRACT"}

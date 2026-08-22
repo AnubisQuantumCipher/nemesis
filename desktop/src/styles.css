@@ -283,7 +283,7 @@ code {
 .inspector {
   min-height: 0;
   overflow-y: auto;
-  background: rgba(11, 13, 16, 0.88);
+  background: transparent;
 }
 
 .mission-rail {
@@ -461,9 +461,9 @@ button:disabled {
   position: relative;
   min-width: 0;
   min-height: 0;
-  padding: 21px 23px;
+  padding: 18px 20px 22px;
   overflow-y: auto;
-  background: rgba(5, 6, 8, 0.68);
+  background: transparent;
 }
 
 .activity-canvas::before {
@@ -511,45 +511,49 @@ button:disabled {
   z-index: 1;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  margin-top: 23px;
-  border-top: 1px solid var(--line-strong);
+  margin-top: 18px;
+  border-top: 1px solid var(--line);
   border-left: 1px solid var(--line);
 }
 
 .graph-node {
   display: grid;
-  grid-template-columns: 32px minmax(0, 1fr);
-  min-height: 116px;
-  padding: 17px 14px;
+  grid-template-columns: 28px minmax(0, 1fr);
+  align-content: start;
+  min-height: 86px;
+  padding: 12px 13px 14px;
   border-right: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
-  background: rgba(12, 14, 17, 0.7);
-  opacity: 0.5;
+  background: transparent;
 }
 
 .graph-node.is-active {
-  opacity: 1;
+  background: linear-gradient(180deg, rgba(238, 60, 67, 0.045), transparent 72%);
 }
 
 .graph-node > span {
   color: var(--text-muted);
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 8px;
+  letter-spacing: 0.08em;
 }
 
 .graph-node.is-active > span {
   color: var(--red);
+  font-weight: 700;
 }
 
 .graph-node strong {
   font-family: "Arial Narrow", "Avenir Next Condensed", sans-serif;
-  font-size: 13px;
-  letter-spacing: 0.1em;
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 .graph-node p {
-  max-width: 250px;
-  margin: 9px 0 0;
+  max-width: 240px;
+  margin: 7px 0 0;
   color: var(--text-muted);
   font-size: 10px;
   line-height: 1.45;

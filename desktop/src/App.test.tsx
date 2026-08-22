@@ -257,6 +257,7 @@ describe("NEMESIS Desktop production surface", () => {
     const user = userEvent.setup();
     render(<App />);
     await user.click(await screen.findByRole("button", { name: "Missions" }));
+    await user.click(screen.getByRole("button", { name: "Review contract" }));
     await user.type(screen.getByRole("textbox", { name: "Mission goal" }), "Replace the value");
     await user.type(screen.getByRole("textbox", { name: "Workspace path" }), "/tmp/repository");
     await user.type(screen.getByRole("textbox", { name: "Relative file path" }), "value.txt");
@@ -281,6 +282,7 @@ describe("NEMESIS Desktop production surface", () => {
     const user = userEvent.setup();
     render(<App />);
     await user.click(await screen.findByRole("button", { name: "Missions" }));
+    await user.click(screen.getByRole("button", { name: "Review contract" }));
     await user.type(
       screen.getByRole("textbox", { name: "Local mission contract path" }),
       "/tmp/mission.json",
@@ -323,7 +325,7 @@ describe("NEMESIS Desktop production surface", () => {
     expect(await screen.findByRole("heading", { name: "Local home initialized" })).toBeInTheDocument();
     expect(screen.getByText(system.localHome)).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Continue to missions" }));
-    expect(screen.getByRole("heading", { name: "Local missions" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Witnessed local change" })).toBeInTheDocument();
   });
 
   it("renders typed refusal and concrete recovery guidance", async () => {
@@ -335,6 +337,7 @@ describe("NEMESIS Desktop production surface", () => {
     const user = userEvent.setup();
     render(<App />);
     await user.click(await screen.findByRole("button", { name: "Missions" }));
+    await user.click(screen.getByRole("button", { name: "Review contract" }));
     await user.type(screen.getByRole("textbox", { name: "Local mission contract path" }), "/tmp/bad.json");
     await user.click(screen.getByRole("button", { name: "Compile contract" }));
 
