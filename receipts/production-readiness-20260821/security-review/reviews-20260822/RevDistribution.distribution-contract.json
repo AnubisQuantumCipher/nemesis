@@ -1,0 +1,265 @@
+{
+  "coverage_summary": "Lane distribution_contract audited at subject commit 9dd22f259d164ebb1afde3b8940a891161cad3f6 (observed via git rev-parse HEAD; matches pinned subject; working tree carried only regenerated receipts + the untracked brief/inputs, and every load-bearing claim was re-checked against committed bytes via git show where the file was dirty). Verdict: GAPS (2 medium, 3 low). CONFIRMED: SOURCE_INSTALL.md quarantine removal is gated on prior `shasum -c` (docs/release/SOURCE_INSTALL.md:47-63) and README repeats the gating (README.md:183); ad-hoc signature is never presented as Developer ID and notarization/Gatekeeper are explicit non-claims (SOURCE_INSTALL.md:20-27, README.md:183, release_manifest.py nonclaims scripts/release_manifest.py:57-63, package_release.sh terminal `signing=ad-hoc notarized=false` line); the enumerated residuals are accurate against code (local home `~/Library/Application Support/com.anubisquantumcipher.nemesis` from release identifier desktop/src-tauri/tauri.release.conf.json:3 + app_data_dir desktop/src-tauri/src/lib.rs:354-356; Keychain service `dev.nemesis.receipt.seed.v1` account `local-default` runtime/crates/nemesis-signer/src/lib.rs:10-11); the schema-refusal claim matches production.rs:350-356. verify_install_contract.py CONFIRMED on: adhoc+TeamIdentifier-not-set enforcement (scripts/verify_install_contract.py:69-72), local-home schema check on both launches (:125-126, :241-244), fail on user-state mutation across bundle replacement (:237-238), isolated $HOME for every spawned app (:90-96) with no static path from launch to the signer/Keychain (signer only invoked on the mission path, desktop/src-tauri/src/mission_runner.rs), and try/finally SIGTERM\u2192kill process termination (:127-137). Version 0.2.0 is consistent across all six surfaces (desktop/package.json:4, tauri.conf.json:4, Cargo.toml:3, Cargo.lock:1761-1762, package-lock.json:3,9, App.test.tsx:53) and package_release.sh cross-checks three of them and refuses drift (scripts/package_release.sh:22-29), with Cargo.lock/package-lock pinned via --locked/npm ci. CHANGELOG 0.2.0 claims spot-verified against shipped code (create_grant/create_approval daemon/src/nemesis_core_daemon.adb:257,294; parent.grant/approval-<digest>.apr daemon/src/nemesis-core-authority_store.adb:51-59; protocol doc protocols/local-core-v1.md:12-19,58-62; 81 obligations in committed FORMAL_KERNEL.json:243; scripts/verify_authority_aba.py present). GAPS: stale living-doc claims that still call signing/notarization prerequisites and TS blockers unresolved (DCO-01, medium); the install gate never hash-binds the predecessor and does not bind the successor path to a SHA256SUMS entry before extract+execute (DCO-02, medium); dead symlink refusal after .resolve() (DCO-03, low); receipt hardcodes no_launchd_jobs/no_privileged_helpers and records but does not enforce version distinctness (DCO-04, low); residual inventory omits writes into the user workspace repository (worktree registration + nemesis/desktop-* branch) so the 'never writes outside' sentence overclaims (DCO-05, low). Historical archives (TS-PROPOSAL.md, archived review JSONs, the 2026-08-21 mission contract, TS continuation contract) retain pre-epoch wording by design and were not counted as gaps. Full brief-schema result follows verbatim.\n\nBRIEF_RESULT_JSON:\n{\"schema\":\"nemesis.hardening-audit.result/v1\",\"lane\":\"distribution_contract\",\"reviewer_identity\":{\"context\":\"Independent defensive re-review subagent RevDistribution (Oh My Pi harness), distribution-contract lane, static read-only audit of the frozen subject worktree\",\"model\":\"anthropic/claude-fable-5\",\"limitations\":[\"Static reading and git read commands only; no builds, no script execution, no package managers.\",\"scripts/verify_install_contract.py behavior assessed from source, not by executing it against release assets.\",\"Keychain non-interaction during the gate's launch path is a static conclusion (nemesis-signer is only reachable on the mission path), not a runtime observation.\",\"Working tree HEAD equals the pinned subject; receipts/production-readiness-20260821/FORMAL_KERNEL.json and receipts/phase-16-public/* were locally modified, so cited receipt values were re-verified against committed bytes with git show.\"]},\"subject_commit\":\"9dd22f259d164ebb1afde3b8940a891161cad3f6\",\"coverage\":[{\"invariant\":\"SOURCE_INSTALL.md gates quarantine removal on prior hash verification and never presents the ad-hoc signature as Developer ID; notarization/Gatekeeper stated as non-claims\",\"files\":[\"docs/release/SOURCE_INSTALL.md\",\"README.md\"],\"status\":\"CONFIRMED\"},{\"invariant\":\"SOURCE_INSTALL.md residual inventory is accurate and complete against code (local home path, Keychain item, no other persistent writes)\",\"files\":[\"docs/release/SOURCE_INSTALL.md\",\"desktop/src-tauri/src/lib.rs\",\"desktop/src-tauri/tauri.release.conf.json\",\"runtime/crates/nemesis-signer/src/lib.rs\",\"desktop/src-tauri/src/mission_runner.rs\",\"runtime/crates/nemesis-runtime/src/lib.rs\"],\"status\":\"GAP\"},{\"invariant\":\"verify_install_contract.py refuses missing and symlink assets\",\"files\":[\"scripts/verify_install_contract.py\"],\"status\":\"GAP\"},{\"invariant\":\"verify_install_contract.py requires SHA256SUMS verification of the asset bytes before any extract or launch\",\"files\":[\"scripts/verify_install_contract.py\"],\"status\":\"GAP\"},{\"invariant\":\"verify_install_contract.py requires Signature=adhoc and TeamIdentifier not set\",\"files\":[\"scripts/verify_install_contract.py\"],\"status\":\"CONFIRMED\"},{\"invariant\":\"verify_install_contract.py enforces the nemesis.local-home/v1 schema check and fails if bundle replacement mutates user state\",\"files\":[\"scripts/verify_install_contract.py\",\"desktop/src-tauri/src/production.rs\"],\"status\":\"CONFIRMED\"},{\"invariant\":\"verify_install_contract.py never touches the real user HOME or Keychain (isolated $HOME) and terminates spawned processes on every path\",\"files\":[\"scripts/verify_install_contract.py\",\"desktop/src-tauri/src/lib.rs\",\"desktop/src-tauri/src/mission_runner.rs\"],\"status\":\"CONFIRMED\"},{\"invariant\":\"Version bump completeness: every surface package_release.sh cross-checks (and the adjacent lockfiles/test fixture) reads 0.2.0\",\"files\":[\"desktop/package.json\",\"desktop/src-tauri/tauri.conf.json\",\"desktop/src-tauri/Cargo.toml\",\"desktop/src-tauri/Cargo.lock\",\"desktop/package-lock.json\",\"desktop/src/App.test.tsx\",\"scripts/package_release.sh\"],\"status\":\"CONFIRMED\"},{\"invariant\":\"CHANGELOG 0.2.0 claims match shipped code and receipts\",\"files\":[\"CHANGELOG.md\",\"daemon/src/nemesis_core_daemon.adb\",\"daemon/src/nemesis-core-authority_store.adb\",\"protocols/local-core-v1.md\",\"receipts/production-readiness-20260821/FORMAL_KERNEL.json\",\"scripts/verify_authority_aba.py\"],\"status\":\"CONFIRMED\"},{\"invariant\":\"package_release.sh refuses version drift and its terminal line plus release_manifest.py assert only non-claims (ad-hoc, not notarized)\",\"files\":[\"scripts/package_release.sh\",\"scripts/release_manifest.py\"],\"status\":\"CONFIRMED\"},{\"invariant\":\"No living doc still claims the old synthesized-grant accept condition or calls signing/notarization a requirement\",\"files\":[\"README.md\",\"docs/architecture/LOCAL_DESKTOP_MISSION.md\",\"SECURITY.md\",\"docs/architecture/FORMAL_ASSURANCE.md\",\"CHANGELOG.md\"],\"status\":\"GAP\"}],\"gaps\":[{\"id\":\"DCO-01\",\"severity\":\"medium\",\"category\":\"documentation-consistency\",\"cwe\":\"CWE-1059\",\"path\":\"README.md\",\"line\":32,\"precondition\":\"A reader or downstream gate consults living docs for the current trust posture.\",\"impact\":\"README.md:32 (committed bytes verified via git show) still says the workflow 'does not resolve the recorded daemon approval/capability trust-surface blockers or public signing/notarization prerequisites' \u2014 calling signing/notarization prerequisites and TS-001/TS-002 unresolved, contradicting the 2026-08-22 architect contract, CHANGELOG.md:40-44 and docs/release/SOURCE_INSTALL.md:6-11. docs/architecture/LOCAL_DESKTOP_MISSION.md:60 likewise still records the Approvals accept-condition integration as an unlanded 'recorded trust-surface blocker' although TS-001 shipped this epoch. SECURITY.md:62 scopes the unsigned/not-notarized non-claim to 'v0.1.x' only, leaving 0.2.0's identical posture unstated.\",\"evidence\":\"README.md:32; docs/architecture/LOCAL_DESKTOP_MISSION.md:60; SECURITY.md:62; contradicted by CHANGELOG.md:9-19,40-44, docs/architecture/FORMAL_ASSURANCE.md:52-53, docs/release/SOURCE_INSTALL.md:6-27\",\"remediation\":\"Update README.md:32 to state TS-001/TS-002 are resolved (linking config/formal-kernel-scope.json) and that signing/notarization are permanent non-claims per SOURCE_INSTALL.md; refresh LOCAL_DESKTOP_MISSION.md:60 to the resolved epoch; widen SECURITY.md:62 to cover all shipped 0.x artifacts. Leave archived receipts/mission contracts untouched.\",\"confidence\":\"high\"},{\"id\":\"DCO-02\",\"severity\":\"medium\",\"category\":\"integrity-verification\",\"cwe\":\"CWE-354\",\"path\":\"scripts/verify_install_contract.py\",\"line\":195,\"precondition\":\"The gate is run with a predecessor zip (always unverified) or with a successor path not actually listed in the adjacent SHA256SUMS.\",\"impact\":\"The contract doc claims the gate proves 'hash verification' before anything else (SOURCE_INSTALL.md:96-104), but only a SHA256SUMS next to the successor is checked (:195-202); the predecessor is extracted and its binary executed (:214, :222) with no hash verification at all \u2014 the comment 'exact verified bytes' (:213) overclaims. Additionally `shasum -c` verifies whatever files SHA256SUMS lists in successor.parent; nothing binds arguments.successor's bytes to a SUMS entry, so a differently-named zip beside a valid SUMS passes the gate and is extracted and launched. The documented fail-closed hash gate is materially weaker than stated for both assets.\",\"evidence\":\"scripts/verify_install_contract.py:195-202 (successor-dir SUMS only), :213-222 (predecessor extract+launch with no hash gate), :228 (successor extract not bound to a verified entry); docs/release/SOURCE_INSTALL.md:96-104 (gate claims)\",\"remediation\":\"Require a SHA256SUMS (or explicit expected-digest argument) covering the predecessor and verify it before extract; after `shasum -c`, parse SHA256SUMS and require an entry whose name and recomputed digest match the exact successor (and predecessor) paths passed on the command line, failing closed otherwise.\",\"confidence\":\"high\"},{\"id\":\"DCO-03\",\"severity\":\"low\",\"category\":\"fail-closed-enforcement\",\"cwe\":\"CWE-561\",\"path\":\"scripts/verify_install_contract.py\",\"line\":162,\"precondition\":\"An asset argument is a symlink.\",\"impact\":\"`predecessor = arguments.predecessor.resolve()` (:162-163) dereferences symlinks before the check at :164-167, so `asset.is_symlink()` can never be true; the documented symlink refusal is dead code and a symlinked asset is silently accepted (the resolved target is used). Consistency between the checked and used path is preserved, so residual risk is TOCTOU-shaped and low, but the stated fail-closed refusal is not enforced.\",\"evidence\":\"scripts/verify_install_contract.py:162-167\",\"remediation\":\"Evaluate `arguments.predecessor.is_symlink()` on the pre-resolution path (or use os.lstat) before resolving, and only then resolve for use.\",\"confidence\":\"high\"},{\"id\":\"DCO-04\",\"severity\":\"low\",\"category\":\"unverified-receipt-claims\",\"cwe\":\"CWE-345\",\"path\":\"scripts/verify_install_contract.py\",\"line\":264,\"precondition\":\"The receipt is consumed as evidence of the uninstall/upgrade contract.\",\"impact\":\"The receipt hardcodes `no_launchd_jobs: True` and `no_privileged_helpers: True` (:264-265) without inspecting the isolated home (e.g. Library/LaunchAgents) \u2014 constants presented as observations. `versions.distinct` (:274) is recorded but never enforced, so a run where predecessor and successor share a version still prints PASS_INSTALL_CONTRACT although SOURCE_INSTALL.md:100-102 says the gate proves 'version identity change'.\",\"evidence\":\"scripts/verify_install_contract.py:264-265, :270-275, :279; docs/release/SOURCE_INSTALL.md:96-104\",\"remediation\":\"Scan the isolated home for LaunchAgents/daemon plists and helper installs and record the observed (empty) inventory; fail closed when `distinct` is false or downgrade the doc claim.\",\"confidence\":\"high\"},{\"id\":\"DCO-05\",\"severity\":\"low\",\"category\":\"residual-inventory-accuracy\",\"cwe\":\"CWE-1059\",\"path\":\"docs/release/SOURCE_INSTALL.md\",\"line\":106,\"precondition\":\"A user runs any desktop mission against a workspace repository, then consults the uninstall inventory.\",\"impact\":\"SOURCE_INSTALL.md states the app 'never writes outside its bundle, its local home, and the Keychain item above', and lists only the local home and Keychain item as residuals. But mission execution invokes nemesis-lane-create with the user-selected workspace as the git repo (desktop/src-tauri/src/mission_runner.rs:767-777), which runs `git worktree add -b nemesis/desktop-<id>` with current_dir at the workspace (runtime/crates/nemesis-runtime/src/lib.rs:110-114) \u2014 durably writing worktree registration metadata under the workspace's .git and creating a branch ref outside the enumerated set. These authorized-but-persistent artifacts survive app uninstall and are absent from the residual inventory.\",\"evidence\":\"docs/release/SOURCE_INSTALL.md:97-109 (never-writes + residual list); desktop/src-tauri/src/mission_runner.rs:767-777; runtime/crates/nemesis-runtime/src/lib.rs:110-114\",\"remediation\":\"Qualify the sentence (writes to a user-authorized workspace repository occur only during an authorized mission) and add the `nemesis/desktop-*` branches and `.git/worktrees` registrations to the deliberate-residuals inventory with their removal commands (`git worktree prune`, `git branch -D`).\",\"confidence\":\"high\"}],\"confirmed_invariants\":[\"Quarantine removal is documented strictly after successful `shasum -c` in both SOURCE_INSTALL.md (docs/release/SOURCE_INSTALL.md:47-63) and README.md:183, with the hash chain explicitly replacing the Gatekeeper trust decision.\",\"Ad-hoc signature is never presented as Developer ID; notarization and Gatekeeper acceptance are explicit non-claims (docs/release/SOURCE_INSTALL.md:20-27; README.md:26,183; scripts/release_manifest.py:57-63 nonclaims; scripts/package_release.sh terminal line `signing=ad-hoc notarized=false`).\",\"Enumerated residuals match code: local home `~/Library/Application Support/com.anubisquantumcipher.nemesis` (desktop/src-tauri/tauri.release.conf.json:3; desktop/src-tauri/src/lib.rs:354-356) and Keychain service `dev.nemesis.receipt.seed.v1` / account `local-default` (runtime/crates/nemesis-signer/src/lib.rs:10-11).\",\"Local-home schema refusal is real: desktop/src-tauri/src/production.rs:340-357 refuses symlinked/oversized/unschema'd home.json instead of guessing, matching the SOURCE_INSTALL claim.\",\"verify_install_contract.py enforces Signature=adhoc and TeamIdentifier-not-set (scripts/verify_install_contract.py:69-72), the local-home schema on both launches (:125-126,:241-244), user-state immutability across bundle replacement (:237-238), an isolated $HOME with a minimal explicit environment for every launched app (:90-96), and try/finally SIGTERM-then-SIGKILL termination of the spawned app on every path (:127-137).\",\"Version 0.2.0 is consistent across desktop/package.json:4, desktop/src-tauri/tauri.conf.json:4, desktop/src-tauri/Cargo.toml:3, desktop/src-tauri/Cargo.lock:1761-1762 (nemesis-desktop), desktop/package-lock.json:3,9, desktop/src/App.test.tsx:53; scripts/package_release.sh:22-29 cross-checks package/tauri/cargo versions and refuses drift, and refuses dirty worktrees, non-arm64 hosts, and malformed versions (:8-20).\",\"CHANGELOG 0.2.0 distribution and authority claims match shipped code: create_grant/create_approval commands (daemon/src/nemesis_core_daemon.adb:257,294; protocols/local-core-v1.md:12-19), parent.grant/approval-<digest>.apr store (daemon/src/nemesis-core-authority_store.adb:51-59; protocols/local-core-v1.md:58-62), 81 proof obligations (committed receipts/production-readiness-20260821/FORMAL_KERNEL.json:243 via git show), authority A-B-A gate script present (scripts/verify_authority_aba.py), and the 'unchanged from 0.1.0' distribution boundary (CHANGELOG.md:40-44).\",\"release_manifest.py derives all hashes from final artifact bytes and writes SHA256SUMS covering the zip and manifest (scripts/release_manifest.py:33-79); its nonclaims block asserts no Developer ID/notarization/Gatekeeper claims.\"],\"verdict\":\"GAPS\"}",
+  "deferred": [
+    {
+      "paths": [
+        "kernel/src/nemesis-kernel-capabilities.adb",
+        "scripts/verify_authority_aba.py",
+        "scripts/verify_kernel_proof.py"
+      ],
+      "reason": "Deep verification of TS-001/TS-002 kernel/daemon semantics, proof-obligation counts beyond the receipt spot-check, and A-B-A gate mechanics belong to sibling lanes (RevDaemonAuthority, RevKernelFormal, RevGatesIntegrity); this lane only spot-checked CHANGELOG claims against surface artifacts."
+    }
+  ],
+  "findings": [
+    {
+      "category": "documentation-consistency",
+      "confidence": "high",
+      "cwe": [
+        "CWE-1059"
+      ],
+      "evidence": [
+        {
+          "excerpt": "This workflow does not resolve the recorded daemon approval/capability trust-surface blockers or public signing/notarization prerequisites.",
+          "explanation": "Committed README line contradicts the 0.2.0 epoch on both trust-surface resolution and the signing non-requirement.",
+          "label": "stale README sentence"
+        },
+        {
+          "excerpt": "Developer ID signing, Apple Developer Program membership, notarization, and Gatekeeper acceptance are **not requirements** of this product.",
+          "explanation": "SOURCE_INSTALL.md declares signing/notarization/Gatekeeper 'not requirements' and 'never a blocker'; CHANGELOG.md:9-19 records TS-001/TS-002 as shipped.",
+          "label": "current contract"
+        }
+      ],
+      "locations": [
+        {
+          "path": "README.md",
+          "role": "stale prerequisite/blocker claim",
+          "start_line": 32
+        },
+        {
+          "path": "docs/architecture/LOCAL_DESKTOP_MISSION.md",
+          "role": "stale trust-surface-blocker claim",
+          "start_line": 60
+        },
+        {
+          "path": "SECURITY.md",
+          "role": "version-scoped non-claim omitting 0.2.0",
+          "start_line": 62
+        },
+        {
+          "end_line": 27,
+          "path": "docs/release/SOURCE_INSTALL.md",
+          "role": "authoritative contract contradicted",
+          "start_line": 6
+        }
+      ],
+      "optionalProperties": {
+        "gap_id": "DCO-01",
+        "lane": "distribution_contract",
+        "remediation": "Update README.md:32 and LOCAL_DESKTOP_MISSION.md:60 to the resolved epoch; widen SECURITY.md:62 beyond v0.1.x; leave archived receipts/mission contracts untouched."
+      },
+      "rule_id": "DCO-01",
+      "severity": "medium",
+      "summary": "README.md:32 (verified at committed bytes) states the desktop workflow 'does not resolve the recorded daemon approval/capability trust-surface blockers or public signing/notarization prerequisites', contradicting the 2026-08-22 architect contract that makes signing/notarization permanent non-claims and the shipped TS-001/TS-002 resolutions. docs/architecture/LOCAL_DESKTOP_MISSION.md:60 still records the Approvals accept-condition as an unlanded blocker, and SECURITY.md:62 scopes the unsigned non-claim to 'v0.1.x' only, leaving the 0.2.0 posture unstated.",
+      "title": "Living docs still call signing/notarization prerequisites and TS trust-surface blockers unresolved"
+    },
+    {
+      "category": "integrity-verification",
+      "confidence": "high",
+      "cwe": [
+        "CWE-354",
+        "CWE-345"
+      ],
+      "evidence": [
+        {
+          "excerpt": "# Install predecessor from exact verified bytes.\napp = extract(predecessor, install_dir)",
+          "explanation": "Comment asserts verification that never happened; the predecessor app binary is launched from those bytes.",
+          "label": "unverified predecessor"
+        },
+        {
+          "excerpt": "check = run([\"/usr/bin/shasum\", \"-a\", \"256\", \"-c\", \"SHA256SUMS\"], cwd=successor.parent)",
+          "explanation": "shasum -c validates whatever files the SUMS lists in successor.parent, not the passed successor path.",
+          "label": "unbound successor check"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 202,
+          "path": "scripts/verify_install_contract.py",
+          "role": "successor-dir SUMS check only",
+          "start_line": 195
+        },
+        {
+          "end_line": 222,
+          "path": "scripts/verify_install_contract.py",
+          "role": "predecessor extract+launch without hash gate",
+          "start_line": 213
+        },
+        {
+          "path": "scripts/verify_install_contract.py",
+          "role": "successor extract unbound to SUMS entry",
+          "start_line": 228
+        },
+        {
+          "end_line": 104,
+          "path": "docs/release/SOURCE_INSTALL.md",
+          "role": "overclaimed gate description",
+          "start_line": 96
+        }
+      ],
+      "optionalProperties": {
+        "gap_id": "DCO-02",
+        "lane": "distribution_contract",
+        "remediation": "Verify predecessor bytes against a SUMS/expected digest before extract; parse SHA256SUMS and require name+digest matches for the exact asset paths supplied."
+      },
+      "rule_id": "DCO-02",
+      "severity": "medium",
+      "summary": "scripts/verify_install_contract.py only runs `shasum -c` on a SHA256SUMS beside the successor (:195-202); the predecessor zip is extracted and its binary executed with no hash verification (:213-222, despite the 'exact verified bytes' comment), and nothing binds the successor argument's bytes/name to an entry in the verified SUMS (:228), so a differently-named zip beside a valid SUMS passes. The doc claims the gate proves hash verification before anything else (SOURCE_INSTALL.md:96-104).",
+      "title": "Install-contract gate never hash-verifies the predecessor and does not bind the successor to a SHA256SUMS entry"
+    },
+    {
+      "category": "fail-closed-enforcement",
+      "confidence": "high",
+      "cwe": [
+        "CWE-561",
+        "CWE-59"
+      ],
+      "evidence": [
+        {
+          "excerpt": "predecessor = arguments.predecessor.resolve()\n...\nif not asset.is_file() or asset.is_symlink():",
+          "explanation": "Path.resolve() dereferences symlinks, so is_symlink() on the result is always False.",
+          "label": "resolve before check"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 167,
+          "path": "scripts/verify_install_contract.py",
+          "role": "dead symlink check",
+          "start_line": 162
+        }
+      ],
+      "optionalProperties": {
+        "gap_id": "DCO-03",
+        "lane": "distribution_contract",
+        "remediation": "Check is_symlink()/lstat on the pre-resolution argument path, then resolve for use."
+      },
+      "rule_id": "DCO-03",
+      "severity": "low",
+      "summary": "Asset paths are `.resolve()`d at scripts/verify_install_contract.py:162-163 before the `asset.is_symlink()` check at :165, which therefore can never fire; a symlinked asset is silently accepted via its resolved target. Residual risk is TOCTOU-shaped and low, but the documented fail-closed refusal is unenforced.",
+      "title": "Symlink refusal in the install gate is dead code (resolve() precedes is_symlink())"
+    },
+    {
+      "category": "unverified-receipt-claims",
+      "confidence": "high",
+      "cwe": [
+        "CWE-345"
+      ],
+      "evidence": [
+        {
+          "excerpt": "\"no_launchd_jobs\": True,\n\"no_privileged_helpers\": True,",
+          "explanation": "No scan of LaunchAgents/helpers backs these receipt fields.",
+          "label": "constants as observations"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 265,
+          "path": "scripts/verify_install_contract.py",
+          "role": "hardcoded residual assertions",
+          "start_line": 264
+        },
+        {
+          "end_line": 275,
+          "path": "scripts/verify_install_contract.py",
+          "role": "unenforced distinctness",
+          "start_line": 270
+        }
+      ],
+      "optionalProperties": {
+        "gap_id": "DCO-04",
+        "lane": "distribution_contract",
+        "remediation": "Record an observed (empty) launchd/helper inventory from the isolated home; fail closed when versions are not distinct or soften the doc claim."
+      },
+      "rule_id": "DCO-04",
+      "severity": "low",
+      "summary": "The receipt asserts `no_launchd_jobs: True` and `no_privileged_helpers: True` as constants (scripts/verify_install_contract.py:264-265) without inspecting the isolated home, and `versions.distinct` (:274) is recorded but not enforced, so a same-version pair still prints PASS_INSTALL_CONTRACT although SOURCE_INSTALL.md says the gate proves a version identity change.",
+      "title": "Install-contract receipt hardcodes residual claims and records but never enforces version distinctness"
+    },
+    {
+      "category": "residual-inventory-accuracy",
+      "confidence": "high",
+      "cwe": [
+        "CWE-1059"
+      ],
+      "evidence": [
+        {
+          "excerpt": ".current_dir(&repo)\n.args([\"worktree\", \"add\", \"-b\", branch])",
+          "explanation": "git worktree add mutates the parent repository's .git directory and creates a new branch ref.",
+          "label": "workspace write"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 109,
+          "path": "docs/release/SOURCE_INSTALL.md",
+          "role": "overclaiming inventory",
+          "start_line": 97
+        },
+        {
+          "end_line": 777,
+          "path": "desktop/src-tauri/src/mission_runner.rs",
+          "role": "lane-create on user workspace",
+          "start_line": 767
+        },
+        {
+          "end_line": 114,
+          "path": "runtime/crates/nemesis-runtime/src/lib.rs",
+          "role": "git worktree add in workspace repo",
+          "start_line": 110
+        }
+      ],
+      "optionalProperties": {
+        "gap_id": "DCO-05",
+        "lane": "distribution_contract",
+        "remediation": "Qualify the never-writes sentence for authorized mission workspaces and list `nemesis/desktop-*` branches plus worktree registrations (with `git worktree prune` / `git branch -D` removal commands) as deliberate residuals."
+      },
+      "rule_id": "DCO-05",
+      "severity": "low",
+      "summary": "SOURCE_INSTALL.md claims the app 'never writes outside its bundle, its local home, and the Keychain item above', but mission execution runs `git worktree add -b nemesis/desktop-<id>` with current_dir at the user-selected workspace (runtime/crates/nemesis-runtime/src/lib.rs:110-114, invoked from desktop/src-tauri/src/mission_runner.rs:767-777), durably writing `.git/worktrees` metadata and a branch ref into that repository \u2014 authorized, but outside the enumerated set and absent from the uninstall residual inventory.",
+      "title": "Residual inventory omits durable writes into the user workspace repository (worktree registration and mission branch)"
+    }
+  ],
+  "reviewed_paths": [
+    "receipts/production-readiness-20260821/security-review/BRIEF-20260822.md",
+    "receipts/production-readiness-20260821/security-review/INPUTS-20260822.json",
+    "docs/release/SOURCE_INSTALL.md",
+    "scripts/verify_install_contract.py",
+    "scripts/package_release.sh",
+    "scripts/release_manifest.py",
+    "README.md",
+    "CHANGELOG.md",
+    "SECURITY.md",
+    "CONTRIBUTING.md",
+    "desktop/package.json",
+    "desktop/package-lock.json",
+    "desktop/src-tauri/tauri.conf.json",
+    "desktop/src-tauri/tauri.release.conf.json",
+    "desktop/src-tauri/Cargo.toml",
+    "desktop/src-tauri/Cargo.lock",
+    "desktop/src/App.test.tsx",
+    "desktop/src-tauri/src/lib.rs",
+    "desktop/src-tauri/src/production.rs",
+    "desktop/src-tauri/src/mission_runner.rs",
+    "runtime/crates/nemesis-signer/src/lib.rs",
+    "runtime/crates/nemesis-runtime/src/lib.rs",
+    "daemon/src/nemesis_core_daemon.adb",
+    "daemon/src/nemesis-core-authority_store.adb",
+    "protocols/local-core-v1.md",
+    "docs/architecture/FORMAL_ASSURANCE.md",
+    "docs/architecture/LOCAL_DESKTOP_MISSION.md",
+    "docs/verification/COMPETITIVE_MATRIX.md",
+    "docs/mission/NEMESIS_DESKTOP_PRODUCTION_READINESS_AUTONOMOUS_MISSION_2026-08-21.md",
+    "config/formal-kernel-scope.json",
+    "receipts/production-readiness-20260821/FORMAL_KERNEL.json"
+  ]
+}

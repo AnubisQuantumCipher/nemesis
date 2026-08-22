@@ -1,0 +1,417 @@
+{
+  "coverage_summary": "Lane gates_integrity, subject commit 9dd22f259d164ebb1afde3b8940a891161cad3f6 (tree 1532c116b1e2bf9ee23c38f159a615769f34f802). git rev-parse HEAD returned the pinned subject at review start; HEAD then advanced during the session to 402c9c46 via two post-freeze receipts-only commits (cf5de0e, 402c9c4) \u2014 verified `git diff 9dd22f2..402c9c4 -- scripts tests daemon kernel desktop runtime protocols config nemesis.gpr alire.toml` is empty, so every source/script/test file read from the worktree is byte-identical to the frozen subject. Audited: verify_authority_aba.py (new A\u2192B\u2192A authority tamper gate), verify_proof_aba.py (copy-anchor change), verify_kernel_proof.py + validate_production_readiness.py (SEALED_LOCAL_PRODUCTION addition) + tests/integration/test_production_readiness.py, generate/verify_phase16_receipt.py (epoch v0.2.0-trust-surface move), and test_authority.sh/test_storage.sh wiring. CONFIRMED: (1) the B mutation is a genuine compiling authority widening \u2014 `Consume_Result not in Approval_Accepted | Approval_Replayed` (verify_authority_aba.py:26-29) against the unique anchor daemon/src/nemesis_core_daemon.adb:411, with Approval_Replayed a real Consume_Result_Kind literal (kernel/src/nemesis-kernel-approvals.ads:18-19); harness fails closed on non-compiling mutation (:153-155), on B passing or lacking failure markers (:156-160), on non-byte-identical restoration (:162-165), and on subject-inventory drift (:173-175); archived B.log shows the hostile test failing on exactly the replay assertion ('OK' != 'REFUSED', FAILED (failures=1)), and all six A/B/A2 log hashes match both receipts. (2) No-op satisfaction impossible: a missing/misspelled hostile test module fails run A (exit!=0 at :136-138) before B is ever evaluated; B acceptance requires nonzero exit AND unittest failure markers; proof ABA additionally requires the intended GNATprove reason (verify_proof_aba.py:132-136) and PASS_KERNEL_PROOF_BASELINE in A/A2 (:114-116). (3) SEALED_LOCAL_PRODUCTION is fail-closed against empty roster (lanes non-empty :237-238, required-lane roster :265-266) and status omission (:253-254 + overall-derivation cross-check :273-275); requires every lane PASS, automatable_complete=true, explicit Developer ID/notarization/Gatekeeper nonclaims, and only EXTERNAL required_for_verdict=false blockers (:322-348), all regression-tested in test_production_readiness.py:148-189 and hostile-calibrated in test_hostile_calibration.sh. (4) Phase-16 epoch move is a two-string change with generator and verifier in exact agreement (v0.2.0-trust-surface at generate:119/verify:22); for the gate-wired receipt (receipts/phase-16-public/PHASE16.json, epoch present, hash matches INPUTS pin) subject ancestor/tree, covered-source diff, dirty-tree, artifact hashes, sentinels, FAIL_/FATAL_/REFUSED_ scan, and guest-cleanup fields are all enforced (verify_phase16_receipt.py:136-227). (5) Wiring: test_authority.sh and test_storage.sh run under set -euo pipefail with each new gate (verify_proof_aba.py, verify_authority_aba.py, nemesis_authority_store_tests) as a bare command line whose failure aborts the script; nemesis_authority_store_tests is a declared Main/Executable in nemesis.gpr:14,25-26 built by build_ada.sh. GAPS: one medium (GIN-01, ABA receipts stamp rev-parse HEAD with no dirty-tree capture \u2014 demonstrated at the frozen subject, whose committed ABA receipts misattribute the TS-modified worktree to baseline commit 4f0f387) and three low (GIN-02 optional-epoch verification downgrade, GIN-03 self-referential trust-surface contract binding in verify_kernel_proof, GIN-04/GIN-05 SEALED semantic seams). Verdict: GAPS.",
+  "findings": [
+    {
+      "category": "evidence-provenance",
+      "confidence": "high",
+      "cwe": [
+        "CWE-345"
+      ],
+      "evidence": [
+        {
+          "excerpt": "\"commit\": git(\"rev-parse\", \"HEAD\"),\n\"tree\": git(\"rev-parse\", \"HEAD^{tree}\"),",
+          "explanation": "Receipt subject is derived solely from rev-parse; the harness never runs git status, so a dirty worktree is silently attributed to the clean HEAD commit.",
+          "label": "no dirty capture at stamp"
+        },
+        {
+          "explanation": "git show 9dd22f2:receipts/production-readiness-20260821/AUTHORITY_ABA.json \u2192 subject.commit 4f0f3879..., observed_at 2026-08-22T13:55:21Z, sha256 0c03402b (matches INPUTS pin); yet its B.log records the TS-001 replay assertion ('OK' != 'REFUSED') against code that does not exist at 4f0f387. The post-freeze commit 402c9c4 refreshed both receipts with correct subject 9dd22f2, confirming maintainers had to regenerate to fix attribution.",
+          "label": "demonstrated at frozen subject"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 181,
+          "path": "scripts/verify_authority_aba.py",
+          "role": "commit/tree stamped without dirty check",
+          "start_line": 180
+        },
+        {
+          "end_line": 157,
+          "path": "scripts/verify_proof_aba.py",
+          "role": "same pattern in proof ABA",
+          "start_line": 156
+        },
+        {
+          "path": "receipts/production-readiness-20260821/AUTHORITY_ABA.json",
+          "role": "subject-committed receipt misattributes run to baseline 4f0f387 (git show 9dd22f2:receipts/.../AUTHORITY_ABA.json)",
+          "start_line": 1
+        },
+        {
+          "end_line": 276,
+          "path": "scripts/verify_kernel_proof.py",
+          "role": "existing in-repo pattern that records dirty_paths (defensive fix template)",
+          "start_line": 266
+        }
+      ],
+      "optionalProperties": {
+        "brief_gap": {
+          "category": "evidence-provenance",
+          "confidence": "high",
+          "cwe": "CWE-345",
+          "evidence": "scripts/verify_authority_aba.py:180-181 and scripts/verify_proof_aba.py:156-157 stamp rev-parse HEAD with no git-status capture; git show 9dd22f2:receipts/production-readiness-20260821/AUTHORITY_ABA.json subject.commit=4f0f387 while its B.log contains the TS-001-only replay assertion.",
+          "id": "GIN-01",
+          "impact": "The PASS receipt binds the run to a commit/tree that does not contain the audited bytes; downstream freezes (INPUTS manifests) then pin misattributed provenance. Demonstrated: receipts committed at the frozen subject claim baseline 4f0f387.",
+          "line": 180,
+          "path": "scripts/verify_authority_aba.py",
+          "precondition": "verify_authority_aba.py or verify_proof_aba.py runs while the working tree differs from HEAD (routine during pre-commit evidence generation).",
+          "remediation": "Mirror verify_kernel_proof.py build_receipt (scripts/verify_kernel_proof.py:266-276): record `git status --porcelain=v1 --untracked-files=all` over the INVENTORY_ROOTS into the receipt, and either refuse to write subject.commit/tree when those paths are dirty or add an explicit dirty_paths field so provenance is self-disclosing.",
+          "severity": "medium"
+        },
+        "full_brief_result": {
+          "confirmed_invariants": [
+            "Authority ABA mutation is a genuine, compiling authority widening: `Consume_Result not in Approval_Accepted | Approval_Replayed` (scripts/verify_authority_aba.py:26-29) accepts replayed approvals at the unique anchor daemon/src/nemesis_core_daemon.adb:411; Approval_Replayed is a Consume_Result_Kind literal (kernel/src/nemesis-kernel-approvals.ads:18-19); anchor uniqueness enforced at runtime (verify_authority_aba.py:143-145) and a subject already containing the widening would fail the anchor count.",
+            "Authority ABA harness is fail-closed at every seam: non-compiling mutation \u2192 FAIL mutation_does_not_compile (:153-155); B exiting 0 or lacking unittest failure markers \u2192 FAIL widening_not_rejected (:156-160); byte-restoration verified against full pre-run copy inventory (:162-165); A2 must exit 0 (:167-171); subject-tree inventory compared before/after the whole gate (:126, :173-175); the gate operates only in a TemporaryDirectory copy and build_ada.sh derives ROOT from its own copied location, so builds land in the copy.",
+            "No-op satisfaction impossible: a missing/misspelled hostile test module makes run A exit nonzero (FAIL initial_A, :136-138) before B; B only runs the single named hostile test, so its failure is attributable; archived B.log confirms the intended rejection ('OK' != 'REFUSED', FAILED (failures=1)); stale receipt and logs are deleted before any run (:120-123) so a crashed run leaves no PASS artifacts; receipt is written atomically only after all checks (:216-218).",
+            "Proof ABA intended-reason discipline: B must exit nonzero AND contain a GNATprove postcondition failure (verify_proof_aba.py:132-136); A/A2 require PASS_KERNEL_PROOF_BASELINE (:114-116, emitted by scripts/prove_kernel.sh:38 only after verify_kernel_proof.py succeeds); archived B.log shows 'nemesis-kernel-capabilities.ads:55:11: high: postcondition might fail'.",
+            "Proof ABA copy-anchor change is correct and fail-closed: TS_CONTINUATION_CONTRACT_2026-08-22.md added to COPY_FILES (verify_proof_aba.py:22-26) because validate_live_scope resolves authorized_by.contract relative to the copy root (verify_kernel_proof.py:201-213); omitting it would fail run A, never fail open.",
+            "SEALED_LOCAL_PRODUCTION cannot be reached by omission: empty lanes \u2192 'lanes must be a non-empty array' (validate_production_readiness.py:237-238) plus 'required lane set missing' (:265-266); omitted/invalid lane status \u2192 'status is invalid' (:253-254); declared overall must equal derived overall which requires non-empty all-PASS statuses (:88-100, :268-275); SEALED additionally requires every lane PASS, automatable_complete=true, Developer ID/notarization/Gatekeeper nonclaims present, and only EXTERNAL required_for_verdict=false blockers (:322-348); regression-tested (tests/integration/test_production_readiness.py:148-189) and hostile-calibrated including python -O assert-stripping (scripts/test_hostile_calibration.sh).",
+            "Phase-16 epoch move: generator and verifier agree exactly (generate_phase16_receipt.py:119 sets epoch v0.2.0-trust-surface; verify_phase16_receipt.py:22 requires it when present); baseline\u2192subject diff is only the two epoch strings, so no source-binding check was weakened; for the gate-wired receipt (receipts/phase-16-public/PHASE16.json, epoch present, sha256 0de52b82 matching the INPUTS pin at subject and at HEAD) the verifier enforces subject existence+ancestry (:130-137), tree equality (:138-140), covered-source diff emptiness (:141-149), artifact set+digests (:151-163), sentinels and FAIL_/FATAL_/REFUSED_ absence in the actual log (:173-203), guest cleanup fields (:168-172), and covered-source cleanliness (:219-227); the generator independently refuses logs missing sentinels or containing failure markers (generate_phase16_receipt.py:60-68) and pins the release-contract identity by hardcoded hash (:26-30); orchestrator cleanup is evidence-backed since an orphaned guest emits FATAL_SECURITY_GUEST_ORPHANED and exits nonzero (scripts/run_security_hardening.sh:31-38).",
+            "Gate wiring propagates failures: scripts/test_authority.sh:2 and scripts/test_storage.sh:2 use `set -euo pipefail`; verify_proof_aba.py, verify_authority_aba.py (test_authority.sh:14-16) and nemesis_authority_store_tests (test_authority.sh:10, test_storage.sh:11) are bare command lines, so any nonzero exit aborts before the PASS marker; nemesis_authority_store_tests is a declared Main with explicit Executable in nemesis.gpr:14,25-26, built into build/bin by scripts/build_ada.sh, and the stale-binary risk is nil because build_ada.sh runs first in both scripts.",
+            "ABA receipt/log integrity at rest: recomputed sha256 of all six archived A/B/A2 logs match their receipts; both receipts at the frozen subject match the INPUTS-20260822.json gate_artifact pins exactly (AUTHORITY_ABA 0c03402b..., PROOF_ABA 53f925ed...)."
+          ],
+          "coverage": [
+            {
+              "files": [
+                "scripts/verify_authority_aba.py",
+                "daemon/src/nemesis_core_daemon.adb",
+                "kernel/src/nemesis-kernel-approvals.ads",
+                "receipts/production-readiness-20260821/AUTHORITY_ABA.json"
+              ],
+              "invariant": "verify_authority_aba.py B mutation is a genuine compiling authority widening; harness fails closed on non-compiling mutation, on hostile test passing under B, and on non-byte-identical restoration; subject tree not mutable by the gate; receipt binds commit/tree/inventory hashes",
+              "status": "GAP"
+            },
+            {
+              "files": [
+                "scripts/verify_authority_aba.py",
+                "scripts/verify_proof_aba.py",
+                "receipts/production-readiness-20260821/authority-aba/B.log",
+                "receipts/production-readiness-20260821/proof-aba/B.log"
+              ],
+              "invariant": "A/B/A2 logs and receipt cannot be satisfied by a no-op run; exit-code and marker logic have no fail-open seams",
+              "status": "CONFIRMED"
+            },
+            {
+              "files": [
+                "scripts/validate_production_readiness.py",
+                "tests/integration/test_production_readiness.py",
+                "scripts/test_hostile_calibration.sh"
+              ],
+              "invariant": "SEALED_LOCAL_PRODUCTION cross-checks are fail-closed: every lane PASS, automatable_complete, explicit Developer ID/notarization/Gatekeeper nonclaims, only informational EXTERNAL blockers required_for_verdict=false; unsatisfiable by empty roster or status omission",
+              "status": "GAP"
+            },
+            {
+              "files": [
+                "scripts/generate_phase16_receipt.py",
+                "scripts/verify_phase16_receipt.py",
+                "receipts/phase-16-public/PHASE16.json",
+                "receipts/phase-16/PHASE16.json"
+              ],
+              "invariant": "Phase-16 epoch move: generator and verifier agree; receipt binds subject commit/tree, artifact hashes, sentinels, no FAIL_/FATAL_/REFUSED_ lines, guest cleanup; nothing in the epoch change weakens source binding",
+              "status": "GAP"
+            },
+            {
+              "files": [
+                "scripts/test_authority.sh",
+                "scripts/test_storage.sh",
+                "nemesis.gpr",
+                "scripts/build_ada.sh"
+              ],
+              "invariant": "Gate wiring: verify_authority_aba.py, verify_proof_aba.py, and nemesis_authority_store_tests actually execute in test_authority.sh/test_storage.sh under set -euo pipefail and any failure propagates",
+              "status": "CONFIRMED"
+            },
+            {
+              "files": [
+                "scripts/verify_proof_aba.py",
+                "scripts/verify_kernel_proof.py",
+                "config/formal-kernel-scope.json"
+              ],
+              "invariant": "verify_proof_aba.py copy-anchor change (TS contract into COPY_FILES) is fail-closed: without the contract, run A refuses because validate_live_scope requires the resolution contract file in the copy root",
+              "status": "CONFIRMED"
+            }
+          ],
+          "gaps": [
+            {
+              "category": "evidence-provenance",
+              "confidence": "high",
+              "cwe": "CWE-345",
+              "evidence": "scripts/verify_authority_aba.py:180-181 and scripts/verify_proof_aba.py:156-157 stamp `git rev-parse HEAD`/`HEAD^{tree}` with no git-status capture. git show 9dd22f2:receipts/production-readiness-20260821/AUTHORITY_ABA.json \u2192 subject.commit 4f0f3879..., observed_at 13:55:21Z, sha256 0c03402b matching the INPUTS pin; its B.log ends with the TS-001-only assertion 'OK' != 'REFUSED', FAILED (failures=1). Receipts were regenerated with correct attribution only in post-freeze commit 402c9c4.",
+              "id": "GIN-01",
+              "impact": "PASS receipts bind runs to a commit/tree not containing the audited bytes; the subject-committed AUTHORITY_ABA.json/PROOF_ABA.json claim baseline commit 4f0f387 while demonstrably exercising TS-001 code. Freeze manifests then pin misattributed provenance.",
+              "line": 180,
+              "path": "scripts/verify_authority_aba.py",
+              "precondition": "ABA harness runs while the working tree differs from HEAD (routine during pre-commit evidence generation; happened for the receipts committed at the frozen subject).",
+              "remediation": "Record `git status --porcelain=v1 --untracked-files=all` over INVENTORY_ROOTS into the receipt and refuse (or self-disclose via dirty_paths) when dirty, mirroring scripts/verify_kernel_proof.py:266-276.",
+              "severity": "medium"
+            },
+            {
+              "category": "verification-downgrade",
+              "confidence": "high",
+              "cwe": "CWE-757",
+              "evidence": "scripts/verify_phase16_receipt.py:111-114 and :173 gate both binding blocks on `if epoch is not None`; receipts/phase-16/PHASE16.json contains no epoch key; scripts/test_phase16_receipt.py only exercises artifact-digest tamper, not epoch stripping.",
+              "id": "GIN-02",
+              "impact": "Verifier still prints PASS_PHASE16_RECEIPT while skipping release-contract identity (lines 112-134) and the entire gate-log binding block (log sha256/bytes/line-count, sentinel-in-log, FAIL_/FATAL_/REFUSED_ scan, lines 173-203); sentinel and guest-cleanup evidence then rest solely on self-declared receipt fields (lines 168-172). Pre-existing seam, not introduced by the epoch move (diff is only the two epoch strings), and the gate-wired public receipt does carry epoch \u2014 but the downgrade path stays reachable by key omission.",
+              "line": 112,
+              "path": "scripts/verify_phase16_receipt.py",
+              "precondition": "A Phase-16 receipt omits the top-level `epoch` key (the legacy receipts/phase-16/PHASE16.json template legitimately has none; any receipt edit can drop it).",
+              "remediation": "Require `epoch == RELEASE_EPOCH` unconditionally for verified receipts (or at minimum enforce log binding whenever gate.log.file is present), and add an epoch-stripped tamper case to scripts/test_phase16_receipt.py.",
+              "severity": "low"
+            },
+            {
+              "category": "authorization-binding",
+              "confidence": "high",
+              "cwe": "CWE-807",
+              "evidence": "scripts/verify_kernel_proof.py:201-213 validates only path-safety, file existence, 64-hex declared hash, and file-hash==declared-hash \u2014 no allowlist of trusted contract digests, unlike the repo convention of hardcoded contract constants (scripts/generate_phase16_receipt.py:26-30, scripts/verify_phase16_receipt.py:14-21).",
+              "id": "GIN-03",
+              "impact": "validate_live_scope's authorized_by check is self-referential: contract path and contract_sha256 both come from the scope file, so consistency with an arbitrary file suffices; production_formal_lane then flips BLOCKED_TRUST_SURFACE\u2192PASS_BOUNDED (verify_kernel_proof.py:283-285) on data fully controlled by the scope author. Mitigated in the composite gate: tests/phase0/test_kernel_proof_manifest.py:83-86 pins the exact architect hash 920900f3... and runs inside test_authority.sh before prove_kernel.sh; a standalone prove_kernel.sh run lacks that pin.",
+              "line": 201,
+              "path": "scripts/verify_kernel_proof.py",
+              "precondition": "config/formal-kernel-scope.json is edited to cite any in-repo file (with its own hash) as the trust-surface resolution contract.",
+              "remediation": "Pin the authorized architect-contract sha256 (or an allowlist) as a constant in verify_kernel_proof.py and require authorized_by.contract_sha256 to match it, mirroring the phase-16 contract pinning.",
+              "severity": "low"
+            },
+            {
+              "category": "input-validation",
+              "confidence": "medium",
+              "cwe": "CWE-1289",
+              "evidence": "scripts/validate_production_readiness.py:327-338 (joined-substring check), :339-348 (external_blockers only); _validate_blockers (:193-212) enforces BLOCKED\u21d2blockers but never PASS\u21d2no-blockers.",
+              "id": "GIN-04",
+              "impact": "The nonclaims gate is substring-presence only (lines 327-338), so it verifies the words appear, not that they are phrased as nonclaims; and SEALED_LOCAL_PRODUCTION constrains only top-level external_blockers (lines 339-348) \u2014 lane-level blockers on PASS lanes are unvalidated for verdict consistency, so a buried load-bearing blocker would not disqualify the sealed verdict. Core fail-closed properties (empty roster, status omission, lane-PASS derivation) are intact.",
+              "line": 327,
+              "path": "scripts/validate_production_readiness.py",
+              "precondition": "A roster author writes semantically inverted nonclaims (e.g. claims containing the words 'Developer ID'/'notarized'/'Gatekeeper'), or records a TRUST_SURFACE-kind blocker inside a PASS lane's `blockers` array under a SEALED verdict.",
+              "remediation": "Under any terminal verdict, reject PASS lanes carrying blocker entries (or at least any kind=TRUST_SURFACE blocker anywhere), and consider matching nonclaims against explicit negative templates instead of bare substrings.",
+              "severity": "low"
+            },
+            {
+              "category": "evidence-provenance",
+              "confidence": "medium",
+              "cwe": "CWE-345",
+              "evidence": "scripts/validate_production_readiness.py:219-226 (_hex checks only); receipts/production-readiness-20260821/PRODUCTION_READINESS.json:9-10 carries subject d18cb7cc...; no git invocation exists anywhere in the validator.",
+              "id": "GIN-05",
+              "impact": "validate_roster only format-checks subject.commit/tree (40-hex) and requires evidence.subject == roster.subject (internal consistency); it never compares the subject to the actual repository HEAD/tree, so a stale-subject sealed roster validates PASS against a newer tree. Observed benignly: the committed roster's subject is d18cb7cc (older than the frozen subject) and it passes baseline validation in test_hostile_calibration.sh on every verify_complete run. Low because the gate wiring asserts schema validity, not terminality, and sibling verifiers (verify_phase16_receipt.py:136-149) do bind subject to HEAD.",
+              "line": 221,
+              "path": "scripts/validate_production_readiness.py",
+              "precondition": "A roster declares a terminal SEALED_LOCAL_PRODUCTION verdict with a subject commit older than the current tree while its pinned evidence artifacts still hash-match.",
+              "remediation": "When --require-terminal is set (or a terminal_verdict is present), cross-check roster subject.commit/tree against `git rev-parse HEAD`/`HEAD^{tree}` and require ancestor-or-equal plus covered-source diff emptiness, mirroring verify_phase16_receipt.py:136-149.",
+              "severity": "low"
+            }
+          ],
+          "lane": "gates_integrity",
+          "reviewer_identity": {
+            "context": "OMP security-reviewer subagent RevGatesIntegrity, defensive hardening re-review 2026-08-22 (trust-surface epoch), read-only static audit",
+            "limitations": [
+              "git rev-parse HEAD returned the pinned subject 9dd22f259d164ebb1afde3b8940a891161cad3f6 at review start; HEAD advanced during the session to 402c9c46b3eaaa3039b121949131515fb5f23800 via two post-freeze receipts-only commits (cf5de0e, 402c9c4). Verified `git diff 9dd22f2..402c9c4` touches only receipts/, so all audited source/script/test bytes equal the frozen subject; receipt citations distinguish subject-committed vs refreshed copies.",
+              "Read-only mandate: harnesses and validators were not executed; behavior conclusions are from static reading plus recomputed sha256 of archived logs/receipts (all matched their receipts and the INPUTS pins at the subject commit).",
+              "INPUTS-20260822.json formal_report pin mismatch for FORMAL_KERNEL.json was investigated by the kernel_formal_surface lane (same root cause as GIN-01); not re-adjudicated here.",
+              "Ada compilability of the B mutation is asserted from language rules (Ada 2012 membership test with '|' alternatives over Consume_Result_Kind literals) and from the archived B.log showing the build succeeded and the hostile test executed; not recompiled locally."
+            ],
+            "model": "anthropic/claude-fable-5"
+          },
+          "schema": "nemesis.hardening-audit.result/v1",
+          "subject_commit": "9dd22f259d164ebb1afde3b8940a891161cad3f6",
+          "verdict": "GAPS"
+        }
+      },
+      "rule_id": "GIN-01",
+      "severity": "medium",
+      "summary": "verify_authority_aba.py and verify_proof_aba.py stamp `subject.commit`/`subject.tree` from `git rev-parse HEAD` at receipt-write time without recording or refusing a dirty working tree. The gate audits worktree bytes (the disposable copy is made from the worktree), so when the worktree differs from HEAD the receipt attributes the run to the wrong commit. This is not theoretical: the AUTHORITY_ABA.json and PROOF_ABA.json committed INSIDE the frozen subject 9dd22f2 declare subject.commit=4f0f387 (the pre-trust-surface baseline, observed_at 13:55Z) although the harness demonstrably exercised the TS-001 code (the mutation anchor `if Consume_Result /= Approval_Accepted` only exists at 9dd22f2, and B.log shows the TS-001 hostile replay test failing). Only source_inventory_sha256 truthfully binds the audited bytes. The sibling verify_kernel_proof.py already solves this by stamping `dirty_paths` from `git status --porcelain` into its receipt.",
+      "title": "ABA receipts bind commit/tree via bare `git rev-parse HEAD` with no dirty-tree capture \u2014 provenance misattribution demonstrated at the frozen subject"
+    },
+    {
+      "category": "verification-downgrade",
+      "confidence": "high",
+      "cwe": [
+        "CWE-757"
+      ],
+      "evidence": [
+        {
+          "excerpt": "epoch = data.get(\"epoch\")\nif epoch is not None:\n    if epoch != RELEASE_EPOCH:\n        return fail(\"release_epoch\")",
+          "explanation": "Log identity, sentinels, and failure-marker scan only run inside the epoch guard; without epoch, gate.status/sentinels are checked as declared receipt fields only (lines 168-171).",
+          "label": "conditional binding"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 134,
+          "path": "scripts/verify_phase16_receipt.py",
+          "role": "epoch/release-contract checks conditional on key presence",
+          "start_line": 111
+        },
+        {
+          "end_line": 203,
+          "path": "scripts/verify_phase16_receipt.py",
+          "role": "gate-log binding skipped when epoch absent",
+          "start_line": 173
+        },
+        {
+          "path": "receipts/phase-16/PHASE16.json",
+          "role": "legacy epoch-less receipt accepted by the verifier",
+          "start_line": 1
+        }
+      ],
+      "optionalProperties": {
+        "brief_gap_ref": "see GIN-02 in full_brief_result on finding GIN-01"
+      },
+      "rule_id": "GIN-02",
+      "severity": "low",
+      "summary": "Both the release-contract identity check and the entire gate-log binding block (log hash/size/line-count, sentinel-in-log verification, FAIL_/FATAL_/REFUSED_ scan) are gated on `if epoch is not None` (verify_phase16_receipt.py:112, :173). A receipt without the key \u2014 the legacy receipts/phase-16/PHASE16.json template legitimately lacks it \u2014 passes with sentinel evidence resting only on self-declared receipt fields. Pre-existing seam (the epoch move itself is only two agreeing string changes); the gate-wired public receipt carries epoch, so current enforcement is intact, but the downgrade-by-omission path remains reachable and untested (test_phase16_receipt.py only tampers artifact digests).",
+      "title": "verify_phase16_receipt.py: omitting the `epoch` key silently skips release-contract and gate-log binding while still printing PASS"
+    },
+    {
+      "category": "authorization-binding",
+      "confidence": "high",
+      "cwe": [
+        "CWE-807"
+      ],
+      "evidence": [
+        {
+          "explanation": "The check validates path safety, existence, 64-hex format, and file-hash==declared-hash \u2014 the declared hash originates from the same scope file being validated, so it authorizes nothing beyond internal consistency.",
+          "label": "no allowlist"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 213,
+          "path": "scripts/verify_kernel_proof.py",
+          "role": "self-consistent-only contract check",
+          "start_line": 201
+        },
+        {
+          "end_line": 285,
+          "path": "scripts/verify_kernel_proof.py",
+          "role": "lane flips to PASS_BOUNDED when blockers empty",
+          "start_line": 283
+        },
+        {
+          "end_line": 86,
+          "path": "tests/phase0/test_kernel_proof_manifest.py",
+          "role": "compensating hash pin (test-only)",
+          "start_line": 83
+        }
+      ],
+      "optionalProperties": {
+        "brief_gap_ref": "see GIN-03 in full_brief_result on finding GIN-01"
+      },
+      "rule_id": "GIN-03",
+      "severity": "low",
+      "summary": "validate_live_scope accepts any resolution whose authorized_by names an existing in-repo file matching its own self-declared sha256 (verify_kernel_proof.py:201-213); with blockers emptied, production_formal_lane flips to PASS_BOUNDED (:283-285) purely on scope-author-controlled data. The repo's own convention pins contract hashes as verifier constants (generate_phase16_receipt.py:26-30). Mitigated inside the composite gate because tests/phase0/test_kernel_proof_manifest.py:83-86 pins the exact 920900f3... architect hash and runs in test_authority.sh; a standalone prove_kernel.sh invocation has no such pin.",
+      "title": "verify_kernel_proof.py trust-surface resolution authorization is self-referential \u2014 no pinned architect-contract hash in the validator"
+    },
+    {
+      "category": "input-validation",
+      "confidence": "medium",
+      "cwe": [
+        "CWE-1289"
+      ],
+      "evidence": [
+        {
+          "explanation": "joined = ' '.join(nonclaims); the branch errors only when the marker words are absent, so inverted phrasing passes.",
+          "label": "presence not semantics"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 338,
+          "path": "scripts/validate_production_readiness.py",
+          "role": "substring nonclaims check",
+          "start_line": 327
+        },
+        {
+          "end_line": 348,
+          "path": "scripts/validate_production_readiness.py",
+          "role": "only external_blockers constrained under SEALED",
+          "start_line": 339
+        },
+        {
+          "end_line": 212,
+          "path": "scripts/validate_production_readiness.py",
+          "role": "lane blockers validated for shape only, not verdict consistency",
+          "start_line": 193
+        }
+      ],
+      "optionalProperties": {
+        "brief_gap_ref": "see GIN-04 in full_brief_result on finding GIN-01"
+      },
+      "rule_id": "GIN-04",
+      "severity": "low",
+      "summary": "The nonclaims requirement is satisfied by mere presence of the substrings 'Developer ID'/'notariz'/'Gatekeeper' anywhere in the nonclaims list (validate_production_readiness.py:327-338), regardless of whether the sentences are actually nonclaims. Separately, SEALED constrains only top-level external_blockers (:339-348); a PASS lane may carry blocker entries \u2014 including kind=TRUST_SURFACE \u2014 without disqualifying the sealed verdict, since _validate_blockers enforces BLOCKED\u21d2blockers but never PASS\u21d2no-blockers. Core fail-closed properties (empty roster, status omission, all-lane-PASS derivation) are intact and tested.",
+      "title": "SEALED_LOCAL_PRODUCTION semantic seams: substring-only nonclaims and unvalidated lane-level blockers on PASS lanes"
+    },
+    {
+      "category": "evidence-provenance",
+      "confidence": "medium",
+      "cwe": [
+        "CWE-345"
+      ],
+      "evidence": [
+        {
+          "explanation": "_hex(subject.get('commit'), 40) is the only subject check; --require-terminal adds only a null-verdict check (main, :364-365).",
+          "label": "no git binding"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 226,
+          "path": "scripts/validate_production_readiness.py",
+          "role": "format-only subject check",
+          "start_line": 219
+        },
+        {
+          "end_line": 10,
+          "path": "receipts/production-readiness-20260821/PRODUCTION_READINESS.json",
+          "role": "roster bound to older subject d18cb7cc",
+          "start_line": 9
+        },
+        {
+          "end_line": 149,
+          "path": "scripts/verify_phase16_receipt.py",
+          "role": "stronger sibling pattern (ancestry + tree + diff)",
+          "start_line": 136
+        }
+      ],
+      "optionalProperties": {
+        "brief_gap_ref": "see GIN-05 in full_brief_result on finding GIN-01"
+      },
+      "rule_id": "GIN-05",
+      "severity": "low",
+      "summary": "validate_roster only checks subject.commit/tree are 40-hex (validate_production_readiness.py:219-226) and that evidence subjects equal the roster subject; no git invocation exists anywhere in the validator, so a terminal SEALED_LOCAL_PRODUCTION roster pinned to an old commit validates PASS against a newer tree as long as its artifact files still hash-match. Observed benignly at the subject: the committed roster's subject is d18cb7cc (pre-subject) and passes baseline validation in test_hostile_calibration.sh on every verify_complete run. Low because gate wiring asserts schema validity rather than terminality, and the phase-16 verifier demonstrates the stronger in-repo pattern (subject ancestry + tree equality + covered-source diff).",
+      "title": "Roster validator never binds subject commit/tree to the actual repository state \u2014 stale-subject sealed roster would validate"
+    }
+  ],
+  "reviewed_paths": [
+    "receipts/production-readiness-20260821/security-review/BRIEF-20260822.md",
+    "receipts/production-readiness-20260821/security-review/INPUTS-20260822.json",
+    "scripts/verify_authority_aba.py",
+    "scripts/verify_proof_aba.py",
+    "scripts/verify_kernel_proof.py",
+    "scripts/validate_production_readiness.py",
+    "tests/integration/test_production_readiness.py",
+    "scripts/generate_phase16_receipt.py",
+    "scripts/verify_phase16_receipt.py",
+    "scripts/test_phase16_receipt.py",
+    "scripts/test_authority.sh",
+    "scripts/test_storage.sh",
+    "scripts/build_ada.sh",
+    "scripts/prove_kernel.sh",
+    "scripts/verify_complete.sh",
+    "scripts/test_hostile_calibration.sh",
+    "scripts/run_security_hardening.sh",
+    "config/formal-kernel-scope.json",
+    "tests/phase0/test_kernel_proof_manifest.py",
+    "daemon/src/nemesis_core_daemon.adb",
+    "kernel/src/nemesis-kernel-approvals.ads",
+    "kernel/src/nemesis-kernel-capabilities.adb",
+    "nemesis.gpr",
+    "receipts/production-readiness-20260821/AUTHORITY_ABA.json",
+    "receipts/production-readiness-20260821/PROOF_ABA.json",
+    "receipts/production-readiness-20260821/authority-aba/A.log",
+    "receipts/production-readiness-20260821/authority-aba/B.log",
+    "receipts/production-readiness-20260821/authority-aba/A2.log",
+    "receipts/production-readiness-20260821/proof-aba/B.log",
+    "receipts/phase-16/PHASE16.json",
+    "receipts/phase-16-public/PHASE16.json",
+    "receipts/phase-16-release/PHASE16.json",
+    "receipts/production-readiness-20260821/PRODUCTION_READINESS.json",
+    "tests/integration/test_daemon_api.py"
+  ]
+}

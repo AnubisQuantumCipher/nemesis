@@ -1,0 +1,103 @@
+{
+  "all_valid": true,
+  "brief": "receipts/production-readiness-20260821/security-review/BRIEF-20260822.md",
+  "disposition": "All mediums (DCO-01, DCO-02, GIN-01) and actionable lows (DCO-03/04/05, GIN-02/03/04/05, KFS-01, PCL-01/02/03, PCL-04 doc-side) were fixed in commit 18ae66513620da8fa8dc8f917477b9b9c8d44804 and re-gated; accepted residuals (recorded, not fixed this epoch): DAP-01 (best-effort directory flush, doc softened + ordering argument), DAP-02, KFS-02 (receipt provenance regenerated at the final clean commit), KFS-03, PCL-05. A final independent re-review lane (final_fix_rereview) verified every fix on the final bytes.",
+  "epoch": "2026-08-22-trust-surface",
+  "identity_note": "each receipt produced by a distinct isolated security-reviewer subagent process (separate context from lead), archived detached from the INPUTS manifest",
+  "inputs": "receipts/production-readiness-20260821/security-review/INPUTS-20260822.json",
+  "receipts": [
+    {
+      "coverage_rows": 7,
+      "gap_ids": [
+        "DAP-01",
+        "DAP-02"
+      ],
+      "gaps": 2,
+      "lane": "daemon_authority_path",
+      "max_severity": "low",
+      "receipt": "receipts/production-readiness-20260821/security-review/reviews-20260822/RevDaemonAuthority.daemon-authority-path.json",
+      "sha256": "9117e2dae1355146f945bea0790df5205b9f5f4431204c5c3dd56455bfb1fc55",
+      "subject_bound": true,
+      "valid": true,
+      "verdict": "CLEAN"
+    },
+    {
+      "coverage_rows": 5,
+      "gap_ids": [
+        "KFS-01",
+        "KFS-02",
+        "KFS-03"
+      ],
+      "gaps": 3,
+      "lane": "kernel_formal_surface",
+      "max_severity": "low",
+      "receipt": "receipts/production-readiness-20260821/security-review/reviews-20260822/RevKernelFormal.kernel-formal-surface.json",
+      "sha256": "4faaec1ed9bc258d956e77738ea41c9075240a8381d4c1b60772fdf086e4ebdb",
+      "subject_bound": true,
+      "valid": true,
+      "verdict": "CLEAN"
+    },
+    {
+      "coverage_rows": 7,
+      "gap_ids": [
+        "PCL-01",
+        "PCL-02",
+        "PCL-03",
+        "PCL-04",
+        "PCL-05"
+      ],
+      "gaps": 5,
+      "lane": "protocol_clients",
+      "max_severity": "low",
+      "receipt": "receipts/production-readiness-20260821/security-review/reviews-20260822/RevProtocolClients.protocol-clients.json",
+      "sha256": "76d66d72b8810c4b486c96bc7888d0012904599be9b68e7c24f82e5b8b1bcc22",
+      "subject_bound": true,
+      "valid": true,
+      "verdict": "CLEAN"
+    },
+    {
+      "coverage_rows": 6,
+      "gap_ids": [
+        "GIN-01",
+        "GIN-02",
+        "GIN-03",
+        "GIN-04",
+        "GIN-05"
+      ],
+      "gaps": 5,
+      "lane": "gates_integrity",
+      "max_severity": "medium",
+      "receipt": "receipts/production-readiness-20260821/security-review/reviews-20260822/RevGatesIntegrity.gates-integrity.json",
+      "sha256": "dda3443627e40de2dbba1288db9eeddce9a7e3ffc983ee27aed6f6e97862692b",
+      "subject_bound": true,
+      "valid": true,
+      "verdict": "GAPS"
+    },
+    {
+      "coverage_rows": 11,
+      "gap_ids": [
+        "DCO-01",
+        "DCO-02",
+        "DCO-03",
+        "DCO-04",
+        "DCO-05"
+      ],
+      "gaps": 5,
+      "lane": "distribution_contract",
+      "max_severity": "medium",
+      "receipt": "receipts/production-readiness-20260821/security-review/reviews-20260822/RevDistribution.distribution-contract.json",
+      "sha256": "16307cdd5c9500deb0a9fcc094e71499ae266918d4e3bb84684451c9832b67e4",
+      "subject_bound": true,
+      "valid": true,
+      "verdict": "GAPS"
+    }
+  ],
+  "reviewer_lanes": 5,
+  "schema": "nemesis.review-validation/v1",
+  "subject_commit": "9dd22f259d164ebb1afde3b8940a891161cad3f6",
+  "validated_at": "2026-08-22T14:33:05.279144Z",
+  "verdict_tally": {
+    "CLEAN": 3,
+    "GAPS": 2
+  }
+}

@@ -1,0 +1,247 @@
+{
+  "coverage_summary": "Lane daemon_authority_path audited at pinned subject 9dd22f259d164ebb1afde3b8940a891161cad3f6 (git rev-parse HEAD matched; worktree dirt confined to receipts/, none in audited sources). Read in full: daemon/src/nemesis_core_daemon.adb, daemon/src/nemesis-core-authority_store.ads/.adb, daemon/tests/nemesis_authority_store_tests.adb, kernel/src/nemesis-kernel-capabilities.ads/.adb, kernel/src/nemesis-kernel-approvals.ads/.adb, kernel/src/nemesis-kernel-types.ads, daemon/src/nemesis-core-json.ads/.adb, plus commit/durability paths of nemesis-core-mission_store.ads/.adb and nemesis-core-ledger.adb, and the baseline->subject git diff of the daemon main. All 7 lane invariants CONFIRMED: (1) authorize_action fails closed on every grant/approval path with no fallback synthesis; (2) consumed approval made durable (tmp+F_FULLFSYNC+rename+dir sync) at daemon.adb:415 strictly before the Action_Authorized ledger commit at daemon.adb:435; (3) Persist_Parent_Grant/Persist_Approval refuse overwrite (store.adb:332-335, 399-402); (4) create_grant derives every field except id from mission context with Planning gating on both issuance commands (daemon.adb:257-262, 271-281, 294-299); (5) strict fixed-width parsing refuses truncation/extension/corruption/cross-mission substitution and ignores .tmp residue (store.adb:159-179, 207-318, 374-378 in-file mission binding; tests cover each case); (6) sole Action_Authorized emission site sits behind the full persisted-grant + consumed-approval chain, old synthesized-grant path removed in diff; (7) Valid_Id/Valid_Digest/Exact_Fields guard all new fields, duplicate JSON keys rejected, home 0700 / socket 0600, single-threaded sequential accept loop unchanged. Two gaps recorded: DAP-01 (low \u2014 Full_Sync_Directory swallows open/fcntl failures so the post-rename directory sync in the durability chain is best-effort) and DAP-02 (informational \u2014 'whole reviewed write budget' comment vs per-action non-cumulative byte budget). Verdict CLEAN (no gap >= medium).",
+  "findings": [
+    {
+      "category": "audit-result",
+      "confidence": "high",
+      "cwe": [],
+      "evidence": [
+        {
+          "excerpt": "HEAD=9dd22f259d164ebb1afde3b8940a891161cad3f6, branch production/desktop-v1-autonomous-recovery",
+          "explanation": "git rev-parse HEAD returned 9dd22f259d164ebb1afde3b8940a891161cad3f6, matching the pinned subject; uncommitted worktree changes were confined to receipts/ artifacts, none in audited source paths.",
+          "label": "subject pin"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 444,
+          "path": "daemon/src/nemesis_core_daemon.adb",
+          "role": "authorize_action handler (primary subject)",
+          "start_line": 332
+        }
+      ],
+      "optionalProperties": {
+        "confirmed_invariants": [
+          "authorize_action fails closed on every grant path (missing, corrupt, IO-failure, revoked/inactive, missing Modify_Data) and every approval path (missing, corrupt, replayed, revoked, expired, mission/action mismatch, consumed-persist failure) with no fallback synthesis of authority",
+          "Consumed approval is made durable via tmp+F_FULLFSYNC+rename+directory-sync strictly before the single Action_Authorized ledger commit; a crash between the two burns the approval and replay is refused as Approval_Replayed",
+          "Persist_Parent_Grant and Persist_Approval refuse overwrite of existing records; Persist_Consumed_Approval only rewrites an existing record to Consumed form; consumed approvals cannot be re-armed and grants cannot be re-issued wider",
+          "create_grant derives mission, subject, resource, operations, scope, expiry, byte budget, and status entirely from the authorized mission context (id is the only protocol input); both issuance commands are gated to PLANNING state",
+          "Fixed-width strict parsing (exact record length + trailing LF, positional separators, charset checks, embedded mission/digest binding) refuses truncation, extension, field corruption, cross-mission substitution, and ignores stale .tmp residue",
+          "The pre-TS synthesized-grant accept condition is removed; the only Action_Authorized emission site requires the full persisted-grant + SPARK-attenuated child + consumed-approval + Authorize chain",
+          "Valid_Id/Valid_Digest/Exact_Fields guard all new protocol fields; duplicate JSON keys rejected; home 0700 and socket 0600 permissions and the single-threaded sequential accept loop are unchanged"
+        ],
+        "coverage": [
+          {
+            "evidence": "daemon/src/nemesis_core_daemon.adb:361-366 refuses Grant_Not_Found/Authority_Corrupt/IO via Grant_Load_Reason; :367-372 refuses inactive parent or missing Modify_Data ('parent_grant_inactive'); :391-394 refuses non-attenuated child; :400-406 refuses missing/corrupt approval; :408-414 refuses every non-Accepted Consume_Approval decision (kernel/src/nemesis-kernel-approvals.adb:11-31 covers Replayed/Was_Revoked/Expired/Mission_Mismatch/Action_Mismatch); :416-419 refuses on consumed-persist failure; :428-434 refuses non-Authorized kernel decision (Authorize postcondition kernel/src/nemesis-kernel-capabilities.ads:47-63 binds status/expiry/mission/subject/resource/scope/operation/bytes). No branch constructs a grant or approval from request fields; expired parent is refused at Authorize via Child.Expires_After <= Parent.Expires_After (daemon:386-390, capabilities.adb:9-23).",
+            "files": [
+              "daemon/src/nemesis_core_daemon.adb",
+              "kernel/src/nemesis-kernel-approvals.adb",
+              "kernel/src/nemesis-kernel-capabilities.adb"
+            ],
+            "invariant": "authorize_action refuses when the parent grant is missing/corrupt/inactive and when the approval is missing/corrupt/replayed/revoked/expired/mismatched \u2014 fail closed on every path, no fallback synthesis of authority",
+            "status": "CONFIRMED"
+          },
+          {
+            "evidence": "Ordering: Persist_Consumed_Approval at daemon/src/nemesis_core_daemon.adb:415 (refusal :416-419) strictly precedes Commit_Event(Action_Authorized) at :435-437. Durability primitive: nemesis-core-authority_store.adb:121-157 Write_Record writes Path&\".tmp\", checks full write and F_FULLFSYNC(file) (:136-140), close (:141-145), rename (:146), directory sync (:147-149). Persist_Consumed_Approval additionally requires Status=Approval_Consumed and an existing record (:456-467). Ledger commit is its own checked F_FULLFSYNC append (nemesis-core-ledger.adb:339-358) invoked only after approval durability succeeded (mission_store.adb:291-312 -> Append_Current_Event:230-268). Crash between the two leaves a durable Consumed record and no ledger event; replay then yields Approval_Replayed (approvals.adb:12-14), matching protocols/local-core-v1.md:41-43. Caveat: directory-sync error swallowing \u2014 see DAP-01 (low).",
+            "files": [
+              "daemon/src/nemesis_core_daemon.adb",
+              "daemon/src/nemesis-core-authority_store.adb",
+              "daemon/src/nemesis-core-mission_store.adb",
+              "daemon/src/nemesis-core-ledger.adb"
+            ],
+            "invariant": "Consumed approval persisted durably (tmp+F_FULLFSYNC+rename+directory sync) BEFORE the Action_Authorized ledger event commits; a crash between the two burns the approval",
+            "status": "CONFIRMED"
+          },
+          {
+            "evidence": "nemesis-core-authority_store.adb:332-335 returns Grant_Already_Exists when parent.grant exists; :399-402 returns Approval_Already_Exists when the .apr exists (including in consumed form, since consumption rewrites the same path). Persist_Consumed_Approval only accepts Status=Approval_Consumed and an existing record (:456-467), so it cannot mint or re-arm. Tests exercise: duplicate grant persist refused (tests:95-96), duplicate persist refused with stale .tmp present (:102-108), re-issuance after consumption refused (:184-185), consumed-persist of a never-issued approval refused (:196-207), not-consumed guard (:167-168).",
+            "files": [
+              "daemon/src/nemesis-core-authority_store.adb",
+              "daemon/tests/nemesis_authority_store_tests.adb"
+            ],
+            "invariant": "Persist_Approval and Persist_Parent_Grant refuse overwrite: consumed approvals cannot be re-armed, issued grants cannot be widened by re-issuance",
+            "status": "CONFIRMED"
+          },
+          {
+            "evidence": "daemon/src/nemesis_core_daemon.adb:271-281: Mission=Context.Id, Subject=Context.Worker, Resource=Filesystem (fixed), Operations=[Modify_Data only], Scope=Context.Scope_Digest, Expires_After=Clamped_Window(Current, 10_000), Maximum_Bytes=4_096 constant, Status=Active \u2014 only Id comes from the request (validated Valid_Id 'cap_' at :266-268). create_approval likewise derives Mission from context and takes only validated approval_id/action_digest (:300-324). Planning gating: :258-262 (create_grant) and :295-299 (create_approval); authorize_action requires Running (:333-337). Baseline->subject diff shows the request-shaped synthesized grant was removed.",
+            "files": [
+              "daemon/src/nemesis_core_daemon.adb"
+            ],
+            "invariant": "create_grant derives every authority field except the id from the authorized mission context; PLANNING-state gating on both issuance commands",
+            "status": "CONFIRMED"
+          },
+          {
+            "evidence": "Read_Record (store.adb:159-179) demands exactly Record_Length+1 bytes ending in LF via an over-sized read buffer, so truncation and extension both fail. Parse_Grant (:207-263) and Parse_Approval (:274-318) check total length, every separator position, Is_Identifier/Is_Hex/Is_Digits charsets, enumerated status bytes, with 'Value overflow trapped to Success=False; 20-digit sequence fields exceeding Sequence_Number (types.ads:44) raise and map to Authority_Corrupt. Cross-mission/cross-digest binding: Load_Parent_Grant refuses Grant.Mission /= Mission (:374-378); Load_Approval refuses Mission or Action_Digest mismatch (:436-443). Stale .tmp is never read (loads open only the exact final path) and cannot be promoted (tests:100-108); tamper/truncate/extend/substitute all covered in tests:110-146, 210-224.",
+            "files": [
+              "daemon/src/nemesis-core-authority_store.adb",
+              "daemon/tests/nemesis_authority_store_tests.adb"
+            ],
+            "invariant": "Fixed-width strict parsing refuses truncation, extension, field corruption, cross-mission substitution, and stale .tmp residue",
+            "status": "CONFIRMED"
+          },
+          {
+            "evidence": "grep over daemon/src shows exactly one Action_Authorized emission site (daemon.adb:435-437), reachable only after Load_Parent_Grant OK (:361), parent Active+Modify_Data (:367-372), Is_Attenuation (:391), Load_Approval OK (:400), Consume_Approval Accepted (:408-414), Persist_Consumed_Approval OK (:415-419), and Authorize=Authorized (:428-434). git diff 4f0f3879..9dd22f25 confirms the former in-handler synthesized Capability_Grant was deleted; the only remaining grant constructions are create_grant's context-derived parent and the SPARK Derive_Child_Grant.",
+            "files": [
+              "daemon/src/nemesis_core_daemon.adb"
+            ],
+            "invariant": "The old accept condition is not silently reachable: no code path authorizes without both persisted grant and consumed approval",
+            "status": "CONFIRMED"
+          },
+          {
+            "evidence": "grant_id Valid_Id 'cap_' (daemon.adb:266-268); approval_id Valid_Id 'apr_' + action_digest Valid_Digest (:310-314); authorize_action worker_id/scope_digest/action_digest validated (:353-358) with estimated_bytes via typed Natural_Value (json.adb raises on missing/non-natural, caught to INVALID_REQUEST at daemon.adb:582-584); Exact_Fields 4/5/7 respectively (:258, :295, :333). JSON parser rejects duplicate keys (json.adb:94-101), caps 16 fields/64KiB, digit-overflow refused. Home chmod 0700 (:631-635), socket chmod 0600 (:655-659), unix stream socket, sequential single-threaded accept loop one request per connection (:663-680) \u2014 all unchanged from baseline per diff.",
+            "files": [
+              "daemon/src/nemesis_core_daemon.adb",
+              "daemon/src/nemesis-core-json.adb"
+            ],
+            "invariant": "Request validation (Valid_Id/Valid_Digest/Exact_Fields) guards all new fields; socket permissions and single-thread dispatch unchanged",
+            "status": "CONFIRMED"
+          }
+        ],
+        "gaps": [
+          {
+            "category": "crash-consistency / ignored error condition",
+            "confidence": "medium",
+            "cwe": "CWE-390",
+            "evidence": "daemon/src/nemesis-core-authority_store.adb:37-48 (errors ignored), :146-150 (Success independent of dir sync); contrast with the file-level F_FULLFSYNC which is treated as fatal at :136-140. Invariant text in nemesis-core-authority_store.ads:47-51 promises durable replacement before the authorization event.",
+            "id": "DAP-01",
+            "impact": "Full_Sync_Directory (:37-48) ignores both open failure and fcntl failure, and Write_Record sets Success := Renamed regardless of directory-sync outcome (:146-150). Persist_Consumed_Approval can therefore report Authority_OK while the rename of the consumed record is not yet durable. In the worst-case crash window the on-disk approval could revert to Active while the subsequent Action_Authorized ledger event (whose own file F_FULLFSYNC is error-checked, ledger.adb:339-342) survived \u2014 narrowing the stated 'consumed-before-commit, never replayable' guarantee from always to almost-always. The identical best-effort pattern exists in mission_store.adb:36-45 and ledger.adb:35-44.",
+            "line": 37,
+            "path": "daemon/src/nemesis-core-authority_store.adb",
+            "precondition": "Power loss shortly after authorize_action, combined with a failed directory F_FULLFSYNC (e.g., fd exhaustion causing C_Open to fail, or fcntl error) and filesystem metadata-journal ordering that lets the later ledger append become durable while the earlier consumed-approval rename is lost.",
+            "remediation": "Make Full_Sync_Directory return a Boolean (or status) and have Write_Record treat directory open/fcntl failure exactly like the file F_FULLFSYNC failure \u2014 Success := False \u2014 so Persist_Consumed_Approval refuses and authorize_action fails closed before Commit_Event. Apply the same propagation in mission_store and ledger for symmetry.",
+            "severity": "low"
+          },
+          {
+            "category": "documentation / budget semantics",
+            "confidence": "high",
+            "cwe": "CWE-1068",
+            "evidence": "daemon/src/nemesis_core_daemon.adb:38-42 (comment), :277-278 (Parent_Grant_Byte_Budget), :390 (Maximum_Bytes => Parent.Maximum_Bytes per child); kernel Authorize checks only per-action Estimated_Bytes <= Grant.Maximum_Bytes (capabilities.adb:18-19). protocols/local-core-v1.md:22-23 documents only a per-action byte-budget binding, so the protocol contract itself is not violated.",
+            "id": "DAP-02",
+            "impact": "The comment at daemon.adb:38-40 calls the parent grant 'the mission's whole reviewed write budget', but Maximum_Bytes is never decremented across actions: every derived child receives the full Parent.Maximum_Bytes (4,096) at :390, so N approved actions may each estimate up to 4,096 bytes. Because each action still requires its own human-created one-shot approval bound to an exact action digest, per-action authority remains human-gated and no lane invariant requires cumulative accounting \u2014 but the comment overstates the enforced property and could mislead future maintainers into relying on a mission-wide cap.",
+            "line": 38,
+            "path": "daemon/src/nemesis_core_daemon.adb",
+            "precondition": "None (semantic observation).",
+            "remediation": "Either reword the comment to 'per-action reviewed write budget', or implement cumulative decrement (persist remaining budget in the parent grant record on each authorization) if mission-wide budgeting is the intended contract.",
+            "severity": "informational"
+          }
+        ],
+        "lane": "daemon_authority_path",
+        "reviewer_identity": {
+          "context": "Independent defensive re-review subagent RevDaemonAuthority (OMP), read-only static source audit per BRIEF-20260822",
+          "limitations": [
+            "Static source review only; no builds, no test executions, no gnatprove re-run \u2014 SPARK contract status taken from source annotations and the shipped FORMAL_KERNEL receipt",
+            "git rev-parse HEAD observed 9dd22f259d164ebb1afde3b8940a891161cad3f6 (matches pinned subject); worktree carried uncommitted modifications confined to receipts/ (PHASE16/FORMAL_KERNEL/proof-aba artifacts), none touching daemon/, kernel/, protocols/, or any audited source path",
+            "Crash-consistency reasoning about APFS metadata-journal ordering after an unsynced rename (DAP-01) is analytic, not empirically reproduced"
+          ],
+          "model": "anthropic/claude-fable-5"
+        },
+        "schema": "nemesis.hardening-audit.result/v1",
+        "subject_commit": "9dd22f259d164ebb1afde3b8940a891161cad3f6",
+        "verdict": "CLEAN"
+      },
+      "rule_id": "daemon_authority_path.result",
+      "severity": "informational",
+      "summary": "Complete brief-schema result object for lane daemon_authority_path is carried in optionalProperties. All seven invariants CONFIRMED; gaps DAP-01 (low) and DAP-02 (informational); verdict CLEAN.",
+      "title": "Lane result JSON (nemesis.hardening-audit.result/v1) \u2014 verdict CLEAN"
+    },
+    {
+      "category": "crash-consistency",
+      "confidence": "medium",
+      "cwe": [
+        "CWE-390"
+      ],
+      "evidence": [
+        {
+          "excerpt": "if FD >= 0 then\n   Ignore := Fcntl (FD, F_FULLFSYNC);\n   Ignore := C_Close (FD);\nend if;",
+          "explanation": "Directory sync failure is discarded, unlike the file-level F_FULLFSYNC at lines 136-140 which fails the write.",
+          "label": "ignored fcntl result"
+        },
+        {
+          "excerpt": "GNAT.OS_Lib.Rename_File (Temp, Path, Renamed);\nif Renamed then\n   Full_Sync_Directory (...);\nend if;\nSuccess := Renamed;",
+          "explanation": "Write_Record sets Success := Renamed whether or not the containing directory was synced.",
+          "label": "success despite unsynced rename"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 48,
+          "path": "daemon/src/nemesis-core-authority_store.adb",
+          "role": "error-swallowing directory sync",
+          "start_line": 37
+        },
+        {
+          "end_line": 150,
+          "path": "daemon/src/nemesis-core-authority_store.adb",
+          "role": "Success independent of directory-sync outcome",
+          "start_line": 146
+        },
+        {
+          "end_line": 437,
+          "path": "daemon/src/nemesis_core_daemon.adb",
+          "role": "ordering that relies on the durability primitive",
+          "start_line": 415
+        }
+      ],
+      "optionalProperties": {
+        "remediation": "Propagate directory-sync failure as Success := False in Write_Record (and mirror in mission_store/ledger), so authorize_action refuses before committing the ledger event."
+      },
+      "rule_id": "DAP-01",
+      "severity": "low",
+      "summary": "Full_Sync_Directory in the authority store ignores open() and fcntl(F_FULLFSYNC) failures, and Write_Record reports success based solely on rename. The consumed-approval record can be reported durable while its rename is not yet synced to the directory, slightly weakening the documented consumed-before-commit replay guarantee under a coincident sync failure and power loss.",
+      "title": "Directory F_FULLFSYNC failures silently ignored in authority-store durability chain"
+    },
+    {
+      "category": "documentation",
+      "confidence": "high",
+      "cwe": [
+        "CWE-1068"
+      ],
+      "evidence": [
+        {
+          "excerpt": "--  The parent grant carries the mission's whole reviewed write budget;\n--  every per-action child is derived from it and only shrinks.",
+          "explanation": "Comment claims a mission-wide budget; kernel Authorize checks only per-action Estimated_Bytes <= Grant.Maximum_Bytes (kernel/src/nemesis-kernel-capabilities.adb:18-19) and no cumulative accounting exists.",
+          "label": "comment vs enforcement"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 42,
+          "path": "daemon/src/nemesis_core_daemon.adb",
+          "role": "overstating comment",
+          "start_line": 38
+        },
+        {
+          "end_line": 390,
+          "path": "daemon/src/nemesis_core_daemon.adb",
+          "role": "child receives full parent budget",
+          "start_line": 390
+        }
+      ],
+      "optionalProperties": {
+        "remediation": "Reword the comment to per-action semantics, or persist a decremented remaining budget if mission-wide capping is intended."
+      },
+      "rule_id": "DAP-02",
+      "severity": "informational",
+      "summary": "The parent grant's Maximum_Bytes (4,096) is not decremented across actions; each approved action's child grant receives the full budget. Enforcement matches the protocol doc (per-action binding) but not the daemon comment's mission-wide framing. Per-action authority remains human-gated by one-shot approvals, so this is documentation-level only.",
+      "title": "'Whole reviewed write budget' comment overstates non-cumulative per-action byte budget"
+    }
+  ],
+  "reviewed_paths": [
+    "daemon/src/nemesis_core_daemon.adb",
+    "daemon/src/nemesis-core-authority_store.ads",
+    "daemon/src/nemesis-core-authority_store.adb",
+    "daemon/tests/nemesis_authority_store_tests.adb",
+    "daemon/src/nemesis-core-mission_store.ads",
+    "daemon/src/nemesis-core-mission_store.adb",
+    "daemon/src/nemesis-core-ledger.adb",
+    "daemon/src/nemesis-core-json.ads",
+    "daemon/src/nemesis-core-json.adb",
+    "kernel/src/nemesis-kernel-capabilities.ads",
+    "kernel/src/nemesis-kernel-capabilities.adb",
+    "kernel/src/nemesis-kernel-approvals.ads",
+    "kernel/src/nemesis-kernel-approvals.adb",
+    "kernel/src/nemesis-kernel-types.ads",
+    "protocols/local-core-v1.md",
+    "receipts/production-readiness-20260821/security-review/BRIEF-20260822.md",
+    "receipts/production-readiness-20260821/security-review/INPUTS-20260822.json"
+  ]
+}

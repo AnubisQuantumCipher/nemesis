@@ -1,0 +1,446 @@
+{
+  "coverage_summary": "Lane protocol_clients defensive re-review at frozen subject 9dd22f259d164ebb1afde3b8940a891161cad3f6 (git rev-parse HEAD observed exactly this SHA; tree 1532c116b1e2bf9ee23c38f159a615769f34f802; TS contract sha256 recomputed and matches manifest 920900f3\u2026). All five enforcement invariants CONFIRMED: (1) grant/approval issuance exists only inside run_local_mission (mission_runner.rs:830-848), reachable only via the run_mission command (lib.rs:493-497, command surface lib.rs:629-639) behind the reviewed-digest gate (mission_runner.rs:740-745); (2) create_approval binds mission.action_digest (mission_runner.rs:838-843) and byte-exact match is re-enforced by the digest-keyed store (authority_store.adb:412-449) and SPARK Consume_Approval equality (approvals.adb:22-31); (3) refusal decisions+reasons propagate via expect_core\u2192MissionRunError::Refused\u2192CommandFailure (mission_runner.rs:682-685, lib.rs:62-92, lib.rs run_mission Err arm) to the UI alert; (4) every new AuthorityReview claim (ONE-SHOT/EXACT ACTION DIGEST/PARENT GRANT\u2192ATTENUATED CHILD/consumed exactly once) is backed by shipped kernel+daemon code, cited per line; (5) the vertical-slice replay probe (run_vertical_slice.py:321-333) and daemon hostile tests (test_daemon_api.py:355-397) assert exact status/decision/reason and would fail on any fail-open regression, including across daemon restart. Invariant 6 (protocol doc accuracy): field counts and state gates match exactly; two low documentation mismatches (checkpoint-recovery sentence, REFUSED_BUDGET omission) and one low durability-wording/unchecked-error item recorded as PCL-01/02/04, plus a low API-level test-coverage hole (PCL-03) and one informational note (PCL-05). Verdict CLEAN per the brief's severity rule (no gap \u2265 medium; all enforcement invariants confirmed). The complete brief-schema JSON (nemesis.hardening-audit.result/v1) is carried verbatim in the PCL-REPORT finding's optionalProperties.",
+  "deferred": [
+    {
+      "paths": [
+        "daemon/src/nemesis_core_daemon.adb",
+        "daemon/src/nemesis-core-authority_store.adb"
+      ],
+      "reason": "Same-user local-process access to the per-mission Core Unix socket (0700 home chain, 0600 socket) and daemon authority-store internals beyond doc-accuracy are the daemon_authority lane's subject (RevDaemonAuthority)."
+    },
+    {
+      "paths": [
+        "kernel/src/nemesis-kernel-capabilities.ads",
+        "kernel/src/nemesis-kernel-approvals.ads"
+      ],
+      "reason": "SPARK proof replay (gnatprove) of the cited Derive_Child_Grant/Consume_Approval contracts is the kernel_formal lane's subject (RevKernelFormal); this lane read the contracts and verified their runtime defense-in-depth re-checks only."
+    }
+  ],
+  "findings": [
+    {
+      "category": "audit-report",
+      "confidence": "high",
+      "cwe": [],
+      "evidence": [
+        {
+          "explanation": "git rev-parse HEAD and HEAD^{tree} observed 9dd22f259d164ebb1afde3b8940a891161cad3f6 / 1532c116b1e2bf9ee23c38f159a615769f34f802, matching INPUTS-20260822.json; TS_CONTINUATION_CONTRACT_2026-08-22.md sha256 recomputed as 920900f3a7d37a9a3e1d51541997070789a0e1e7bddecf31808076c67a00d3f9, matching the manifest.",
+          "label": "Subject verification"
+        }
+      ],
+      "locations": [
+        {
+          "path": "receipts/production-readiness-20260821/security-review/BRIEF-20260822.md",
+          "role": "authorizing brief",
+          "start_line": 1
+        }
+      ],
+      "optionalProperties": {
+        "confirmed_invariants": [
+          "INV-1 issuance locality: the only create_grant/create_approval requests in the desktop codebase are inside run_local_mission (desktop/src-tauri/src/mission_runner.rs:830-843, progress marker 845-848); run_local_mission is invoked solely by the run_mission Tauri command (desktop/src-tauri/src/lib.rs:493-497) whose registered surface (lib.rs:629-639) contains no other Core-touching command \u2014 draft_mission (mission_runner.rs draft_local_mission), compile_mission (preflight_local_mission), and load_replay never open the Core socket; the reviewed-digest gate (mission_runner.rs:740-745) executes before any Core process is started (CoreProcess start at 823), and desktop/src-tauri/tests/mission_execution.rs:255-278 proves a mismatched reviewed digest refuses before a lane exists. The daemon additionally gates issuance to PLANNING state with exact field counts (nemesis_core_daemon.adb:257-259, 294-296).",
+          "INV-2 digest binding without widening: reviewed_action_digest must equal mission.action_digest (mission_runner.rs:743-745); create_approval carries mission.action_digest (mission_runner.rs:838-843); the daemon persists the approval under a digest-keyed filename (authority_store.adb:56-61) with overwrite refusal ('approval_already_exists', authority_store.adb:396-403) so a consumed approval can never be re-armed; authorize_action loads by exact digest with mission+digest cross-check on parse (authority_store.adb:412-449) and the SPARK kernel refuses any digest inequality (nemesis-kernel-approvals.adb:24-27, Post at nemesis-kernel-approvals.ads:31-40); the worker's proposal is checked against the reviewed relative_path and content_digest before authorization is requested (mission_runner.rs:886-903) and the executed write is the reviewed replacement bytes themselves (mission_runner.rs:936-940, verified 981-987).",
+          "INV-3 refusal propagation: any non-OK Core response becomes MissionRunError::Refused embedding the full response JSON including decision and reason (mission_runner.rs:682-685); Display is the raw message (mission_runner.rs:33-41); run_mission converts it to a typed CommandFailure with code/message/recovery (lib.rs:62-92) and both records it in the polled snapshot and returns it as the command error (lib.rs run_mission Err arm); App.tsx surfaces code, message, and recovery in a role=alert block, asserted by App.test.tsx 'renders typed refusal and concrete recovery guidance'.",
+          "INV-4 UI claims are enforced copy: 'ONE-SHOT \u00b7 EXACT ACTION DIGEST' (AuthorityReview.tsx:71-74) \u2190 nemesis-kernel-approvals.adb:11-31 (consumed\u2192Approval_Replayed; exact digest equality) plus durable consumption before the authorization event (nemesis_core_daemon.adb:408-437) and anti-re-arm persistence (authority_store.adb:396-403); 'PARENT GRANT \u2192 ATTENUATED CHILD' (AuthorityReview.tsx:76-80) \u2190 persisted parent load with fail-closed missing/corrupt/inactive handling (nemesis_core_daemon.adb:361-384), SPARK-proved Derive_Child_Grant postcondition (nemesis-kernel-capabilities.ads:83-107, body .adb:43-58) and runtime Is_Attenuation re-check (nemesis_core_daemon.adb:385-399); 'Consumed exactly once \u2026 replay is refused' (AuthorityReview.tsx:100-103) \u2190 same consumption path plus replay refusal proven across restart in tests; footer 'backend re-reads the file and refuses any changed byte before creating a lane' (AuthorityReview.tsx:113-116) \u2190 contract re-read (lib.rs:481), digest gate (mission_runner.rs:740-745), expectedSha256/baseRevision workspace validation (mission_runner.rs:454-459) all before lane creation (mission_runner.rs:769). App.test.tsx:216-222 additionally pins that the digests shown in review are the exact values passed to run_mission.",
+          "INV-5 probe/test strength: run_vertical_slice.py raises on any non-zero subprocess (run(), lines 59-72) and on any non-OK Core response (expect(), 158-162); the replay probe (321-333) re-issues authorize_action after a daemon restart and hard-fails unless status==REFUSED AND reason==approval_replayed \u2014 a fail-open regression (OK/AUTHORIZED) or a reason drift both raise. test_daemon_api.py test_authority_is_persisted_one_shot_and_fail_closed (277-392) asserts exact status/decision/reason triples for: missing grant (no_parent_grant), missing approval (no_approval), duplicate issuance (grant_already_exists/approval_already_exists), replay before AND after daemon restart (approval_replayed), on-disk approval tamper (approval_corrupt), on-disk grant tamper (grant_corrupt), and PLANNING-only issuance; test_lifecycle (262-273) asserts terminal-state authorize_action refuses without sequence movement.",
+          "INV-6 (field counts + state gates): Exact_Fields counts match the documented commands exactly \u2014 ping 2, create 7, authorize 4, run 3, inspect 3, create_grant 4, create_approval 5, authorize_action 7, action_completed 5, accept_evidence 6, propose_completion 3, receipt_payload 3 (nemesis_core_daemon.adb:161, 166, 220, 246, 258, 295, 333, 452, 471, 497, 542); state gates match: issuance PLANNING-only (258-259, 295-296), authorize_action/action_completed/accept_evidence/propose_completion RUNNING-only (333-334, 452-453, 472-473, 497-498), receipt_payload COMPLETE with current claims (542-545); message bound 65,536 both sides (nemesis-core-json.ads:2, mission_runner.rs:22); socket chmod 0600 after bind and home 0700 (nemesis_core_daemon.adb daemon prologue) match the doc; all documented refusal reasons exist verbatim in code (nemesis_core_daemon.adb:106-131)."
+        ],
+        "coverage": [
+          {
+            "files": [
+              "desktop/src-tauri/src/mission_runner.rs",
+              "desktop/src-tauri/src/lib.rs",
+              "desktop/src-tauri/src/main.rs",
+              "desktop/src-tauri/tests/mission_execution.rs"
+            ],
+            "invariant": "INV-1: Grant/approval issuance happens only inside run_local_mission, reachable only through the reviewed-digest-validated run_mission command; no other issuance path exists in the desktop app",
+            "status": "CONFIRMED"
+          },
+          {
+            "files": [
+              "desktop/src-tauri/src/mission_runner.rs",
+              "desktop/src-tauri/src/production.rs",
+              "daemon/src/nemesis_core_daemon.adb",
+              "daemon/src/nemesis-core-authority_store.adb",
+              "kernel/src/nemesis-kernel-approvals.adb"
+            ],
+            "invariant": "INV-2: create_approval binds mission.action_digest (the human-reviewed digest); the worker's later proposed action must still match byte-exactly or authorize_action refuses \u2014 no widening between review and execution",
+            "status": "CONFIRMED"
+          },
+          {
+            "files": [
+              "desktop/src-tauri/src/mission_runner.rs",
+              "desktop/src-tauri/src/lib.rs",
+              "desktop/src/App.tsx",
+              "desktop/src/App.test.tsx"
+            ],
+            "invariant": "INV-3: Refusal decisions and reasons propagate to the operator through typed failures (expect_core \u2192 MissionRunError::Refused \u2192 CommandFailure), never silently swallowed",
+            "status": "CONFIRMED"
+          },
+          {
+            "files": [
+              "desktop/src/components/AuthorityReview.tsx",
+              "kernel/src/nemesis-kernel-approvals.adb",
+              "kernel/src/nemesis-kernel-capabilities.ads",
+              "kernel/src/nemesis-kernel-capabilities.adb",
+              "daemon/src/nemesis_core_daemon.adb",
+              "daemon/src/nemesis-core-authority_store.adb"
+            ],
+            "invariant": "INV-4: AuthorityReview's new claims (ONE-SHOT / EXACT ACTION DIGEST / PARENT GRANT \u2192 ATTENUATED CHILD / consumed exactly once) are enforced by shipped code, not aspirational copy",
+            "status": "CONFIRMED"
+          },
+          {
+            "files": [
+              "scripts/run_vertical_slice.py",
+              "tests/integration/test_daemon_api.py",
+              "kernel/tests/nemesis_authority_tests.adb"
+            ],
+            "invariant": "INV-5: The vertical-slice replay probe and the daemon-api hostile tests actually fail if replay were accepted (assertion strength catches a fail-open regression)",
+            "status": "CONFIRMED"
+          },
+          {
+            "files": [
+              "protocols/local-core-v1.md",
+              "daemon/src/nemesis_core_daemon.adb"
+            ],
+            "invariant": "INV-6a: protocols/local-core-v1.md matches implemented field counts and state gates",
+            "status": "CONFIRMED"
+          },
+          {
+            "files": [
+              "protocols/local-core-v1.md",
+              "daemon/src/nemesis_core_daemon.adb",
+              "daemon/src/nemesis-core-mission_store.adb",
+              "daemon/src/nemesis-core-authority_store.adb"
+            ],
+            "invariant": "INV-6b: protocols/local-core-v1.md matches implemented refusal vocabulary and recovery/durability behavior",
+            "status": "GAP"
+          }
+        ],
+        "gaps": [
+          {
+            "category": "documentation-accuracy",
+            "confidence": "high",
+            "cwe": "CWE-1059",
+            "evidence": "protocols/local-core-v1.md:64 vs daemon/src/nemesis-core-mission_store.adb:484-513 and tests/integration/test_daemon_api.py:394-420 (test comment explicitly: 'never brick to STORE_CORRUPT').",
+            "id": "PCL-01",
+            "impact": "The sentence 'Ledger/checkpoint disagreement returns corrupt state; Core does not guess or run' is only true for a checkpoint AHEAD of the ledger (daemon/src/nemesis-core-mission_store.adb:486-491 \u2192 Store_Corrupt). A missing or lagging checkpoint is deliberately rebuilt from the hash-chain-validated ledger tail (nemesis-core-mission_store.adb:495-513, SQL-001), and tests/integration/test_daemon_api.py:394-420 asserts that recovery. A maintainer 'fixing' code to match the doc would reintroduce the SQL-001 crash-brick.",
+            "line": 64,
+            "path": "protocols/local-core-v1.md",
+            "precondition": "A maintainer or reviewer relies on the protocol document for Core recovery semantics.",
+            "remediation": "Reword the Recovery paragraph to distinguish the two directions: checkpoint ahead of the ledger fails closed as corrupt; checkpoint missing/behind is rebuilt from the authoritative ledger.",
+            "severity": "low"
+          },
+          {
+            "category": "documentation-accuracy",
+            "confidence": "high",
+            "cwe": "CWE-1059",
+            "evidence": "protocols/local-core-v1.md:36-41 vs daemon/src/nemesis_core_daemon.adb:428-434 and kernel/src/nemesis-kernel-capabilities.adb:9-22.",
+            "id": "PCL-02",
+            "impact": "The documented refusal vocabulary says decisions are 'REFUSED_CAPABILITY or REFUSED_APPROVAL' each with a reason, but the post-consumption capability check can return REFUSED_BUDGET (kernel/src/nemesis-kernel-capabilities.adb:18-19), emitted verbatim via Authority_Decision'Image with NO reason key (daemon/src/nemesis_core_daemon.adb:428-434). Consumers parsing per the doc would meet an undocumented decision value and a missing field.",
+            "line": 37,
+            "path": "protocols/local-core-v1.md",
+            "precondition": "A direct local socket client sends authorize_action with estimated_bytes exceeding the 4096-byte parent budget (the desktop client cannot: replacement_bytes \u2264 maxWriteBytes 4096 is enforced at contract compile).",
+            "remediation": "Document REFUSED_BUDGET (and that the Authorize-refusal branch carries decision only), or add a reason string to that branch for uniformity.",
+            "severity": "low"
+          },
+          {
+            "category": "test-coverage",
+            "confidence": "high",
+            "cwe": "N/A (assurance gap)",
+            "evidence": "tests/integration/test_daemon_api.py:277-392 (all attempt() calls use matching WORKER/SCOPE and estimated_bytes 128); daemon/src/nemesis_core_daemon.adb:352-434; kernel/tests/nemesis_authority_tests.adb:122-160.",
+            "id": "PCL-03",
+            "impact": "The hostile daemon-API tests cover missing/tampered authority, one-shot replay across restart, and PLANNING-only issuance, but never exercise the post-consumption Authorize refusal dimensions through the socket: scope_digest mismatch, worker_id mismatch, estimated_bytes over the 4096 parent budget, or grant/approval expiry. These are asserted only at the kernel unit level (kernel/tests/nemesis_authority_tests.adb:122-160), which would not catch a daemon-layer request-to-Action_Request wiring regression. The documented 'a later budget or scope failure has already burned its one-shot approval' fail-closed direction (protocols/local-core-v1.md:41-43) is also untested end-to-end.",
+            "line": 277,
+            "path": "tests/integration/test_daemon_api.py",
+            "precondition": "A future daemon-layer regression in how authorize_action populates Action_Request (e.g., taking scope or subject from the stored grant instead of the request), or in window/budget wiring.",
+            "remediation": "Add daemon-level cases: wrong scope_digest, wrong worker_id, estimated_bytes 4097 \u2014 each asserting status REFUSED and that a subsequent exact retry reports approval_replayed (proving the approval burned on the failed attempt).",
+            "severity": "low"
+          },
+          {
+            "category": "hardening / documentation-accuracy",
+            "confidence": "medium",
+            "cwe": "CWE-391",
+            "evidence": "daemon/src/nemesis-core-authority_store.adb:38-47 ('Ignore := Fcntl (FD, F_FULLFSYNC)'), 147-151; protocols/local-core-v1.md:58-62.",
+            "id": "PCL-04",
+            "impact": "protocols/local-core-v1.md:58-62 claims authority records are written 'tmp-then-rename with F_FULLFSYNC on file and directory', but Full_Sync_Directory (authority_store.adb:38-47) discards both the open and fcntl results, and Write_Record (authority_store.adb:147-151) treats directory sync as best-effort after rename \u2014 only file-level F_FULLFSYNC failure fails closed (137-142). The code is therefore weaker than the documented durability contract. Practical replay exposure is judged unlikely because the subsequent Action_Authorized ledger commit performs its own F_FULLFSYNC (device-wide cache flush) after Persist_Consumed_Approval returns (daemon/src/nemesis_core_daemon.adb:415-437) [INFERENCE on macOS flush ordering], but the doc states a guarantee the code does not enforce.",
+            "line": 38,
+            "path": "daemon/src/nemesis-core-authority_store.adb",
+            "precondition": "Directory F_FULLFSYNC fails or is skipped (open/fcntl error) immediately followed by power loss after the consumed-approval rename.",
+            "remediation": "Propagate Full_Sync_Directory failure so Write_Record reports failure (mapped to Authority_IO_Failure, which authorize_action already fails closed on), or soften the doc to 'best-effort directory flush ordered before the ledger commit's full device flush'.",
+            "severity": "low"
+          },
+          {
+            "category": "assertion-strength parity",
+            "confidence": "high",
+            "cwe": "N/A",
+            "evidence": "mission_runner.rs:886-903 vs run_vertical_slice.py:296-302; production.rs:208-214; mission_runner.rs:936-940.",
+            "id": "PCL-05",
+            "impact": "run_local_mission validates the worker proposal's method, relative_path, and content_digest (mission_runner.rs:886-903) but not its action_kind or purpose fields, whereas scripts/run_vertical_slice.py:296-302 compares the full params object. No authority widening is possible: the lane write is performed by the runner itself with the reviewed replacement bytes (write_lane_file at mission_runner.rs:936-940), the content verifier re-reads them (mission_runner.rs:981-987), and authorization uses mission.action_digest, which already binds kind 'filesystem.modify' from the reviewed normalized action (desktop/src-tauri/src/production.rs:208-214). Recorded only as a strength-parity note.",
+            "line": 886,
+            "path": "desktop/src-tauri/src/mission_runner.rs",
+            "precondition": "None required; observation of differing check strength between the shipped runner and the slice probe.",
+            "remediation": "Optionally mirror the slice's full-params comparison in the runner for defense in depth.",
+            "severity": "informational"
+          }
+        ],
+        "lane": "protocol_clients",
+        "reviewer_identity": {
+          "context": "Independent defensive hardening re-review subagent RevProtocolClients (Oh My Pi), lane protocol_clients, 2026-08-22 trust-surface epoch, read-only static source audit",
+          "context_note": "PCL-04 exploitability reasoning about macOS flush ordering is [INFERENCE]; the unchecked directory-sync error itself is observed code.",
+          "limitations": [
+            "Static reading plus git read commands only; no builds, test executions, or dynamic probes were run in this review \u2014 assertions about test strength are from reading test source, not from running the suites.",
+            "git rev-parse HEAD observed 9dd22f259d164ebb1afde3b8940a891161cad3f6 (tree 1532c116b1e2bf9ee23c38f159a615769f34f802), identical to the pinned subject, so worktree bytes were audited directly.",
+            "TS_CONTINUATION_CONTRACT_2026-08-22.md sha256 recomputed locally as 920900f3a7d37a9a3e1d51541997070789a0e1e7bddecf31808076c67a00d3f9, matching INPUTS-20260822.json.",
+            "Verdict CLEAN follows the brief's severity rule (no gap \u2265 medium, every enforcement invariant CONFIRMED); the recorded gaps are low documentation-accuracy/test-coverage items on the protocol-doc invariant, not enforcement failures \u2014 noted here explicitly so the verdict is not read as 'zero findings'.",
+            "Exposure of the per-mission Core Unix socket to other same-user local processes (0700 home, 0600 socket) is the daemon_authority lane's subject and was not re-adjudicated here.",
+            "SPARK proof replay (gnatprove) for the cited Post contracts was not re-run; contracts were read as source and their runtime re-checks (Is_Attenuation defense-in-depth) verified in daemon code."
+          ],
+          "model": "anthropic/claude-fable-5"
+        },
+        "schema": "nemesis.hardening-audit.result/v1",
+        "subject_commit": "9dd22f259d164ebb1afde3b8940a891161cad3f6",
+        "verdict": "CLEAN"
+      },
+      "rule_id": "PCL-REPORT",
+      "severity": "informational",
+      "summary": "Full brief-schema JSON for lane protocol_clients is embedded in this finding's optionalProperties, exactly as required by BRIEF-20260822.md. Verdict CLEAN; five low/informational gaps PCL-01..PCL-05; six coverage rows.",
+      "title": "Lane report: nemesis.hardening-audit.result/v1 (protocol_clients)"
+    },
+    {
+      "category": "documentation-accuracy",
+      "confidence": "high",
+      "cwe": [
+        "CWE-1059"
+      ],
+      "evidence": [
+        {
+          "excerpt": "Ledger/checkpoint disagreement returns corrupt state; Core does not guess or run.",
+          "explanation": "The Recovery section states disagreement always yields corrupt state.",
+          "label": "Doc claim"
+        },
+        {
+          "excerpt": "if Checkpoint_Status = Checkpoint_Valid and then Checkpoint.Sequence > Recovered.Sequence then Result := Store_Corrupt; ... Rebuild the derived checkpoint from the ledger tail whenever it is missing or stale",
+          "explanation": "Only checkpoint-ahead fails closed; lagging/mismatched checkpoints are rebuilt from the authoritative ledger tail (SQL-001 comment at nemesis-core-mission_store.adb:495-497).",
+          "label": "Implementation"
+        }
+      ],
+      "locations": [
+        {
+          "path": "protocols/local-core-v1.md",
+          "role": "inaccurate doc sentence",
+          "start_line": 64
+        },
+        {
+          "end_line": 513,
+          "path": "daemon/src/nemesis-core-mission_store.adb",
+          "role": "actual behavior: ahead=corrupt, behind=rebuild",
+          "start_line": 484
+        },
+        {
+          "end_line": 420,
+          "path": "tests/integration/test_daemon_api.py",
+          "role": "test asserting rebuild-on-lag",
+          "start_line": 394
+        }
+      ],
+      "optionalProperties": {
+        "gap_id": "PCL-01",
+        "remediation": "Reword to distinguish checkpoint-ahead (fail closed, corrupt) from checkpoint-behind/missing (rebuilt from authoritative ledger)."
+      },
+      "rule_id": "PCL-01",
+      "severity": "low",
+      "summary": "protocols/local-core-v1.md:64 says 'Ledger/checkpoint disagreement returns corrupt state; Core does not guess or run', but the implementation fails closed only when the checkpoint is AHEAD of the ledger; a missing/lagging checkpoint is rebuilt from the hash-chain-validated ledger (SQL-001), and the integration test asserts that recovery. A maintainer aligning code to the doc would reintroduce the crash-brick.",
+      "title": "Protocol doc overstates checkpoint-disagreement behavior vs SQL-001 rebuild-on-lag implementation"
+    },
+    {
+      "category": "documentation-accuracy",
+      "confidence": "high",
+      "cwe": [
+        "CWE-1059"
+      ],
+      "evidence": [
+        {
+          "excerpt": "return Context_Response (\"REFUSED\", Context, \",\" & Quote & \"decision\" & Quote & \":\" & Quote & Authority_Decision'Image (Decision) & Quote);",
+          "explanation": "The Authorize-refusal path returns only the decision image, unlike every other refusal which includes a reason.",
+          "label": "Reason-less branch"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 41,
+          "path": "protocols/local-core-v1.md",
+          "role": "incomplete vocabulary",
+          "start_line": 36
+        },
+        {
+          "end_line": 434,
+          "path": "daemon/src/nemesis_core_daemon.adb",
+          "role": "reason-less Authorize refusal branch",
+          "start_line": 428
+        },
+        {
+          "end_line": 19,
+          "path": "kernel/src/nemesis-kernel-capabilities.adb",
+          "role": "Refused_Budget source",
+          "start_line": 18
+        }
+      ],
+      "optionalProperties": {
+        "gap_id": "PCL-02",
+        "remediation": "Document REFUSED_BUDGET and the decision-only shape of this branch, or add a reason string for uniformity."
+      },
+      "rule_id": "PCL-02",
+      "severity": "low",
+      "summary": "The doc enumerates authorize_action refusal decisions as REFUSED_CAPABILITY or REFUSED_APPROVAL, each paired with a reason. The post-consumption Authorize call can also return REFUSED_BUDGET, which the daemon emits verbatim with no reason key. Reachable only by a direct socket client sending estimated_bytes > 4096; the desktop client cannot produce it.",
+      "title": "Refusal vocabulary omits reachable REFUSED_BUDGET decision (emitted without a reason field)"
+    },
+    {
+      "category": "test-coverage",
+      "confidence": "high",
+      "cwe": [],
+      "evidence": [
+        {
+          "excerpt": "return self.request(\"authorize_action\", mission_id=mission_id, worker_id=WORKER, scope_digest=SCOPE, action_digest=ACTION, estimated_bytes=128)",
+          "explanation": "All daemon-level authorize_action attempts send worker_id=WORKER, scope_digest=SCOPE, estimated_bytes=128 \u2014 never a mismatching subject/scope or an over-budget size \u2014 so Authorize's Refused_Capability/Refused_Budget branches are never traversed through the socket API.",
+          "label": "Uniform happy inputs"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 392,
+          "path": "tests/integration/test_daemon_api.py",
+          "role": "hostile suite lacking these cases",
+          "start_line": 277
+        },
+        {
+          "end_line": 434,
+          "path": "daemon/src/nemesis_core_daemon.adb",
+          "role": "untested-through-socket wiring",
+          "start_line": 352
+        },
+        {
+          "end_line": 160,
+          "path": "kernel/tests/nemesis_authority_tests.adb",
+          "role": "kernel-level coverage that exists",
+          "start_line": 122
+        }
+      ],
+      "optionalProperties": {
+        "gap_id": "PCL-03",
+        "remediation": "Add daemon-level cases for wrong scope_digest, wrong worker_id, and estimated_bytes 4097, each asserting REFUSED and that an exact retry then reports approval_replayed (proving the approval burned closed)."
+      },
+      "rule_id": "PCL-03",
+      "severity": "low",
+      "summary": "test_daemon_api.py covers replay, missing authority, tamper, and state gating with exact assertions, but every attempt() uses matching worker/scope and in-budget bytes. Scope mismatch, worker mismatch, over-budget, and expiry refusals \u2014 and the documented rule that a request failing the later capability check has already burned its one-shot approval \u2014 are only covered by kernel unit asserts, which would miss a daemon-layer Action_Request wiring regression.",
+      "title": "Daemon-API hostile tests skip post-consumption Authorize dimensions (scope/worker/budget/expiry) and the burned-approval-on-late-failure direction"
+    },
+    {
+      "category": "hardening",
+      "confidence": "medium",
+      "cwe": [
+        "CWE-391"
+      ],
+      "evidence": [
+        {
+          "excerpt": "FD := C_Open (...); if FD >= 0 then Ignore := Fcntl (FD, F_FULLFSYNC); Ignore := C_Close (FD); end if;",
+          "explanation": "Both the fcntl and close results are assigned to a throwaway variable; an open failure silently skips the flush entirely.",
+          "label": "Ignored result"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 47,
+          "path": "daemon/src/nemesis-core-authority_store.adb",
+          "role": "ignored sync result",
+          "start_line": 38
+        },
+        {
+          "end_line": 151,
+          "path": "daemon/src/nemesis-core-authority_store.adb",
+          "role": "best-effort call site in Write_Record",
+          "start_line": 147
+        },
+        {
+          "end_line": 62,
+          "path": "protocols/local-core-v1.md",
+          "role": "stronger documented contract",
+          "start_line": 58
+        }
+      ],
+      "optionalProperties": {
+        "gap_id": "PCL-04",
+        "remediation": "Propagate Full_Sync_Directory failure into Write_Record's Success (mapping to Authority_IO_Failure, on which authorize_action already fails closed), or soften the doc wording."
+      },
+      "rule_id": "PCL-04",
+      "severity": "low",
+      "summary": "Full_Sync_Directory discards open/fcntl failures, making the directory flush best-effort, while protocols/local-core-v1.md:58-62 states authority records get F_FULLFSYNC on file AND directory. File-level fsync failure fails closed; directory-level does not. Practical replay exposure is judged unlikely (the later ledger commit's F_FULLFSYNC flushes the device cache after consumption persists \u2014 [INFERENCE] on macOS flush ordering), but the code enforces less than the doc guarantees.",
+      "title": "Directory F_FULLFSYNC result ignored while doc claims full-sync 'on file and directory'"
+    },
+    {
+      "category": "assertion-strength parity",
+      "confidence": "high",
+      "cwe": [],
+      "evidence": [
+        {
+          "excerpt": "write_lane_file(&lane, &mission.relative_path, mission.replacement.as_bytes())",
+          "explanation": "The lane mutation is write_lane_file(mission.replacement) executed by the trusted runner (mission_runner.rs:936-940) and re-verified byte-exactly (981-987); the worker proposal is evidence, not the executed action.",
+          "label": "Why impact is nil"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 903,
+          "path": "desktop/src-tauri/src/mission_runner.rs",
+          "role": "partial-field proposal check",
+          "start_line": 886
+        },
+        {
+          "end_line": 302,
+          "path": "scripts/run_vertical_slice.py",
+          "role": "full-params comparison",
+          "start_line": 296
+        },
+        {
+          "end_line": 214,
+          "path": "desktop/src-tauri/src/production.rs",
+          "role": "action_digest binds kind",
+          "start_line": 208
+        }
+      ],
+      "optionalProperties": {
+        "gap_id": "PCL-05",
+        "remediation": "Optionally mirror the slice's full-params equality check in the runner."
+      },
+      "rule_id": "PCL-05",
+      "severity": "informational",
+      "summary": "mission_runner.rs validates the proposal's method, relative_path, and content_digest; run_vertical_slice.py compares the entire params object including action_kind and purpose. No authority impact: the runner performs the write itself with the reviewed replacement bytes and authorization binds mission.action_digest, which already encodes kind 'filesystem.modify' from the reviewed normalized action. Strength-parity note only.",
+      "title": "Runner checks worker proposal path+content digest but not action_kind/purpose (slice probe compares full params)"
+    }
+  ],
+  "reviewed_paths": [
+    "desktop/src-tauri/src/mission_runner.rs",
+    "desktop/src-tauri/src/lib.rs",
+    "desktop/src-tauri/src/production.rs (digest-derivation sections)",
+    "desktop/src-tauri/tests/mission_execution.rs",
+    "desktop/src/components/AuthorityReview.tsx",
+    "desktop/src/App.tsx",
+    "desktop/src/App.test.tsx",
+    "desktop/src/lib/bridge.ts (runMission)",
+    "scripts/run_vertical_slice.py",
+    "tests/integration/test_daemon_api.py",
+    "protocols/local-core-v1.md",
+    "daemon/src/nemesis_core_daemon.adb",
+    "daemon/src/nemesis-core-authority_store.adb",
+    "daemon/src/nemesis-core-authority_store.ads",
+    "daemon/src/nemesis-core-mission_store.adb (checkpoint recovery section)",
+    "daemon/src/nemesis-core-json.ads",
+    "kernel/src/nemesis-kernel-approvals.ads",
+    "kernel/src/nemesis-kernel-approvals.adb",
+    "kernel/src/nemesis-kernel-capabilities.ads",
+    "kernel/src/nemesis-kernel-capabilities.adb",
+    "kernel/src/nemesis-kernel-types.ads (Authority_Decision)",
+    "kernel/tests/nemesis_authority_tests.adb (authority sections)",
+    "daemon/tests/nemesis_authority_store_tests.adb (consumption sections)",
+    "receipts/production-readiness-20260821/security-review/BRIEF-20260822.md",
+    "receipts/production-readiness-20260821/security-review/INPUTS-20260822.json"
+  ]
+}

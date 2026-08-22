@@ -41,9 +41,9 @@
     "runtime/crates/nemesis-signer/src/lib.rs": "22720d2e0bbbe4cd05fd0a4e23a1a8a8a40965ead58dfd91bf23256abdf59d21",
     "scripts/run_security_hardening.sh": "de288e91da5ded4708eec1c409de64883e5bcee9fcad0e09584df6a161f5d83a",
     "scripts/security_hardening_guest.sh": "abc8b62cf70acda898e0e57d281e9e4e5c51c59ae7b340ec0d1ca2b5108a4875",
-    "scripts/test_phase16_receipt.py": "2590a673c265030f41b4f7466d7fb1c17943c7e736fe91262e454c48bb0913fa",
+    "scripts/test_phase16_receipt.py": "ad6397e1d6aba278f561d71e30f659062757087044ca88daf697b11a3ffa1457",
     "scripts/test_security_hardening.sh": "3f8bf77f23e7ad7d5cac62e09b2ce357c222e030ec090a9bd66975ba32ad21b6",
-    "scripts/verify_phase16_receipt.py": "40dc2b902fe76eeaf02987e5c2664ca553c368ff3e0ee26e9143a72095f9a1e2"
+    "scripts/verify_phase16_receipt.py": "428cbb5038514ba1cd32f2770f5ec3b9f3c496191fd51d6e47c98f572e103457"
   },
   "dependency_review": {
     "cargo_audit": "PASS",
@@ -64,9 +64,9 @@
       "bytes": 56454,
       "file": "receipts/phase-16-public/security-hardening.txt",
       "line_count": 1333,
-      "sha256": "168e19f16be189a2299e7d48471291cc8de5dc5ac54b81633d194165c6f0cba5"
+      "sha256": "bf216bd5c1fdeea824a27675e9570f28b9c8f215630b651e52899da8a69970a0"
     },
-    "observed_at": "2026-08-22T14:07:50Z",
+    "observed_at": "2026-08-22T14:31:55Z",
     "observed_warnings": [
       "Ada link steps reported a deployment-target override from 16.0 to the host target 26.0; every build, test, and bounded proof command still exited zero."
     ],
@@ -92,8 +92,8 @@
   },
   "repository": {
     "branch": "production/desktop-v1-autonomous-recovery",
-    "subject_commit": "9dd22f259d164ebb1afde3b8940a891161cad3f6",
-    "subject_tree": "1532c116b1e2bf9ee23c38f159a615769f34f802"
+    "subject_commit": "18ae66513620da8fa8dc8f917477b9b9c8d44804",
+    "subject_tree": "8a7da1057ae272bf58bc41a0affc777c7e1d449a"
   },
   "residuals": [
     {
