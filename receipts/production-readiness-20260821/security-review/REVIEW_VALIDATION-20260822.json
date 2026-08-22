@@ -3,6 +3,11 @@
   "brief": "receipts/production-readiness-20260821/security-review/BRIEF-20260822.md",
   "disposition": "All mediums (DCO-01, DCO-02, GIN-01) and actionable lows (DCO-03/04/05, GIN-02/03/04/05, KFS-01, PCL-01/02/03, PCL-04 doc-side) were fixed in commit 18ae66513620da8fa8dc8f917477b9b9c8d44804 and re-gated; accepted residuals (recorded, not fixed this epoch): DAP-01 (best-effort directory flush, doc softened + ordering argument), DAP-02, KFS-02 (receipt provenance regenerated at the final clean commit), KFS-03, PCL-05. A final independent re-review lane (final_fix_rereview) verified every fix on the final bytes.",
   "epoch": "2026-08-22-trust-surface",
+  "final_fix_rereview": {
+    "note": "all 14 fix coverage rows CONFIRMED on the fix-sweep source-final; two informational notes recorded",
+    "subject_commit": "18ae66513620da8fa8dc8f917477b9b9c8d44804",
+    "verdict": "CLEAN"
+  },
   "identity_note": "each receipt produced by a distinct isolated security-reviewer subagent process (separate context from lead), archived detached from the INPUTS manifest",
   "inputs": "receipts/production-readiness-20260821/security-review/INPUTS-20260822.json",
   "receipts": [
@@ -90,14 +95,30 @@
       "subject_bound": true,
       "valid": true,
       "verdict": "GAPS"
+    },
+    {
+      "coverage_rows": 14,
+      "gap_ids": [
+        "FRR-01",
+        "FRR-02"
+      ],
+      "gaps": 2,
+      "lane": "final_fix_rereview",
+      "max_severity": "informational",
+      "receipt": "receipts/production-readiness-20260821/security-review/reviews-20260822/FinalReReview.final-fix-rereview.json",
+      "sha256": "66832b21141664e57531dff349d8cce3ae97e8f3a264bb2daf1bb3b2d38d2e2f",
+      "subject_bound": true,
+      "subject_commit": "18ae66513620da8fa8dc8f917477b9b9c8d44804",
+      "valid": true,
+      "verdict": "CLEAN"
     }
   ],
-  "reviewer_lanes": 5,
+  "reviewer_lanes": 6,
   "schema": "nemesis.review-validation/v1",
   "subject_commit": "9dd22f259d164ebb1afde3b8940a891161cad3f6",
-  "validated_at": "2026-08-22T14:33:05.279144Z",
+  "validated_at": "2026-08-22T14:40:26.698759Z",
   "verdict_tally": {
-    "CLEAN": 3,
+    "CLEAN": 4,
     "GAPS": 2
   }
 }

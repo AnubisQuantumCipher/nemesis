@@ -1,0 +1,94 @@
+{
+  "coverage_summary": "{\"schema\":\"nemesis.hardening-audit.result/v1\",\"lane\":\"final_fix_rereview\",\"reviewer_identity\":{\"agent\":\"FinalReReview\",\"model\":\"anthropic/claude (independent re-review agent)\",\"method\":\"read-only static review of git diff 402c9c4..18ae665 plus HEAD file bytes and cross-referenced daemon/kernel/desktop sources; no builds, no test runs, no subagents\",\"date\":\"2026-08-22\"},\"subject_commit\":\"18ae66513620da8fa8dc8f917477b9b9c8d44804\",\"coverage\":[{\"invariant\":\"DCO-01 fix\",\"files\":[\"README.md\",\"SECURITY.md\",\"docs/architecture/LOCAL_DESKTOP_MISSION.md\"],\"status\":\"CONFIRMED\",\"detail\":\"README.md:32 now states TS-001/TS-002 resolved 2026-08-22 under architect authorization and frames Developer ID signing/notarization as permanent non-claims never prerequisites; SECURITY.md:62 rewritten to 'Every shipped 0.x macOS artifact is ad-hoc signed and not notarized' with hash-verification trust framing; LOCAL_DESKTOP_MISSION.md:60 now says Nemesis.Kernel.Approvals IS durably integrated (contract sha256 920900f3...). Living-doc grep (README, SECURITY, STATUS, docs/, protocols/, config/) found no residual claim that TS blockers are unresolved or that signing is a prerequisite; remaining matches are archived mission briefs (docs/mission/*), frozen phase-16 review, and generic policy language, all exempt.\"},{\"invariant\":\"DCO-02 fix\",\"files\":[\"scripts/verify_install_contract.py\"],\"status\":\"CONFIRMED\",\"detail\":\"bound_to_sums (scripts/verify_install_contract.py:250-263) requires a non-symlink SHA256SUMS beside each asset, exact-name listing, and recomputed sha256 match; applied to BOTH predecessor and successor at :265-270 before the try block. First extract() (the only ditto call, :49-57) occurs at :292 and both launches go through launch_probe after binding; no path reaches ditto or launch with an unbound asset. Malformed sums lines (e.g. names with spaces) fall out of the expected map and fail closed as asset_not_listed.\"},{\"invariant\":\"DCO-03 fix\",\"files\":[\"scripts/verify_install_contract.py\"],\"status\":\"CONFIRMED\",\"detail\":\"Symlink refusal now runs on the pre-resolution argparse arguments (scripts/verify_install_contract.py:212-215, supplied.is_symlink() before .resolve() at :216-217); the previously dead post-resolve check is gone (:219-221 checks is_file only). SHA256SUMS itself is also refused when a symlink (:252).\"},{\"invariant\":\"DCO-04 fix\",\"files\":[\"scripts/verify_install_contract.py\"],\"status\":\"CONFIRMED\",\"detail\":\"Launch-agent/helper inventory is observed: rglob scan of $HOME Library/LaunchAgents, LaunchDaemons, PrivilegedHelperTools at :360-375 raises ContractError on any file; receipt field observed_launch_agents_or_helpers:[] is only written after the scan proves empty (:390). Version distinctness enforced fail-closed at :397-399 (FAIL_INSTALL_CONTRACT versions_not_distinct, exit 1) with distinct:true recorded only past that gate.\"},{\"invariant\":\"DCO-05 fix\",\"files\":[\"docs/release/SOURCE_INSTALL.md\"],\"status\":\"CONFIRMED\",\"detail\":\"Residuals now include the workspace repository's git worktree registration (.git/worktrees/) and nemesis/desktop-* mission branch with exact removal commands git worktree prune and git branch -D nemesis/desktop-<id> (docs/release/SOURCE_INSTALL.md:103-107). Write-boundary sentence qualified at :109-113 to include the authorized-mission isolated lane worktree/branch. Executable-proof paragraph (:117-129) matches the new script behavior including locked-console criterion.\"},{\"invariant\":\"GIN-01 fix\",\"files\":[\"scripts/verify_authority_aba.py\",\"scripts/verify_proof_aba.py\"],\"status\":\"CONFIRMED\",\"detail\":\"verify_authority_aba.py:76-84 dirty_inventory_paths() (git status --porcelain=v1 --untracked-files=all over INVENTORY_ROOTS) with fail-closed refusal FAIL_AUTHORITY_ABA dirty_subject at :131-134 and subject.dirty_paths recorded in the receipt at :197. verify_proof_aba.py:100-110 same gate (FAIL_KERNEL_PROOF_ABA dirty_subject) with subject.dirty_paths at :169. Both run before hash_inventory snapshot, so a passing receipt provably records a clean ([]) subject.\"},{\"invariant\":\"GIN-02 fix\",\"files\":[\"scripts/verify_phase16_receipt.py\",\"scripts/test_phase16_receipt.py\"],\"status\":\"CONFIRMED\",\"detail\":\"Epoch enforced unconditionally: scripts/verify_phase16_receipt.py:109-111 (data.get('epoch') != RELEASE_EPOCH -> fail('release_epoch'); a stripped key yields None and fails); release-contract identity (:112-127) and full gate-log binding (path confinement, sha256/bytes/line_count, sentinels, failure markers, :169-201) are no longer gated on 'epoch is not None'. scripts/test_phase16_receipt.py:52-66 adds the epoch-strip tamper case requiring nonzero exit AND 'FAIL_PHASE16_RECEIPT release_epoch' in stdout, which matches fail()'s exact output format (:82-84).\"},{\"invariant\":\"GIN-03 fix\",\"files\":[\"scripts/verify_kernel_proof.py\",\"config/formal-kernel-scope.json\"],\"status\":\"CONFIRMED\",\"detail\":\"AUTHORIZED_TRUST_SURFACE_CONTRACTS frozenset pinned at scripts/verify_kernel_proof.py:26-33 (single hash 920900f3a7d37a9a3e1d51541997070789a0e1e7bddecf31808076c67a00d3f9). validate_live_scope first requires the contract file to exist and its recomputed sha256 to match contract_sha256, then refuses any resolution whose hash is not in the allowlist (:232-235). Both TS-001/TS-002 resolutions in config/formal-kernel-scope.json anchor to that hash, and I recomputed sha256 of receipts/production-readiness-20260821/trust-surface/TS_CONTINUATION_CONTRACT_2026-08-22.md = 920900f3... (match).\"},{\"invariant\":\"GIN-04 fix\",\"files\":[\"scripts/validate_production_readiness.py\"],\"status\":\"CONFIRMED\",\"detail\":\"Under any terminal verdict (verdict is not None, validated against TERMINAL_VERDICTS): every PASS lane carrying blockers errors, and any TRUST_SURFACE-kind lane blocker under a verdict other than BLOCKED_TRUST_SURFACE errors (scripts/validate_production_readiness.py:351-367). Fixture rosters in tests/integration/test_production_readiness.py keep blockers:[] on PASS lanes and use EXTERNAL-kind blockers on BLOCKED lanes, so all nine tests remain coherent with the new checks.\"},{\"invariant\":\"GIN-05 fix\",\"files\":[\"scripts/validate_production_readiness.py\",\"tests/integration/test_production_readiness.py\"],\"status\":\"CONFIRMED\",\"detail\":\"SEALED_LOCAL_PRODUCTION / COMPLETE_PRODUCTION_PUBLIC verdicts now bind: subject commit exists (git cat-file -e), is an ancestor of HEAD (merge-base --is-ancestor), subject tree equals the commit's tree, and staleness fails when any non-receipts/ path other than STATUS.md changed since the seal (scripts/validate_production_readiness.py:369-405). Fixture tests still make sense: temp-dir roots have no .git so the ancestry arm is skipped by the (root/'.git').exists() guard (:372), leaving the expected-empty-error assertions valid; real gate runs use ROOT which is a git worktree.\"},{\"invariant\":\"KFS-01 fix\",\"files\":[\"scripts/verify_kernel_proof.py\",\"tests/phase0/test_kernel_proof_manifest.py\"],\"status\":\"CONFIRMED\",\"detail\":\"_total_row now returns (total, unproved, justified) reading the second-to-last Total-row column (scripts/verify_kernel_proof.py:70-82, matching GNATprove's ...Justified|Unproved column order); ProofSummary carries justified (:44) and validate_proof_summary refuses any nonzero value (:109-112) \u2014 a non-numeric cell maps to -1 and still refuses. Regression tests/phase0/test_kernel_proof_manifest.py:68-80 tampers the fixture Justified cell '.'->'3', asserts summary.justified==3 and a 'justified' error; the fixture Total row's token layout makes fields[-2] the Justified cell exactly.\"},{\"invariant\":\"PCL-01 fix\",\"files\":[\"protocols/local-core-v1.md\"],\"status\":\"CONFIRMED\",\"detail\":\"protocols/local-core-v1.md:72 now documents both directions and matches the code: checkpoint AHEAD of ledger fails closed as corrupt (daemon/src/nemesis-core-mission_store.adb:484-492 Checkpoint.Sequence > Recovered.Sequence -> Store_Corrupt), missing/lagging/mismatched checkpoint is rebuilt from the hash-chain-validated ledger tail (:496-514, SQL-001), and a broken ledger chain is never guessed past (:474-483). tests/integration/test_daemon_api.py retains test_stale_or_lagging_checkpoint_recovers_from_authoritative_ledger.\"},{\"invariant\":\"PCL-02 fix\",\"files\":[\"protocols/local-core-v1.md\"],\"status\":\"CONFIRMED\",\"detail\":\"protocols/local-core-v1.md:36-49 now documents the decision-only refusal branch (no reason key) with REFUSED_CAPABILITY for subject/scope mismatch and REFUSED_BUDGET for over-budget, matching daemon/src/nemesis_core_daemon.adb:430-434 (Authority_Decision'Image, no reason field) and kernel/src/nemesis-kernel-capabilities.adb:9-22 (mismatch->Refused_Capability before Estimated_Bytes>Maximum_Bytes->Refused_Budget). The 'reachable only by a direct socket client' qualifier is accurate: desktop compiler bounds replacement_bytes<=max_write_bytes<=4096 (desktop/src-tauri/src/production.rs:169-178, MAX_WRITE_BYTES=4096 at :14) and sends estimated_bytes=replacement_bytes (mission_runner.rs:910-911), while the parent/child grant budget is the same 4096 (daemon/src/nemesis_core_daemon.adb:44,283,390).\"},{\"invariant\":\"PCL-03 fix\",\"files\":[\"tests/integration/test_daemon_api.py\"],\"status\":\"CONFIRMED\",\"detail\":\"tests/integration/test_daemon_api.py:401-497 adds test_capability_refusals_burn_the_one_shot_approval: three fresh missions exercise wrong-scope (REFUSED_CAPABILITY, asserts no reason key), wrong-worker (REFUSED_CAPABILITY), and over-budget estimated_bytes=4097 (REFUSED_BUDGET); after each, an exact retry must return REFUSED_APPROVAL/approval_replayed, proving consumption preceded the capability check. Mission/worker ids and digests satisfy the daemon's Valid_Id ('a'..'z'|'0'..'9') and Valid_Digest charsets; budget 4097>4096 matches the parent-grant byte budget.\"}],\"gaps\":[{\"id\":\"FRR-01\",\"severity\":\"informational\",\"finding\":\"DCO-02 rework replaced the previously minimal sanitized launch environment ({HOME, PATH, LANG, LC_ALL, TMPDIR}) with the full parent environment plus overridden HOME (scripts/verify_install_contract.py:117-118, environment = dict(os.environ)). $HOME isolation \u2014 the documented contract claim \u2014 is preserved, and the change is plausibly required for GUI/window-server launch, but the probe is now less hermetic (inherited PATH/TMPDIR/DYLD_* could influence app behavior during the gate). No fail-open effect on any verification decision.\"},{\"id\":\"FRR-02\",\"severity\":\"informational\",\"finding\":\"The new GIN-05 sealed-verdict ancestry/tree/staleness binding is silently skipped when the validated root lacks .git (scripts/validate_production_readiness.py:369-373). This is a deliberate seam for temp-dir fixture tests and the production gate always runs against the repo worktree (which has .git), but a hypothetical non-git export of the validator would accept a sealed roster without subject binding. Fail-open only outside the supported execution context.\"}],\"confirmed_invariants\":[\"DCO-01: living docs carry resolved-TS + signing-nonclaim language with no stale contradiction\",\"DCO-02: both release assets bound by exact name + recomputed sha256 to adjacent SHA256SUMS before any ditto/launch\",\"DCO-03: symlink refusal evaluated on pre-resolution arguments\",\"DCO-04: launch-agent/helper inventory observed by scan, fail-closed; version distinctness fail-closed\",\"DCO-05: workspace worktree/branch residuals documented with removal commands; write boundary qualified\",\"GIN-01: both ABA gates refuse dirty inventory-root subjects and record dirty_paths\",\"GIN-02: phase-16 epoch and gate-log binding unconditional; epoch-strip tamper case enforced\",\"GIN-03: trust-surface resolutions pinned to the recomputed-hash architect-contract allowlist\",\"GIN-04: terminal verdicts refuse PASS-lane blockers and out-of-place TRUST_SURFACE blockers\",\"GIN-05: sealed verdicts bind commit existence, HEAD ancestry, tree identity, and non-receipt staleness\",\"KFS-01: GNATprove Justified column parsed and nonzero refused, with regression test\",\"PCL-01: two-direction checkpoint recovery documentation matches mission-store code\",\"PCL-02: REFUSED_BUDGET / decision-only branch documentation matches daemon+kernel code\",\"PCL-03: capability refusals proven to burn the one-shot approval via approval_replayed retries\"],\"verdict\":\"CLEAN\"}",
+  "findings": [
+    {
+      "category": "gate-hermeticity",
+      "confidence": "high",
+      "cwe": [
+        "CWE-668"
+      ],
+      "evidence": [
+        {
+          "excerpt": "environment = dict(os.environ)\n    environment[\"HOME\"] = str(home)",
+          "explanation": "Previous code passed only {HOME, PATH, LANG, LC_ALL, TMPDIR}; the fix commit passes the whole parent environment with HOME overridden.",
+          "label": "environment now inherited"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 118,
+          "path": "scripts/verify_install_contract.py",
+          "role": "environment construction for launch probe",
+          "start_line": 117
+        }
+      ],
+      "optionalProperties": {
+        "blocks_clean_verdict": false,
+        "new_regression": true
+      },
+      "rule_id": "FRR-01",
+      "severity": "informational",
+      "summary": "The DCO-02/DCO-04 rework of scripts/verify_install_contract.py replaced the previous minimal sanitized launch environment with dict(os.environ) plus an overridden HOME. The documented '$HOME isolation' claim still holds and the change is plausibly required for GUI launch under a real window-server session, but the gate's launch probe is less hermetic than before: inherited PATH, TMPDIR, or DYLD_* variables could influence app behavior during verification. No verification decision becomes fail-open.",
+      "title": "Install-contract launch probe now inherits the full parent environment"
+    },
+    {
+      "category": "fail-open-seam",
+      "confidence": "high",
+      "cwe": [
+        "CWE-754"
+      ],
+      "evidence": [
+        {
+          "excerpt": "if (\n        verdict in {\"SEALED_LOCAL_PRODUCTION\", \"COMPLETE_PRODUCTION_PUBLIC\"}\n        and isinstance(subject, dict)\n        and (root / \".git\").exists()\n    ):",
+          "explanation": "The ancestry/tree/staleness arm only executes when the root contains .git.",
+          "label": "guard"
+        }
+      ],
+      "locations": [
+        {
+          "end_line": 373,
+          "path": "scripts/validate_production_readiness.py",
+          "role": "guard condition",
+          "start_line": 369
+        }
+      ],
+      "optionalProperties": {
+        "blocks_clean_verdict": false,
+        "new_regression": false
+      },
+      "rule_id": "FRR-02",
+      "severity": "informational",
+      "summary": "The new GIN-05 sealed-roster binding (commit existence, HEAD ancestry, tree identity, non-receipt staleness) is guarded by (root / '.git').exists(). This is a deliberate seam so temp-dir fixture tests keep passing, and the production gate always runs against the repo worktree, but a validator invocation against a non-git export would silently accept a sealed roster without subject binding.",
+      "title": "Sealed-verdict git binding skipped when validated root lacks .git"
+    }
+  ],
+  "reviewed_paths": [
+    "README.md",
+    "SECURITY.md",
+    "STATUS.md",
+    "docs/architecture/LOCAL_DESKTOP_MISSION.md",
+    "docs/architecture/FORMAL_ASSURANCE.md",
+    "docs/release/SOURCE_INSTALL.md",
+    "protocols/local-core-v1.md",
+    "scripts/verify_install_contract.py",
+    "scripts/probe_window_ownership.swift",
+    "scripts/verify_authority_aba.py",
+    "scripts/verify_proof_aba.py",
+    "scripts/verify_phase16_receipt.py",
+    "scripts/test_phase16_receipt.py",
+    "scripts/verify_kernel_proof.py",
+    "scripts/validate_production_readiness.py",
+    "tests/integration/test_daemon_api.py",
+    "tests/integration/test_production_readiness.py",
+    "tests/phase0/test_kernel_proof_manifest.py",
+    "config/formal-kernel-scope.json",
+    "daemon/src/nemesis_core_daemon.adb",
+    "daemon/src/nemesis-core-mission_store.adb",
+    "daemon/src/nemesis-core-checkpoints.adb",
+    "daemon/src/nemesis-core-authority_store.adb",
+    "kernel/src/nemesis-kernel-capabilities.adb",
+    "desktop/src-tauri/src/production.rs",
+    "desktop/src-tauri/src/mission_runner.rs",
+    "receipts/production-readiness-20260821/trust-surface/TS_CONTINUATION_CONTRACT_2026-08-22.md"
+  ]
+}
