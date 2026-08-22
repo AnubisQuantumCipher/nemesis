@@ -563,15 +563,19 @@
      "title": "Run specialist Tauri WebKit IPC security review"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "RustSafety2 (isolated security-reviewer, anthropic/claude-opus-4, separate process) verdict CLEAN; 5/5 Rust process/path invariants CONFIRMED (zero unsafe blocks, bounded reads, safe slicing behind length guards, sanitized env, no request-path panics); receipt security-review/reviews/RustSafety2.rust-process-path.json sha256=de3dd9d3534345244e7c22e8876b579abe88944576b5d5b4172295e47e77094d"
+     ],
      "id": "E-06",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Run specialist Rust process path handling review"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "KeychainSigning2 (isolated security-reviewer, separate process) verdict CLEAN; 5/5 keychain/signing/secret invariants CONFIRMED (seed zeroization, no secret in logs/frontend/errors, least-privilege ACL -T, typed refusals); informational KEY-01 (explicit zeroize feature pin) FIXED in runtime/Cargo.toml:24 (ed25519-dalek features=[zeroize]); cargo check nemesis-signer exit=0; receipt security-review/reviews/KeychainSigning2.keychain-signing-secrets.json sha256=6cfebf185707719ddae5405005f3f24769c31d9882358287b807e95032aab352"
+     ],
      "id": "E-07",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Run specialist Keychain signing secrets review"
     },
     {
@@ -1146,57 +1150,84 @@
   {
    "gates": [
     {
-     "evidence": [],
+     "evidence": [
+      "telemetry absent + fail-closed network: no analytics/telemetry channel; system_status network=DENIED_BY_CONTRACT (lib.rs:427); test_operations network-egress-absence check (no reqwest/fetch/sendBeacon in desktop app)",
+      "operations-20260822.log sha256=da39ecff73bf82f45210415a6989606dffb7bb34f206fcefc4fec61447929b5f exit=0 marker=PASS_PRODUCTION_OPERATIONS"
+     ],
      "id": "J-01",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Keep telemetry absent or explicit opt-in and deletable"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "no unauthorized outbound: network-egress grep gate finds none in desktop/src + desktop/src-tauri/src; authority.network=false enforced at compile+runner; docs/operations/PRIVACY.md",
+      "operations-20260822.log sha256=da39ecff73bf82f45210415a6989606dffb7bb34f206fcefc4fec61447929b5f exit=0 marker=PASS_PRODUCTION_OPERATIONS"
+     ],
      "id": "J-02",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Prevent unauthorized outbound prompts secrets and evidence"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "privacy/data-locations/backup/export/delete documented to reality: docs/operations/PRIVACY.md (app-data local home path, 0700/0600, uninstall=delete home)",
+      "operations-20260822.log sha256=da39ecff73bf82f45210415a6989606dffb7bb34f206fcefc4fec61447929b5f exit=0 marker=PASS_PRODUCTION_OPERATIONS"
+     ],
      "id": "J-03",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Document privacy data locations backup export deletion"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "diagnostics/redaction/vuln-reporting documented: docs/operations/PRIVACY.md (path-remap redaction, support bundle secret-scan) + SECURITY.md pointer",
+      "operations-20260822.log sha256=da39ecff73bf82f45210415a6989606dffb7bb34f206fcefc4fec61447929b5f exit=0 marker=PASS_PRODUCTION_OPERATIONS"
+     ],
      "id": "J-04",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Document diagnostics redaction and vulnerability reporting"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "bounded previewable secret-scanned support bundle: scripts/support_bundle.py (256KiB/file, 5MiB cap, MANIFEST preview, secret-scan refuses); happy-path + secret-refusal control both exercised by gate",
+      "operations-20260822.log sha256=da39ecff73bf82f45210415a6989606dffb7bb34f206fcefc4fec61447929b5f exit=0 marker=PASS_PRODUCTION_OPERATIONS"
+     ],
      "id": "J-05",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Generate bounded previewable secret-scanned support bundle"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "automatic transmission disabled: support bundle transmission=DISABLED_NO_AUTOMATIC_EXPORT, no network calls; gate asserts marker",
+      "operations-20260822.log sha256=da39ecff73bf82f45210415a6989606dffb7bb34f206fcefc4fec61447929b5f exit=0 marker=PASS_PRODUCTION_OPERATIONS"
+     ],
      "id": "J-06",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Disable automatic support bundle transmission"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "secret-safe component/resource diagnostics: scripts/operator_diagnostics.py (versions, backend inventory, daemon health ping, sandbox/network/updates); secrets_included=false; marker PASS_OPERATOR_DIAGNOSTICS",
+      "operations-20260822.log sha256=da39ecff73bf82f45210415a6989606dffb7bb34f206fcefc4fec61447929b5f exit=0 marker=PASS_PRODUCTION_OPERATIONS"
+     ],
      "id": "J-07",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Expose secret-safe component and resource diagnostics"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "database/verifier/sandbox diagnostics: operator_diagnostics reports receipt/replay verifier presence, sandbox WORKSPACE_SAFE_AVAILABLE, daemon control-plane health",
+      "operations-20260822.log sha256=da39ecff73bf82f45210415a6989606dffb7bb34f206fcefc4fec61447929b5f exit=0 marker=PASS_PRODUCTION_OPERATIONS"
+     ],
      "id": "J-08",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Expose database verifier and sandbox diagnostics"
     },
     {
-     "evidence": [],
+     "evidence": [
+      "runnable installed-product troubleshooting matrix: docs/operations/TROUBLESHOOTING.md (each row a command that runs against the installed build via $RES resources path)",
+      "operations-20260822.log sha256=da39ecff73bf82f45210415a6989606dffb7bb34f206fcefc4fec61447929b5f exit=0 marker=PASS_PRODUCTION_OPERATIONS"
+     ],
      "id": "J-09",
-     "status": "PENDING",
+     "status": "PASS",
      "title": "Build runnable installed-product troubleshooting matrix"
     }
    ],
@@ -1607,5 +1638,5 @@
  ],
  "schema": "nemesis.production-readiness-tracker/v1",
  "terminal_verdict": null,
- "updated_at": "2026-08-22T09:05:18Z"
+ "updated_at": "2026-08-22T09:14:51Z"
 }
