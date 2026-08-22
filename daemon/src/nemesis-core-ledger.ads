@@ -42,6 +42,7 @@ package Nemesis.Core.Ledger with SPARK_Mode => Off is
       Head     : Digest_Hex := Zero_Digest;
       First_Payload : Digest_Hex := Zero_Digest;
       Last_Payload  : Digest_Hex := Zero_Digest;
+      Source        : Digest_Hex := Zero_Digest;
    end record;
 
    function Digest (Value : String) return Digest_Hex;

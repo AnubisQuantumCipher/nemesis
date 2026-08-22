@@ -1,0 +1,127 @@
+{
+  "coverage_summary": "{\"schema\":\"nemesis.hardening-audit.result/v1\",\"lane\":\"sqlite-event-durability\",\"reviewer_identity\":{\"context\":\"isolated subagent, separate process/context from lead\",\"model\":\"anthropic/claude-opus-4 (SqliteDurability3)\",\"limitations\":[\"static-only\",\"no build/run of Ada daemon\",\"durability reasoning inferred from POSIX/macOS semantics, not fault-injection tested\"]},\"subject_commit\":\"47f6976332a41006718198f43844e9e4724c1fd8\",\"coverage\":[{\"invariant\":\"Event ledger is append-only with a verifiable SHA-256 hash chain; truncated/corrupt/duplicate/reordered records refused on recovery\",\"files\":[\"daemon/src/nemesis-core-ledger.adb\",\"daemon/src/nemesis-core-ledger.ads\",\"daemon/src/nemesis-core-checkpoints.adb\"],\"status\":\"CONFIRMED\"},{\"invariant\":\"Writes are atomic so a kill-during-commit leaves a consistent state (temp+rename for objects/checkpoints/refs, append-only+fsync for ledger)\",\"files\":[\"daemon/src/nemesis-core-objects.adb\",\"daemon/src/nemesis-core-checkpoints.adb\",\"daemon/src/nemesis-core-mission_store.adb\",\"daemon/src/nemesis-core-ledger.adb\"],\"status\":\"GAP\"},{\"invariant\":\"SQLite index derivation refuses on migration failure and cannot corrupt the authoritative ledger\",\"files\":[\"daemon/src/nemesis-core-index.adb\",\"daemon/src/nemesis-core-index.ads\"],\"status\":\"CONFIRMED\"},{\"invariant\":\"Concurrent create/transition has a single authoritative owner; no duplicate events\",\"files\":[\"daemon/src/nemesis_core_daemon.adb\",\"daemon/src/nemesis-core-mission_store.adb\",\"tests/integration/test_daemon_api.py\"],\"status\":\"CONFIRMED\"},{\"invariant\":\"Bounded message/record sizes prevent unbounded allocation\",\"files\":[\"daemon/src/nemesis-core-json.ads\",\"daemon/src/nemesis-core-json.adb\",\"daemon/src/nemesis_core_daemon.adb\"],\"status\":\"CONFIRMED\"}],\"gaps\":[{\"id\":\"SQL-001\",\"severity\":\"medium\",\"category\":\"durability-recovery/consistency\",\"cwe\":\"CWE-460\",\"path\":\"daemon/src/nemesis-core-mission_store.adb\",\"line\":233,\"precondition\":\"Process is SIGKILLed (or crashes, or the checkpoint write fails) in the window after Append durably fsyncs the ledger record (mission_store.adb:223-232) but before Save_Checkpoint completes its temp+rename (mission_store.adb:233).\",\"impact\":\"On-disk ledger advances to sequence N+1 (durable) while checkpoint.ncp still holds N. Load_Mission requires an exact ledger/checkpoint match (mission_store.adb:446-456) and returns Store_Corrupt with no rebuild path, so an otherwise fully intact, hash-chain-valid authoritative ledger becomes permanently unloadable. The derived checkpoint is effectively treated as co-authoritative, contradicting the append-only-ledger-is-authoritative model and invariant 2's 'kill-during-commit leaves a consistent state'.\",\"evidence\":\"Append_Current_Event fsyncs+verifies the ledger append (mission_store.adb:210-231) THEN writes the checkpoint (233). A kill between 232 and 234 leaves ledger seq=N+1, checkpoint seq=N. Load_Mission at mission_store.adb:446-456 fails on Recovered.Sequence /= Checkpoint.Sequence -> Store_Corrupt (454). ledger.adb Recover returns Recovered_Valid for the intact chain, and Append refuses to advance a non-Recovered_Valid ledger, so there is no automatic repair.\",\"remediation\":\"Treat the ledger as the sole source of truth on recovery: allow Load_Mission to accept a checkpoint whose sequence is <= the recovered ledger head and rebuild/rewrite the checkpoint from the authoritative ledger tail (Recovered.State/Sequence/Head), rather than hard-failing to Store_Corrupt on any ledger>checkpoint skew. Alternatively fold the checkpoint pointer into the ledger append so the two advance atomically.\",\"confidence\":\"high\"},{\"id\":\"SQL-002\",\"severity\":\"low\",\"category\":\"durability-power-loss\",\"cwe\":\"CWE-662\",\"path\":\"daemon/src/nemesis-core-objects.adb\",\"line\":166,\"precondition\":\"OS crash or power loss (not a mere process kill) immediately after a commit; and/or macOS APFS where fsync() does not flush to stable storage without F_FULLFSYNC.\",\"impact\":\"All writers do temp+rename (objects.adb:166-170, checkpoints.adb:213-217, mission_store.adb Write_Reference:93-95) and the ledger creates/appends+fsync (ledger.adb:296-322) but NONE fsync the containing directory after rename/create, and fsync() alone is not durable on macOS. On power loss the just-committed rename/file-create can be lost, leaving a mission dir missing its object/reference/checkpoint or ledger file -> Load_Mission returns Store_Corrupt / Store_IO_Failure. The documented 'temp+rename+dir-sync' pattern is only two-thirds implemented. Process-kill (the primary stated threat) is unaffected because atomic rename lands in the page cache.\",\"evidence\":\"objects.adb Put closes+fsyncs the temp file then Rename_File (objects.adb:160-172) with no directory fsync; checkpoints.adb Write_Checkpoint identical (checkpoints.adb:207-219); mission_store Write_Reference identical (mission_store.adb:82-95); ledger.adb Append fsyncs the file fd only (ledger.adb:315-320) and never dir-syncs the parent on first-append file creation (ledger.adb:298-302). Fsync is imported as C 'fsync' (e.g. ledger.adb:17-18), not fcntl F_FULLFSYNC required for durability on macOS/APFS.\",\"remediation\":\"After each rename/create of an authoritative artifact, open the containing directory and fsync its fd (and fsync the parent again after Create_Path). On macOS replace fsync() with fcntl(fd, F_FULLFSYNC) for the ledger, checkpoint, object, and reference writes to obtain true stable-storage durability.\",\"confidence\":\"high\"}],\"confirmed_invariants\":[\"Append-only hash chain enforced: ledger.adb Recover validates monotonic sequence (ledger.adb:224-228), prev-hash linkage Previous_Value /= Expected_Previous (ledger.adb:232-235), and Stored_Hash = Digest(core) (ledger.adb:237-240); duplicated/reordered/tampered records -> Corrupt, missing v1 tag -> Unsupported_Version (ledger.adb:150-158), partial tail -> Truncated_Tail (ledger.adb:253-256). Append refuses to extend any non-Recovered_Valid/Empty ledger (Invalid_Existing_Ledger, ledger.adb:280-285).\",\"Checkpoint integrity: fixed 241-byte frame, schema tag, delimiter positions, hex fields, and self-hash all verified on read (checkpoints.adb:90-146).\",\"Atomicity vs process-kill: objects/checkpoints/references use O_EXCL temp + fsync + atomic Rename_File (objects.adb:127-172, checkpoints.adb:180-219, mission_store.adb:82-95); ledger uses single 305-byte Open_Append write + fsync so a kill yields at worst a Truncated_Tail that recovery refuses (ledger.adb:296-322, 253-256).\",\"SQLite index is isolated and non-authoritative: Nemesis.Core.Index is referenced only by its own unit and daemon/tests/nemesis_index_tests.adb (never by mission_store or the daemon write path); Initialize wraps DDL in BEGIN IMMEDIATE/COMMIT with ROLLBACK on failure (index.adb:212-241) and gates Version > Supported_Schema_Version -> Index_Unsupported_Schema (index.adb:242-246); Id/hex inputs validated (index.adb:74-84, 289-293) so it cannot touch the ledger.\",\"Single authoritative owner: daemon is a single-threaded serial accept loop (nemesis_core_daemon.adb:478-493, one Accept->process->Close at a time); Create_Mission rejects an existing mission dir with Mission_Already_Exists (mission_store.adb:302-304). Confirmed by tests/integration/test_daemon_api.py:137-158 (exactly one OK, sequence 2, two ledger lines).\",\"Bounded sizes: Max_Message_Bytes=65536 (json.ads:2) enforced at parse (json.adb:59-62) AND at the socket read loop cap (nemesis_core_daemon.adb:417-419); JSON fields fixed-bounded (Max_Fields/Max_Key_Length/Max_Value_Length, json.ads:20-38); ledger/checkpoint records fixed length 305/241 (ledger.adb:14-16, checkpoints.adb:16-18).\"],\"verdict\":\"GAPS\"}",
+  "findings": [
+    {
+      "rule_id": "SQL-001",
+      "title": "Derived checkpoint treated as co-authoritative: kill/crash between ledger append and checkpoint rename permanently bricks an intact mission",
+      "summary": "Append_Current_Event durably fsyncs the ledger record before writing the checkpoint. A SIGKILL/crash (or checkpoint-write failure) in that window leaves the authoritative append-only ledger at sequence N+1 while checkpoint.ncp holds N. Load_Mission demands an exact ledger/checkpoint match and returns Store_Corrupt with no path to rebuild the derived checkpoint from the authoritative ledger, so a fully hash-chain-valid mission becomes permanently unloadable — violating the 'kill-during-commit leaves a consistent state' invariant.",
+      "severity": "medium",
+      "confidence": "high",
+      "category": "durability-recovery",
+      "locations": [
+        {
+          "path": "daemon/src/nemesis-core-mission_store.adb",
+          "start_line": 210,
+          "end_line": 239,
+          "role": "unsynchronized ledger-then-checkpoint commit"
+        },
+        {
+          "path": "daemon/src/nemesis-core-mission_store.adb",
+          "start_line": 446,
+          "end_line": 456,
+          "role": "recovery hard-fails on ledger>checkpoint skew"
+        }
+      ],
+      "cwe": [
+        "CWE-460",
+        "CWE-459"
+      ],
+      "evidence": [
+        {
+          "label": "commit ordering",
+          "explanation": "Ledger append is fsynced and verified (223-231), then Save_Checkpoint runs (233); a kill between 232 and 234 durably advances the ledger but not the checkpoint.",
+          "excerpt": "Recover(...);\\n if Recovered.Status /= Recovered_Valid ... then Result:=Store_Corrupt ...\\n Context.Ledger_Head:=...; Save_Checkpoint(Home,Context,Checkpoint_OK);"
+        },
+        {
+          "label": "recovery rejects intact ledger",
+          "explanation": "Load_Mission requires Recovered.Sequence = Checkpoint.Sequence (and state/head); any skew -> Store_Corrupt (454), with no rebuild-from-ledger path.",
+          "excerpt": "if Recovered.Status /= Recovered_Valid or else Checkpoint_Status /= Checkpoint_Valid or else Recovered.Sequence /= Checkpoint.Sequence ... then Result := Store_Corrupt;"
+        }
+      ],
+      "optionalProperties": {
+        "precondition": "Kill/crash or checkpoint-write failure after ledger fsync (mission_store.adb:232) and before checkpoint rename (mission_store.adb:233).",
+        "remediation": "On recovery accept checkpoint.sequence <= ledger head and rebuild the checkpoint from the authoritative ledger tail instead of failing to Store_Corrupt, or make the checkpoint pointer advance atomically with the ledger append."
+      }
+    },
+    {
+      "rule_id": "SQL-002",
+      "title": "Missing containing-directory fsync (and macOS F_FULLFSYNC) after temp+rename / file create weakens power-loss durability",
+      "summary": "Object, checkpoint, reference, and ledger writers implement temp+rename / append+fsync but never fsync the containing directory after rename/create, and use plain fsync() which is not durable on macOS/APFS without F_FULLFSYNC. Under OS crash/power loss a just-committed rename or new ledger file can be lost, leaving a mission missing an object/reference/checkpoint/ledger and failing to load. The documented 'temp+rename+dir-sync' pattern is only partially implemented. Process-kill (the primary stated threat) is unaffected.",
+      "severity": "low",
+      "confidence": "high",
+      "category": "durability-power-loss",
+      "locations": [
+        {
+          "path": "daemon/src/nemesis-core-objects.adb",
+          "start_line": 160,
+          "end_line": 172,
+          "role": "rename without dir fsync"
+        },
+        {
+          "path": "daemon/src/nemesis-core-checkpoints.adb",
+          "start_line": 207,
+          "end_line": 219,
+          "role": "rename without dir fsync"
+        },
+        {
+          "path": "daemon/src/nemesis-core-mission_store.adb",
+          "start_line": 82,
+          "end_line": 95,
+          "role": "reference rename without dir fsync"
+        },
+        {
+          "path": "daemon/src/nemesis-core-ledger.adb",
+          "start_line": 296,
+          "end_line": 322,
+          "role": "file create/append fsync only, no dir sync; plain fsync"
+        }
+      ],
+      "cwe": [
+        "CWE-662"
+      ],
+      "evidence": [
+        {
+          "label": "object store",
+          "explanation": "Put fsyncs the temp file then Rename_File with no directory fsync.",
+          "excerpt": "if Fsync(...) /= 0 then ...; Close(FD,Close_OK); ...; Rename_File(Temp_Path,Final_Path,Rename_OK);"
+        },
+        {
+          "label": "plain fsync on macOS",
+          "explanation": "fsync is imported as the C 'fsync', which on APFS does not flush to stable storage; F_FULLFSYNC is required for real durability on the stated macOS target.",
+          "excerpt": "function Fsync (FD : Interfaces.C.int) return Interfaces.C.int with Import, Convention => C, External_Name => \"fsync\";"
+        }
+      ],
+      "optionalProperties": {
+        "precondition": "OS crash / power loss (not a plain process kill), and/or macOS APFS fsync semantics.",
+        "remediation": "fsync the containing directory fd after each rename/create; on macOS use fcntl(fd,F_FULLFSYNC) for ledger/checkpoint/object/reference writes."
+      }
+    }
+  ],
+  "reviewed_paths": [
+    "daemon/src/nemesis-core-ledger.ads",
+    "daemon/src/nemesis-core-ledger.adb",
+    "daemon/src/nemesis-core-checkpoints.ads",
+    "daemon/src/nemesis-core-checkpoints.adb",
+    "daemon/src/nemesis-core-mission_store.ads",
+    "daemon/src/nemesis-core-mission_store.adb",
+    "daemon/src/nemesis-core-objects.ads",
+    "daemon/src/nemesis-core-objects.adb",
+    "daemon/src/nemesis-core-index.ads",
+    "daemon/src/nemesis-core-index.adb",
+    "daemon/src/nemesis-core-json.ads",
+    "daemon/src/nemesis-core-json.adb",
+    "daemon/src/nemesis-core-paths.adb",
+    "daemon/src/nemesis_core_daemon.adb",
+    "tests/integration/test_daemon_api.py",
+    "kernel/src/nemesis-kernel-types.ads"
+  ],
+  "deferred": [
+    {
+      "reason": "Architect-gated residuals TS-001/TS-002 (kernel one-shot approval consumption; capability parent/child persistence) are out of this lane's durability scope and were not re-litigated.",
+      "paths": [
+        "config/formal-kernel-scope.json",
+        "docs/architecture/FORMAL_ASSURANCE.md"
+      ]
+    }
+  ]
+}

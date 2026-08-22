@@ -7,6 +7,7 @@ cd "$ROOT"
 python3 scripts/verify_contract.py
 cargo fmt --manifest-path runtime/Cargo.toml --all -- --check
 cargo audit --file runtime/Cargo.lock
+cargo audit --file desktop/src-tauri/Cargo.lock
 (
   cd desktop
   npm audit

@@ -260,6 +260,43 @@ class DaemonApiTests(unittest.TestCase):
         unchanged = self.request("inspect", mission_id=MISSION)
         self.assertEqual(unchanged["sequence"], complete["sequence"])
 
+    def test_stale_or_lagging_checkpoint_recovers_from_authoritative_ledger(self) -> None:
+        # SQL-001: a crash between the durable ledger append and the checkpoint
+        # rename leaves the checkpoint behind the ledger. The hash-chain-validated
+        # ledger is authoritative, so the mission must still load (checkpoint
+        # rebuilt from the ledger tail), never brick to STORE_CORRUPT.
+        self.request(
+            "create",
+            mission_id=MISSION,
+            worker_id=WORKER,
+            contract_digest=CONTRACT,
+            scope_digest=SCOPE,
+            source_digest=SOURCE_INITIAL,
+        )
+        checkpoint = self.home / "missions" / MISSION / "checkpoint.ncp"
+        stale = checkpoint.read_bytes()  # seq 2 snapshot
+
+        authorized = self.request("authorize", mission_id=MISSION, contract_digest=CONTRACT)
+        self.assertEqual(authorized["state"], "PLANNING")
+        self.assertEqual(authorized["sequence"], 3)
+
+        # Roll the checkpoint back to the stale snapshot; the ledger stays at seq 3.
+        checkpoint.write_bytes(stale)
+        recovered = self.request("inspect", mission_id=MISSION)
+        self.assertEqual(recovered["status"], "OK")
+        self.assertEqual(recovered["state"], "PLANNING")
+        self.assertEqual(recovered["sequence"], 3)
+        # The stale checkpoint must have been rewritten from the authoritative ledger.
+        self.assertNotEqual(checkpoint.read_bytes(), stale)
+
+        # A genuinely absent checkpoint also recovers from the ledger.
+        checkpoint.unlink()
+        self.restart_daemon()
+        rebuilt = self.request("inspect", mission_id=MISSION)
+        self.assertEqual(rebuilt["status"], "OK")
+        self.assertEqual(rebuilt["sequence"], 3)
+        self.assertTrue(checkpoint.exists())
+
 
 if __name__ == "__main__":
     unittest.main()

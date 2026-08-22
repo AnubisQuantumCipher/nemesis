@@ -48,22 +48,22 @@ export function AuthorityReview({
 
       <div className="authority-table" role="table" aria-label="Mission authority">
         <div className="authority-row" role="row">
-          <strong role="cell">FILESYSTEM</strong>
+          <strong role="rowheader">FILESYSTEM</strong>
           <span role="cell">{compiled.relativePath}</span>
           <b role="cell" className="decision-exact">WRITE EXACT</b>
         </div>
         <div className="authority-row" role="row">
-          <strong role="cell">NETWORK</strong>
+          <strong role="rowheader">NETWORK</strong>
           <span role="cell">No worker egress</span>
           <b role="cell" className="decision-deny">NETWORK DENY</b>
         </div>
         <div className="authority-row" role="row">
-          <strong role="cell">PUSH / PUBLISH</strong>
+          <strong role="rowheader">PUSH / PUBLISH</strong>
           <span role="cell">No remote mutation</span>
           <b role="cell" className="decision-deny">PUSH DENY</b>
         </div>
         <div className="authority-row" role="row">
-          <strong role="cell">SECRETS</strong>
+          <strong role="rowheader">SECRETS</strong>
           <span role="cell">No worker secret view</span>
           <b role="cell" className="decision-deny">SECRETS DENY</b>
         </div>

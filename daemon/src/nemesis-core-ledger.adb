@@ -17,8 +17,31 @@ package body Nemesis.Core.Ledger with SPARK_Mode => Off is
    Line_Length   : constant Positive := 304;
    Record_Length : constant Positive := 305;
 
-   function Fsync (FD : Interfaces.C.int) return Interfaces.C.int
-   with Import, Convention => C, External_Name => "fsync";
+   --  macOS fsync() does not flush to stable storage; F_FULLFSYNC does.
+   F_FULLFSYNC : constant Interfaces.C.int := 51;
+   O_RDONLY : constant Interfaces.C.int := 0;
+
+   function Fcntl (FD : Interfaces.C.int; Cmd : Interfaces.C.int)
+     return Interfaces.C.int
+   with Import, Convention => C, External_Name => "fcntl";
+
+   function C_Open (Path : Interfaces.C.char_array; Flags : Interfaces.C.int)
+     return Interfaces.C.int
+   with Import, Convention => C, External_Name => "open";
+
+   function C_Close (FD : Interfaces.C.int) return Interfaces.C.int
+   with Import, Convention => C, External_Name => "close";
+
+   procedure Full_Sync_Directory (Dir : String) is
+      FD : Interfaces.C.int;
+      Ignore : Interfaces.C.int;
+   begin
+      FD := C_Open (Interfaces.C.To_C (Dir), O_RDONLY);
+      if FD >= 0 then
+         Ignore := Fcntl (FD, F_FULLFSYNC);
+         Ignore := C_Close (FD);
+      end if;
+   end Full_Sync_Directory;
 
    function Digest (Value : String) return Digest_Hex is
       Raw : constant GNAT.SHA256.Message_Digest := GNAT.SHA256.Digest (Value);
@@ -96,7 +119,8 @@ package body Nemesis.Core.Ledger with SPARK_Mode => Off is
          State         => Draft,
          Head          => Zero_Digest,
          First_Payload => Zero_Digest,
-         Last_Payload  => Zero_Digest);
+         Last_Payload  => Zero_Digest,
+         Source        => Zero_Digest);
 
       if not Ada.Directories.Exists (Path) then
          return;
@@ -221,6 +245,7 @@ package body Nemesis.Core.Ledger with SPARK_Mode => Off is
                      Result.First_Payload := Payload_Value;
                   end if;
                   Result.Last_Payload := Payload_Value;
+                  Result.Source := Source_Value;
                   Expected_Previous := Stored_Hash;
                exception
                   when Constraint_Error =>
@@ -311,7 +336,7 @@ package body Nemesis.Core.Ledger with SPARK_Mode => Off is
             return;
          end if;
 
-         Synced := Fsync (Interfaces.C.int (FD));
+         Synced := Fcntl (Interfaces.C.int (FD), F_FULLFSYNC);
          if Synced /= 0 then
             GNAT.OS_Lib.Close (FD, Close_OK);
             Result := Sync_Failed;
@@ -323,6 +348,11 @@ package body Nemesis.Core.Ledger with SPARK_Mode => Off is
             Result := Close_Failed;
             return;
          end if;
+
+         --  Make the append (and, on first write, the file creation) durable in
+         --  the containing directory so a power loss cannot lose a committed
+         --  authoritative event.
+         Full_Sync_Directory (Ada.Directories.Containing_Directory (Path));
 
          Event_Digest := Hash;
          Result := Committed;

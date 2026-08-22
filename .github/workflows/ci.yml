@@ -113,6 +113,7 @@ jobs:
         run: |
           npm --prefix desktop ci
           cargo audit --file runtime/Cargo.lock
+          cargo audit --file desktop/src-tauri/Cargo.lock
           npm --prefix desktop audit
           mkdir -p /tmp/nemesis-licenses
           cargo about generate \
