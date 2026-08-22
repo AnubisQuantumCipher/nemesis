@@ -16,7 +16,7 @@ test_exact_contract_passes_and_one_byte_tamper_rejects (tests.phase0.test_produc
 test_notices_include_shipped_cargo_and_npm_license_texts (tests.integration.test_third_party_notices.ThirdPartyNoticesTests) ... ok
 
 ----------------------------------------------------------------------
-Ran 13 tests in 0.200s
+Ran 13 tests in 0.277s
 
 OK
 PASS_CONTRACT_INTEGRITY sha256=ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e0d8beebee532779 bytes=77321 lines=2188
@@ -31,12 +31,13 @@ test_threat_model_covers_hostile_boundaries (tests.phase0.test_phase0.PhaseZeroC
 test_exact_contract_passes_and_one_byte_tamper_rejects (tests.phase0.test_production_contract.ProductionContractTests) ... ok
 test_live_scope_covers_every_kernel_body_and_public_operation (tests.phase0.test_kernel_proof_manifest.KernelProofManifestTests) ... ok
 test_parses_nonzero_proved_summary_without_warnings_or_assumptions (tests.phase0.test_kernel_proof_manifest.KernelProofManifestTests) ... ok
+test_rejects_manually_justified_obligations (tests.phase0.test_kernel_proof_manifest.KernelProofManifestTests) ... ok
 test_rejects_zero_work_missing_units_warnings_assumptions_and_timeouts (tests.phase0.test_kernel_proof_manifest.KernelProofManifestTests) ... ok
 test_scope_refuses_silent_trust_surface_erasure (tests.phase0.test_kernel_proof_manifest.KernelProofManifestTests) ... ok
 test_strict_scope_parser_rejects_duplicate_keys (tests.phase0.test_kernel_proof_manifest.KernelProofManifestTests) ... ok
 
 ----------------------------------------------------------------------
-Ran 13 tests in 0.005s
+Ran 14 tests in 0.010s
 
 OK
 PASS_PHASE0
@@ -139,12 +140,13 @@ test_counts_nonblank_noncomment_lines_only (tests.phase0.test_tcb_budget.Trusted
 test_rejects_missing_source (tests.phase0.test_tcb_budget.TrustedComputingBaseCounterTests) ... ok
 test_live_scope_covers_every_kernel_body_and_public_operation (tests.phase0.test_kernel_proof_manifest.KernelProofManifestTests) ... ok
 test_parses_nonzero_proved_summary_without_warnings_or_assumptions (tests.phase0.test_kernel_proof_manifest.KernelProofManifestTests) ... ok
+test_rejects_manually_justified_obligations (tests.phase0.test_kernel_proof_manifest.KernelProofManifestTests) ... ok
 test_rejects_zero_work_missing_units_warnings_assumptions_and_timeouts (tests.phase0.test_kernel_proof_manifest.KernelProofManifestTests) ... ok
 test_scope_refuses_silent_trust_surface_erasure (tests.phase0.test_kernel_proof_manifest.KernelProofManifestTests) ... ok
 test_strict_scope_parser_rejects_duplicate_keys (tests.phase0.test_kernel_proof_manifest.KernelProofManifestTests) ... ok
 
 ----------------------------------------------------------------------
-Ran 7 tests in 0.003s
+Ran 8 tests in 0.004s
 
 OK
 PASS_TCB_BUDGET sloc=605 budget=2500 files=17
@@ -334,15 +336,7 @@ PASS_DURABLE_STORAGE
 PASS_AUTHORITY_STORE_DURABILITY
 PASS_SQLITE_INDEX_MIGRATION
 PASS_PHASE3_DURABLE_STORAGE
-   Compiling fastrand v2.5.0
-   Compiling nemesis-deterministic-worker v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-deterministic-worker)
-   Compiling nemesis-protocol v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-protocol)
-   Compiling nemesis-receipt v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-receipt)
-   Compiling nemesis-signer v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-signer)
-   Compiling tempfile v3.27.0
-   Compiling nemesis-runtime v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-runtime)
-   Compiling nemesis-verify v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-verify)
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.53s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.43s
      Running unittests src/main.rs (runtime/target/debug/deps/nemesis_deterministic_worker-e7d44065ee4af0be)
 
 running 0 tests
@@ -356,7 +350,7 @@ test invalid_action_path_fails_without_emitting_a_proposal ... ok
 test completion_mode_emits_a_proposal_not_a_state_transition ... ok
 test plan_emits_only_protocol_valid_proposals ... ok
 
-test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.16s
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.18s
 
      Running unittests src/lib.rs (runtime/target/debug/deps/nemesis_protocol-c01b7f7b11f36e6b)
 
@@ -367,11 +361,11 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
      Running tests/worker_protocol.rs (runtime/target/debug/deps/worker_protocol-5985dbfa8740b0b4)
 
 running 6 tests
-test rejects_unknown_params_and_oversized_messages ... ok
-test rejects_unknown_protocol_and_identifiers ... ok
-test permits_only_a_completion_proposal ... ok
 test accepts_a_bounded_relative_action_proposal ... ok
+test rejects_unknown_params_and_oversized_messages ... ok
+test permits_only_a_completion_proposal ... ok
 test rejects_worker_supplied_authoritative_fields ... ok
+test rejects_unknown_protocol_and_identifiers ... ok
 test rejects_absolute_and_traversing_action_paths ... ok
 
 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
@@ -389,7 +383,7 @@ test canonical_sign1_is_deterministic_and_independently_verifiable ... ok
 test wrong_key_and_nonverified_mandatory_claim_are_rejected ... ok
 test every_single_byte_mutation_is_rejected ... ok
 
-test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
 
      Running unittests src/lib.rs (runtime/target/debug/deps/nemesis_runtime-967c2a71b65df3db)
 
@@ -425,12 +419,12 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 running 5 tests
 test usage_accounting_refuses_over_budget_without_mutation ... ok
+test api_profiles_require_explicit_network_and_secret_capabilities ... ok
 test fallback_preserves_authority_and_consequence_ceiling ... ok
 test missing_provider_is_typed_unavailable_not_a_fallback_success ... ok
-test api_profiles_require_explicit_network_and_secret_capabilities ... ok
 test generic_subprocess_adapter_runs_protocol_worker_in_workspace_safe ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
      Running tests/automation.rs (runtime/target/debug/deps/automation-2b42a2a70de197e3)
 
@@ -456,9 +450,9 @@ test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
      Running tests/evidence_replay.rs (runtime/target/debug/deps/evidence_replay-f1038b8e5fd24819)
 
 running 5 tests
+test causal_graph_returns_recorded_chain_not_retrospective_story ... ok
 test old_source_and_unauthorized_verifier_cannot_complete_claims ... ok
 test changed_dependency_invalidates_accepted_evidence ... ok
-test causal_graph_returns_recorded_chain_not_retrospective_story ... ok
 test mission_fork_preserves_prefix_and_marks_model_reexecution_comparative ... ok
 test replay_reconstructs_hash_chain_and_rejects_mutation ... ok
 
@@ -474,17 +468,17 @@ test signed_plugin_cannot_exceed_granted_capabilities ... ok
 test wasi_host_runs_bounded_module_without_ambient_capabilities ... ok
 test wasi_host_enforces_fuel_and_memory_limits ... ok
 
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
 
      Running tests/git_workflows.rs (runtime/target/debug/deps/git_workflows-0dc14c68aced5544)
 
 running 4 tests
-test ci_observation_is_accepted_only_for_current_source ... ok
 test push_merge_and_unrelated_deletion_refuse_without_exact_authority ... ok
+test ci_observation_is_accepted_only_for_current_source ... ok
 test path_traversal_and_git_metadata_staging_refuse ... ok
 test exact_lane_commit_leaves_default_branch_unchanged ... ok
 
-test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.26s
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.25s
 
      Running tests/isolation.rs (runtime/target/debug/deps/isolation-fa1edbe03181970b)
 
@@ -495,7 +489,7 @@ test sandbox_refuses_read_and_write_outside_lane ... ok
 test sandbox_refuses_a_reachable_loopback_connection ... ok
 test creates_an_isolated_git_worktree_without_moving_main ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.11s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
 
      Running tests/lifecycle.rs (runtime/target/debug/deps/lifecycle-b59f0704d19e53f4)
 
@@ -510,10 +504,10 @@ test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 running 6 tests
 test builder_cannot_accept_own_elevated_evidence ... ok
 test scheduler_refuses_missing_worker_budget_and_cycles ... ok
+test compatible_tasks_serialize_when_only_one_worker_is_available ... ok
 test scheduler_records_explainable_decisions_and_preserves_authority ... ok
 test conflicting_lane_patches_are_surfaced_not_merged ... ok
 test schedule_is_deterministic_across_input_order ... ok
-test compatible_tasks_serialize_when_only_one_worker_is_available ... ok
 
 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
@@ -525,7 +519,7 @@ test encoded_path_and_schema_attacks_refuse ... ok
 test worker_protocol_mutations_never_panic_or_gain_authority ... ok
 test every_ledger_byte_mutation_rejects ... ok
 
-test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
 
      Running unittests src/lib.rs (runtime/target/debug/deps/nemesis_signer-d9a644baeb05ba0f)
 
@@ -560,7 +554,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 running 1 test
 test standalone_cli_accepts_valid_and_rejects_tampered_receipt ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.17s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.19s
 
    Doc-tests nemesis_protocol
 
@@ -590,73 +584,60 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 {"id":1,"jsonrpc":"2.0","method":"heartbeat","mission_id":"mis_0000000000000000000000","params":{},"protocol":"nemesis.worker/v1","worker_id":"wrk_0000000000000000000000"}
 {"id":2,"jsonrpc":"2.0","method":"propose_action","mission_id":"mis_0000000000000000000000","params":{"action_kind":"filesystem.modify","content_digest":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","purpose":"Apply the authorized deterministic fixture change.","relative_path":"value.txt"},"protocol":"nemesis.worker/v1","worker_id":"wrk_0000000000000000000000"}
 PASS_PHASE5_WORKER_BOUNDARY
-   Compiling zeroize v1.9.0
-   Compiling curve25519-dalek v4.1.3
-   Compiling ed25519-dalek v2.2.0
-   Compiling nemesis-runtime v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-runtime)
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.40s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s
      Running tests/adapters.rs (runtime/target/debug/deps/adapters-ad4ae9a2c58b386f)
 
 running 5 tests
+test usage_accounting_refuses_over_budget_without_mutation ... ok
 test api_profiles_require_explicit_network_and_secret_capabilities ... ok
 test fallback_preserves_authority_and_consequence_ceiling ... ok
-test usage_accounting_refuses_over_budget_without_mutation ... ok
 test missing_provider_is_typed_unavailable_not_a_fallback_success ... ok
 test generic_subprocess_adapter_runs_protocol_worker_in_workspace_safe ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
 {"authority_source":"mission contract","fallback_expands_authority":false,"providers":[{"consequence_ceiling":"DecisionBoundary","detail":"executable:/Users/sicarii/.local/bin/codex","provider":"Codex","roles":["Builder","Recovery"],"status":"AVAILABLE"},{"consequence_ceiling":"DecisionBoundary","detail":"executable:/Users/sicarii/.local/bin/claude","provider":"ClaudeCode","roles":["Reviewer","RedTeam"],"status":"AVAILABLE"},{"consequence_ceiling":"Advisory","detail":"executable:/usr/local/bin/ollama","provider":"LocalModel","roles":["Planner"],"status":"AVAILABLE"},{"consequence_ceiling":"Advisory","detail":"API adapter requires explicit network and secret capabilities","provider":"OpenAiApi","roles":["Builder"],"status":"UNAVAILABLE"},{"consequence_ceiling":"Advisory","detail":"API adapter requires explicit network and secret capabilities","provider":"AnthropicApi","roles":["Reviewer"],"status":"UNAVAILABLE"}],"schema":"nemesis.adapters/v1"}
 PASS_PHASE8_WORKER_ADAPTERS
-   Compiling nemesis-runtime v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-runtime)
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.33s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
      Running tests/scheduler.rs (runtime/target/debug/deps/scheduler-468be44523eb17a1)
 
 running 6 tests
 test builder_cannot_accept_own_elevated_evidence ... ok
 test scheduler_refuses_missing_worker_budget_and_cycles ... ok
-test conflicting_lane_patches_are_surfaced_not_merged ... ok
-test compatible_tasks_serialize_when_only_one_worker_is_available ... ok
 test scheduler_records_explainable_decisions_and_preserves_authority ... ok
+test conflicting_lane_patches_are_surfaced_not_merged ... ok
 test schedule_is_deterministic_across_input_order ... ok
+test compatible_tasks_serialize_when_only_one_worker_is_available ... ok
 
 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
 PASS_PHASE9_DETERMINISTIC_SCHEDULER
-   Compiling nemesis-runtime v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-runtime)
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.34s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
      Running tests/context.rs (runtime/target/debug/deps/context-128bc776f52bae1d)
 
 running 5 tests
-test repository_index_binds_relative_files_and_rejects_traversal ... ok
 test superseded_revoked_and_expired_facts_are_not_active ... ok
 test context_budget_refuses_instead_of_omitting_mandatory_state ... ok
+test repository_index_binds_relative_files_and_rejects_traversal ... ok
 test capsule_signature_rejects_one_byte_mutation ... ok
 test context_replacement_retains_obligations_and_visible_contradictions ... ok
 
 test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
 PASS_PHASE10_CONTEXT_KNOWLEDGE
-   Compiling nemesis-runtime v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-runtime)
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.37s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s
      Running tests/evidence_replay.rs (runtime/target/debug/deps/evidence_replay-6d21cd136a085a5d)
 
 running 5 tests
 test old_source_and_unauthorized_verifier_cannot_complete_claims ... ok
-test changed_dependency_invalidates_accepted_evidence ... ok
 test causal_graph_returns_recorded_chain_not_retrospective_story ... ok
+test changed_dependency_invalidates_accepted_evidence ... ok
 test mission_fork_preserves_prefix_and_marks_model_reexecution_comparative ... ok
 test replay_reconstructs_hash_chain_and_rejects_mutation ... ok
 
 test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-   Compiling libc v0.2.189
-   Compiling thiserror v2.0.20
-   Compiling cpufeatures v0.2.17
-   Compiling sha2 v0.10.9
-   Compiling ed25519-dalek v2.2.0
-   Compiling nemesis-receipt v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-receipt)
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.57s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.03s
      Running unittests src/lib.rs (runtime/target/debug/deps/nemesis_receipt-f3127a7a691a954e)
 
 running 0 tests
@@ -670,7 +651,7 @@ test canonical_sign1_is_deterministic_and_independently_verifiable ... ok
 test wrong_key_and_nonverified_mandatory_claim_are_rejected ... ok
 test every_single_byte_mutation_is_rejected ... ok
 
-test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
 
    Doc-tests nemesis_receipt
 
@@ -683,31 +664,29 @@ npm notice run vitest run --configLoader=runner
 
  RUN  v3.2.7 /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop
 
- ✓ src/App.test.tsx (11 tests) 658ms
+ ✓ src/App.test.tsx (11 tests) 647ms
 
  Test Files  1 passed (1)
       Tests  11 passed (11)
-   Start at  10:11:43
-   Duration  1.22s (transform 57ms, setup 80ms, collect 94ms, tests 658ms, environment 240ms, prepare 34ms)
+   Start at  10:33:35
+   Duration  1.30s (transform 60ms, setup 98ms, collect 102ms, tests 647ms, environment 286ms, prepare 33ms)
 
-   Compiling nemesis-desktop v0.2.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop/src-tauri)
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.53s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.41s
      Running unittests src/lib.rs (desktop/src-tauri/target/debug/deps/nemesis_desktop-3f8b363e6019b822)
 
 running 6 tests
-test tests::maps_only_exact_verified_replay ... ok
 test tests::rejects_empty_or_model_exact_replay ... ok
+test tests::maps_only_exact_verified_replay ... ok
 test mission_runner::tests::core_home_chain_is_private_0700 ... ok
 test tests::rejects_bundled_support_root_with_wrong_contract ... ok
-test tests::discovers_development_source_root_from_runtime_ancestors ... ok
 test tests::selects_bundled_support_root_when_contract_matches ... ok
+test tests::discovers_development_source_root_from_runtime_ancestors ... ok
 
 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
 PASS_EVIDENCE_BUNDLE
 PASS_PHASE11_EVIDENCE_REPLAY
-   Compiling nemesis-runtime v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-runtime)
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.41s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s
      Running tests/extensions.rs (runtime/target/debug/deps/extensions-175e8feff048ddde)
 
 running 6 tests
@@ -718,24 +697,22 @@ test signed_plugin_cannot_exceed_granted_capabilities ... ok
 test wasi_host_runs_bounded_module_without_ambient_capabilities ... ok
 test wasi_host_enforces_fuel_and_memory_limits ... ok
 
-test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
 
 PASS_PHASE12_EXTENSION_SECURITY
-   Compiling nemesis-runtime v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-runtime)
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.30s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.07s
      Running tests/git_workflows.rs (runtime/target/debug/deps/git_workflows-c728c2726bb57c50)
 
 running 4 tests
-test ci_observation_is_accepted_only_for_current_source ... ok
 test push_merge_and_unrelated_deletion_refuse_without_exact_authority ... ok
+test ci_observation_is_accepted_only_for_current_source ... ok
 test path_traversal_and_git_metadata_staging_refuse ... ok
 test exact_lane_commit_leaves_default_branch_unchanged ... ok
 
 test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.25s
 
 PASS_PHASE13_LOCAL_GIT_WORKFLOWS
-   Compiling nemesis-runtime v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-runtime)
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.36s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.08s
      Running tests/automation.rs (runtime/target/debug/deps/automation-76b0a3b015fb1ac2)
 
 running 4 tests
@@ -846,12 +823,12 @@ npm notice run vitest run --configLoader=runner
 
  RUN  v3.2.7 /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop
 
- ✓ src/App.test.tsx (11 tests) 652ms
+ ✓ src/App.test.tsx (11 tests) 672ms
 
  Test Files  1 passed (1)
       Tests  11 passed (11)
-   Start at  10:12:00
-   Duration  1.05s (transform 60ms, setup 46ms, collect 87ms, tests 652ms, environment 133ms, prepare 25ms)
+   Start at  10:33:46
+   Duration  1.12s (transform 58ms, setup 46ms, collect 86ms, tests 672ms, environment 158ms, prepare 24ms)
 
 npm notice run nemesis-desktop@0.2.0 build
 npm notice run tsc -b && vite build --configLoader native
@@ -863,7 +840,7 @@ computing gzip size...
 dist/index.html                   0.45 kB │ gzip:  0.29 kB
 dist/assets/index-xXpWOPaX.css   15.41 kB │ gzip:  3.84 kB
 dist/assets/index-D46NO10M.js   218.78 kB │ gzip: 67.42 kB │ map: 990.10 kB
-✓ built in 368ms
+✓ built in 398ms
 npm notice run nemesis-desktop@0.2.0 tauri
 npm notice run tauri build --debug --no-bundle
         Info Looking up installed tauri packages to check mismatched versions...
@@ -878,32 +855,31 @@ computing gzip size...
 dist/index.html                   0.45 kB │ gzip:  0.29 kB
 dist/assets/index-xXpWOPaX.css   15.41 kB │ gzip:  3.84 kB
 dist/assets/index-D46NO10M.js   218.78 kB │ gzip: 67.42 kB │ map: 990.10 kB
-✓ built in 370ms
+✓ built in 369ms
    Compiling objc2-exception-helper v0.1.1
-   Compiling tauri v2.11.5
-   Compiling tauri-macros v2.6.3
    Compiling objc2 v0.6.4
-   Compiling nemesis-desktop v0.2.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop/src-tauri)
-   Compiling objc2-core-foundation v0.3.2
    Compiling block2 v0.6.2
+   Compiling objc2-core-foundation v0.3.2
    Compiling dispatch2 v0.3.1
    Compiling objc2-foundation v0.3.2
    Compiling objc2-app-kit v0.3.2
    Compiling objc2-web-kit v0.3.2
    Compiling tao v0.35.3
-   Compiling window-vibrancy v0.6.0
    Compiling muda v0.19.3
+   Compiling window-vibrancy v0.6.0
    Compiling tauri-runtime v2.11.3
    Compiling wry v0.55.1
    Compiling tauri-runtime-wry v2.11.4
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 11.36s
+   Compiling tauri v2.11.5
+   Compiling nemesis-desktop v0.2.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop/src-tauri)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 9.62s
        Built application at: /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop/src-tauri/target/debug/nemesis-desktop
 PASS_NEMESIS_DESKTOP_PROCESS
 PASS_EVIDENCE_BUNDLE
 PASS_NEMESIS_DESKTOP_VERTICAL_SLICE
 npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
 
-added 164 packages in 843ms
+added 164 packages in 1s
 npm warn install-scripts 2 packages had install scripts blocked because they are not covered by allowScripts:
 npm warn install-scripts   esbuild@0.28.2 (postinstall: node install.js)
 npm warn install-scripts   fsevents@2.3.3 (install: (install scripts present))
@@ -914,12 +890,12 @@ npm notice run vitest run --configLoader=runner
 
  RUN  v3.2.7 /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop
 
- ✓ src/App.test.tsx (11 tests) 651ms
+ ✓ src/App.test.tsx (11 tests) 703ms
 
  Test Files  1 passed (1)
       Tests  11 passed (11)
-   Start at  10:12:18
-   Duration  1.07s (transform 60ms, setup 48ms, collect 97ms, tests 651ms, environment 133ms, prepare 24ms)
+   Start at  10:34:03
+   Duration  1.15s (transform 62ms, setup 51ms, collect 93ms, tests 703ms, environment 150ms, prepare 27ms)
 
 npm notice run nemesis-desktop@0.2.0 build
 npm notice run tsc -b && vite build --configLoader native
@@ -931,11 +907,11 @@ computing gzip size...
 dist/index.html                   0.45 kB │ gzip:  0.29 kB
 dist/assets/index-xXpWOPaX.css   15.41 kB │ gzip:  3.84 kB
 dist/assets/index-D46NO10M.js   218.78 kB │ gzip: 67.42 kB │ map: 990.10 kB
-✓ built in 389ms
+✓ built in 429ms
    Compiling objc2-exception-helper v0.1.1
    Compiling objc2 v0.6.4
-   Compiling objc2-core-foundation v0.3.2
    Compiling block2 v0.6.2
+   Compiling objc2-core-foundation v0.3.2
    Compiling dispatch2 v0.3.1
    Compiling objc2-foundation v0.3.2
    Compiling objc2-app-kit v0.3.2
@@ -943,17 +919,17 @@ dist/assets/index-D46NO10M.js   218.78 kB │ gzip: 67.42 kB │ map: 990.10 kB
    Compiling tao v0.35.3
    Compiling window-vibrancy v0.6.0
    Compiling muda v0.19.3
-   Compiling tauri-runtime v2.11.3
    Compiling wry v0.55.1
+   Compiling tauri-runtime v2.11.3
    Compiling tauri-runtime-wry v2.11.4
    Compiling tauri v2.11.5
    Compiling nemesis-desktop v0.2.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop/src-tauri)
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 11.20s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 9.66s
      Running unittests src/lib.rs (desktop/src-tauri/target/debug/deps/nemesis_desktop-3f8b363e6019b822)
 
 running 6 tests
-test tests::maps_only_exact_verified_replay ... ok
 test tests::rejects_empty_or_model_exact_replay ... ok
+test tests::maps_only_exact_verified_replay ... ok
 test mission_runner::tests::core_home_chain_is_private_0700 ... ok
 test tests::rejects_bundled_support_root_with_wrong_contract ... ok
 test tests::selects_bundled_support_root_when_contract_matches ... ok
@@ -974,17 +950,17 @@ test executes_reviewed_contract_and_persists_current_receipt_and_replay ... igno
 test reviewed_digest_mismatch_refuses_before_creating_a_lane ... ok
 test pre_cancelled_mission_refuses_before_creating_a_lane ... ok
 test executable_symlink_substitution_is_refused_before_lane_creation ... ok
-test drafts_an_exact_source_bound_contract_inside_the_private_local_home ... ok
 test preflight_binds_clean_workspace_head_and_expected_target_bytes ... ok
+test drafts_an_exact_source_bound_contract_inside_the_private_local_home ... ok
 test child_process_environment_is_sanitized_before_lane_creation ... ok
 
-test result: ok. 6 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.59s
+test result: ok. 6 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.65s
 
      Running tests/production_mission.rs (desktop/src-tauri/target/debug/deps/production_mission-b1ab0fee61b48925)
 
 running 4 tests
-test compiles_equivalent_json_to_one_normalized_digest_and_exact_action ... ok
 test rejects_duplicate_unknown_unsafe_or_authority_widening_contract_fields ... ok
+test compiles_equivalent_json_to_one_normalized_digest_and_exact_action ... ok
 test initializes_private_versioned_local_home_idempotently ... ok
 test settings_are_safe_persisted_and_reversible ... ok
 
@@ -995,20 +971,20 @@ test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 running 14 tests
 test read_only_parent_fails_cleanly ... ok
 test future_schema_home_is_refused_as_downgrade_guard ... ok
-test corrupt_home_manifest_is_refused_without_mutation ... ok
-test missing_last_mission_pointer_is_a_clean_cold_start ... ok
-test settings_persist_and_reverse_across_relaunch ... ok
-test settings_recover_or_refuse_at_the_intended_seam ... ok
 test corrupt_last_mission_pointer_is_refused ... ok
+test missing_last_mission_pointer_is_a_clean_cold_start ... ok
+test corrupt_home_manifest_is_refused_without_mutation ... ok
+test stale_atomic_write_temporaries_are_swept_on_init ... ok
 test leftover_temporary_does_not_block_commit ... ok
 test symlinked_or_oversized_last_mission_pointer_is_refused ... ok
 test symlinked_or_oversized_home_manifest_is_refused ... ok
-test stale_atomic_write_temporaries_are_swept_on_init ... ok
+test settings_persist_and_reverse_across_relaunch ... ok
+test settings_recover_or_refuse_at_the_intended_seam ... ok
 test install_uninstall_reinstall_cycle_is_clean ... ok
 test repeated_launch_cycles_are_stable ... ok
 test disk_full_write_preserves_prior_settings ... ok
 
-test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.40s
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.49s
 
    Doc-tests nemesis_desktop
 
@@ -1016,13 +992,13 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.44s
      Running tests/mission_execution.rs (desktop/src-tauri/target/debug/deps/mission_execution-e7a5a3e9b22770ce)
 
 running 1 test
 test executes_reviewed_contract_and_persists_current_receipt_and_replay ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 1.01s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 1.02s
 
 test_release_config_bundles_complete_standalone_runtime (tests.integration.test_release_bundle.ReleaseBundleTests) ... ok
 test_release_contract_with_private_paths_is_not_bundled (tests.integration.test_release_bundle.ReleaseBundleTests) ... ok
@@ -1037,30 +1013,31 @@ PASS_PRODUCTION_DESKTOP_AUTOMATED
 
 running 14 tests
 test read_only_parent_fails_cleanly ... ok
-test missing_last_mission_pointer_is_a_clean_cold_start ... ok
 test future_schema_home_is_refused_as_downgrade_guard ... ok
+test missing_last_mission_pointer_is_a_clean_cold_start ... ok
+test corrupt_last_mission_pointer_is_refused ... ok
 test corrupt_home_manifest_is_refused_without_mutation ... ok
 test symlinked_or_oversized_home_manifest_is_refused ... ok
-test corrupt_last_mission_pointer_is_refused ... ok
-test symlinked_or_oversized_last_mission_pointer_is_refused ... ok
 test leftover_temporary_does_not_block_commit ... ok
-test settings_persist_and_reverse_across_relaunch ... ok
-test settings_recover_or_refuse_at_the_intended_seam ... ok
 test stale_atomic_write_temporaries_are_swept_on_init ... ok
+test settings_persist_and_reverse_across_relaunch ... ok
+test symlinked_or_oversized_last_mission_pointer_is_refused ... ok
+test settings_recover_or_refuse_at_the_intended_seam ... ok
 test install_uninstall_reinstall_cycle_is_clean ... ok
 test repeated_launch_cycles_are_stable ... ok
 test disk_full_write_preserves_prior_settings ... ok
 
-test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.45s
+test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.43s
 
 test_authority_is_persisted_one_shot_and_fail_closed (tests.integration.test_daemon_api.DaemonApiTests) ... ok
+test_capability_refusals_burn_the_one_shot_approval (tests.integration.test_daemon_api.DaemonApiTests) ... ok
 test_concurrent_create_has_one_authoritative_owner_and_no_duplicate_events (tests.integration.test_daemon_api.DaemonApiTests) ... ok
 test_lifecycle_recovers_and_completion_rejects_stale_evidence (tests.integration.test_daemon_api.DaemonApiTests) ... ok
 test_protocol_handles_partial_reads_and_refuses_ambiguous_json (tests.integration.test_daemon_api.DaemonApiTests) ... ok
 test_stale_or_lagging_checkpoint_recovers_from_authoritative_ledger (tests.integration.test_daemon_api.DaemonApiTests) ... ok
 
 ----------------------------------------------------------------------
-Ran 5 tests in 1.428s
+Ran 6 tests in 1.592s
 
 OK
 PASS_PRODUCTION_RELIABILITY
@@ -1069,12 +1046,12 @@ npm notice run vitest run --configLoader=runner
 
  RUN  v3.2.7 /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop
 
- ✓ src/App.test.tsx (11 tests) 694ms
+ ✓ src/App.test.tsx (11 tests) 702ms
 
  Test Files  1 passed (1)
       Tests  11 passed (11)
-   Start at  10:12:40
-   Duration  1.11s (transform 58ms, setup 48ms, collect 87ms, tests 694ms, environment 140ms, prepare 24ms)
+   Start at  10:34:25
+   Duration  1.40s (transform 71ms, setup 95ms, collect 127ms, tests 702ms, environment 307ms, prepare 45ms)
 
 PASS_PRODUCTION_ACCESSIBILITY
 {
@@ -1083,7 +1060,7 @@ PASS_PRODUCTION_ACCESSIBILITY
   "idle_rss_bytes_median": 2080768,
   "max_s": 0.0042,
   "median_s": 0.0039,
-  "min_s": 0.003,
+  "min_s": 0.0037,
   "p95_ceiling_s": 2.0,
   "p95_s": 0.0042,
   "runs": 10,
@@ -1092,19 +1069,19 @@ PASS_PRODUCTION_ACCESSIBILITY
   "within_threshold": true
  },
  "daemon_workload": {
-  "authorize_run_transition_s": 0.02414,
+  "authorize_run_transition_s": 0.03104,
   "authorized_state": "PLANNING",
   "bytes_per_mission": 977,
-  "create_max_s": 0.06286,
-  "create_median_s": 0.05188,
-  "create_min_s": 0.04604,
-  "create_p95_s": 0.06286,
+  "create_max_s": 0.0599,
+  "create_median_s": 0.05013,
+  "create_min_s": 0.04395,
+  "create_p95_s": 0.0599,
   "missions_dir_bytes": 9770,
   "replay_load": {
    "event_lines": 4,
    "ledger_bytes": 1220,
    "max_ledger_bytes_cap": 67108864,
-   "parse_s": 0.00588,
+   "parse_s": 0.00887,
    "verdict_verified": true
   },
   "run_state": "RUNNING",
@@ -1199,7 +1176,7 @@ PASS_PRODUCTION_ACCESSIBILITY
   "mem_bytes": "51539607552",
   "uname": "Darwin 25.6.0 arm64 arm"
  },
- "measured_at": "2026-08-22T14:12:42Z",
+ "measured_at": "2026-08-22T14:34:27Z",
  "schema": "nemesis.performance/v1",
  "sizes": {
   "build_bin_total_bytes": 7344064,
@@ -2010,125 +1987,125 @@ Warning: Permanently added '192.168.64.3' (ED25519) to the list of known hosts.
 PASS_CONTRACT_INTEGRITY sha256=ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e0d8beebee532779 bytes=77321 lines=2188
     Updating crates.io index
  Downloading crates ...
-  Downloaded leb128fmt v0.1.0
-  Downloaded find-msvc-tools v0.1.11
-  Downloaded cranelift-codegen-shared v0.134.4
-  Downloaded cranelift-bitset v0.134.3
-  Downloaded cranelift-native v0.134.3
-  Downloaded ambient-authority v0.0.2
-  Downloaded futures-io v0.3.34
-  Downloaded cranelift-srcgen v0.134.4
-  Downloaded futures-sink v0.3.34
-  Downloaded futures-core v0.3.34
-  Downloaded id-arena v2.3.0
-  Downloaded cranelift-control v0.134.4
-  Downloaded wasmtime-internal-jit-debug v47.0.3
-  Downloaded maybe-owned v0.3.4
-  Downloaded zerovec-derive v0.11.5
-  Downloaded potential_utf v0.1.6
-  Downloaded pulley-macros v47.0.3
+  Downloaded displaydoc v0.2.7
   Downloaded wasmtime-internal-jit-icache-coherence v47.0.3
-  Downloaded async-trait v0.1.92
-  Downloaded cap-fs-ext v4.0.3
-  Downloaded fs-set-times v0.20.3
-  Downloaded futures-task v0.3.34
-  Downloaded wasmtime-internal-versioned-export-macros v47.0.3
-  Downloaded wasmtime-internal-component-util v47.0.3
-  Downloaded wat v1.257.1
+  Downloaded futures-core v0.3.34
+  Downloaded futures-sink v0.3.34
+  Downloaded maybe-owned v0.3.4
+  Downloaded cranelift-native v0.134.3
+  Downloaded cranelift-srcgen v0.134.4
   Downloaded leb128 v0.2.7
-  Downloaded rustc-demangle v0.1.28
-  Downloaded cranelift-entity v0.134.3
+  Downloaded cranelift-control v0.134.4
+  Downloaded futures-task v0.3.34
+  Downloaded leb128fmt v0.1.0
+  Downloaded wiggle-generate v47.0.3
+  Downloaded fs-set-times v0.20.3
+  Downloaded cranelift-codegen-shared v0.134.4
+  Downloaded id-arena v2.3.0
+  Downloaded wasmtime-internal-component-util v47.0.3
+  Downloaded futures-io v0.3.34
   Downloaded fastrand v2.5.0
-  Downloaded foldhash v0.2.0
+  Downloaded io-lifetimes v2.0.4
+  Downloaded wiggle v47.0.3
+  Downloaded potential_utf v0.1.6
+  Downloaded ambient-authority v0.0.2
+  Downloaded pulley-macros v47.0.3
+  Downloaded wiggle-macro v47.0.3
+  Downloaded wasmtime-internal-jit-debug v47.0.3
+  Downloaded wasmtime-internal-versioned-export-macros v47.0.3
+  Downloaded target-lexicon v0.13.5
+  Downloaded find-msvc-tools v0.1.11
+  Downloaded cc v1.4.3
+  Downloaded cranelift-assembler-x64 v0.134.4
   Downloaded either v1.17.0
+  Downloaded ipnet v2.12.1
+  Downloaded cap-fs-ext v4.0.3
+  Downloaded minicbor-derive v0.15.3
+  Downloaded cranelift-entity v0.134.3
+  Downloaded cranelift-bitset v0.134.3
+  Downloaded foldhash v0.2.0
+  Downloaded thiserror v2.0.20
+  Downloaded minicbor v0.25.1
+  Downloaded anyhow v1.0.104
+  Downloaded io-lifetimes v3.0.1
+  Downloaded quote v1.0.47
   Downloaded termcolor v1.4.1
+  Downloaded async-trait v0.1.92
+  Downloaded cap-std v4.0.3
   Downloaded thiserror-impl v2.0.20
   Downloaded tinystr v0.8.4
-  Downloaded wasmtime-internal-unwinder v47.0.3
-  Downloaded arbitrary v1.4.2
-  Downloaded target-lexicon v0.13.5
-  Downloaded thiserror v2.0.20
-  Downloaded io-lifetimes v3.0.1
-  Downloaded minicbor-derive v0.15.3
-  Downloaded cranelift-assembler-x64 v0.134.4
-  Downloaded io-extras v0.19.0
-  Downloaded io-lifetimes v2.0.4
-  Downloaded ipnet v2.12.1
+  Downloaded wat v1.257.1
+  Downloaded addr2line v0.26.1
+  Downloaded cranelift-assembler-x64-meta v0.134.4
   Downloaded litemap v0.8.3
   Downloaded mach2 v0.6.0
-  Downloaded quote v1.0.47
-  Downloaded addr2line v0.26.1
-  Downloaded cap-std v4.0.3
-  Downloaded cranelift-assembler-x64-meta v0.134.4
+  Downloaded arbitrary v1.4.2
   Downloaded cranelift-bforest v0.134.3
-  Downloaded displaydoc v0.2.7
   Downloaded futures-channel v0.3.34
-  Downloaded minicbor v0.25.1
-  Downloaded wasmtime-internal-fiber v47.0.3
-  Downloaded serde_derive v1.0.229
-  Downloaded wiggle v47.0.3
-  Downloaded anyhow v1.0.104
-  Downloaded futures v0.3.34
+  Downloaded cranelift-frontend v0.134.3
   Downloaded icu_provider v2.3.0
+  Downloaded io-extras v0.19.0
+  Downloaded rustc-demangle v0.1.28
+  Downloaded wasmtime-internal-unwinder v47.0.3
   Downloaded socket2 v0.6.5
+  Downloaded wasmtime-internal-fiber v47.0.3
   Downloaded wasmprinter v0.252.0
-  Downloaded bitflags v2.13.1
+  Downloaded serde_core v1.0.229
+  Downloaded proc-macro2 v1.0.107
+  Downloaded serde_derive v1.0.229
+  Downloaded wasmtime-internal-core v47.0.3
+  Downloaded bytes v1.12.1
   Downloaded icu_locale_core v2.3.0
   Downloaded icu_normalizer_data v2.3.0
-  Downloaded proc-macro2 v1.0.107
-  Downloaded serde_core v1.0.229
   Downloaded pulley-interpreter v47.0.3
-  Downloaded wasmtime-internal-core v47.0.3
-  Downloaded wasmtime-wasi-io v47.0.3
-  Downloaded bytes v1.12.1
-  Downloaded wasm-encoder v0.252.0
-  Downloaded cap-primitives v4.0.3
+  Downloaded writeable v0.6.4
+  Downloaded zerovec-derive v0.11.5
+  Downloaded zmij v1.0.23
   Downloaded cpp_demangle v0.5.1
-  Downloaded icu_collections v2.3.0
-  Downloaded cranelift-frontend v0.134.3
+  Downloaded futures v0.3.34
   Downloaded serde v1.0.229
-  Downloaded cc v1.4.3
+  Downloaded wasm-encoder v0.252.0
+  Downloaded bitflags v2.13.1
+  Downloaded cap-primitives v4.0.3
   Downloaded cranelift-codegen-meta v0.134.3
   Downloaded cranelift-isle v0.134.3
-  Downloaded icu_properties v2.3.0
-  Downloaded memchr v2.8.3
+  Downloaded icu_collections v2.3.0
   Downloaded mio v1.2.2
   Downloaded wasm-encoder v0.257.1
-  Downloaded wiggle-macro v47.0.3
-  Downloaded hashbrown v0.16.1
-  Downloaded writeable v0.6.4
-  Downloaded regalloc2 v0.15.2
-  Downloaded serde_json v1.0.151
-  Downloaded icu_properties_data v2.3.0
-  Downloaded futures-util v0.3.34
-  Downloaded wiggle-generate v47.0.3
-  Downloaded wasmtime-wasi v47.0.3
-  Downloaded zmij v1.0.23
   Downloaded wasmtime-internal-wit-bindgen v47.0.3
+  Downloaded memchr v2.8.3
   Downloaded witx v0.9.1
-  Downloaded unicode-width v0.2.2
-  Downloaded wasmparser v0.252.0
-  Downloaded wasmtime-internal-component-macro v47.0.3
+  Downloaded icu_properties v2.3.0
+  Downloaded wasmtime-wasi-io v47.0.3
+  Downloaded hashbrown v0.16.1
+  Downloaded regalloc2 v0.15.2
+  Downloaded futures-util v0.3.34
+  Downloaded icu_properties_data v2.3.0
+  Downloaded serde_json v1.0.151
   Downloaded wasmtime-internal-cranelift v47.0.3
+  Downloaded wasmtime-wasi v47.0.3
+  Downloaded wasmtime-internal-component-macro v47.0.3
+  Downloaded wasmparser v0.252.0
+  Downloaded unicode-width v0.2.2
+  Downloaded wast v35.0.2
   Downloaded wasmparser v0.257.1
   Downloaded wasmtime-environ v47.0.3
-  Downloaded syn v3.0.3
   Downloaded syn v2.0.119
+  Downloaded syn v3.0.3
   Downloaded gimli v0.33.0
   Downloaded object v0.39.1
-  Downloaded icu_normalizer v2.3.0
   Downloaded zerotrie v0.2.5
-  Downloaded wast v35.0.2
+  Downloaded zerovec v0.11.8
+  Downloaded wit-parser v0.252.0
+  Downloaded wast v257.0.1
+  Downloaded icu_normalizer v2.3.0
   Downloaded libc v0.2.189
   Downloaded tokio v1.53.1
   Downloaded wasmtime v47.0.3
-  Downloaded zerovec v0.11.8
   Downloaded cranelift-codegen v0.134.3
-  Downloaded wast v257.0.1
-  Downloaded wit-parser v0.252.0
    Compiling proc-macro2 v1.0.107
-   Compiling quote v1.0.47
    Compiling unicode-ident v1.0.24
+   Compiling quote v1.0.47
    Compiling serde_core v1.0.229
    Compiling libc v0.2.189
    Compiling serde v1.0.229
@@ -2143,54 +2120,53 @@ PASS_CONTRACT_INTEGRITY sha256=ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e
    Compiling memchr v2.8.3
    Compiling zmij v1.0.23
    Compiling serde_json v1.0.151
-   Compiling cpufeatures v0.2.17
    Compiling block-buffer v0.10.4
    Compiling crypto-common v0.1.7
+   Compiling cpufeatures v0.2.17
+   Compiling syn v3.0.3
+   Compiling syn v2.0.119
    Compiling digest v0.10.7
    Compiling itoa v1.0.18
    Compiling hashbrown v0.17.1
-   Compiling syn v3.0.3
-   Compiling syn v2.0.119
    Compiling sha2 v0.10.9
    Compiling log v0.4.33
-   Compiling equivalent v1.0.2
    Compiling wasmtime-internal-core v47.0.3
+   Compiling equivalent v1.0.2
    Compiling bitflags v2.13.1
    Compiling rustc_version v0.4.1
    Compiling heck v0.5.0
-   Compiling cranelift-srcgen v0.134.4
    Compiling target-lexicon v0.13.5
+   Compiling cranelift-srcgen v0.134.4
    Compiling curve25519-dalek v4.1.3
+   Compiling signature v2.2.0
    Compiling cranelift-assembler-x64-meta v0.134.4
    Compiling zeroize v1.9.0
-   Compiling signature v2.2.0
    Compiling subtle v2.6.1
    Compiling ed25519 v2.2.3
    Compiling rustix v1.1.4
    Compiling stable_deref_trait v1.2.1
    Compiling errno v0.3.14
    Compiling cranelift-isle v0.134.3
+   Compiling allocator-api2 v0.2.21
    Compiling hex v0.4.3
    Compiling anyhow v1.0.104
-   Compiling allocator-api2 v0.2.21
    Compiling ed25519-dalek v2.2.0
    Compiling bumpalo v3.20.3
-   Compiling cranelift-codegen-shared v0.134.4
-   Compiling hashbrown v0.16.1
-   Compiling indexmap v2.14.0
-   Compiling leb128fmt v0.1.0
    Compiling fnv v1.0.7
+   Compiling leb128fmt v0.1.0
+   Compiling cranelift-codegen-shared v0.134.4
+   Compiling indexmap v2.14.0
+   Compiling hashbrown v0.16.1
    Compiling cranelift-assembler-x64 v0.134.4
    Compiling gimli v0.33.0
    Compiling crc32fast v1.5.0
    Compiling synstructure v0.13.2
-   Compiling shlex v2.0.1
+   Compiling object v0.39.1
    Compiling arbitrary v1.4.2
    Compiling rustc-hash v2.1.3
-   Compiling object v0.39.1
    Compiling find-msvc-tools v0.1.11
+   Compiling shlex v2.0.1
    Compiling cc v1.4.3
-   Compiling cranelift-control v0.134.4
    Compiling serde_derive v1.0.229
    Compiling thiserror-impl v2.0.20
    Compiling zerofrom-derive v0.1.7
@@ -2199,53 +2175,54 @@ PASS_CONTRACT_INTEGRITY sha256=ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e
    Compiling zerovec-derive v0.11.5
    Compiling displaydoc v0.2.7
    Compiling cobs v0.3.0
-   Compiling wasmtime-internal-versioned-export-macros v47.0.3
-   Compiling wasmtime-internal-component-util v47.0.3
    Compiling zerofrom v0.1.8
+   Compiling wasmtime-internal-versioned-export-macros v47.0.3
+   Compiling cranelift-control v0.134.4
    Compiling yoke v0.8.3
+   Compiling termcolor v1.4.1
+   Compiling wasmtime-internal-component-util v47.0.3
    Compiling once_cell v1.21.4
    Compiling zerovec v0.11.8
-   Compiling termcolor v1.4.1
    Compiling wasm-encoder v0.252.0
    Compiling writeable v0.6.4
    Compiling litemap v0.8.3
-   Compiling zerotrie v0.2.5
    Compiling tinystr v0.8.4
-   Compiling icu_locale_core v2.3.0
    Compiling potential_utf v0.1.6
-   Compiling id-arena v2.3.0
-   Compiling io-lifetimes v3.0.1
-   Compiling utf8_iter v1.0.4
-   Compiling wasmtime-internal-unwinder v47.0.3
+   Compiling zerotrie v0.2.5
+   Compiling icu_locale_core v2.3.0
    Compiling icu_normalizer_data v2.3.0
+   Compiling id-arena v2.3.0
    Compiling smallvec v1.15.2
    Compiling postcard v1.1.3
    Compiling wasmparser v0.252.0
-   Compiling regalloc2 v0.15.2
-   Compiling pin-project-lite v0.2.17
    Compiling cranelift-bitset v0.134.3
+   Compiling regalloc2 v0.15.2
    Compiling cranelift-entity v0.134.3
    Compiling pulley-interpreter v47.0.3
    Compiling cranelift-bforest v0.134.3
-   Compiling icu_properties_data v2.3.0
+   Compiling wasmtime-internal-unwinder v47.0.3
    Compiling io-lifetimes v2.0.4
+   Compiling pin-project-lite v0.2.17
+   Compiling utf8_iter v1.0.4
+   Compiling icu_properties_data v2.3.0
    Compiling thiserror v1.0.69
+   Compiling io-lifetimes v3.0.1
    Compiling cranelift-codegen-meta v0.134.3
-   Compiling icu_provider v2.3.0
    Compiling icu_collections v2.3.0
+   Compiling icu_provider v2.3.0
    Compiling wasmtime-internal-fiber v47.0.3
    Compiling thiserror-impl v1.0.69
    Compiling wasm-encoder v0.257.1
    Compiling wasmtime-internal-cranelift v47.0.3
-   Compiling either v1.17.0
-   Compiling unicode-width v0.2.2
-   Compiling io-extras v0.19.0
-   Compiling wasmtime-internal-component-macro v47.0.3
-   Compiling getrandom v0.3.4
    Compiling leb128 v0.2.7
-   Compiling wast v35.0.2
+   Compiling wasmtime-internal-component-macro v47.0.3
+   Compiling either v1.17.0
+   Compiling io-extras v0.19.0
+   Compiling getrandom v0.3.4
+   Compiling unicode-width v0.2.2
    Compiling wast v257.0.1
    Compiling itertools v0.14.0
+   Compiling wast v35.0.2
    Compiling cranelift-codegen v0.134.3
    Compiling wit-parser v0.252.0
    Compiling wasmprinter v0.252.0
@@ -2253,12 +2230,12 @@ PASS_CONTRACT_INTEGRITY sha256=ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e
    Compiling wasmtime-internal-wit-bindgen v47.0.3
    Compiling nemesis-protocol v0.1.0 (/Users/admin/nemesis-security/runtime/crates/nemesis-protocol)
    Compiling wasmtime v47.0.3
-   Compiling futures-core v0.3.34
-   Compiling futures-sink v0.3.34
    Compiling cap-primitives v4.0.3
+   Compiling futures-sink v0.3.34
+   Compiling futures-core v0.3.34
+   Compiling icu_properties v2.3.0
    Compiling wat v1.257.1
    Compiling fs-set-times v0.20.3
-   Compiling icu_properties v2.3.0
    Compiling icu_normalizer v2.3.0
    Compiling witx v0.9.1
    Compiling wasmtime-internal-jit-icache-coherence v47.0.3
@@ -2266,47 +2243,47 @@ PASS_CONTRACT_INTEGRITY sha256=ebebe1a7b3fc11458d21ee9eedd1b724ad08b38d84372733e
    Compiling tracing-attributes v0.1.31
    Compiling async-trait v0.1.92
    Compiling encoding_rs v0.8.35
-   Compiling getrandom v0.4.3
+   Compiling maybe-owned v0.3.4
+   Compiling cap-std v4.0.3
    Compiling wiggle-macro v47.0.3
    Compiling rand_core v0.10.1
    Compiling mach2 v0.6.0
-   Compiling ipnet v2.12.1
-   Compiling cap-std v4.0.3
    Compiling ambient-authority v0.0.2
+   Compiling ipnet v2.12.1
    Compiling futures-task v0.3.34
-   Compiling maybe-owned v0.3.4
+   Compiling getrandom v0.4.3
    Compiling futures-util v0.3.34
    Compiling tracing v0.1.44
    Compiling idna_adapter v1.2.2
    Compiling futures-channel v0.3.34
-   Compiling cap-fs-ext v4.0.3
-   Compiling percent-encoding v2.3.2
    Compiling futures-io v0.3.34
    Compiling bytes v1.12.1
+   Compiling percent-encoding v2.3.2
+   Compiling cap-fs-ext v4.0.3
    Compiling form_urlencoded v1.2.2
    Compiling idna v1.1.0
-   Compiling chacha20 v0.10.1
-   Compiling mio v1.2.2
-   Compiling socket2 v0.6.5
-   Compiling rand v0.10.2
    Compiling futures v0.3.34
+   Compiling chacha20 v0.10.1
+   Compiling socket2 v0.6.5
+   Compiling mio v1.2.2
+   Compiling rand v0.10.2
    Compiling url v2.5.8
    Compiling tokio v1.53.1
    Compiling fastrand v2.5.0
    Compiling minicbor v0.25.1
-   Compiling tempfile v3.27.0
    Compiling nemesis-deterministic-worker v0.1.0 (/Users/admin/nemesis-security/runtime/crates/nemesis-deterministic-worker)
+   Compiling tempfile v3.27.0
    Compiling wiggle-generate v47.0.3
    Compiling nemesis-receipt v0.1.0 (/Users/admin/nemesis-security/runtime/crates/nemesis-receipt)
    Compiling nemesis-signer v0.1.0 (/Users/admin/nemesis-security/runtime/crates/nemesis-signer)
    Compiling nemesis-verify v0.1.0 (/Users/admin/nemesis-security/runtime/crates/nemesis-verify)
    Compiling cranelift-frontend v0.134.3
    Compiling cranelift-native v0.134.3
-   Compiling wasmtime-wasi-io v47.0.3
    Compiling wiggle v47.0.3
+   Compiling wasmtime-wasi-io v47.0.3
    Compiling wasmtime-wasi v47.0.3
    Compiling nemesis-runtime v0.1.0 (/Users/admin/nemesis-security/runtime/crates/nemesis-runtime)
-    Finished `test` profile [unoptimized + debuginfo] target(s) in 37.23s
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 35.81s
      Running unittests src/main.rs (runtime/target/debug/deps/nemesis_deterministic_worker-e7d44065ee4af0be)
 
 running 0 tests
@@ -2331,11 +2308,11 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
      Running tests/worker_protocol.rs (runtime/target/debug/deps/worker_protocol-5985dbfa8740b0b4)
 
 running 6 tests
-test accepts_a_bounded_relative_action_proposal ... ok
 test rejects_unknown_params_and_oversized_messages ... ok
+test accepts_a_bounded_relative_action_proposal ... ok
+test rejects_worker_supplied_authoritative_fields ... ok
 test rejects_unknown_protocol_and_identifiers ... ok
 test permits_only_a_completion_proposal ... ok
-test rejects_worker_supplied_authoritative_fields ... ok
 test rejects_absolute_and_traversing_action_paths ... ok
 
 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
@@ -2389,8 +2366,8 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 running 5 tests
 test usage_accounting_refuses_over_budget_without_mutation ... ok
-test fallback_preserves_authority_and_consequence_ceiling ... ok
 test api_profiles_require_explicit_network_and_secret_capabilities ... ok
+test fallback_preserves_authority_and_consequence_ceiling ... ok
 test missing_provider_is_typed_unavailable_not_a_fallback_success ... ok
 test generic_subprocess_adapter_runs_protocol_worker_in_workspace_safe ... ok
 
@@ -2448,7 +2425,7 @@ test ci_observation_is_accepted_only_for_current_source ... ok
 test path_traversal_and_git_metadata_staging_refuse ... ok
 test exact_lane_commit_leaves_default_branch_unchanged ... ok
 
-test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.21s
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.55s
 
      Running tests/isolation.rs (runtime/target/debug/deps/isolation-fa1edbe03181970b)
 
@@ -2459,7 +2436,7 @@ test sandbox_refuses_read_and_write_outside_lane ... ok
 test sandbox_refuses_a_reachable_loopback_connection ... ok
 test creates_an_isolated_git_worktree_without_moving_main ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
 
      Running tests/lifecycle.rs (runtime/target/debug/deps/lifecycle-b59f0704d19e53f4)
 
@@ -2474,9 +2451,9 @@ test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 running 6 tests
 test builder_cannot_accept_own_elevated_evidence ... ok
 test scheduler_refuses_missing_worker_budget_and_cycles ... ok
+test conflicting_lane_patches_are_surfaced_not_merged ... ok
 test scheduler_records_explainable_decisions_and_preserves_authority ... ok
 test compatible_tasks_serialize_when_only_one_worker_is_available ... ok
-test conflicting_lane_patches_are_surfaced_not_merged ... ok
 test schedule_is_deterministic_across_input_order ... ok
 
 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
@@ -2524,7 +2501,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 running 1 test
 test standalone_cli_accepts_valid_and_rejects_tampered_receipt ... ok
 
-test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
 
    Doc-tests nemesis_protocol
 
@@ -2553,7 +2530,7 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 PASS_PHASE16_VZ_SECURITY_HARDENING
 PASS_PHASE16_VZ_SECURITY_HARDENING_ORCHESTRATOR base=anubis-xcode
 PASS_PHASE16_SECURITY_HARDENING
-PASS_PHASE16_RECEIPT subject=9dd22f259d164ebb1afde3b8940a891161cad3f6 verdict=VERIFIED
-PASS_PHASE16_RECEIPT subject=9dd22f259d164ebb1afde3b8940a891161cad3f6 verdict=VERIFIED
+PASS_PHASE16_RECEIPT subject=18ae66513620da8fa8dc8f917477b9b9c8d44804 verdict=VERIFIED
+PASS_PHASE16_RECEIPT subject=18ae66513620da8fa8dc8f917477b9b9c8d44804 verdict=VERIFIED
 PASS_PHASE16_RECEIPT_TAMPER_REJECTION
 PASS_NEMESIS_DESKTOP_COMPLETE
