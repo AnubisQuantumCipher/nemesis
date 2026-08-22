@@ -1,0 +1,286 @@
+{
+ "schema": "nemesis.boss-harness-tracker/v1",
+ "date": "2026-08-22",
+ "contract": {
+  "path": "/tmp/NEMESIS_BOSS_HARNESS_COMPLETION_2026-08-22.md",
+  "sha256": "56f13d11fc44b0eb27da9d9d342a2b71966493c927c5fb580f494853bf75fa2e",
+  "wc": {
+   "lines": 161,
+   "words": 992,
+   "bytes": 7356
+  }
+ },
+ "base": {
+  "requiredHead": "29f9c852653d19269194c04ee5df7bca55281cfd",
+  "observedHead": "29f9c852653d19269194c04ee5df7bca55281cfd",
+  "branch": "production/boss-harness-completion",
+  "remoteEqualOriginMain": true,
+  "clean": true
+ },
+ "phases": [
+  {
+   "phase": "NativePaint",
+   "items": [
+    {
+     "id": "NP-01",
+     "title": "Prove why the current .app webview is blank",
+     "status": "PASS",
+     "evidence": [
+      "receipts/boss-20260822/evidence/PAINT_PROOF.json",
+      "receipts/boss-20260822/evidence/devurl-requests.json"
+     ]
+    },
+    {
+     "id": "NP-02",
+     "title": "Pack desktop/dist into the native bundle, fail closed",
+     "status": "PASS",
+     "evidence": [
+      "desktop/src-tauri/build.rs (FAIL_FRONTEND_DIST_MISSING / FAIL_FRONTEND_DIST_HOLLOW; 4-case matrix verified)",
+      "scripts/package_release.sh (FAIL_RELEASE_FRONTEND_NOT_EMBEDDED)"
+     ]
+    },
+    {
+     "id": "NP-03",
+     "title": "Launch the named app and prove pixels",
+     "status": "PARTIAL_ENVIRONMENT_BLOCKED",
+     "evidence": [
+      "window ownership 1440x900 via probe_window_ownership.swift",
+      "fresh-home IPC proof (home.json created by embedded JS through system_status)",
+      "screenshot sha256 ed81b05403e6d1d30d55859860e9a63967a0dd2c8a3577dec4a21d4706b91b17 (title bar painted; body compositing blocked)",
+      "IOConsoleLocked=Yes; capture_macos_accessibility.swift refused session_locked; pixel confirmation deferred, not claimed"
+     ]
+    },
+    {
+     "id": "NP-04",
+     "title": "Install/upgrade/uninstall still hash-bound after the pack fix",
+     "status": "PENDING",
+     "evidence": []
+    }
+   ]
+  },
+  {
+   "phase": "FourteenRails",
+   "items": [
+    {
+     "id": "FR-01",
+     "title": "Workspaces rail: real fail-closed surface",
+     "status": "PASS",
+     "evidence": [
+      "desktop/src-tauri/src/rails/workspaces.rs",
+      "desktop/src/components/rails/WorkspacesPanel.tsx",
+      "desktop/src/components/rails/WorkspacesPanel.test.tsx"
+     ]
+    },
+    {
+     "id": "FR-02",
+     "title": "Agents rail: real fail-closed surface",
+     "status": "PASS",
+     "evidence": [
+      "desktop/src-tauri/src/rails/agents.rs",
+      "desktop/src/components/rails/AgentsPanel.tsx",
+      "desktop/src/components/rails/AgentsPanel.test.tsx"
+     ]
+    },
+    {
+     "id": "FR-03",
+     "title": "Changes rail: real fail-closed surface",
+     "status": "PASS",
+     "evidence": [
+      "desktop/src-tauri/src/rails/changes.rs",
+      "desktop/src/components/rails/ChangesPanel.tsx",
+      "desktop/src/components/rails/ChangesPanel.test.tsx"
+     ]
+    },
+    {
+     "id": "FR-04",
+     "title": "Tests rail: real fail-closed surface",
+     "status": "PASS",
+     "evidence": [
+      "desktop/src-tauri/src/rails/tests_rail.rs",
+      "desktop/src/components/rails/TestsPanel.tsx",
+      "desktop/src/components/rails/TestsPanel.test.tsx"
+     ]
+    },
+    {
+     "id": "FR-05",
+     "title": "Knowledge rail: real fail-closed surface",
+     "status": "PASS",
+     "evidence": [
+      "desktop/src-tauri/src/rails/knowledge.rs",
+      "desktop/src/components/rails/KnowledgePanel.tsx",
+      "desktop/src/components/rails/KnowledgePanel.test.tsx"
+     ]
+    },
+    {
+     "id": "FR-06",
+     "title": "Skills rail: real fail-closed surface",
+     "status": "PASS",
+     "evidence": [
+      "desktop/src-tauri/src/rails/skills.rs",
+      "desktop/src/components/rails/SkillsPanel.tsx",
+      "desktop/src/components/rails/SkillsPanel.test.tsx"
+     ]
+    },
+    {
+     "id": "FR-07",
+     "title": "Automations rail: real fail-closed surface",
+     "status": "PASS",
+     "evidence": [
+      "desktop/src-tauri/src/rails/automations.rs",
+      "desktop/src/components/rails/AutomationsPanel.tsx",
+      "desktop/src/components/rails/AutomationsPanel.test.tsx"
+     ]
+    },
+    {
+     "id": "FR-08",
+     "title": "Integrations rail: real fail-closed surface",
+     "status": "PASS",
+     "evidence": [
+      "desktop/src-tauri/src/rails/integrations.rs",
+      "desktop/src/components/rails/IntegrationsPanel.tsx",
+      "desktop/src/components/rails/IntegrationsPanel.test.tsx"
+     ]
+    },
+    {
+     "id": "FR-09",
+     "title": "Security rail: real fail-closed surface",
+     "status": "PASS",
+     "evidence": [
+      "desktop/src-tauri/src/rails/security.rs",
+      "desktop/src/components/rails/SecurityPanel.tsx",
+      "desktop/src/components/rails/SecurityPanel.test.tsx"
+     ]
+    }
+   ]
+  },
+  {
+   "phase": "Ecosystem",
+   "items": [
+    {
+     "id": "EC-01",
+     "title": "NEMESIS-owned skill format (local files, hashed, reviewable)",
+     "status": "PASS",
+     "evidence": [
+      "protocols/desktop-rails-v1.md",
+      "desktop/src-tauri/src/rails/skills.rs",
+      "library/skills/mission-hygiene/"
+     ]
+    },
+    {
+     "id": "EC-02",
+     "title": "Plugin/tool adapter format (no silent network, no secret view, deny-by-default)",
+     "status": "PASS",
+     "evidence": [
+      "desktop/src-tauri/src/rails/integrations.rs (capabilities beyond empty unrepresentable)",
+      "rails::tests::integrations_capabilities_are_deny_by_default"
+     ]
+    },
+    {
+     "id": "EC-03",
+     "title": "Install / list / enable / disable / revoke with receipts",
+     "status": "PASS",
+     "evidence": [
+      "desktop/src-tauri/src/state_repo.rs (adoption chain)",
+      "rails::tests::integration_lifecycle_is_ordered",
+      "rails::tests::receipt_chain_rejects_tamper"
+     ]
+    },
+    {
+     "id": "EC-04",
+     "title": "Built-in skill pack + plugin exercising the authority path end-to-end",
+     "status": "PASS",
+     "evidence": [
+      "desktop/src-tauri/tests/rail_governance.rs::governs_builtin_skill_and_plugin_through_the_full_authority_path (3 real daemon missions, adoption chain length 3, WASI execution result 14)"
+     ]
+    },
+    {
+     "id": "EC-05",
+     "title": "Competitive matrix updated against live sources; highest-value gap closed",
+     "status": "PASS",
+     "evidence": [
+      "docs/verification/COMPETITIVE_MATRIX.md (6 columns incl. Bridgemind; ecosystem row split system SHIPPED / breadth PARTIAL)"
+     ]
+    }
+   ]
+  },
+  {
+   "phase": "Gates",
+   "items": [
+    {
+     "id": "GT-01",
+     "title": "functional / security / formal / reliability / hostile",
+     "status": "PENDING",
+     "evidence": []
+    },
+    {
+     "id": "GT-02",
+     "title": "perf / a11y / privacy / package / replay",
+     "status": "PENDING",
+     "evidence": []
+    },
+    {
+     "id": "GT-03",
+     "title": "G-10 if unlocked; else name the lock",
+     "status": "PENDING",
+     "evidence": []
+    }
+   ]
+  },
+  {
+   "phase": "Review",
+   "items": [
+    {
+     "id": "RV-01",
+     "title": "Independent autonomous reviewers on final bytes",
+     "status": "PENDING",
+     "evidence": []
+    }
+   ]
+  },
+  {
+   "phase": "Release",
+   "items": [
+    {
+     "id": "RL-01",
+     "title": "Pushed checkpoint branch + draft/mergeable PR",
+     "status": "PENDING",
+     "evidence": []
+    },
+    {
+     "id": "RL-02",
+     "title": "Hash-bound successor archive/readback if a release is cut",
+     "status": "PENDING",
+     "evidence": []
+    }
+   ]
+  },
+  {
+   "phase": "Final",
+   "items": [
+    {
+     "id": "FN-01",
+     "title": "Reconcile STATUS / FINAL / TRACKER to the real terminal state",
+     "status": "PENDING",
+     "evidence": []
+    }
+   ]
+  }
+ ],
+ "scars": [
+  {
+   "id": "BSCAR-01",
+   "date": "2026-08-22",
+   "note": "Mid-mission host policy blocked the bash tool; execution continued through the sanctioned eval kernel (same scar class as the sealed epoch). The block was later lifted."
+  },
+  {
+   "id": "BSCAR-02",
+   "date": "2026-08-22",
+   "note": "First guard test was invalid: tauri build regenerates dist via beforeBuildCommand, masking the missing-dist case. Instrument redesigned to invoke cargo directly with the production feature; 4-case matrix then proved the guard."
+  },
+  {
+   "id": "BSCAR-03",
+   "date": "2026-08-22",
+   "note": "bounded_text trimmed content-addressed skill bodies, breaking manifest hash binding in the e2e; fixed with raw_text (byte-preserving) for bodies and WAT modules."
+  }
+ ]
+}

@@ -6,7 +6,7 @@
     "SPARK conclusions do not extend to Rust, Tauri/WebKit, SQLite, Git, Keychain, macOS, compilers, provers, or dependencies.",
     "Unproved authority boundaries remain SPARK_Mode Off and are covered by tests; resolved trust-surface changes are enforced by the daemon authority path and its hostile A-B-A gates."
   ],
-  "observed_at": "2026-08-22T16:59:42.327831Z",
+  "observed_at": "2026-08-22T17:01:52.299914Z",
   "production_formal_lane": "PASS_BOUNDED",
   "schema": "nemesis.kernel-proof/v1",
   "scope": {
@@ -228,10 +228,10 @@
   },
   "status": "PARTIAL",
   "subject": {
-    "commit": "c3984ce4e9065e83a0b5392cc73ef6eaea5333b8",
+    "commit": "c6660de7def05b6adb1104d66fd100dbe0a3d26f",
     "dirty_paths": [],
     "source_set_sha256": "5885b1bca2860598949208bad47c7637145e01d27877373055e68c16d118334b",
-    "tree": "d6eb59bdd66f791bea847340cc613effb9baff74"
+    "tree": "c645d15507256801643b0eadff56be0cf4568a40"
   },
   "summary": {
     "analyzed_units": 8,

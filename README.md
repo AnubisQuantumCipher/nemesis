@@ -31,6 +31,22 @@ The successor worktree adds a source-bound `nemesis.desktop-mission/v1` path wit
 
 See [Bounded Local Desktop Mission](docs/architecture/LOCAL_DESKTOP_MISSION.md) and its [machine schema](protocols/schemas/nemesis.desktop-mission.v1.schema.json). The formerly recorded daemon approval/capability trust-surface blockers (TS-001/TS-002) were resolved on 2026-08-22 under exact architect authorization: `authorize_action` now consumes a persisted one-shot approval and derives an attenuated child from a persisted parent grant (see [config/formal-kernel-scope.json](config/formal-kernel-scope.json) trust_surface_resolutions and [docs/architecture/FORMAL_ASSURANCE.md](docs/architecture/FORMAL_ASSURANCE.md)). Developer ID signing and notarization are permanent non-claims of the supported source-install distribution ([docs/release/SOURCE_INSTALL.md](docs/release/SOURCE_INSTALL.md)), never prerequisites.
 
+## Boss-harness epoch (0.3.0)
+
+The 2026-08-22 boss-harness completion widened the product surface without
+widening authority: the cockpit now carries fourteen rails (Home, Missions,
+Workspaces, Agents, Changes, Tests, Knowledge, Skills, Automations,
+Integrations, Security, Evidence, Replay, Settings). Rail state lives in a
+private governed Git repository, every governed mutation travels the same
+compile → authority-review → one-shot-approval → attenuated-grant → receipt →
+replay pipeline, and kernel-authorized bytes are adopted mechanically with a
+hash-chained adoption receipt. A NEMESIS-owned skills and plugins ecosystem
+ships on top: content-addressed reviewable skill bodies with a
+no-skip trust ladder, WebAssembly plugins with structurally deny-by-default
+capabilities executed in a bounded WASI host, and hash-bound built-ins in
+[`library/`](library) exercised end-to-end through the real daemon. See
+[protocols/desktop-rails-v1.md](protocols/desktop-rails-v1.md).
+
 ## Architecture and trust flow
 
 ```text
