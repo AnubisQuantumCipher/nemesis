@@ -699,7 +699,7 @@ test canonical_sign1_is_deterministic_and_independently_verifiable ... ok
 test wrong_key_and_nonverified_mandatory_claim_are_rejected ... ok
 test every_single_byte_mutation_is_rejected ... ok
 
-test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.10s
 
 
 running 0 tests
@@ -739,8 +739,8 @@ test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 running 4 tests
 test unattended_authority_boundary_denies_instead_of_waiting_or_proceeding ... ok
-test denied_request_is_terminal_not_waiting_approval ... ok
 test queue_is_idempotent_bounded_and_rate_limited ... ok
+test denied_request_is_terminal_not_waiting_approval ... ok
 test signed_queue_checkpoint_recovers_exactly_and_rejects_tamper ... ok
 
 test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
@@ -783,7 +783,7 @@ test ci_observation_is_accepted_only_for_current_source ... ok
 test path_traversal_and_git_metadata_staging_refuse ... ok
 test exact_lane_commit_leaves_default_branch_unchanged ... ok
 
-test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.20s
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.52s
 
 
 running 5 tests
@@ -793,7 +793,7 @@ test sandbox_refuses_read_and_write_outside_lane ... ok
 test sandbox_refuses_a_reachable_loopback_connection ... ok
 test creates_an_isolated_git_worktree_without_moving_main ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.08s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.07s
 
 
 running 2 tests
@@ -806,8 +806,8 @@ test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 running 6 tests
 test builder_cannot_accept_own_elevated_evidence ... ok
 test scheduler_refuses_missing_worker_budget_and_cycles ... ok
-test conflicting_lane_patches_are_surfaced_not_merged ... ok
 test scheduler_records_explainable_decisions_and_preserves_authority ... ok
+test conflicting_lane_patches_are_surfaced_not_merged ... ok
 test compatible_tasks_serialize_when_only_one_worker_is_available ... ok
 test schedule_is_deterministic_across_input_order ... ok
 
@@ -824,8 +824,8 @@ test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 
 running 2 tests
-test tests::keychain_creation_trusts_only_the_stable_security_binary ... ok
 test tests::prompted_secret_is_supplied_twice_over_stdin ... ok
+test tests::keychain_creation_trusts_only_the_stable_security_binary ... ok
 
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 

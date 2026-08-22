@@ -29,7 +29,6 @@ interface MissionCockpitProps {
   drafting: boolean;
   savingSettings: boolean;
   error: CommandFailure | null;
-  onSelect: (name: NavigationName) => void;
   onContractPath: (path: string) => void;
   onCompile: () => void;
   onDraft: (request: MissionDraftRequest) => Promise<void>;
@@ -64,7 +63,6 @@ export function MissionCockpit({
   drafting,
   savingSettings,
   error,
-  onSelect,
   onContractPath,
   onCompile,
   onDraft,
@@ -200,7 +198,6 @@ export function MissionCockpit({
       </div>
     );
   }
-
 
   return (
     <section className="mission-workspace" aria-labelledby="missions-heading">

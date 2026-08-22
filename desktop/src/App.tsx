@@ -334,7 +334,6 @@ export default function App() {
               drafting={drafting}
               savingSettings={savingSettings}
               error={error}
-              onSelect={setSelected}
               onContractPath={setContractPath}
               onCompile={() => void compileContract()}
               onDraft={draftContract}
