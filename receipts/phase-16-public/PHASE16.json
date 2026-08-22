@@ -62,11 +62,11 @@
     },
     "log": {
       "bytes": 55570,
-      "file": "receipts/production-readiness-20260821/phase16-reseal-20260822.log",
+      "file": "receipts/phase-16-public/security-hardening.txt",
       "line_count": 1322,
       "sha256": "bd19c5305728f92ab3d69863007ce1b22a69e05c2f6efb1aeb809c00565a5962"
     },
-    "observed_at": "2026-08-22T09:56:51Z",
+    "observed_at": "2026-08-22T10:00:16Z",
     "observed_warnings": [
       "Ada link steps reported a deployment-target override from 16.0 to the host target 26.0; every build, test, and bounded proof command still exited zero."
     ],
@@ -92,8 +92,8 @@
   },
   "repository": {
     "branch": "production/desktop-v1-autonomous-recovery",
-    "subject_commit": "7bd5737b5b663781cf824288f43ecf483f1d43bf",
-    "subject_tree": "31018e923849bdbd5aa01ff9c1effb0a6c135572"
+    "subject_commit": "b68901a8b9ce8747e26e0955df75c7387849d18a",
+    "subject_tree": "eb644ff82a4776fa8200ceafdb78293d363d0798"
   },
   "residuals": [
     {

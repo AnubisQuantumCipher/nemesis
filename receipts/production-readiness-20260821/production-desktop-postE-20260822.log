@@ -1,0 +1,141 @@
+2026-08-22T05:36:40Z FOCUSED_DESKTOP_POST_E date=2026-08-22T09:36:40Z head=47f6976332a41006718198f43844e9e4724c1fd8
+2026-08-22T05:36:41Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+2026-08-22T05:36:43Z 
+2026-08-22T05:36:43Z added 164 packages in 2s
+2026-08-22T05:36:43Z npm warn allow-scripts 2 packages have install scripts not yet covered by allowScripts:
+2026-08-22T05:36:43Z npm warn allow-scripts   esbuild@0.28.2 (postinstall: node install.js)
+2026-08-22T05:36:43Z npm warn allow-scripts   fsevents@2.3.3 (install: (install scripts present))
+2026-08-22T05:36:43Z npm warn allow-scripts
+2026-08-22T05:36:43Z npm warn allow-scripts Run `npm approve-scripts --allow-scripts-pending` to review, or `npm approve-scripts <pkg>` to allow.
+2026-08-22T05:36:43Z 
+2026-08-22T05:36:43Z > nemesis-desktop@0.1.0 test
+2026-08-22T05:36:43Z > vitest run --configLoader=runner
+2026-08-22T05:36:43Z 
+2026-08-22T05:36:44Z 
+2026-08-22T05:36:44Z  RUN  v3.2.7 /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop
+2026-08-22T05:36:44Z 
+2026-08-22T05:36:46Z  ✓ src/App.test.tsx (11 tests) 1441ms
+2026-08-22T05:36:46Z    ✓ NEMESIS Desktop production surface > drafts an exact local contract without a terminal prerequisite  417ms
+2026-08-22T05:36:46Z    ✓ NEMESIS Desktop production surface > compiles, reviews, and authorizes the exact normalized digests  305ms
+2026-08-22T05:36:46Z 
+2026-08-22T05:36:46Z  Test Files  1 passed (1)
+2026-08-22T05:36:46Z       Tests  11 passed (11)
+2026-08-22T05:36:46Z    Start at  05:36:44
+2026-08-22T05:36:46Z    Duration  2.27s (transform 109ms, setup 149ms, collect 175ms, tests 1.44s, environment 273ms, prepare 34ms)
+2026-08-22T05:36:46Z 
+2026-08-22T05:36:46Z 
+2026-08-22T05:36:46Z > nemesis-desktop@0.1.0 build
+2026-08-22T05:36:46Z > tsc -b && vite build --configLoader native
+2026-08-22T05:36:46Z 
+2026-08-22T05:36:49Z vite v7.3.6 building client environment for production...
+2026-08-22T05:36:49Z transforming...
+2026-08-22T05:36:49Z ✓ 40 modules transformed.
+2026-08-22T05:36:49Z rendering chunks...
+2026-08-22T05:36:49Z computing gzip size...
+2026-08-22T05:36:49Z dist/index.html                   0.45 kB │ gzip:  0.30 kB
+2026-08-22T05:36:49Z dist/assets/index-xXpWOPaX.css   15.41 kB │ gzip:  3.84 kB
+2026-08-22T05:36:49Z dist/assets/index-CF7H6YpK.js   217.99 kB │ gzip: 67.18 kB │ map: 988.73 kB
+2026-08-22T05:36:49Z ✓ built in 753ms
+2026-08-22T05:36:50Z    Compiling time-core v0.1.9
+2026-08-22T05:36:50Z    Compiling num-conv v0.2.2
+2026-08-22T05:36:50Z    Compiling deranged v0.5.8
+2026-08-22T05:36:50Z    Compiling quick-xml v0.41.0
+2026-08-22T05:36:50Z    Compiling time-macros v0.2.32
+2026-08-22T05:36:51Z    Compiling time v0.3.55
+2026-08-22T05:36:52Z    Compiling plist v1.10.0
+2026-08-22T05:36:53Z    Compiling cookie v0.18.2
+2026-08-22T05:36:53Z    Compiling tauri-utils v2.9.3
+2026-08-22T05:36:53Z    Compiling wry v0.55.1
+2026-08-22T05:36:58Z    Compiling tauri-runtime v2.11.3
+2026-08-22T05:36:58Z    Compiling tauri-runtime-wry v2.11.4
+2026-08-22T05:36:59Z    Compiling tauri-build v2.6.3
+2026-08-22T05:36:59Z    Compiling tauri-codegen v2.6.3
+2026-08-22T05:37:01Z    Compiling tauri v2.11.5
+2026-08-22T05:37:01Z    Compiling nemesis-desktop v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop/src-tauri)
+2026-08-22T05:37:01Z    Compiling tauri-macros v2.6.3
+2026-08-22T05:37:17Z     Finished `test` profile [unoptimized + debuginfo] target(s) in 27.67s
+2026-08-22T05:37:17Z      Running unittests src/lib.rs (desktop/src-tauri/target/debug/deps/nemesis_desktop-84e0923947e443d8)
+2026-08-22T05:37:18Z 
+2026-08-22T05:37:18Z running 6 tests
+2026-08-22T05:37:18Z test tests::rejects_empty_or_model_exact_replay ... ok
+2026-08-22T05:37:18Z test tests::maps_only_exact_verified_replay ... ok
+2026-08-22T05:37:18Z test tests::rejects_bundled_support_root_with_wrong_contract ... ok
+2026-08-22T05:37:18Z test mission_runner::tests::core_home_chain_is_private_0700 ... ok
+2026-08-22T05:37:18Z test tests::selects_bundled_support_root_when_contract_matches ... ok
+2026-08-22T05:37:18Z test tests::discovers_development_source_root_from_runtime_ancestors ... ok
+2026-08-22T05:37:18Z 
+2026-08-22T05:37:18Z test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.01s
+2026-08-22T05:37:18Z 
+2026-08-22T05:37:18Z      Running unittests src/main.rs (desktop/src-tauri/target/debug/deps/nemesis_desktop-3c7c747f5d5054a1)
+2026-08-22T05:37:18Z 
+2026-08-22T05:37:18Z running 0 tests
+2026-08-22T05:37:18Z 
+2026-08-22T05:37:18Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-22T05:37:18Z 
+2026-08-22T05:37:18Z      Running tests/mission_execution.rs (desktop/src-tauri/target/debug/deps/mission_execution-d7d869f77e27d516)
+2026-08-22T05:37:18Z 
+2026-08-22T05:37:18Z running 7 tests
+2026-08-22T05:37:18Z test executes_reviewed_contract_and_persists_current_receipt_and_replay ... ignored, requires built Ada and Rust runtime executables plus macOS Keychain
+2026-08-22T05:37:18Z test reviewed_digest_mismatch_refuses_before_creating_a_lane ... ok
+2026-08-22T05:37:18Z test pre_cancelled_mission_refuses_before_creating_a_lane ... ok
+2026-08-22T05:37:18Z test executable_symlink_substitution_is_refused_before_lane_creation ... ok
+2026-08-22T05:37:18Z test drafts_an_exact_source_bound_contract_inside_the_private_local_home ... ok
+2026-08-22T05:37:18Z test preflight_binds_clean_workspace_head_and_expected_target_bytes ... ok
+2026-08-22T05:37:19Z test child_process_environment_is_sanitized_before_lane_creation ... ok
+2026-08-22T05:37:19Z 
+2026-08-22T05:37:19Z test result: ok. 6 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.61s
+2026-08-22T05:37:19Z 
+2026-08-22T05:37:19Z      Running tests/production_mission.rs (desktop/src-tauri/target/debug/deps/production_mission-3d39a17220f1d60b)
+2026-08-22T05:37:19Z 
+2026-08-22T05:37:19Z running 4 tests
+2026-08-22T05:37:19Z test rejects_duplicate_unknown_unsafe_or_authority_widening_contract_fields ... ok
+2026-08-22T05:37:19Z test compiles_equivalent_json_to_one_normalized_digest_and_exact_action ... ok
+2026-08-22T05:37:19Z test initializes_private_versioned_local_home_idempotently ... ok
+2026-08-22T05:37:19Z test settings_are_safe_persisted_and_reversible ... ok
+2026-08-22T05:37:19Z 
+2026-08-22T05:37:19Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.03s
+2026-08-22T05:37:19Z 
+2026-08-22T05:37:19Z      Running tests/reliability.rs (desktop/src-tauri/target/debug/deps/reliability-1b67f49fafa47867)
+2026-08-22T05:37:19Z 
+2026-08-22T05:37:19Z running 14 tests
+2026-08-22T05:37:19Z test read_only_parent_fails_cleanly ... ok
+2026-08-22T05:37:19Z test future_schema_home_is_refused_as_downgrade_guard ... ok
+2026-08-22T05:37:19Z test missing_last_mission_pointer_is_a_clean_cold_start ... ok
+2026-08-22T05:37:19Z test corrupt_home_manifest_is_refused_without_mutation ... ok
+2026-08-22T05:37:19Z test corrupt_last_mission_pointer_is_refused ... ok
+2026-08-22T05:37:19Z test leftover_temporary_does_not_block_commit ... ok
+2026-08-22T05:37:19Z test settings_persist_and_reverse_across_relaunch ... ok
+2026-08-22T05:37:19Z test symlinked_or_oversized_last_mission_pointer_is_refused ... ok
+2026-08-22T05:37:19Z test symlinked_or_oversized_home_manifest_is_refused ... ok
+2026-08-22T05:37:19Z test settings_recover_or_refuse_at_the_intended_seam ... ok
+2026-08-22T05:37:19Z test stale_atomic_write_temporaries_are_swept_on_init ... ok
+2026-08-22T05:37:19Z test install_uninstall_reinstall_cycle_is_clean ... ok
+2026-08-22T05:37:19Z test repeated_launch_cycles_are_stable ... ok
+2026-08-22T05:37:27Z test disk_full_write_preserves_prior_settings ... ok
+2026-08-22T05:37:27Z 
+2026-08-22T05:37:27Z test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 7.60s
+2026-08-22T05:37:27Z 
+2026-08-22T05:37:27Z    Doc-tests nemesis_desktop
+2026-08-22T05:37:27Z 
+2026-08-22T05:37:27Z running 0 tests
+2026-08-22T05:37:27Z 
+2026-08-22T05:37:27Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-22T05:37:27Z 
+2026-08-22T05:37:27Z    Compiling nemesis-desktop v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop/src-tauri)
+2026-08-22T05:37:29Z     Finished `test` profile [unoptimized + debuginfo] target(s) in 1.77s
+2026-08-22T05:37:29Z      Running tests/mission_execution.rs (desktop/src-tauri/target/debug/deps/mission_execution-d7d869f77e27d516)
+2026-08-22T05:37:29Z 
+2026-08-22T05:37:29Z running 1 test
+2026-08-22T05:37:30Z test executes_reviewed_contract_and_persists_current_receipt_and_replay ... ok
+2026-08-22T05:37:30Z 
+2026-08-22T05:37:30Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.90s
+2026-08-22T05:37:30Z 
+2026-08-22T05:37:30Z test_release_config_bundles_complete_standalone_runtime (tests.integration.test_release_bundle.ReleaseBundleTests.test_release_config_bundles_complete_standalone_runtime) ... ok
+2026-08-22T05:37:30Z test_release_contract_with_private_paths_is_not_bundled (tests.integration.test_release_bundle.ReleaseBundleTests.test_release_contract_with_private_paths_is_not_bundled) ... ok
+2026-08-22T05:37:30Z 
+2026-08-22T05:37:30Z ----------------------------------------------------------------------
+2026-08-22T05:37:30Z Ran 2 tests in 0.000s
+2026-08-22T05:37:30Z 
+2026-08-22T05:37:30Z OK
+2026-08-22T05:37:30Z PASS_PRODUCTION_DESKTOP_AUTOMATED
+2026-08-22T05:37:30Z DESKTOP_GATE_EXIT_STATUS=0

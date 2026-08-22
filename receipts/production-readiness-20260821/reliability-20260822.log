@@ -1,0 +1,32 @@
+2026-08-22T04:40:50Z RELIABILITY_GATE date=2026-08-22T08:40:50Z head=ea1ff7739211e82ccfa52c225e2018a4524b1c19 tree_dirty=5
+2026-08-22T04:40:50Z     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.13s
+2026-08-22T04:40:50Z      Running tests/reliability.rs (desktop/src-tauri/target/debug/deps/reliability-1d6590098979250f)
+2026-08-22T04:40:50Z 
+2026-08-22T04:40:50Z running 14 tests
+2026-08-22T04:40:50Z test read_only_parent_fails_cleanly ... ok
+2026-08-22T04:40:50Z test future_schema_home_is_refused_as_downgrade_guard ... ok
+2026-08-22T04:40:50Z test corrupt_home_manifest_is_refused_without_mutation ... ok
+2026-08-22T04:40:50Z test missing_last_mission_pointer_is_a_clean_cold_start ... ok
+2026-08-22T04:40:50Z test settings_recover_or_refuse_at_the_intended_seam ... ok
+2026-08-22T04:40:50Z test settings_persist_and_reverse_across_relaunch ... ok
+2026-08-22T04:40:50Z test symlinked_or_oversized_last_mission_pointer_is_refused ... ok
+2026-08-22T04:40:50Z test corrupt_last_mission_pointer_is_refused ... ok
+2026-08-22T04:40:50Z test leftover_temporary_does_not_block_commit ... ok
+2026-08-22T04:40:50Z test symlinked_or_oversized_home_manifest_is_refused ... ok
+2026-08-22T04:40:50Z test stale_atomic_write_temporaries_are_swept_on_init ... ok
+2026-08-22T04:40:50Z test install_uninstall_reinstall_cycle_is_clean ... ok
+2026-08-22T04:40:51Z test repeated_launch_cycles_are_stable ... ok
+2026-08-22T04:40:52Z test disk_full_write_preserves_prior_settings ... ok
+2026-08-22T04:40:52Z 
+2026-08-22T04:40:52Z test result: ok. 14 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.49s
+2026-08-22T04:40:52Z 
+2026-08-22T04:40:52Z test_concurrent_create_has_one_authoritative_owner_and_no_duplicate_events (tests.integration.test_daemon_api.DaemonApiTests.test_concurrent_create_has_one_authoritative_owner_and_no_duplicate_events) ... ok
+2026-08-22T04:40:52Z test_lifecycle_recovers_and_completion_rejects_stale_evidence (tests.integration.test_daemon_api.DaemonApiTests.test_lifecycle_recovers_and_completion_rejects_stale_evidence) ... ok
+2026-08-22T04:40:52Z test_protocol_handles_partial_reads_and_refuses_ambiguous_json (tests.integration.test_daemon_api.DaemonApiTests.test_protocol_handles_partial_reads_and_refuses_ambiguous_json) ... ok
+2026-08-22T04:40:52Z 
+2026-08-22T04:40:52Z ----------------------------------------------------------------------
+2026-08-22T04:40:52Z Ran 3 tests in 0.076s
+2026-08-22T04:40:52Z 
+2026-08-22T04:40:52Z OK
+2026-08-22T04:40:52Z PASS_PRODUCTION_RELIABILITY
+2026-08-22T04:40:52Z RELIABILITY_GATE_EXIT_STATUS=0

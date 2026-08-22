@@ -1,0 +1,96 @@
+2026-08-22T02:14:31Z FOCUSED_DESKTOP_REBIND date=2026-08-22T06:14:31Z head=f36d84b267af73bc559b89a76ce6c9a6c57bb770 tree=88f83b2e4aa52176bc104e1fa1596b9fa04e5cd4
+2026-08-22T02:14:32Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+2026-08-22T02:14:32Z 
+2026-08-22T02:14:32Z added 164 packages in 987ms
+2026-08-22T02:14:32Z npm warn install-scripts 2 packages had install scripts blocked because they are not covered by allowScripts:
+2026-08-22T02:14:32Z npm warn install-scripts   esbuild@0.28.2 (postinstall: node install.js)
+2026-08-22T02:14:32Z npm warn install-scripts   fsevents@2.3.3 (install: (install scripts present))
+2026-08-22T02:14:32Z npm warn install-scripts
+2026-08-22T02:14:32Z npm warn install-scripts Run `npm install-scripts ls` to review, or `npm install-scripts approve <pkg>` to allow.
+2026-08-22T02:14:32Z npm notice run nemesis-desktop@0.1.0 test
+2026-08-22T02:14:32Z npm notice run vitest run --configLoader=runner
+2026-08-22T02:14:33Z 
+2026-08-22T02:14:33Z  RUN  v3.2.7 /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop
+2026-08-22T02:14:33Z 
+2026-08-22T02:14:34Z  ✓ src/App.test.tsx (8 tests) 559ms
+2026-08-22T02:14:34Z 
+2026-08-22T02:14:34Z  Test Files  1 passed (1)
+2026-08-22T02:14:34Z       Tests  8 passed (8)
+2026-08-22T02:14:34Z    Start at  02:14:33
+2026-08-22T02:14:34Z    Duration  938ms (transform 57ms, setup 42ms, collect 80ms, tests 559ms, environment 124ms, prepare 24ms)
+2026-08-22T02:14:34Z 
+2026-08-22T02:14:34Z npm notice run nemesis-desktop@0.1.0 build
+2026-08-22T02:14:34Z npm notice run tsc -b && vite build --configLoader native
+2026-08-22T02:14:35Z vite v7.3.6 building client environment for production...
+2026-08-22T02:14:35Z transforming...
+2026-08-22T02:14:36Z ✓ 40 modules transformed.
+2026-08-22T02:14:36Z rendering chunks...
+2026-08-22T02:14:36Z computing gzip size...
+2026-08-22T02:14:36Z dist/index.html                   0.45 kB │ gzip:  0.29 kB
+2026-08-22T02:14:36Z dist/assets/index-CJ0cpqPF.css   15.41 kB │ gzip:  3.84 kB
+2026-08-22T02:14:36Z dist/assets/index-DsVNRuLu.js   217.97 kB │ gzip: 67.23 kB │ map: 988.71 kB
+2026-08-22T02:14:36Z ✓ built in 345ms
+2026-08-22T02:14:36Z     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.41s
+2026-08-22T02:14:36Z      Running unittests src/lib.rs (desktop/src-tauri/target/debug/deps/nemesis_desktop-8f53608fceaebdcb)
+2026-08-22T02:14:36Z 
+2026-08-22T02:14:36Z running 5 tests
+2026-08-22T02:14:36Z test tests::rejects_empty_or_model_exact_replay ... ok
+2026-08-22T02:14:36Z test tests::maps_only_exact_verified_replay ... ok
+2026-08-22T02:14:36Z test tests::rejects_bundled_support_root_with_wrong_contract ... ok
+2026-08-22T02:14:36Z test tests::selects_bundled_support_root_when_contract_matches ... ok
+2026-08-22T02:14:36Z test tests::discovers_development_source_root_from_runtime_ancestors ... ok
+2026-08-22T02:14:36Z 
+2026-08-22T02:14:36Z test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-22T02:14:36Z 
+2026-08-22T02:14:36Z      Running unittests src/main.rs (desktop/src-tauri/target/debug/deps/nemesis_desktop-02b71a01e98b593a)
+2026-08-22T02:14:36Z 
+2026-08-22T02:14:36Z running 0 tests
+2026-08-22T02:14:36Z 
+2026-08-22T02:14:36Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-22T02:14:36Z 
+2026-08-22T02:14:36Z      Running tests/mission_execution.rs (desktop/src-tauri/target/debug/deps/mission_execution-95ca4f938d7689b9)
+2026-08-22T02:14:36Z 
+2026-08-22T02:14:36Z running 7 tests
+2026-08-22T02:14:36Z test executes_reviewed_contract_and_persists_current_receipt_and_replay ... ignored, requires built Ada and Rust runtime executables plus macOS Keychain
+2026-08-22T02:14:37Z test reviewed_digest_mismatch_refuses_before_creating_a_lane ... ok
+2026-08-22T02:14:37Z test pre_cancelled_mission_refuses_before_creating_a_lane ... ok
+2026-08-22T02:14:37Z test executable_symlink_substitution_is_refused_before_lane_creation ... ok
+2026-08-22T02:14:37Z test drafts_an_exact_source_bound_contract_inside_the_private_local_home ... ok
+2026-08-22T02:14:37Z test preflight_binds_clean_workspace_head_and_expected_target_bytes ... ok
+2026-08-22T02:14:37Z test child_process_environment_is_sanitized_before_lane_creation ... ok
+2026-08-22T02:14:37Z 
+2026-08-22T02:14:37Z test result: ok. 6 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out; finished in 0.59s
+2026-08-22T02:14:37Z 
+2026-08-22T02:14:37Z      Running tests/production_mission.rs (desktop/src-tauri/target/debug/deps/production_mission-76d08499b983fb04)
+2026-08-22T02:14:37Z 
+2026-08-22T02:14:37Z running 4 tests
+2026-08-22T02:14:37Z test compiles_equivalent_json_to_one_normalized_digest_and_exact_action ... ok
+2026-08-22T02:14:37Z test rejects_duplicate_unknown_unsafe_or_authority_widening_contract_fields ... ok
+2026-08-22T02:14:37Z test initializes_private_versioned_local_home_idempotently ... ok
+2026-08-22T02:14:37Z test settings_are_safe_persisted_and_reversible ... ok
+2026-08-22T02:14:37Z 
+2026-08-22T02:14:37Z test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+2026-08-22T02:14:37Z 
+2026-08-22T02:14:37Z    Doc-tests nemesis_desktop
+2026-08-22T02:14:38Z 
+2026-08-22T02:14:38Z running 0 tests
+2026-08-22T02:14:38Z 
+2026-08-22T02:14:38Z test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+2026-08-22T02:14:38Z 
+2026-08-22T02:14:38Z     Finished `test` profile [unoptimized + debuginfo] target(s) in 0.10s
+2026-08-22T02:14:38Z      Running tests/mission_execution.rs (desktop/src-tauri/target/debug/deps/mission_execution-95ca4f938d7689b9)
+2026-08-22T02:14:38Z 
+2026-08-22T02:14:38Z running 1 test
+2026-08-22T02:14:38Z test executes_reviewed_contract_and_persists_current_receipt_and_replay ... ok
+2026-08-22T02:14:38Z 
+2026-08-22T02:14:38Z test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.66s
+2026-08-22T02:14:38Z 
+2026-08-22T02:14:39Z test_release_config_bundles_complete_standalone_runtime (tests.integration.test_release_bundle.ReleaseBundleTests) ... ok
+2026-08-22T02:14:39Z test_release_contract_with_private_paths_is_not_bundled (tests.integration.test_release_bundle.ReleaseBundleTests) ... ok
+2026-08-22T02:14:39Z 
+2026-08-22T02:14:39Z ----------------------------------------------------------------------
+2026-08-22T02:14:39Z Ran 2 tests in 0.000s
+2026-08-22T02:14:39Z 
+2026-08-22T02:14:39Z OK
+2026-08-22T02:14:39Z PASS_PRODUCTION_DESKTOP_AUTOMATED
+2026-08-22T02:14:39Z DESKTOP_GATE_EXIT_STATUS=0

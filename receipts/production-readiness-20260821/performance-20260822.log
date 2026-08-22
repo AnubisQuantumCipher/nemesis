@@ -1,0 +1,133 @@
+2026-08-22T05:04:38Z PERFORMANCE_GATE date=2026-08-22T09:04:38Z head=a1d89dfc6c175a349a474281fd937e12d7cc5ce9
+2026-08-22T05:04:38Z {
+2026-08-22T05:04:38Z  "daemon_control_plane_start": {
+2026-08-22T05:04:38Z   "idle_cpu_percent_median": 0.0,
+2026-08-22T05:04:38Z   "idle_rss_bytes_median": 1867776,
+2026-08-22T05:04:38Z   "max_s": 0.0041,
+2026-08-22T05:04:38Z   "median_s": 0.0035,
+2026-08-22T05:04:38Z   "min_s": 0.0032,
+2026-08-22T05:04:38Z   "p95_ceiling_s": 2.0,
+2026-08-22T05:04:38Z   "p95_s": 0.0041,
+2026-08-22T05:04:38Z   "runs": 10,
+2026-08-22T05:04:38Z   "status": "OK",
+2026-08-22T05:04:38Z   "wakeups": "NOT_MEASURED_REQUIRES_PRIVILEGED_POWERMETRICS",
+2026-08-22T05:04:38Z   "within_threshold": true
+2026-08-22T05:04:38Z  },
+2026-08-22T05:04:38Z  "daemon_workload": {
+2026-08-22T05:04:38Z   "authorize_run_transition_s": 0.00069,
+2026-08-22T05:04:38Z   "authorized_state": "PLANNING",
+2026-08-22T05:04:38Z   "bytes_per_mission": 977,
+2026-08-22T05:04:38Z   "create_max_s": 0.00157,
+2026-08-22T05:04:38Z   "create_median_s": 0.00087,
+2026-08-22T05:04:38Z   "create_min_s": 0.00081,
+2026-08-22T05:04:38Z   "create_p95_s": 0.00157,
+2026-08-22T05:04:38Z   "missions_dir_bytes": 9770,
+2026-08-22T05:04:38Z   "replay_load": {
+2026-08-22T05:04:38Z    "event_lines": 4,
+2026-08-22T05:04:38Z    "ledger_bytes": 1220,
+2026-08-22T05:04:38Z    "max_ledger_bytes_cap": 67108864,
+2026-08-22T05:04:38Z    "parse_s": 0.0027,
+2026-08-22T05:04:38Z    "verdict_verified": true
+2026-08-22T05:04:38Z   },
+2026-08-22T05:04:38Z   "run_state": "RUNNING",
+2026-08-22T05:04:38Z   "runs": 10,
+2026-08-22T05:04:38Z   "status": "OK"
+2026-08-22T05:04:38Z  },
+2026-08-22T05:04:38Z  "declared_product_limits": {
+2026-08-22T05:04:38Z   "all_present": true,
+2026-08-22T05:04:38Z   "limits": [
+2026-08-22T05:04:38Z    {
+2026-08-22T05:04:38Z     "const": "MAX_REPLAY_BYTES",
+2026-08-22T05:04:38Z     "expected": 67108864,
+2026-08-22T05:04:38Z     "found": 67108864,
+2026-08-22T05:04:38Z     "ok": true,
+2026-08-22T05:04:38Z     "path": "desktop/src-tauri/src/lib.rs"
+2026-08-22T05:04:38Z    },
+2026-08-22T05:04:38Z    {
+2026-08-22T05:04:38Z     "const": "MAX_LOCAL_CONTRACT_BYTES",
+2026-08-22T05:04:38Z     "expected": 65536,
+2026-08-22T05:04:38Z     "found": 65536,
+2026-08-22T05:04:38Z     "ok": true,
+2026-08-22T05:04:38Z     "path": "desktop/src-tauri/src/lib.rs"
+2026-08-22T05:04:38Z    },
+2026-08-22T05:04:38Z    {
+2026-08-22T05:04:38Z     "const": "MAX_CONTRACT_BYTES",
+2026-08-22T05:04:38Z     "expected": 65536,
+2026-08-22T05:04:38Z     "found": 65536,
+2026-08-22T05:04:38Z     "ok": true,
+2026-08-22T05:04:38Z     "path": "desktop/src-tauri/src/production.rs"
+2026-08-22T05:04:38Z    },
+2026-08-22T05:04:38Z    {
+2026-08-22T05:04:38Z     "const": "MAX_GOAL_BYTES",
+2026-08-22T05:04:38Z     "expected": 1024,
+2026-08-22T05:04:38Z     "found": 1024,
+2026-08-22T05:04:38Z     "ok": true,
+2026-08-22T05:04:38Z     "path": "desktop/src-tauri/src/production.rs"
+2026-08-22T05:04:38Z    },
+2026-08-22T05:04:38Z    {
+2026-08-22T05:04:38Z     "const": "MAX_WORKSPACE_BYTES",
+2026-08-22T05:04:38Z     "expected": 4096,
+2026-08-22T05:04:38Z     "found": 4096,
+2026-08-22T05:04:38Z     "ok": true,
+2026-08-22T05:04:38Z     "path": "desktop/src-tauri/src/production.rs"
+2026-08-22T05:04:38Z    },
+2026-08-22T05:04:38Z    {
+2026-08-22T05:04:38Z     "const": "MAX_WRITE_BYTES",
+2026-08-22T05:04:38Z     "expected": 4096,
+2026-08-22T05:04:38Z     "found": 4096,
+2026-08-22T05:04:38Z     "ok": true,
+2026-08-22T05:04:38Z     "path": "desktop/src-tauri/src/production.rs"
+2026-08-22T05:04:38Z    },
+2026-08-22T05:04:38Z    {
+2026-08-22T05:04:38Z     "const": "MAX_RUNTIME_SECONDS",
+2026-08-22T05:04:38Z     "expected": 900,
+2026-08-22T05:04:38Z     "found": 900,
+2026-08-22T05:04:38Z     "ok": true,
+2026-08-22T05:04:38Z     "path": "desktop/src-tauri/src/production.rs"
+2026-08-22T05:04:38Z    },
+2026-08-22T05:04:38Z    {
+2026-08-22T05:04:38Z     "const": "MAX_OUTPUT_BYTES",
+2026-08-22T05:04:38Z     "expected": 16777216,
+2026-08-22T05:04:38Z     "found": 16777216,
+2026-08-22T05:04:38Z     "ok": true,
+2026-08-22T05:04:38Z     "path": "desktop/src-tauri/src/production.rs"
+2026-08-22T05:04:38Z    },
+2026-08-22T05:04:38Z    {
+2026-08-22T05:04:38Z     "const": "MAX_CORE_MESSAGE_BYTES",
+2026-08-22T05:04:38Z     "expected": 65536,
+2026-08-22T05:04:38Z     "found": 65536,
+2026-08-22T05:04:38Z     "ok": true,
+2026-08-22T05:04:38Z     "path": "desktop/src-tauri/src/mission_runner.rs"
+2026-08-22T05:04:38Z    },
+2026-08-22T05:04:38Z    {
+2026-08-22T05:04:38Z     "const": "MAX_RESULT_BYTES",
+2026-08-22T05:04:38Z     "expected": 4194304,
+2026-08-22T05:04:38Z     "found": 4194304,
+2026-08-22T05:04:38Z     "ok": true,
+2026-08-22T05:04:38Z     "path": "desktop/src-tauri/src/mission_runner.rs"
+2026-08-22T05:04:38Z    }
+2026-08-22T05:04:38Z   ]
+2026-08-22T05:04:38Z  },
+2026-08-22T05:04:38Z  "gui_launch": {
+2026-08-22T05:04:38Z   "reason": "console IOConsoleLocked=Yes; native Tauri window-server launch cannot be measured headlessly. Daemon control-plane start is measured as the usable local-control-plane proxy.",
+2026-08-22T05:04:38Z   "status": "ENVIRONMENT_BLOCKED"
+2026-08-22T05:04:38Z  },
+2026-08-22T05:04:38Z  "instrument_validated": true,
+2026-08-22T05:04:38Z  "machine": {
+2026-08-22T05:04:38Z   "cpu": "Apple M4 Max",
+2026-08-22T05:04:38Z   "hw_model": "Mac16,5",
+2026-08-22T05:04:38Z   "logical_cpus": "16",
+2026-08-22T05:04:38Z   "macos": "26.6",
+2026-08-22T05:04:38Z   "mem_bytes": "51539607552",
+2026-08-22T05:04:38Z   "uname": "Darwin 25.6.0 arm64 arm"
+2026-08-22T05:04:38Z  },
+2026-08-22T05:04:38Z  "measured_at": "2026-08-22T09:04:38Z",
+2026-08-22T05:04:38Z  "schema": "nemesis.performance/v1",
+2026-08-22T05:04:38Z  "sizes": {
+2026-08-22T05:04:38Z   "build_bin_total_bytes": 6266848,
+2026-08-22T05:04:38Z   "desktop_dist_total_bytes": 1222536
+2026-08-22T05:04:38Z  }
+2026-08-22T05:04:38Z }
+2026-08-22T05:04:38Z PASS_PERFORMANCE_BOUNDED
+2026-08-22T05:04:38Z PASS_PRODUCTION_PERFORMANCE
+2026-08-22T05:04:38Z PERFORMANCE_GATE_EXIT_STATUS=0

@@ -1,0 +1,17 @@
+2026-08-22T04:58:31Z ACCESSIBILITY_GATE date=2026-08-22T08:58:31Z head=a1d89dfc6c175a349a474281fd937e12d7cc5ce9
+2026-08-22T04:58:32Z 
+2026-08-22T04:58:32Z > nemesis-desktop@0.1.0 test
+2026-08-22T04:58:32Z > vitest run --configLoader=runner
+2026-08-22T04:58:32Z 
+2026-08-22T04:58:32Z 
+2026-08-22T04:58:32Z  RUN  v3.2.7 /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop
+2026-08-22T04:58:32Z 
+2026-08-22T04:58:33Z  ✓ src/App.test.tsx (11 tests) 639ms
+2026-08-22T04:58:33Z 
+2026-08-22T04:58:33Z  Test Files  1 passed (1)
+2026-08-22T04:58:33Z       Tests  11 passed (11)
+2026-08-22T04:58:33Z    Start at  04:58:32
+2026-08-22T04:58:33Z    Duration  988ms (transform 51ms, setup 37ms, collect 77ms, tests 639ms, environment 115ms, prepare 24ms)
+2026-08-22T04:58:33Z 
+2026-08-22T04:58:33Z PASS_PRODUCTION_ACCESSIBILITY
+2026-08-22T04:58:33Z ACCESSIBILITY_GATE_EXIT_STATUS=0

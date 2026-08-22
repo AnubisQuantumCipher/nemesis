@@ -1,0 +1,567 @@
+2026-08-22T05:40:30Z RELEASE_PACKAGE date=2026-08-22T09:40:30Z head=2f78bf13574dd9602ffa57fc180741b225e03af8
+2026-08-22T05:40:30Z PASS_RELEASE_CONTRACT sha256=8f62d762c30849ec6841b0fbde87004ced41365b456c98c79f6f1bf53c347ccc bytes=12735 lines=137
+2026-08-22T05:40:31Z Setup
+2026-08-22T05:40:31Z    [mkdir]        object directory for project Nemesis
+2026-08-22T05:40:31Z Compile
+2026-08-22T05:40:31Z    [Ada]          nemesis_core_daemon.adb
+2026-08-22T05:40:32Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:32Z    [Ada]          nemesis_kernel_tests.adb
+2026-08-22T05:40:32Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:32Z    [Ada]          nemesis_authority_tests.adb
+2026-08-22T05:40:32Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:32Z    [Ada]          nemesis_path_tests.adb
+2026-08-22T05:40:32Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:32Z    [Ada]          nemesis_ledger_tests.adb
+2026-08-22T05:40:32Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:32Z    [Ada]          nemesis_storage_tests.adb
+2026-08-22T05:40:32Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:32Z    [Ada]          nemesis_index_tests.adb
+2026-08-22T05:40:33Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:33Z    [Ada]          nemesis.ads
+2026-08-22T05:40:33Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:33Z    [Ada]          nemesis-core.ads
+2026-08-22T05:40:33Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:33Z    [Ada]          nemesis-core-json.adb
+2026-08-22T05:40:33Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:33Z    [Ada]          nemesis-core-ledger.adb
+2026-08-22T05:40:33Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:33Z    [Ada]          nemesis-core-mission_store.adb
+2026-08-22T05:40:34Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:34Z    [Ada]          nemesis-kernel.ads
+2026-08-22T05:40:34Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:34Z    [Ada]          nemesis-kernel-capabilities.adb
+2026-08-22T05:40:34Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:34Z    [Ada]          nemesis-kernel-completion.adb
+2026-08-22T05:40:34Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:34Z    [Ada]          nemesis-kernel-missions.adb
+2026-08-22T05:40:34Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:34Z    [Ada]          nemesis-kernel-types.adb
+2026-08-22T05:40:34Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:34Z    [Ada]          nemesis-kernel-transitions.adb
+2026-08-22T05:40:34Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:34Z    [Ada]          nemesis-kernel-approvals.adb
+2026-08-22T05:40:34Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:34Z    [Ada]          nemesis-kernel-budgets.adb
+2026-08-22T05:40:34Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:34Z    [Ada]          nemesis-kernel-evidence.adb
+2026-08-22T05:40:35Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:35Z    [Ada]          nemesis-core-paths.adb
+2026-08-22T05:40:35Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:35Z    [Ada]          nemesis-core-checkpoints.adb
+2026-08-22T05:40:35Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:35Z    [Ada]          nemesis-core-objects.adb
+2026-08-22T05:40:35Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:35Z    [Ada]          nemesis-core-index.adb
+2026-08-22T05:40:36Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:36Z Bind
+2026-08-22T05:40:36Z    [gprbind]      nemesis_core_daemon.bexch
+2026-08-22T05:40:36Z    [Ada]          nemesis_core_daemon.ali
+2026-08-22T05:40:36Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:36Z    [gprbind]      nemesis_kernel_tests.bexch
+2026-08-22T05:40:36Z    [Ada]          nemesis_kernel_tests.ali
+2026-08-22T05:40:36Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:36Z    [gprbind]      nemesis_authority_tests.bexch
+2026-08-22T05:40:36Z    [Ada]          nemesis_authority_tests.ali
+2026-08-22T05:40:36Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:36Z    [gprbind]      nemesis_path_tests.bexch
+2026-08-22T05:40:36Z    [Ada]          nemesis_path_tests.ali
+2026-08-22T05:40:36Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:36Z    [gprbind]      nemesis_ledger_tests.bexch
+2026-08-22T05:40:36Z    [Ada]          nemesis_ledger_tests.ali
+2026-08-22T05:40:36Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:36Z    [gprbind]      nemesis_storage_tests.bexch
+2026-08-22T05:40:36Z    [Ada]          nemesis_storage_tests.ali
+2026-08-22T05:40:37Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:37Z    [gprbind]      nemesis_index_tests.bexch
+2026-08-22T05:40:37Z    [Ada]          nemesis_index_tests.ali
+2026-08-22T05:40:37Z clang: warning: overriding deployment version from '16.0' to '26.0' [-Woverriding-deployment-version]
+2026-08-22T05:40:37Z Link
+2026-08-22T05:40:37Z    [link]         nemesis_core_daemon.adb
+2026-08-22T05:40:37Z    [link]         nemesis_kernel_tests.adb
+2026-08-22T05:40:37Z    [link]         nemesis_authority_tests.adb
+2026-08-22T05:40:37Z    [link]         nemesis_path_tests.adb
+2026-08-22T05:40:37Z    [link]         nemesis_ledger_tests.adb
+2026-08-22T05:40:37Z    [link]         nemesis_storage_tests.adb
+2026-08-22T05:40:37Z    [link]         nemesis_index_tests.adb
+2026-08-22T05:40:38Z    Compiling proc-macro2 v1.0.107
+2026-08-22T05:40:38Z    Compiling unicode-ident v1.0.24
+2026-08-22T05:40:38Z    Compiling quote v1.0.47
+2026-08-22T05:40:38Z    Compiling serde_core v1.0.229
+2026-08-22T05:40:38Z    Compiling version_check v0.9.5
+2026-08-22T05:40:38Z    Compiling libc v0.2.189
+2026-08-22T05:40:38Z    Compiling libm v0.2.16
+2026-08-22T05:40:38Z    Compiling serde v1.0.229
+2026-08-22T05:40:38Z    Compiling cfg-if v1.0.4
+2026-08-22T05:40:38Z    Compiling foldhash v0.2.0
+2026-08-22T05:40:38Z    Compiling hashbrown v0.17.1
+2026-08-22T05:40:38Z    Compiling generic-array v0.14.7
+2026-08-22T05:40:38Z    Compiling typenum v1.20.1
+2026-08-22T05:40:38Z    Compiling wasmtime-internal-core v47.0.3
+2026-08-22T05:40:38Z    Compiling thiserror v2.0.20
+2026-08-22T05:40:39Z    Compiling semver v1.0.28
+2026-08-22T05:40:39Z    Compiling log v0.4.33
+2026-08-22T05:40:39Z    Compiling target-lexicon v0.13.5
+2026-08-22T05:40:39Z    Compiling syn v3.0.3
+2026-08-22T05:40:39Z    Compiling syn v2.0.119
+2026-08-22T05:40:39Z    Compiling zmij v1.0.23
+2026-08-22T05:40:40Z    Compiling cpufeatures v0.2.17
+2026-08-22T05:40:40Z    Compiling memchr v2.8.3
+2026-08-22T05:40:40Z    Compiling cranelift-srcgen v0.134.4
+2026-08-22T05:40:40Z    Compiling block-buffer v0.10.4
+2026-08-22T05:40:40Z    Compiling crypto-common v0.1.7
+2026-08-22T05:40:40Z    Compiling serde_json v1.0.151
+2026-08-22T05:40:40Z    Compiling heck v0.5.0
+2026-08-22T05:40:40Z    Compiling digest v0.10.7
+2026-08-22T05:40:40Z    Compiling cranelift-assembler-x64-meta v0.134.4
+2026-08-22T05:40:40Z    Compiling bitflags v2.13.1
+2026-08-22T05:40:40Z    Compiling stable_deref_trait v1.2.1
+2026-08-22T05:40:40Z    Compiling sha2 v0.10.9
+2026-08-22T05:40:40Z    Compiling equivalent v1.0.2
+2026-08-22T05:40:40Z    Compiling cranelift-isle v0.134.3
+2026-08-22T05:40:40Z    Compiling anyhow v1.0.104
+2026-08-22T05:40:40Z    Compiling allocator-api2 v0.2.21
+2026-08-22T05:40:41Z    Compiling bumpalo v3.20.3
+2026-08-22T05:40:41Z    Compiling hashbrown v0.16.1
+2026-08-22T05:40:41Z    Compiling cranelift-codegen-shared v0.134.4
+2026-08-22T05:40:41Z    Compiling indexmap v2.14.0
+2026-08-22T05:40:41Z    Compiling fnv v1.0.7
+2026-08-22T05:40:41Z    Compiling leb128fmt v0.1.0
+2026-08-22T05:40:41Z    Compiling crc32fast v1.5.0
+2026-08-22T05:40:41Z    Compiling rustix v1.1.4
+2026-08-22T05:40:41Z    Compiling cranelift-assembler-x64 v0.134.4
+2026-08-22T05:40:42Z    Compiling errno v0.3.14
+2026-08-22T05:40:42Z    Compiling shlex v2.0.1
+2026-08-22T05:40:42Z    Compiling object v0.39.1
+2026-08-22T05:40:42Z    Compiling arbitrary v1.4.2
+2026-08-22T05:40:42Z    Compiling rustc-hash v2.1.3
+2026-08-22T05:40:42Z    Compiling find-msvc-tools v0.1.11
+2026-08-22T05:40:42Z    Compiling cc v1.4.3
+2026-08-22T05:40:42Z    Compiling gimli v0.33.0
+2026-08-22T05:40:43Z    Compiling cranelift-control v0.134.4
+2026-08-22T05:40:43Z    Compiling termcolor v1.4.1
+2026-08-22T05:40:43Z    Compiling wasm-encoder v0.252.0
+2026-08-22T05:40:43Z    Compiling synstructure v0.13.2
+2026-08-22T05:40:43Z    Compiling rustc_version v0.4.1
+2026-08-22T05:40:44Z    Compiling wasmtime-internal-component-util v47.0.3
+2026-08-22T05:40:44Z    Compiling litemap v0.8.3
+2026-08-22T05:40:44Z    Compiling serde_derive v1.0.229
+2026-08-22T05:40:44Z    Compiling thiserror-impl v2.0.20
+2026-08-22T05:40:44Z    Compiling zerovec-derive v0.11.5
+2026-08-22T05:40:44Z    Compiling displaydoc v0.2.7
+2026-08-22T05:40:44Z    Compiling writeable v0.6.4
+2026-08-22T05:40:44Z    Compiling itoa v1.0.18
+2026-08-22T05:40:44Z    Compiling zerofrom-derive v0.1.7
+2026-08-22T05:40:44Z    Compiling yoke-derive v0.8.2
+2026-08-22T05:40:45Z    Compiling pulley-macros v47.0.3
+2026-08-22T05:40:45Z    Compiling zerofrom v0.1.8
+2026-08-22T05:40:45Z    Compiling cobs v0.3.0
+2026-08-22T05:40:45Z    Compiling wasmtime-internal-versioned-export-macros v47.0.3
+2026-08-22T05:40:45Z    Compiling curve25519-dalek v4.1.3
+2026-08-22T05:40:45Z    Compiling yoke v0.8.3
+2026-08-22T05:40:46Z    Compiling utf8_iter v1.0.4
+2026-08-22T05:40:46Z    Compiling thiserror v1.0.69
+2026-08-22T05:40:46Z    Compiling zerovec v0.11.8
+2026-08-22T05:40:46Z    Compiling zerotrie v0.2.5
+2026-08-22T05:40:46Z    Compiling icu_normalizer_data v2.3.0
+2026-08-22T05:40:46Z    Compiling pin-project-lite v0.2.17
+2026-08-22T05:40:46Z    Compiling wasmtime-internal-unwinder v47.0.3
+2026-08-22T05:40:46Z    Compiling icu_properties_data v2.3.0
+2026-08-22T05:40:46Z    Compiling io-lifetimes v3.0.1
+2026-08-22T05:40:46Z    Compiling io-lifetimes v2.0.4
+2026-08-22T05:40:46Z    Compiling id-arena v2.3.0
+2026-08-22T05:40:46Z    Compiling tinystr v0.8.4
+2026-08-22T05:40:46Z    Compiling potential_utf v0.1.6
+2026-08-22T05:40:46Z    Compiling icu_locale_core v2.3.0
+2026-08-22T05:40:46Z    Compiling icu_collections v2.3.0
+2026-08-22T05:40:47Z    Compiling wasmtime-internal-fiber v47.0.3
+2026-08-22T05:40:47Z    Compiling wasmparser v0.252.0
+2026-08-22T05:40:48Z    Compiling smallvec v1.15.2
+2026-08-22T05:40:48Z    Compiling postcard v1.1.3
+2026-08-22T05:40:48Z    Compiling regalloc2 v0.15.2
+2026-08-22T05:40:48Z    Compiling cranelift-bitset v0.134.3
+2026-08-22T05:40:48Z    Compiling icu_provider v2.3.0
+2026-08-22T05:40:48Z    Compiling pulley-interpreter v47.0.3
+2026-08-22T05:40:48Z    Compiling cranelift-entity v0.134.3
+2026-08-22T05:40:49Z    Compiling cranelift-bforest v0.134.3
+2026-08-22T05:40:49Z    Compiling thiserror-impl v1.0.69
+2026-08-22T05:40:49Z    Compiling wasm-encoder v0.257.1
+2026-08-22T05:40:49Z    Compiling subtle v2.6.1
+2026-08-22T05:40:49Z    Compiling signature v2.2.0
+2026-08-22T05:40:49Z    Compiling leb128 v0.2.7
+2026-08-22T05:40:49Z    Compiling wasmtime-internal-component-macro v47.0.3
+2026-08-22T05:40:50Z    Compiling zeroize v1.9.0
+2026-08-22T05:40:50Z    Compiling once_cell v1.21.4
+2026-08-22T05:40:50Z    Compiling wasmtime-internal-cranelift v47.0.3
+2026-08-22T05:40:50Z    Compiling either v1.17.0
+2026-08-22T05:40:50Z    Compiling unicode-width v0.2.2
+2026-08-22T05:40:50Z    Compiling io-extras v0.19.0
+2026-08-22T05:40:50Z    Compiling wast v257.0.1
+2026-08-22T05:40:50Z    Compiling cranelift-codegen-meta v0.134.3
+2026-08-22T05:40:50Z    Compiling itertools v0.14.0
+2026-08-22T05:40:53Z    Compiling wast v35.0.2
+2026-08-22T05:40:53Z    Compiling ed25519 v2.2.3
+2026-08-22T05:40:53Z    Compiling cranelift-codegen v0.134.3
+2026-08-22T05:40:54Z    Compiling wasmtime v47.0.3
+2026-08-22T05:40:54Z    Compiling cap-primitives v4.0.3
+2026-08-22T05:40:55Z    Compiling futures-sink v0.3.34
+2026-08-22T05:40:55Z    Compiling futures-core v0.3.34
+2026-08-22T05:40:55Z    Compiling wit-parser v0.252.0
+2026-08-22T05:40:55Z    Compiling fs-set-times v0.20.3
+2026-08-22T05:40:55Z    Compiling icu_properties v2.3.0
+2026-08-22T05:40:56Z    Compiling icu_normalizer v2.3.0
+2026-08-22T05:40:56Z    Compiling witx v0.9.1
+2026-08-22T05:40:57Z    Compiling wasmprinter v0.252.0
+2026-08-22T05:40:57Z    Compiling wasmtime-environ v47.0.3
+2026-08-22T05:40:57Z    Compiling ed25519-dalek v2.2.0
+2026-08-22T05:40:57Z    Compiling tracing-core v0.1.36
+2026-08-22T05:40:57Z    Compiling wasmtime-internal-jit-icache-coherence v47.0.3
+2026-08-22T05:40:57Z    Compiling tracing-attributes v0.1.31
+2026-08-22T05:40:57Z    Compiling wat v1.257.1
+2026-08-22T05:40:58Z    Compiling wasmtime-internal-wit-bindgen v47.0.3
+2026-08-22T05:40:58Z    Compiling async-trait v0.1.92
+2026-08-22T05:40:58Z    Compiling encoding_rs v0.8.35
+2026-08-22T05:40:58Z    Compiling ipnet v2.12.1
+2026-08-22T05:40:59Z    Compiling cap-std v4.0.3
+2026-08-22T05:40:59Z    Compiling wiggle-macro v47.0.3
+2026-08-22T05:40:59Z    Compiling maybe-owned v0.3.4
+2026-08-22T05:40:59Z    Compiling rand_core v0.10.1
+2026-08-22T05:40:59Z    Compiling mach2 v0.6.0
+2026-08-22T05:41:00Z    Compiling ambient-authority v0.0.2
+2026-08-22T05:41:00Z    Compiling futures-task v0.3.34
+2026-08-22T05:41:00Z    Compiling hex v0.4.3
+2026-08-22T05:41:00Z    Compiling getrandom v0.4.3
+2026-08-22T05:41:01Z    Compiling futures-util v0.3.34
+2026-08-22T05:41:02Z    Compiling tracing v0.1.44
+2026-08-22T05:41:02Z    Compiling wiggle-generate v47.0.3
+2026-08-22T05:41:02Z    Compiling idna_adapter v1.2.2
+2026-08-22T05:41:02Z    Compiling futures-channel v0.3.34
+2026-08-22T05:41:02Z    Compiling percent-encoding v2.3.2
+2026-08-22T05:41:02Z    Compiling bytes v1.12.1
+2026-08-22T05:41:02Z    Compiling futures-io v0.3.34
+2026-08-22T05:41:02Z    Compiling cap-fs-ext v4.0.3
+2026-08-22T05:41:02Z    Compiling form_urlencoded v1.2.2
+2026-08-22T05:41:02Z    Compiling futures v0.3.34
+2026-08-22T05:41:03Z    Compiling idna v1.1.0
+2026-08-22T05:41:03Z    Compiling chacha20 v0.10.1
+2026-08-22T05:41:03Z    Compiling socket2 v0.6.5
+2026-08-22T05:41:03Z    Compiling mio v1.2.2
+2026-08-22T05:41:03Z    Compiling rand v0.10.2
+2026-08-22T05:41:03Z    Compiling tokio v1.53.1
+2026-08-22T05:41:03Z    Compiling url v2.5.8
+2026-08-22T05:41:04Z    Compiling nemesis-protocol v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-protocol)
+2026-08-22T05:41:04Z    Compiling minicbor v0.25.1
+2026-08-22T05:41:04Z    Compiling getrandom v0.3.4
+2026-08-22T05:41:05Z    Compiling nemesis-deterministic-worker v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-deterministic-worker)
+2026-08-22T05:41:05Z    Compiling nemesis-receipt v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-receipt)
+2026-08-22T05:41:06Z    Compiling nemesis-signer v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-signer)
+2026-08-22T05:41:06Z    Compiling nemesis-verify v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-verify)
+2026-08-22T05:41:32Z    Compiling cranelift-native v0.134.3
+2026-08-22T05:41:32Z    Compiling cranelift-frontend v0.134.3
+2026-08-22T05:41:48Z    Compiling wiggle v47.0.3
+2026-08-22T05:41:48Z    Compiling wasmtime-wasi-io v47.0.3
+2026-08-22T05:41:49Z    Compiling wasmtime-wasi v47.0.3
+2026-08-22T05:42:04Z    Compiling nemesis-runtime v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-runtime)
+2026-08-22T05:42:19Z     Finished `release` profile [optimized] target(s) in 1m 41s
+2026-08-22T05:42:20Z npm warn deprecated whatwg-encoding@3.1.1: Use @exodus/bytes instead for a more spec-conformant and faster implementation
+2026-08-22T05:42:22Z 
+2026-08-22T05:42:22Z added 164 packages in 2s
+2026-08-22T05:42:22Z npm warn allow-scripts 2 packages have install scripts not yet covered by allowScripts:
+2026-08-22T05:42:22Z npm warn allow-scripts   esbuild@0.28.2 (postinstall: node install.js)
+2026-08-22T05:42:22Z npm warn allow-scripts   fsevents@2.3.3 (install: (install scripts present))
+2026-08-22T05:42:22Z npm warn allow-scripts
+2026-08-22T05:42:22Z npm warn allow-scripts Run `npm approve-scripts --allow-scripts-pending` to review, or `npm approve-scripts <pkg>` to allow.
+2026-08-22T05:42:47Z PASS_THIRD_PARTY_NOTICES output=/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/build/release/THIRD_PARTY_NOTICES.txt bytes=477775
+2026-08-22T05:42:47Z 
+2026-08-22T05:42:47Z > nemesis-desktop@0.1.0 test
+2026-08-22T05:42:47Z > vitest run --configLoader=runner
+2026-08-22T05:42:47Z 
+2026-08-22T05:42:48Z 
+2026-08-22T05:42:48Z  RUN  v3.2.7 /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop
+2026-08-22T05:42:48Z 
+2026-08-22T05:42:50Z  ✓ src/App.test.tsx (11 tests) 1214ms
+2026-08-22T05:42:50Z    ✓ NEMESIS Desktop production surface > drafts an exact local contract without a terminal prerequisite  329ms
+2026-08-22T05:42:50Z 
+2026-08-22T05:42:50Z  Test Files  1 passed (1)
+2026-08-22T05:42:50Z       Tests  11 passed (11)
+2026-08-22T05:42:50Z    Start at  05:42:48
+2026-08-22T05:42:50Z    Duration  2.08s (transform 104ms, setup 83ms, collect 174ms, tests 1.21s, environment 249ms, prepare 85ms)
+2026-08-22T05:42:50Z 
+2026-08-22T05:42:50Z 
+2026-08-22T05:42:50Z > nemesis-desktop@0.1.0 build
+2026-08-22T05:42:50Z > tsc -b && vite build --configLoader native
+2026-08-22T05:42:50Z 
+2026-08-22T05:42:52Z vite v7.3.6 building client environment for production...
+2026-08-22T05:42:52Z transforming...
+2026-08-22T05:42:52Z ✓ 40 modules transformed.
+2026-08-22T05:42:52Z rendering chunks...
+2026-08-22T05:42:52Z computing gzip size...
+2026-08-22T05:42:52Z dist/index.html                   0.45 kB │ gzip:  0.30 kB
+2026-08-22T05:42:52Z dist/assets/index-xXpWOPaX.css   15.41 kB │ gzip:  3.84 kB
+2026-08-22T05:42:52Z dist/assets/index-CF7H6YpK.js   217.99 kB │ gzip: 67.18 kB │ map: 988.73 kB
+2026-08-22T05:42:52Z ✓ built in 670ms
+2026-08-22T05:42:53Z 
+2026-08-22T05:42:53Z > nemesis-desktop@0.1.0 tauri
+2026-08-22T05:42:53Z > tauri build --config src-tauri/tauri.release.conf.json --bundles app
+2026-08-22T05:42:53Z 
+2026-08-22T05:42:53Z         Info Looking up installed tauri packages to check mismatched versions...
+2026-08-22T05:42:54Z      Running beforeBuildCommand `npm run build`
+2026-08-22T05:42:54Z 
+2026-08-22T05:42:54Z > nemesis-desktop@0.1.0 build
+2026-08-22T05:42:54Z > tsc -b && vite build --configLoader native
+2026-08-22T05:42:54Z 
+2026-08-22T05:42:55Z vite v7.3.6 building client environment for production...
+2026-08-22T05:42:55Z transforming...
+2026-08-22T05:42:56Z ✓ 40 modules transformed.
+2026-08-22T05:42:56Z rendering chunks...
+2026-08-22T05:42:56Z computing gzip size...
+2026-08-22T05:42:56Z dist/index.html                   0.45 kB │ gzip:  0.30 kB
+2026-08-22T05:42:56Z dist/assets/index-xXpWOPaX.css   15.41 kB │ gzip:  3.84 kB
+2026-08-22T05:42:56Z dist/assets/index-CF7H6YpK.js   217.99 kB │ gzip: 67.18 kB │ map: 988.73 kB
+2026-08-22T05:42:56Z ✓ built in 624ms
+2026-08-22T05:42:57Z    Compiling proc-macro2 v1.0.107
+2026-08-22T05:42:57Z    Compiling unicode-ident v1.0.24
+2026-08-22T05:42:57Z    Compiling quote v1.0.47
+2026-08-22T05:42:57Z    Compiling serde_core v1.0.229
+2026-08-22T05:42:57Z    Compiling libc v0.2.189
+2026-08-22T05:42:57Z    Compiling siphasher v1.0.3
+2026-08-22T05:42:57Z    Compiling icu_properties_data v2.1.2
+2026-08-22T05:42:57Z    Compiling icu_normalizer_data v2.1.1
+2026-08-22T05:42:57Z    Compiling zmij v1.0.23
+2026-08-22T05:42:57Z    Compiling fastrand v2.5.0
+2026-08-22T05:42:57Z    Compiling phf_shared v0.13.1
+2026-08-22T05:42:57Z    Compiling stable_deref_trait v1.2.1
+2026-08-22T05:42:57Z    Compiling cfg-if v1.0.4
+2026-08-22T05:42:57Z    Compiling find-msvc-tools v0.1.11
+2026-08-22T05:42:57Z    Compiling shlex v2.0.1
+2026-08-22T05:42:57Z    Compiling memchr v2.8.3
+2026-08-22T05:42:57Z    Compiling smallvec v1.15.2
+2026-08-22T05:42:57Z    Compiling phf_generator v0.13.1
+2026-08-22T05:42:57Z    Compiling cc v1.4.3
+2026-08-22T05:42:57Z    Compiling serde v1.0.229
+2026-08-22T05:42:57Z    Compiling version_check v0.9.5
+2026-08-22T05:42:57Z    Compiling itoa v1.0.18
+2026-08-22T05:42:57Z    Compiling thiserror v2.0.20
+2026-08-22T05:42:57Z    Compiling typeid v1.0.3
+2026-08-22T05:42:57Z    Compiling fnv v1.0.7
+2026-08-22T05:42:57Z    Compiling num-conv v0.2.2
+2026-08-22T05:42:57Z    Compiling time-core v0.1.9
+2026-08-22T05:42:57Z    Compiling phf_codegen v0.13.1
+2026-08-22T05:42:57Z    Compiling writeable v0.6.4
+2026-08-22T05:42:57Z    Compiling litemap v0.8.3
+2026-08-22T05:42:57Z    Compiling strsim v0.11.1
+2026-08-22T05:42:57Z    Compiling serde_json v1.0.151
+2026-08-22T05:42:57Z    Compiling erased-serde v0.4.10
+2026-08-22T05:42:57Z    Compiling thiserror v1.0.69
+2026-08-22T05:42:57Z    Compiling ident_case v1.0.1
+2026-08-22T05:42:57Z    Compiling parking_lot_core v0.9.12
+2026-08-22T05:42:58Z    Compiling syn v2.0.119
+2026-08-22T05:42:58Z    Compiling syn v3.0.3
+2026-08-22T05:42:58Z    Compiling objc2-exception-helper v0.1.1
+2026-08-22T05:42:58Z    Compiling scopeguard v1.2.0
+2026-08-22T05:42:58Z    Compiling anyhow v1.0.104
+2026-08-22T05:42:58Z    Compiling new_debug_unreachable v1.0.6
+2026-08-22T05:42:58Z    Compiling lock_api v0.4.14
+2026-08-22T05:42:58Z    Compiling string_cache_codegen v0.6.1
+2026-08-22T05:42:58Z    Compiling generic-array v0.14.7
+2026-08-22T05:42:58Z    Compiling getrandom v0.4.3
+2026-08-22T05:42:58Z    Compiling winnow v1.0.4
+2026-08-22T05:42:58Z    Compiling objc2 v0.6.4
+2026-08-22T05:42:59Z    Compiling precomputed-hash v0.1.1
+2026-08-22T05:42:59Z    Compiling toml_parser v1.1.3+spec-1.1.0
+2026-08-22T05:42:59Z    Compiling web_atoms v0.2.6
+2026-08-22T05:42:59Z    Compiling parking_lot v0.12.5
+2026-08-22T05:42:59Z    Compiling toml_writer v1.1.2+spec-1.1.0
+2026-08-22T05:42:59Z    Compiling ctor-proc-macro v0.0.7
+2026-08-22T05:42:59Z    Compiling objc2-encode v4.1.0
+2026-08-22T05:42:59Z    Compiling serde_spanned v1.1.1
+2026-08-22T05:42:59Z    Compiling semver v1.0.28
+2026-08-22T05:42:59Z    Compiling string_cache v0.9.0
+2026-08-22T05:42:59Z    Compiling utf8_iter v1.0.4
+2026-08-22T05:42:59Z    Compiling autocfg v1.5.1
+2026-08-22T05:42:59Z    Compiling percent-encoding v2.3.2
+2026-08-22T05:42:59Z    Compiling dtoa v1.0.11
+2026-08-22T05:42:59Z    Compiling crc32fast v1.5.0
+2026-08-22T05:42:59Z    Compiling log v0.4.33
+2026-08-22T05:42:59Z    Compiling indexmap v1.9.3
+2026-08-22T05:42:59Z    Compiling dtoa-short v0.3.5
+2026-08-22T05:42:59Z    Compiling form_urlencoded v1.2.2
+2026-08-22T05:42:59Z    Compiling bitflags v2.13.1
+2026-08-22T05:42:59Z    Compiling uuid v1.24.1
+2026-08-22T05:42:59Z    Compiling toml_datetime v1.1.1+spec-1.1.0
+2026-08-22T05:42:59Z    Compiling tendril v0.5.1
+2026-08-22T05:43:00Z    Compiling selectors v0.36.1
+2026-08-22T05:43:00Z    Compiling aho-corasick v1.1.5
+2026-08-22T05:43:00Z    Compiling regex-syntax v0.8.11
+2026-08-22T05:43:00Z    Compiling byteorder v1.5.0
+2026-08-22T05:43:00Z    Compiling unic-common v0.9.0
+2026-08-22T05:43:00Z    Compiling camino v1.2.5
+2026-08-22T05:43:00Z    Compiling unic-char-range v0.9.0
+2026-08-22T05:43:00Z    Compiling alloc-no-stdlib v2.0.4
+2026-08-22T05:43:00Z    Compiling alloc-stdlib v0.2.4
+2026-08-22T05:43:00Z    Compiling unic-char-property v0.9.0
+2026-08-22T05:43:00Z    Compiling unic-ucd-version v0.9.0
+2026-08-22T05:43:00Z    Compiling toml v1.1.4+spec-1.1.0
+2026-08-22T05:43:00Z    Compiling servo_arc v0.4.3
+2026-08-22T05:43:00Z    Compiling schemars v0.8.22
+2026-08-22T05:43:00Z    Compiling synstructure v0.13.2
+2026-08-22T05:43:00Z    Compiling darling_core v0.21.3
+2026-08-22T05:43:00Z    Compiling serde_derive_internals v0.29.1
+2026-08-22T05:43:01Z    Compiling bit-vec v0.8.0
+2026-08-22T05:43:01Z    Compiling powerfmt v0.2.0
+2026-08-22T05:43:01Z    Compiling deranged v0.5.8
+2026-08-22T05:43:01Z    Compiling rustc-hash v2.1.3
+2026-08-22T05:43:01Z    Compiling hashbrown v0.17.1
+2026-08-22T05:43:01Z    Compiling hashbrown v0.12.3
+2026-08-22T05:43:01Z    Compiling equivalent v1.0.2
+2026-08-22T05:43:01Z    Compiling zerovec-derive v0.11.5
+2026-08-22T05:43:01Z    Compiling serde_derive v1.0.229
+2026-08-22T05:43:01Z    Compiling displaydoc v0.2.7
+2026-08-22T05:43:01Z    Compiling thiserror-impl v2.0.20
+2026-08-22T05:43:01Z    Compiling indexmap v2.14.0
+2026-08-22T05:43:01Z    Compiling bit-set v0.8.0
+2026-08-22T05:43:01Z    Compiling zerofrom-derive v0.1.7
+2026-08-22T05:43:01Z    Compiling yoke-derive v0.8.2
+2026-08-22T05:43:01Z    Compiling phf_macros v0.13.1
+2026-08-22T05:43:02Z    Compiling thiserror-impl v1.0.69
+2026-08-22T05:43:02Z    Compiling derive_more-impl v2.1.1
+2026-08-22T05:43:02Z    Compiling cssparser-macros v0.6.1
+2026-08-22T05:43:02Z    Compiling regex-automata v0.4.18
+2026-08-22T05:43:02Z    Compiling phf v0.13.1
+2026-08-22T05:43:02Z    Compiling time v0.3.55
+2026-08-22T05:43:02Z    Compiling schemars_derive v0.8.22
+2026-08-22T05:43:02Z    Compiling zerofrom v0.1.8
+2026-08-22T05:43:02Z    Compiling derive_more v2.1.1
+2026-08-22T05:43:02Z    Compiling yoke v0.8.3
+2026-08-22T05:43:02Z    Compiling cssparser v0.36.0
+2026-08-22T05:43:03Z    Compiling markup5ever v0.38.0
+2026-08-22T05:43:03Z    Compiling html5ever v0.38.0
+2026-08-22T05:43:03Z    Compiling zerovec v0.11.8
+2026-08-22T05:43:03Z    Compiling zerotrie v0.2.5
+2026-08-22T05:43:03Z    Compiling darling_macro v0.21.3
+2026-08-22T05:43:03Z    Compiling darling v0.21.3
+2026-08-22T05:43:04Z    Compiling regex v1.13.1
+2026-08-22T05:43:04Z    Compiling tinystr v0.8.4
+2026-08-22T05:43:04Z    Compiling potential_utf v0.1.6
+2026-08-22T05:43:04Z    Compiling serde_with_macros v3.17.0
+2026-08-22T05:43:04Z    Compiling icu_locale_core v2.1.1
+2026-08-22T05:43:04Z    Compiling icu_collections v2.1.1
+2026-08-22T05:43:04Z    Compiling objc2-core-foundation v0.3.2
+2026-08-22T05:43:04Z    Compiling swift-rs v1.0.8
+2026-08-22T05:43:04Z    Compiling jsonptr v0.6.3
+2026-08-22T05:43:04Z    Compiling cargo-platform v0.1.9
+2026-08-22T05:43:04Z    Compiling icu_provider v2.1.1
+2026-08-22T05:43:04Z    Compiling block2 v0.6.2
+2026-08-22T05:43:04Z    Compiling unic-ucd-ident v0.9.0
+2026-08-22T05:43:04Z    Compiling icu_normalizer v2.1.1
+2026-08-22T05:43:05Z    Compiling icu_properties v2.1.2
+2026-08-22T05:43:05Z    Compiling brotli-decompressor v5.0.3
+2026-08-22T05:43:05Z    Compiling cfb v0.7.3
+2026-08-22T05:43:05Z    Compiling quick-xml v0.41.0
+2026-08-22T05:43:05Z    Compiling foldhash v0.2.0
+2026-08-22T05:43:05Z    Compiling base64 v0.21.7
+2026-08-22T05:43:05Z    Compiling base64 v0.22.1
+2026-08-22T05:43:05Z    Compiling dunce v1.0.5
+2026-08-22T05:43:05Z    Compiling dyn-clone v1.0.20
+2026-08-22T05:43:05Z    Compiling bytes v1.12.1
+2026-08-22T05:43:05Z    Compiling same-file v1.0.6
+2026-08-22T05:43:05Z    Compiling objc2-foundation v0.3.2
+2026-08-22T05:43:05Z    Compiling walkdir v2.5.0
+2026-08-22T05:43:05Z    Compiling brotli v8.0.4
+2026-08-22T05:43:05Z    Compiling infer v0.19.0
+2026-08-22T05:43:06Z    Compiling http v1.5.0
+2026-08-22T05:43:06Z    Compiling plist v1.10.0
+2026-08-22T05:43:06Z    Compiling idna_adapter v1.2.1
+2026-08-22T05:43:06Z    Compiling dom_query v0.27.0
+2026-08-22T05:43:06Z    Compiling idna v1.1.0
+2026-08-22T05:43:06Z    Compiling json-patch v3.0.1
+2026-08-22T05:43:06Z    Compiling serde_with v3.17.0
+2026-08-22T05:43:06Z    Compiling cargo_metadata v0.19.2
+2026-08-22T05:43:06Z    Compiling url v2.5.8
+2026-08-22T05:43:06Z    Compiling serde-untagged v0.1.9
+2026-08-22T05:43:06Z    Compiling ctor v0.8.0
+2026-08-22T05:43:06Z    Compiling glob v0.3.4
+2026-08-22T05:43:07Z    Compiling urlpattern v0.3.0
+2026-08-22T05:43:07Z    Compiling rustc_version v0.4.1
+2026-08-22T05:43:07Z    Compiling toml_datetime v0.7.5+spec-1.1.0
+2026-08-22T05:43:07Z    Compiling time-macros v0.2.32
+2026-08-22T05:43:07Z    Compiling simd-adler32 v0.3.10
+2026-08-22T05:43:07Z    Compiling typenum v1.20.1
+2026-08-22T05:43:07Z    Compiling winnow v0.7.15
+2026-08-22T05:43:08Z    Compiling option-ext v0.2.0
+2026-08-22T05:43:08Z    Compiling dirs-sys v0.5.0
+2026-08-22T05:43:08Z    Compiling embed-resource v3.0.11
+2026-08-22T05:43:08Z    Compiling heck v0.5.0
+2026-08-22T05:43:08Z    Compiling adler2 v2.0.1
+2026-08-22T05:43:08Z    Compiling crossbeam-utils v0.8.22
+2026-08-22T05:43:08Z    Compiling tauri-utils v2.9.3
+2026-08-22T05:43:09Z    Compiling toml v0.9.12+spec-1.1.0
+2026-08-22T05:43:09Z    Compiling miniz_oxide v0.8.9
+2026-08-22T05:43:09Z    Compiling tauri-winres v0.3.6
+2026-08-22T05:43:09Z    Compiling dirs v6.0.0
+2026-08-22T05:43:09Z    Compiling dpi v0.1.2
+2026-08-22T05:43:09Z    Compiling cookie v0.18.2
+2026-08-22T05:43:09Z    Compiling cargo_toml v0.22.3
+2026-08-22T05:43:09Z    Compiling core-foundation-sys v0.8.7
+2026-08-22T05:43:10Z    Compiling raw-window-handle v0.6.2
+2026-08-22T05:43:10Z    Compiling objc2-app-kit v0.3.2
+2026-08-22T05:43:11Z    Compiling core-foundation v0.10.1
+2026-08-22T05:43:11Z    Compiling flate2 v1.1.9
+2026-08-22T05:43:11Z    Compiling block-buffer v0.10.4
+2026-08-22T05:43:11Z    Compiling crypto-common v0.1.7
+2026-08-22T05:43:11Z    Compiling fdeflate v0.3.7
+2026-08-22T05:43:11Z    Compiling foreign-types-macros v0.2.4
+2026-08-22T05:43:12Z    Compiling foreign-types-shared v0.3.1
+2026-08-22T05:43:12Z    Compiling bitflags v1.3.2
+2026-08-22T05:43:12Z    Compiling once_cell v1.21.4
+2026-08-22T05:43:13Z    Compiling png v0.17.16
+2026-08-22T05:43:13Z    Compiling foreign-types v0.5.0
+2026-08-22T05:43:14Z    Compiling digest v0.10.7
+2026-08-22T05:43:14Z    Compiling crossbeam-channel v0.5.16
+2026-08-22T05:43:14Z    Compiling core-graphics-types v0.2.0
+2026-08-22T05:43:15Z    Compiling objc2-web-kit v0.3.2
+2026-08-22T05:43:15Z    Compiling tauri-build v2.6.3
+2026-08-22T05:43:15Z    Compiling cpufeatures v0.2.17
+2026-08-22T05:43:15Z    Compiling tauri-runtime v2.11.3
+2026-08-22T05:43:16Z    Compiling wry v0.55.1
+2026-08-22T05:43:16Z    Compiling sha2 v0.10.9
+2026-08-22T05:43:16Z    Compiling core-graphics v0.25.0
+2026-08-22T05:43:16Z    Compiling ico v0.5.0
+2026-08-22T05:43:16Z    Compiling dispatch2 v0.3.1
+2026-08-22T05:43:16Z    Compiling getrandom v0.3.4
+2026-08-22T05:43:16Z    Compiling unicode-segmentation v1.13.3
+2026-08-22T05:43:16Z    Compiling tauri-runtime-wry v2.11.4
+2026-08-22T05:43:16Z    Compiling tao v0.35.3
+2026-08-22T05:43:16Z    Compiling keyboard-types v0.7.0
+2026-08-22T05:43:16Z    Compiling png v0.18.1
+2026-08-22T05:43:17Z    Compiling tauri-codegen v2.6.3
+2026-08-22T05:43:17Z    Compiling serialize-to-javascript-impl v0.1.2
+2026-08-22T05:43:17Z    Compiling pin-project-lite v0.2.17
+2026-08-22T05:43:17Z    Compiling tokio v1.53.1
+2026-08-22T05:43:17Z    Compiling serialize-to-javascript v0.1.2
+2026-08-22T05:43:17Z    Compiling muda v0.19.3
+2026-08-22T05:43:18Z    Compiling window-vibrancy v0.6.0
+2026-08-22T05:43:18Z    Compiling serde_repr v0.1.21
+2026-08-22T05:43:18Z    Compiling tauri v2.11.5
+2026-08-22T05:43:18Z    Compiling nemesis-desktop v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop/src-tauri)
+2026-08-22T05:43:18Z    Compiling tauri-macros v2.6.3
+2026-08-22T05:43:18Z    Compiling embed_plist v1.2.2
+2026-08-22T05:43:19Z    Compiling mime v0.3.17
+2026-08-22T05:43:19Z    Compiling nemesis-protocol v0.1.0 (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/runtime/crates/nemesis-protocol)
+2026-08-22T05:43:19Z    Compiling hex v0.4.3
+2026-08-22T05:43:57Z     Finished `release` profile [optimized] target(s) in 1m 00s
+2026-08-22T05:43:57Z        Built application at: /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop/src-tauri/target/release/nemesis-desktop
+2026-08-22T05:43:57Z     Bundling NEMESIS Desktop.app (/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop/src-tauri/target/release/bundle/macos/NEMESIS Desktop.app)
+2026-08-22T05:43:57Z     Finished 1 bundle at:
+2026-08-22T05:43:57Z         /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop/src-tauri/target/release/bundle/macos/NEMESIS Desktop.app
+2026-08-22T05:43:57Z 
+2026-08-22T05:43:59Z PASS_MACHO_SANITIZE files=8 private_rpaths_removed=3
+2026-08-22T05:44:00Z PASS_RELEASE_LEAK_SCAN files=8
+2026-08-22T05:44:00Z /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop/src-tauri/target/release/bundle/macos/NEMESIS Desktop.app/Contents/Info.plist: OK
+2026-08-22T05:44:00Z /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop/src-tauri/target/release/bundle/macos/NEMESIS Desktop.app: replacing existing signature
+2026-08-22T05:44:00Z /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop/src-tauri/target/release/bundle/macos/NEMESIS Desktop.app: valid on disk
+2026-08-22T05:44:00Z /Users/sicarii/Worktrees/nemesis-desktop-production-recovered/desktop/src-tauri/target/release/bundle/macos/NEMESIS Desktop.app: satisfies its Designated Requirement
+2026-08-22T05:44:01Z PASS_RELEASE_MANIFEST asset=NEMESIS-Desktop-v0.1.0-macos-arm64.zip bytes=4701016 sha256=8efc91e06d5cb8a4282a479d93c80b8c8f0ca5a490298cb002c95e3333e850c7
+2026-08-22T05:44:01Z NEMESIS-Desktop-v0.1.0-macos-arm64.zip: OK
+2026-08-22T05:44:01Z release-manifest.json: OK
+2026-08-22T05:44:01Z PASS_RELEASE_PACKAGE version=0.1.0 commit=2f78bf13574dd9602ffa57fc180741b225e03af8 asset=NEMESIS-Desktop-v0.1.0-macos-arm64.zip signing=ad-hoc notarized=false
+2026-08-22T05:44:01Z RELEASE_PACKAGE_EXIT_STATUS=0
