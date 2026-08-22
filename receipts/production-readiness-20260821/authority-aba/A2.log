@@ -1,6 +1,6 @@
 test_authority_is_persisted_one_shot_and_fail_closed (tests.integration.test_daemon_api.DaemonApiTests) ... ok
 
 ----------------------------------------------------------------------
-Ran 1 test in 0.749s
+Ran 1 test in 0.784s
 
 OK
