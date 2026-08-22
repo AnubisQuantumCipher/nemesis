@@ -254,9 +254,9 @@
     {
      "id": "RL-01",
      "title": "Pushed checkpoint branch + draft/mergeable PR",
-     "status": "PENDING_PUSH",
+     "status": "PASS",
      "evidence": [
-      "checkpoint branch production/boss-harness-completion ready to push; PR to be opened (see FINAL.json / STATUS.md for URL)"
+      "branch pushed to origin; PR https://github.com/AnubisQuantumCipher/nemesis/pull/7 (base main, MERGEABLE); merge is an operator gate (not merged)"
      ]
     },
     {
@@ -319,7 +319,9 @@
   },
   "source_final": {
    "race_fix_commit": "4f06d2304ff17ec4c30238779a336f7217b739ef",
-   "final_commit": "b8a32f7c5c7510d57b5ba5fcc1993b913e6fb61e"
+   "final_commit": "b8a32f7c5c7510d57b5ba5fcc1993b913e6fb61e",
+   "desktop_source_final_commit": "cb4f1cc2e99dfc895263bba26f1205098c9ab95b",
+   "phase16_reseal_subject": "28cf02c7361a3464b48f951cd5a52bcacc099b24"
   }
  },
  "race_fix": {
@@ -345,6 +347,7 @@
   "needs_human": [
    "Independent external HUMAN security review",
    "Any git tag/GitHub Release publish and PR merge (operator gate)"
-  ]
+  ],
+  "integration_pr": "https://github.com/AnubisQuantumCipher/nemesis/pull/7"
  }
 }
