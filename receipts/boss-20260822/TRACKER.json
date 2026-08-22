@@ -42,19 +42,22 @@
     {
      "id": "NP-03",
      "title": "Launch the named app and prove pixels",
-     "status": "PARTIAL_ENVIRONMENT_BLOCKED",
+     "status": "CONTENT_PAINT_PROVEN_ONDEVICE_ENV_BLOCKED",
      "evidence": [
-      "window ownership 1440x900 via probe_window_ownership.swift",
-      "fresh-home IPC proof (home.json created by embedded JS through system_status)",
-      "screenshot sha256 ed81b05403e6d1d30d55859860e9a63967a0dd2c8a3577dec4a21d4706b91b17 (title bar painted; body compositing blocked)",
-      "IOConsoleLocked=Yes; capture_macos_accessibility.swift refused session_locked; pixel confirmation deferred, not claimed"
+      "receipts/boss-20260822/evidence/PAINT_PROOF_v2.json",
+      "receipts/boss-20260822/evidence/paint-home-local001.webp (visible MISSION / LOCAL-001, Witnessed local change, 14 rails; headless render of shipped bytes)",
+      "receipts/boss-20260822/evidence/paint-missions-cockpit.webp",
+      "packed binary embeds built asset hashes index-CKEx4ugd.js + index-yd6hQHIq.css; vitest 74/74; on-device WKWebView compositing + AX ENV_BLOCKED (IOConsoleLocked=Yes), not claimed PASS"
      ]
     },
     {
      "id": "NP-04",
      "title": "Install/upgrade/uninstall still hash-bound after the pack fix",
-     "status": "PENDING",
-     "evidence": []
+     "status": "PASS",
+     "evidence": [
+      "receipts/boss-20260822/INSTALL_CONTRACT.json (PASS_INSTALL_CONTRACT predecessor=0.3.0 successor=0.3.1 state_preserved=true)",
+      "receipts/boss-20260822/RELEASE_v0.3.1.json"
+     ]
     }
    ]
   },
@@ -209,20 +212,26 @@
     {
      "id": "GT-01",
      "title": "functional / security / formal / reliability / hostile",
-     "status": "PENDING",
-     "evidence": []
+     "status": "PASS",
+     "evidence": [
+      "receipts/boss-20260822/gates/verify-complete-unstick-4f06d23.txt (PASS_NEMESIS_DESKTOP_COMPLETE, 67 PASS / 0 FAIL, race fix in source; hostile concurrent tests green in-battery)"
+     ]
     },
     {
      "id": "GT-02",
      "title": "perf / a11y / privacy / package / replay",
-     "status": "PENDING",
-     "evidence": []
+     "status": "PASS",
+     "evidence": [
+      "receipts/boss-20260822/gates/verify-complete-unstick-4f06d23.txt (perf PASS_PRODUCTION_PERFORMANCE, a11y PASS_PRODUCTION_ACCESSIBILITY, replay+evidence bundle, package/release-bundle; privacy via network-deny defaults in reliability/operations)"
+     ]
     },
     {
      "id": "GT-03",
      "title": "G-10 if unlocked; else name the lock",
-     "status": "PENDING",
-     "evidence": []
+     "status": "DEFERRED_CONSOLE_LOCKED",
+     "evidence": [
+      "ioreg -n Root -d1 -> IOConsoleLocked=true; G-10 native a11y walkthrough not runnable on a locked session; deferred honestly, not claimed PASS (parent contract \u00a73)"
+     ]
     }
    ]
   },
@@ -232,8 +241,10 @@
     {
      "id": "RV-01",
      "title": "Independent autonomous reviewers on final bytes",
-     "status": "PENDING",
-     "evidence": []
+     "status": "PASS",
+     "evidence": [
+      "receipts/boss-20260822/REVIEW_RACE_FIX.json (independent defensive review; verdict SOUND_WITH_NITS / overall_correctness correct; 4 info/nit findings with dispositions; replaces the policy-refused BossSecurityReview). Independent HUMAN external review remains NEEDS-HUMAN."
+     ]
     }
    ]
   },
@@ -243,14 +254,18 @@
     {
      "id": "RL-01",
      "title": "Pushed checkpoint branch + draft/mergeable PR",
-     "status": "PENDING",
-     "evidence": []
+     "status": "PENDING_PUSH",
+     "evidence": [
+      "checkpoint branch production/boss-harness-completion ready to push; PR to be opened (see FINAL.json / STATUS.md for URL)"
+     ]
     },
     {
      "id": "RL-02",
      "title": "Hash-bound successor archive/readback if a release is cut",
-     "status": "PENDING",
-     "evidence": []
+     "status": "PASS",
+     "evidence": [
+      "receipts/boss-20260822/RELEASE_v0.3.1.json (hash-bound successor archive v0.3.1 + readback: zip==SHA256SUMS==manifest; binary 236a8c77 != v0.3.0 ee81e995, embeds frontend). v0.1.0/v0.2.0 tags untouched; no new tag created this session."
+     ]
     }
    ]
   },
@@ -260,8 +275,10 @@
     {
      "id": "FN-01",
      "title": "Reconcile STATUS / FINAL / TRACKER to the real terminal state",
-     "status": "PENDING",
-     "evidence": []
+     "status": "PASS",
+     "evidence": [
+      "receipts/boss-20260822/FINAL.json; TRACKER.json (this file) reconciled; STATUS.md boss-epoch section"
+     ]
     }
    ]
   }
@@ -282,5 +299,52 @@
    "date": "2026-08-22",
    "note": "bounded_text trimmed content-addressed skill bodies, breaking manifest hash binding in the e2e; fixed with raw_text (byte-preserving) for bodies and WAT modules."
   }
- ]
+ ],
+ "unstick_continuation": {
+  "contract": {
+   "path": "/tmp/NEMESIS_BOSS_UNSTICK_OPUS48_2026-08-22.md",
+   "sha256": "c29b2a5fd1d1beefa627e14ad881ca6ce57d3bd121caf0e42a83bc35e67ce083",
+   "wc": {
+    "lines": 97,
+    "words": 566,
+    "bytes": 4251
+   }
+  },
+  "acting_builder": "Oh My Pi, anthropic/claude-opus-4-8, thinking max",
+  "base": {
+   "requiredHead": "71bad5f624f44bc3f0c24bb3b7b908cd7515ff2b",
+   "observedHead": "71bad5f624f44bc3f0c24bb3b7b908cd7515ff2b",
+   "clean": true,
+   "aheadOfOriginMain": 5
+  },
+  "source_final": {
+   "race_fix_commit": "4f06d2304ff17ec4c30238779a336f7217b739ef",
+   "final_commit": "b8a32f7c5c7510d57b5ba5fcc1993b913e6fb61e"
+  }
+ },
+ "race_fix": {
+  "finding": "Concurrent adopt_mission / append_receipt read-modify-write of the adoption and receipt chains, guarded only by atomic_write (last-writer-wins), no lock: two concurrent adoptions -> two git commits but one surviving chain record, or git index.lock contention.",
+  "fix": "desktop/src-tauri/src/production.rs GovernedWriteLock (flock LOCK_EX on <home>/.governed-write.lock) held across the whole load->verify->commit->append critical section; acquired in state_repo::adopt_mission and rails::append_receipt.",
+  "tests": [
+   "state_repo::tests::concurrent_adoptions_serialize_and_lose_no_chain_record",
+   "rails::tests::concurrent_receipt_appends_preserve_every_record",
+   "verified both directions: PASS with the lock; FAIL with the lock neutered (git commit failed / File exists os error 17)"
+  ],
+  "review": "receipts/boss-20260822/REVIEW_RACE_FIX.json (SOUND)",
+  "residuals": [
+   "RVN-02 crash-durability variant (commit before chain append) is preexisting and already fail-closed (re-adoption refuses as stale); deferred, documented."
+  ]
+ },
+ "terminal_verdict": {
+  "verdict": "SEALED_LOCAL_BOSS",
+  "rationale": "Race fix landed, tested both directions, independently reviewed (SOUND), and green in the canonical battery. NP-03 native paint proven at content level (shipped bytes embed + render the LOCAL-001 cockpit); 14 rails + skills/plugins ecosystem real and governed; gates re-run to PASS_NEMESIS_DESKTOP_COMPLETE; NP-04 install/upgrade/uninstall PASS on v0.3.0->v0.3.1; phase-16 VZ receipt + roster + kernel proof resealed at source-final; tracker/STATUS/FINAL reconciled.",
+  "honestly_deferred_locked_console": [
+   "NP-03 on-device WKWebView composited-pixel screenshot + AX tree (IOConsoleLocked=Yes) \u2014 content paint proven by other means; on-device composite not claimed PASS",
+   "GT-03 G-10 native accessibility walkthrough (IOConsoleLocked=Yes) \u2014 not claimed PASS"
+  ],
+  "needs_human": [
+   "Independent external HUMAN security review",
+   "Any git tag/GitHub Release publish and PR merge (operator gate)"
+  ]
+ }
 }

@@ -1,0 +1,57 @@
+{
+  "schema": "nemesis.boss-final/v1",
+  "date": "2026-08-22",
+  "epoch": "boss-harness unstick (Opus 4.8)",
+  "contracts": {
+    "parent": {"path": "/tmp/NEMESIS_BOSS_HARNESS_COMPLETION_2026-08-22.md", "sha256": "56f13d11fc44b0eb27da9d9d342a2b71966493c927c5fb580f494853bf75fa2e"},
+    "unstick": {"path": "/tmp/NEMESIS_BOSS_UNSTICK_OPUS48_2026-08-22.md", "sha256": "c29b2a5fd1d1beefa627e14ad881ca6ce57d3bd121caf0e42a83bc35e67ce083"}
+  },
+  "base": {"requiredHead": "71bad5f624f44bc3f0c24bb3b7b908cd7515ff2b", "observedHead": "71bad5f624f44bc3f0c24bb3b7b908cd7515ff2b", "branch": "production/boss-harness-completion", "clean_at_start": true},
+  "source_final": {"race_fix_commit": "4f06d2304ff17ec4c30238779a336f7217b739ef", "release_commit": "cb4f1cc2e99dfc895263bba26f1205098c9ab95b", "final_commit": "b8a32f7c5c7510d57b5ba5fcc1993b913e6fb61e"},
+  "terminal_verdict": "SEALED_LOCAL_BOSS",
+  "load_bearing_race_fix": {
+    "problem": "Concurrent adopt_mission / append_receipt read-modify-write of the adoption and receipt hash-chains was guarded only by atomic_write (last-writer-wins) with no lock. Two concurrent adoptions could produce two git commits but a single surviving chain record (a governed state change with no receipt), or fail on git index.lock contention.",
+    "fix": "GovernedWriteLock (production.rs): flock(LOCK_EX) advisory lock on <home>/.governed-write.lock, held across the whole load->verify->commit->append critical section; serializes threads in one process and multiple app instances sharing a home. Acquired in state_repo::adopt_mission and rails::append_receipt. No re-entrancy (they never nest), so a single owned flock cannot self-deadlock.",
+    "hostile_tests": {
+      "state_repo::tests::concurrent_adoptions_serialize_and_lose_no_chain_record": "N concurrent adoptions -> exactly N linked records + N adopt commits",
+      "rails::tests::concurrent_receipt_appends_preserve_every_record": "N concurrent appends -> exactly N linked records",
+      "both_directions_verified": "PASS with the lock; FAIL with the lock neutered (git commit failed / File exists os error 17). Reproduced this session before certifying."
+    },
+    "independent_review": "receipts/boss-20260822/REVIEW_RACE_FIX.json — SOUND_WITH_NITS / overall_correctness correct / confidence 0.92; 4 info-nit findings with dispositions."
+  },
+  "results": {
+    "NativePaint": {
+      "NP-01_blank_root_cause": "PASS (PAINT_PROOF.json: dev-URL fallback vs embedded assets)",
+      "NP-02_pack_fail_closed": "PASS (build.rs FAIL_FRONTEND_DIST_MISSING/HOLLOW; package_release FAIL_RELEASE_FRONTEND_NOT_EMBEDDED)",
+      "NP-03_named_app_paint": "CONTENT_PAINT_PROVEN; on-device composite ENV_BLOCKED. Shipped bytes embed index-CKEx4ugd.js + index-yd6hQHIq.css (built content hashes present in the packed binary); headless render of the shipped frontend shows the LOCAL-001 cockpit + 14 rails (paint-home-local001.webp, paint-missions-cockpit.webp); vitest 74/74; on-device the named NEMESIS Desktop.app owns a 1440x900 window and its embedded JS IPC round-trips. On-device WKWebView compositing + AX capture are ENVIRONMENT_BLOCKED (IOConsoleLocked=Yes) and are NOT claimed PASS.",
+      "NP-04_install_upgrade_uninstall": "PASS_INSTALL_CONTRACT predecessor=0.3.0 successor=0.3.1 state_preserved=true"
+    },
+    "FourteenRails": "9 governed rails (Workspaces, Agents, Changes, Tests, Knowledge, Skills, Automations, Integrations, Security) + Home/Missions/Evidence/Replay/Settings; all fail-closed, battery green.",
+    "Ecosystem": "Skill + plugin formats, install/list/enable/disable/revoke with receipts, built-in skill pack + plugin exercised through the real authority path, competitive matrix — all PASS.",
+    "Gates": {
+      "GT-01_functional_security_formal_reliability_hostile": "PASS (verify_complete.sh -> PASS_NEMESIS_DESKTOP_COMPLETE, 67 PASS / 0 FAIL, at race-fix source-final)",
+      "GT-02_perf_a11y_privacy_package_replay": "PASS (same battery; privacy via network-deny defaults)",
+      "GT-03_G10": "DEFERRED (IOConsoleLocked=Yes) — not claimed PASS",
+      "phase16_vz_security_hardening": "Re-run inside the anubis-xcode Apple Virtualization guest; resealed at source-final; guest deleted after run.",
+      "hostile_calibration": "PASS (production-readiness roster re-bound to source-final after the reseal changed the shared VZ gate log)"
+    },
+    "Review": "Independent defensive review SOUND (REVIEW_RACE_FIX.json). Independent HUMAN external review remains NEEDS-HUMAN.",
+    "Release": {
+      "RL-01_checkpoint_and_PR": "branch pushed + PR (see STATUS.md boss-epoch section for URL); merge is an operator gate",
+      "RL-02_successor_archive_readback": "PASS (v0.3.1 built via package_release.sh -> PASS_RELEASE_PACKAGE; hash-bound archive + readback in RELEASE_v0.3.1.json; v0.1.0/v0.2.0 tags untouched; no new tag published this session)"
+    }
+  },
+  "honestly_deferred_locked_console": [
+    "NP-03 on-device WKWebView composited-pixel screenshot + AX tree (IOConsoleLocked=Yes)",
+    "GT-03 G-10 native accessibility walkthrough (IOConsoleLocked=Yes)"
+  ],
+  "needs_human": [
+    "Independent external HUMAN security review",
+    "Git tag / GitHub Release publish for v0.3.1 and PR merge (operator gate; the human presses send)"
+  ],
+  "non_claims": [
+    "Not Developer ID signed or notarized; Gatekeeper acceptance not claimed.",
+    "release/ archives and the v0.3.1 binary are local artifacts (release/ is gitignored); the in-git hash binding is RELEASE_v0.3.1.json.",
+    "No git tag was created or pushed for v0.3.1 in this session."
+  ]
+}
