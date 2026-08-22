@@ -1,0 +1,11 @@
+OK_ACCEPTED baseline-roster-valid
+OK_REFUSED L-01-empty-corpus
+OK_REFUSED L-02-duplicate-key
+OK_REFUSED L-02-contradictory-overall
+OK_REFUSED L-08-unsafe-artifact-path
+OK_REFUSED L-06-python-O-strips-assert
+OK_REFUSED L-05-stale-pass-ignored
+OK_REFUSED L-09-aba-exact-restore A=1 B=0 A2=1 bytes_restored=true
+OK_REFUSED L-07-inventory-change-detected
+NOTE L-03/L-04 enforced by scripts/verify_phase16_receipt.py (source/tree binding) and scripts/verify_evidence_bundle.py (unlisted/missing/stale reject)
+PASS_HOSTILE_CALIBRATION

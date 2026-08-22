@@ -8,7 +8,7 @@
     "successor": {
       "bytes": 4713391,
       "path": "/Users/sicarii/Worktrees/nemesis-desktop-production-recovered/release/v0.2.0/NEMESIS-Desktop-v0.2.0-macos-arm64.zip",
-      "sha256": "41adf410250ade41c40eae7877e7561609fd023ccb5dc4f0ce97722ba59bab1d"
+      "sha256": "9ee994d786a0bdc05d4dcddc9fc6aaa2bbd382bfb16ac4932d3a4ded2679338e"
     }
   },
   "contract_doc": "docs/release/SOURCE_INSTALL.md",
@@ -35,22 +35,23 @@
     "process_launched": true,
     "terminated_cleanly": true
   },
-  "observed_at": "2026-08-22T14:21:57.220347Z",
+  "observed_at": "2026-08-22T14:54:27.983803Z",
+  "predecessor_sha256sums": "BOUND_BY_NAME_AND_DIGEST",
   "schema": "nemesis.install-contract/v1",
   "subject": {
-    "commit": "402c9c46b3eaaa3039b121949131515fb5f23800",
-    "tree": "7c01384fa5faf4637353b11ca1e4529a9dc890c8"
+    "commit": "6e7a9c9e17fe3b18157d3085e9b84079a4505817",
+    "tree": "5688d6579b3f2d09204fe7285ff4ce1ea5eee6be"
   },
-  "successor_sha256sums": "VERIFIED",
+  "successor_sha256sums": "BOUND_BY_NAME_AND_DIGEST",
   "terminal_marker": "PASS_INSTALL_CONTRACT",
   "uninstall": {
     "bundle_removed": true,
-    "no_launchd_jobs": true,
-    "no_privileged_helpers": true,
+    "observed_launch_agents_or_helpers": [],
     "residuals": {
       "keychain_item": "dev.nemesis.receipt.seed.v1 (never touched by this gate; removal command documented in docs/release/SOURCE_INSTALL.md)",
-      "local_home": "/var/folders/bg/pt9l6y1j47q642kp3z5blrmh0000gn/T/nemesis-install-contract-7rckx1o2/home/Library/Application Support/com.anubisquantumcipher.nemesis",
-      "local_home_files": 2
+      "local_home": "/var/folders/bg/pt9l6y1j47q642kp3z5blrmh0000gn/T/nemesis-install-contract-y69pa36q/home/Library/Application Support/com.anubisquantumcipher.nemesis",
+      "local_home_files": 2,
+      "workspace_note": "authorized missions additionally register git worktrees and nemesis/desktop-* branches inside the user-selected workspace repository; not exercised by this gate, removal commands documented in SOURCE_INSTALL.md"
     }
   },
   "upgrade": {

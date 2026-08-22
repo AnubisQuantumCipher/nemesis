@@ -1,0 +1,1 @@
+PASS_INSTALL_CONTRACT predecessor=0.1.0 successor=0.2.0 state_preserved=true

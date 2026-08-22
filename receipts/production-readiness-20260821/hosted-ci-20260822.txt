@@ -1,0 +1,7 @@
+branch tip 6e7a9c9e17fe3b18157d3085e9b84079a4505817 CI run 32579420343 conclusion=success
+  job Dependency audit: success (https://github.com/AnubisQuantumCipher/nemesis/actions/runs/32579420343/job/97046479934)
+  job Rust and Desktop (macos-14): success (https://github.com/AnubisQuantumCipher/nemesis/actions/runs/32579420343/job/97046480047)
+  job Rust and Desktop (macos-15): success (https://github.com/AnubisQuantumCipher/nemesis/actions/runs/32579420343/job/97046480049)
+  job Contract and evidence: success (https://github.com/AnubisQuantumCipher/nemesis/actions/runs/32579420343/job/97046480058)
+merge commit ed5c06f64798e59c288929a987114e4c507c249a merged from this tip with strict required checks green (PR 4, mergeStateStatus CLEAN at merge time, mergedAt 2026-08-22T14:47:49Z)
+PASS_HOSTED_CI_REQUIRED_CHECKS run=32579420343 required=4/4 conclusion=success
