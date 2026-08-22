@@ -38,7 +38,7 @@ Every status names a reproducible gate and observed marker.
 
 - PR: https://github.com/AnubisQuantumCipher/nemesis/pull/4 — state OPEN, MERGEABLE/CLEAN.
 - CI bound to **covered-source tree `43058f04fbd0f3cded16d2d887a03ef8450e4198`** (source-final `2f78bf13574dd9602ffa57fc180741b225e03af8`), not a mutating head.
-- Terminal-green runs over that identical tree: run `32567007222`@`089549f`→success; run `32567308119`@`8ee557a`→success.
+- Terminal-green runs over that identical tree: run `32567007222`@`089549f`→success; run `32567308119`@`8ee557a`→success; run `32567869078`@`d780234`→success.
 - Non-circularity: Every commit after source-final is receipts-only (proven: git diff over runtime/kernel/daemon/desktop/protocols/config/scripts/docs/.github/tests is EMPTY vs 2f78bf1). Each such commit retriggers CI, but every run validates the identical covered-source tree 43058f04 and is a determinate repeat. Two independent runs (089549f, 8ee557a) already reached terminal 4/4 success; the receipts-only commit carrying THIS receipt re-validates the same tree and is observed post-push, not chased with a further reseal. The load-bearing attestation is fixed to the covered-source tree, so it stays true regardless of which receipts head is the tip.
 - Predecessor v0.1.0=616c78508b754081bb77fab63e6665d16f47d84d (intact, 3 assets).
 
@@ -70,5 +70,5 @@ Every status names a reproducible gate and observed marker.
 - **immutable_predecessor:** v0.1.0 tag/release/assets intact
 - **unrelated_worktrees:** /Users/sicarii/Desktop/Projects/nemesis, /Users/sicarii/Worktrees/nemesis-desktop-production, jackal-* not modified this session
 
-Machine-readable receipt: `receipts/production-readiness-20260821/FINAL.json` (sha256 `b212f53fb725e2afb8a8335adb452401de9d09e1091e9889a43ab105629de214`); mission_state `SEALED_BLOCKED_PRODUCTION_PUBLIC`.
+Machine-readable receipt: `receipts/production-readiness-20260821/FINAL.json` (sha256 `ca84463c7ea53389371f7c7e0c07aeaeaf68b953297077634d3b8356dd40c653`); mission_state `SEALED_BLOCKED_PRODUCTION_PUBLIC`.
 
