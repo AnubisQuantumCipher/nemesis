@@ -230,6 +230,10 @@ describe("NEMESIS Desktop production surface", () => {
     }
     await waitFor(() => expect(screen.getByText("CORE READY")).toBeInTheDocument());
     expect(screen.getByText("UPDATES DISABLED")).toBeInTheDocument();
+    expect(screen.getByText("AUTHORITY LANE: NET DENY")).toBeInTheDocument();
+    expect(
+      screen.getByText("PROVIDER INFERENCE: USER-OWNED NETWORK / OPT-IN"),
+    ).toBeInTheDocument();
     expect(screen.queryByText("PROVED_LOCAL")).not.toBeInTheDocument();
   });
 
