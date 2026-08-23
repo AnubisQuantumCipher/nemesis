@@ -444,6 +444,91 @@ procedure Nemesis_Core_Daemon is
                return Context_Response ("REFUSED", Context);
             end if;
          end;
+      elsif Command = "capability_check" then
+         --  Read-only capability adjudication for a worker petition. It loads
+         --  the persisted parent grant, derives the exact per-action child, and
+         --  evaluates the SPARK-proved Authorize on the caller's proposed
+         --  action. It NEVER loads or consumes an approval and NEVER commits an
+         --  event, so it mutates no mission state and burns no one-shot
+         --  approval. A subprocess worker's proposal is adjudicated here before
+         --  the one-shot authorize_action is spent: an out-of-grant action
+         --  refuses REFUSED_CAPABILITY/REFUSED_BUDGET, and an in-grant action
+         --  that still lacks a one-shot approval surfaces as REQUIRES_APPROVAL
+         --  at the petition layer instead of ever executing silently.
+         if not Exact_Fields (Request, 7)
+           or else State_Of (Context.Mission) /= Running
+         then
+            return Context_Response ("REFUSED", Context);
+         end if;
+         declare
+            Worker_Text : constant String := String_Value (Request, "worker_id");
+            Scope_Text : constant String := String_Value (Request, "scope_digest");
+            Action_Text : constant String := String_Value (Request, "action_digest");
+            Estimated : constant Natural := Natural_Value (Request, "estimated_bytes");
+            Current : constant Sequence_Number := Sequence_Of (Context.Mission);
+            Parent : Capability_Grant;
+            Child : Capability_Grant;
+            Action : Action_Request;
+            Authority_Result : Authority_Status;
+            Decision : Authority_Decision;
+         begin
+            if not Valid_Id (Worker_Text, "wrk_")
+              or else not Valid_Digest (Scope_Text)
+              or else not Valid_Digest (Action_Text)
+            then
+               return Status_Response ("INVALID_REQUEST");
+            end if;
+            Load_Parent_Grant (Home, Context.Id, Authority_Result, Parent);
+            if Authority_Result /= Authority_OK then
+               return Authority_Refusal
+                 (Context, Refused_Capability,
+                  Grant_Load_Reason (Authority_Result));
+            end if;
+            if Parent.Status /= Active
+              or else not Parent.Operations (Modify_Data)
+            then
+               return Authority_Refusal
+                 (Context, Refused_Capability, "parent_grant_inactive");
+            end if;
+            Child :=
+              Derive_Child_Grant
+                (Parent        => Parent,
+                 Child_Id      =>
+                   Capability_Id
+                     ("cap_"
+                      & Action_Text
+                          (Action_Text'First .. Action_Text'First + 21)),
+                 Operation     => Modify_Data,
+                 Expires_After =>
+                   Sequence_Number'Min
+                     (Clamped_Window (Current, Action_Window),
+                      Parent.Expires_After),
+                 Maximum_Bytes => Parent.Maximum_Bytes);
+            if not Is_Attenuation (Parent, Child) then
+               return Authority_Refusal
+                 (Context, Refused_Capability, "not_attenuated");
+            end if;
+            Action :=
+              (Mission         => Context.Id,
+               Subject         => Worker_Id (Worker_Text),
+               Resource        => Filesystem,
+               Operation       => Modify_Data,
+               Scope           => Digest_256 (Scope_Text),
+               Estimated_Bytes => Estimated,
+               Digest          => Digest_256 (Action_Text));
+            Decision := Authorize (Child, Action, Current);
+            if Decision = Authorized then
+               return Context_Response
+                 ("OK", Context,
+                  "," & Quote & "decision" & Quote & ":" & Quote
+                  & "AUTHORIZED" & Quote);
+            else
+               return Context_Response
+                 ("REFUSED", Context,
+                  "," & Quote & "decision" & Quote & ":" & Quote
+                  & Authority_Decision'Image (Decision) & Quote);
+            end if;
+         end;
       elsif Command = "action_completed" then
          if not Exact_Fields (Request, 5)
            or else State_Of (Context.Mission) /= Running

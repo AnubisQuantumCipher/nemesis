@@ -1,4 +1,5 @@
 mod mission_runner;
+mod petition;
 mod production;
 pub mod rails;
 pub mod state_repo;
@@ -8,16 +9,19 @@ pub use mission_runner::{
     MissionExecutables, MissionExecutionResult, MissionProgress, MissionRunError,
     draft_local_mission, load_last_mission, preflight_local_mission, run_local_mission,
 };
+pub use petition::{
+    PetitionOutcome, PetitionVerdict, ProposedAction, ResolvedAgent, resolve_agent,
+    worker_id_for_agent,
+};
 pub use production::{
     CompiledMission, DesktopSettings, LocalHomeStatus, ProductionError, TextScale,
     compile_local_contract, initialize_local_home, load_settings, save_settings,
 };
-
+use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
 
-use serde::Serialize;
 use serde_json::Value;
 use sha2::{Digest, Sha256};
 use tauri::Manager;
@@ -756,6 +760,72 @@ fn execute_integration_plugin(
     rails::integrations::execute_plugin(&home, &integration_id).map_err(CommandFailure::from)
 }
 
+/// A request to make a registered Agents-rail worker petition the kernel for an
+/// exact proposed change. `reviewed` pre-issues the human one-shot approval; left
+/// false, an in-grant petition returns REQUIRES_APPROVAL instead of executing.
+#[derive(Clone, Debug, Deserialize)]
+#[serde(deny_unknown_fields, rename_all = "camelCase")]
+pub struct AgentPetitionRequest {
+    pub agent_id: String,
+    pub relative_path: String,
+    pub replacement: String,
+    #[serde(default)]
+    pub reviewed: bool,
+}
+
+#[tauri::command]
+fn petition_agent(
+    handle: tauri::AppHandle,
+    request: AgentPetitionRequest,
+) -> Result<PetitionOutcome, CommandFailure> {
+    let root = project_root(&handle)?;
+    let home = local_home(&handle)?;
+    initialize_local_home(&home).map_err(CommandFailure::storage)?;
+    state_repo::initialize_state_repo(&home).map_err(rails::RailError::from)?;
+    let executables = executables_for(&root);
+    if !executable_ready(&executables) {
+        return Err(CommandFailure::new(
+            "BLOCKED_RUNTIME",
+            "NEMESIS runtime binaries are not available.",
+            "Install or build the Core daemon and runtime workers, then retry.",
+        ));
+    }
+    let (_, bytes) = state_repo::entity_current(&home, "agents", &request.agent_id)
+        .map_err(rails::RailError::from)?
+        .ok_or_else(|| {
+            CommandFailure::new(
+                "REFUSED_AGENT",
+                format!(
+                    "agent '{}' is not registered on the Agents rail",
+                    request.agent_id
+                ),
+                "Register the agent before petitioning; only governed rows may petition.",
+            )
+        })?;
+    let agent: Value = serde_json::from_slice(&bytes).map_err(|error| {
+        CommandFailure::new(
+            "BLOCKED_RAIL_STATE",
+            format!("agent row is not valid JSON: {error}"),
+            "Inspect the governed agents rail state; nothing was hidden.",
+        )
+    })?;
+    let proposal = ProposedAction {
+        relative_path: request.relative_path.clone(),
+        content_digest: hex::encode(Sha256::digest(request.replacement.as_bytes())),
+        estimated_bytes: request.replacement.len() as u64,
+    };
+    let cancellation = MissionCancellation::default();
+    petition::petition_agent_action(
+        &home,
+        &executables,
+        &agent,
+        &proposal,
+        request.reviewed,
+        &cancellation,
+    )
+    .map_err(CommandFailure::mission)
+}
+
 pub fn run() -> Result<(), tauri::Error> {
     tauri::Builder::default()
         .menu(tauri::menu::Menu::default)
@@ -777,7 +847,8 @@ pub fn run() -> Result<(), tauri::Error> {
             security_snapshot,
             run_rail_test,
             dispatch_automation,
-            execute_integration_plugin
+            execute_integration_plugin,
+            petition_agent
         ])
         .run(tauri::generate_context!())
 }

@@ -90,6 +90,21 @@ struct NormalizedAction<'a> {
     content_digest: &'a str,
 }
 
+/// Canonical `action_digest` for a `filesystem.modify` proposal: the lowercase
+/// SHA-256 over the exact `{kind,relative_path,content_digest}` JSON the kernel
+/// authority binds. A worker petition recomputes this from the subprocess
+/// worker's own `propose_action` so the kernel adjudicates the worker's choice,
+/// never a value the desktop invented.
+pub fn normalized_action_digest(relative_path: &str, content_digest: &str) -> String {
+    let normalized_action = serde_json::to_vec(&NormalizedAction {
+        kind: "filesystem.modify",
+        relative_path,
+        content_digest,
+    })
+    .expect("NormalizedAction serializes to JSON");
+    hex::encode(Sha256::digest(normalized_action))
+}
+
 #[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CompiledMission {
@@ -206,13 +221,7 @@ pub fn compile_local_contract(bytes: &[u8]) -> Result<CompiledMission, Productio
         serde_json::to_string(&contract).map_err(|error| contract_error(error.to_string()))?;
     let contract_digest = hex::encode(Sha256::digest(normalized_contract.as_bytes()));
     let content_digest = hex::encode(Sha256::digest(contract.action.replacement.as_bytes()));
-    let normalized_action = serde_json::to_vec(&NormalizedAction {
-        kind: "filesystem.modify",
-        relative_path: &contract.action.relative_path,
-        content_digest: &content_digest,
-    })
-    .map_err(|error| contract_error(error.to_string()))?;
-    let action_digest = hex::encode(Sha256::digest(normalized_action));
+    let action_digest = normalized_action_digest(&contract.action.relative_path, &content_digest);
 
     Ok(CompiledMission {
         mission_id: contract.mission_id,
