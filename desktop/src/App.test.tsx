@@ -257,6 +257,7 @@ describe("NEMESIS Desktop production surface", () => {
     const user = userEvent.setup();
     render(<App />);
     await user.click(await screen.findByRole("button", { name: "Missions" }));
+    await user.click(screen.getByRole("button", { name: "Review contract" }));
     await user.type(screen.getByRole("textbox", { name: "Mission goal" }), "Replace the value");
     await user.type(screen.getByRole("textbox", { name: "Workspace path" }), "/tmp/repository");
     await user.type(screen.getByRole("textbox", { name: "Relative file path" }), "value.txt");
@@ -281,6 +282,7 @@ describe("NEMESIS Desktop production surface", () => {
     const user = userEvent.setup();
     render(<App />);
     await user.click(await screen.findByRole("button", { name: "Missions" }));
+    await user.click(screen.getByRole("button", { name: "Review contract" }));
     await user.type(
       screen.getByRole("textbox", { name: "Local mission contract path" }),
       "/tmp/mission.json",
@@ -315,15 +317,42 @@ describe("NEMESIS Desktop production surface", () => {
     expect(screen.getByText("TAMPER REJECTED")).toBeInTheDocument();
   });
 
-  it("shows a first-launch local-home initialization boundary", async () => {
-    mockedStatus.mockResolvedValueOnce({ ...system, firstLaunch: true });
+  it("guides first launch to a real mission composer without a terminal", async () => {
+    mockedStatus.mockResolvedValue({ ...system, firstLaunch: true });
     const user = userEvent.setup();
     render(<App />);
 
-    expect(await screen.findByRole("heading", { name: "Local home initialized" })).toBeInTheDocument();
+    expect(
+      await screen.findByRole("heading", { name: "Reach your first witnessed mission" }),
+    ).toBeInTheDocument();
     expect(screen.getByText(system.localHome)).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Continue to missions" }));
-    expect(screen.getByRole("heading", { name: "Local missions" })).toBeInTheDocument();
+    const begin = screen.getByRole("button", { name: "Begin first mission" });
+    expect(begin).toBeDisabled();
+
+    await user.type(screen.getByRole("textbox", { name: "Workspace path" }), "/tmp/repository");
+    expect(begin).toBeEnabled();
+    await user.click(begin);
+
+    expect(await screen.findByRole("heading", { name: "Local missions" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Workspace path" })).toHaveValue("/tmp/repository");
+  });
+
+  it("keeps first launch fail-closed when a bundled component is not ready", async () => {
+    mockedStatus.mockResolvedValue({
+      ...system,
+      firstLaunch: true,
+      ready: false,
+      runtime: "MISSING",
+    });
+    const user = userEvent.setup();
+    render(<App />);
+
+    await screen.findByRole("heading", { name: "Reach your first witnessed mission" });
+    await user.type(screen.getByRole("textbox", { name: "Workspace path" }), "/tmp/repository");
+    expect(screen.getByRole("button", { name: "Begin first mission" })).toBeDisabled();
+    const alert = screen.getByRole("alert");
+    expect(alert).toHaveTextContent("BLOCKED_FIRST_LAUNCH");
+    expect(alert).toHaveTextContent("Runtime: MISSING");
   });
 
   it("renders typed refusal and concrete recovery guidance", async () => {
@@ -335,6 +364,7 @@ describe("NEMESIS Desktop production surface", () => {
     const user = userEvent.setup();
     render(<App />);
     await user.click(await screen.findByRole("button", { name: "Missions" }));
+    await user.click(screen.getByRole("button", { name: "Review contract" }));
     await user.type(screen.getByRole("textbox", { name: "Local mission contract path" }), "/tmp/bad.json");
     await user.click(screen.getByRole("button", { name: "Compile contract" }));
 
@@ -390,6 +420,26 @@ describe("NEMESIS Desktop production surface", () => {
     await waitFor(() => expect(screen.getByText("CORE READY")).toBeInTheDocument());
   });
 
+  it("exposes Activity Diff Evidence Conversation on the LOCAL-001 cockpit", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(await screen.findByRole("button", { name: "Missions" }));
+    expect(screen.getByRole("heading", { name: "Witnessed local change" })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "Activity" })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("heading", { name: "Mission activity" })).toBeInTheDocument();
+
+    await user.click(screen.getByRole("tab", { name: "Diff" }));
+    expect(screen.getByText("No compiled contract. Diff is not inferred.")).toBeInTheDocument();
+
+    await user.click(screen.getByRole("tab", { name: "Evidence" }));
+    expect(screen.getByRole("heading", { name: "No accepted mission evidence" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "No evidence graph yet" })).toBeInTheDocument();
+
+    await user.click(screen.getByRole("tab", { name: "Conversation" }));
+    expect(screen.getByText("Kernel log, not model chat")).toBeInTheDocument();
+    expect(screen.queryByText(/Codex said|Claude said|assistant/i)).not.toBeInTheDocument();
+  });
+
   it("keeps every production destination keyboard-reachable with an accessible name", async () => {
     render(<App />);
     await screen.findByRole("button", { name: "Home" });
@@ -415,5 +465,43 @@ describe("NEMESIS Desktop production surface", () => {
       fireEvent.keyDown(buttons[index - 1], { key: "ArrowDown" });
       expect(buttons[index]).toHaveFocus();
     }
+  });
+
+  it("renders labeled committed kernel events on the Activity tab", async () => {
+    mockedStatus.mockResolvedValue({ ...system, lastMission: result });
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(await screen.findByRole("button", { name: "Missions" }));
+
+    expect(screen.getByRole("heading", { name: "Mission activity" })).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByText("State Transitioned")).toBeInTheDocument());
+    expect(screen.getByText("Mission Created")).toBeInTheDocument();
+    expect(screen.getByText("Running")).toBeInTheDocument();
+    expect(screen.queryByText(/Kind \d+ · State \d+/)).not.toBeInTheDocument();
+  });
+
+  it("labels the kernel conversation with kernel enum names, never model chat", async () => {
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(await screen.findByRole("button", { name: "Missions" }));
+    await user.click(screen.getByRole("tab", { name: "Conversation" }));
+
+    await waitFor(() =>
+      expect(screen.getByText("Mission Created · Contract Compiled")).toBeInTheDocument(),
+    );
+    expect(screen.getByText("State Transitioned · Running")).toBeInTheDocument();
+  });
+
+  it("binds a typed evidence graph alongside the completion court", async () => {
+    mockedStatus.mockResolvedValue({ ...system, lastMission: result });
+    const user = userEvent.setup();
+    render(<App />);
+    await user.click(await screen.findByRole("button", { name: "Evidence" }));
+
+    expect(await screen.findByRole("heading", { name: "Evidence graph" })).toBeInTheDocument();
+    expect(screen.getByText("DETERMINISTIC CHECK")).toBeInTheDocument();
+    expect(screen.getByText("CLAIM · BUILD")).toBeInTheDocument();
+    expect(screen.getByText("/usr/bin/git diff --check")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Completion court" })).toBeInTheDocument();
   });
 });

@@ -495,6 +495,148 @@ class DaemonApiTests(unittest.TestCase):
         self.assertEqual(refused["decision"], "REFUSED_BUDGET")
         exact_retry(over_budget)
 
+    def test_capability_check_petitions_without_burning_authority(self) -> None:
+        # Worker-petition boundary. `capability_check` is the read-only kernel
+        # adjudication a subprocess worker's proposal passes through before the
+        # one-shot `authorize_action` is ever spent. It reuses the SPARK-proved
+        # Load_Parent_Grant + Derive_Child_Grant + Authorize but loads no
+        # approval, consumes nothing, and commits no event: an out-of-grant
+        # proposal refuses REFUSED_CAPABILITY/REFUSED_BUDGET and an in-grant
+        # proposal returns AUTHORIZED without advancing the ledger or burning
+        # the one-shot approval. This is the tripwire the contract requires: if
+        # create_grant is ever widened (subject, scope, or the 4096-byte
+        # ceiling) the out-of-grant assertions below flip and this test fails.
+        def prepare(mission_id: str, *, approval: bool) -> None:
+            self.assertEqual(
+                self.request(
+                    "create",
+                    mission_id=mission_id,
+                    worker_id=WORKER,
+                    contract_digest=CONTRACT,
+                    scope_digest=SCOPE,
+                    source_digest=SOURCE_INITIAL,
+                )["status"],
+                "OK",
+            )
+            self.assertEqual(
+                self.request(
+                    "authorize", mission_id=mission_id, contract_digest=CONTRACT
+                )["status"],
+                "OK",
+            )
+            self.assertEqual(
+                self.request("create_grant", mission_id=mission_id, grant_id=GRANT)[
+                    "status"
+                ],
+                "OK",
+            )
+            if approval:
+                self.assertEqual(
+                    self.request(
+                        "create_approval",
+                        mission_id=mission_id,
+                        approval_id=APPROVAL,
+                        action_digest=ACTION,
+                    )["status"],
+                    "OK",
+                )
+            self.assertEqual(self.request("run", mission_id=mission_id)["status"], "OK")
+
+        def check(mission_id: str, **overrides: object) -> dict[str, object]:
+            fields: dict[str, object] = dict(
+                worker_id=WORKER,
+                scope_digest=SCOPE,
+                action_digest=ACTION,
+                estimated_bytes=128,
+            )
+            fields.update(overrides)
+            return self.request("capability_check", mission_id=mission_id, **fields)
+
+        # A mission with a grant and a matching one-shot approval.
+        approved = f"mis_{'p' * 22}"
+        prepare(approved, approval=True)
+        running_sequence = self.request("inspect", mission_id=approved)["sequence"]
+
+        # In-grant proposal -> AUTHORIZED, and the ledger did not advance.
+        granted = check(approved)
+        self.assertEqual(granted["status"], "OK")
+        self.assertEqual(granted["decision"], "AUTHORIZED")
+        self.assertEqual(granted["sequence"], running_sequence)
+
+        # Out-of-grant proposals -> the kernel refuses. Hostile twin + tripwire.
+        wrong_subject = check(approved, worker_id=f"wrk_{'b' * 22}")
+        self.assertEqual(wrong_subject["status"], "REFUSED")
+        self.assertEqual(wrong_subject["decision"], "REFUSED_CAPABILITY")
+        wrong_scope = check(approved, scope_digest="ab" * 32)
+        self.assertEqual(wrong_scope["decision"], "REFUSED_CAPABILITY")
+        over_budget = check(approved, estimated_bytes=4_097)
+        self.assertEqual(over_budget["decision"], "REFUSED_BUDGET")
+
+        # None of the read-only checks advanced the ledger.
+        self.assertEqual(
+            self.request("inspect", mission_id=approved)["sequence"], running_sequence
+        )
+
+        # The one-shot approval was NOT burned by capability_check: the real
+        # authorize_action still consumes it exactly once.
+        authorized = self.request(
+            "authorize_action",
+            mission_id=approved,
+            worker_id=WORKER,
+            scope_digest=SCOPE,
+            action_digest=ACTION,
+            estimated_bytes=128,
+        )
+        self.assertEqual(authorized["decision"], "AUTHORIZED")
+        self.assertGreater(authorized["sequence"], running_sequence)
+
+        # REQUIRES_APPROVAL: an in-grant proposal with no matching one-shot
+        # approval is capability-AUTHORIZED but authorize_action refuses
+        # no_approval - never a silent execute. The petition layer maps exactly
+        # this pair (capability AUTHORIZED + REFUSED_APPROVAL/no_approval) to
+        # REQUIRES_APPROVAL.
+        unapproved = f"mis_{'q' * 22}"
+        prepare(unapproved, approval=False)
+        capable = check(unapproved)
+        self.assertEqual(capable["decision"], "AUTHORIZED")
+        needs = self.request(
+            "authorize_action",
+            mission_id=unapproved,
+            worker_id=WORKER,
+            scope_digest=SCOPE,
+            action_digest=ACTION,
+            estimated_bytes=128,
+        )
+        self.assertEqual(needs["status"], "REFUSED")
+        self.assertEqual(needs["decision"], "REFUSED_APPROVAL")
+        self.assertEqual(needs["reason"], "no_approval")
+
+        # capability_check needs a RUNNING mission with a persisted grant;
+        # without a grant it fails closed on the missing capability.
+        bare = f"mis_{'r' * 22}"
+        self.assertEqual(
+            self.request(
+                "create",
+                mission_id=bare,
+                worker_id=WORKER,
+                contract_digest=CONTRACT,
+                scope_digest=SCOPE,
+                source_digest=SOURCE_INITIAL,
+            )["status"],
+            "OK",
+        )
+        self.assertEqual(
+            self.request("authorize", mission_id=bare, contract_digest=CONTRACT)[
+                "status"
+            ],
+            "OK",
+        )
+        self.assertEqual(self.request("run", mission_id=bare)["status"], "OK")
+        missing = check(bare)
+        self.assertEqual(missing["status"], "REFUSED")
+        self.assertEqual(missing["decision"], "REFUSED_CAPABILITY")
+        self.assertEqual(missing["reason"], "no_parent_grant")
+
     def test_stale_or_lagging_checkpoint_recovers_from_authoritative_ledger(self) -> None:
         # SQL-001: a crash between the durable ledger append and the checkpoint
         # rename leaves the checkpoint behind the ledger. The hash-chain-validated

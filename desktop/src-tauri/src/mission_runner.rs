@@ -61,7 +61,7 @@ fn refused(message: impl Into<String>) -> MissionRunError {
 /// Create a directory (and parents) then enforce private 0700 permissions on it,
 /// so the Core home chain self-enforces the documented socket-directory invariant
 /// instead of relying on an inherited umask.
-fn ensure_private_dir(path: &Path) -> Result<(), MissionRunError> {
+pub(crate) fn ensure_private_dir(path: &Path) -> Result<(), MissionRunError> {
     fs::create_dir_all(path)?;
     fs::set_permissions(path, fs::Permissions::from_mode(0o700))?;
     Ok(())
@@ -307,7 +307,7 @@ fn checked_output(output: BoundedOutput, name: &str) -> Result<Vec<u8>, MissionR
     Ok(output.stdout)
 }
 
-fn run_exact(
+pub(crate) fn run_exact(
     executable: &Path,
     arguments: &[&OsStr],
     cwd: Option<&Path>,
@@ -327,7 +327,7 @@ fn run_exact(
     )
 }
 
-fn sha256(bytes: &[u8]) -> String {
+pub(crate) fn sha256(bytes: &[u8]) -> String {
     hex::encode(Sha256::digest(bytes))
 }
 
@@ -565,14 +565,14 @@ fn write_lane_file(
     Ok(())
 }
 
-struct CoreProcess {
+pub(crate) struct CoreProcess {
     executable: PathBuf,
     home: PathBuf,
     child: Option<Child>,
 }
 
 impl CoreProcess {
-    fn new(executable: &Path, home: &Path) -> Self {
+    pub(crate) fn new(executable: &Path, home: &Path) -> Self {
         Self {
             executable: executable.to_path_buf(),
             home: home.to_path_buf(),
@@ -584,7 +584,7 @@ impl CoreProcess {
         self.home.join("core.sock")
     }
 
-    fn start(&mut self) -> Result<(), MissionRunError> {
+    pub(crate) fn start(&mut self) -> Result<(), MissionRunError> {
         if self.socket().as_os_str().as_bytes().len() > 103 {
             return Err(refused(
                 "Core Unix socket path exceeds the macOS sockaddr_un limit",
@@ -648,12 +648,12 @@ impl CoreProcess {
         }
     }
 
-    fn restart(&mut self) -> Result<(), MissionRunError> {
+    pub(crate) fn restart(&mut self) -> Result<(), MissionRunError> {
         self.stop();
         self.start()
     }
 
-    fn request(&self, value: Value) -> Result<Value, MissionRunError> {
+    pub(crate) fn request(&self, value: Value) -> Result<Value, MissionRunError> {
         let mut bytes = serde_json::to_vec(&value).map_err(|error| refused(error.to_string()))?;
         bytes.push(b'\n');
         if bytes.len() > MAX_CORE_MESSAGE_BYTES {
