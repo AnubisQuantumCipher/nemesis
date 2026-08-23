@@ -64,9 +64,9 @@
       "bytes": 56449,
       "file": "receipts/phase-16-public/security-hardening.txt",
       "line_count": 1333,
-      "sha256": "b30d01111e44b99502b0d0cfa826e5914e2a4e256e9444c37acf8b1ddb719347"
+      "sha256": "09ec14877ad2078e6548d5b0fd6c9c7f2321d40459daa0828a6f6c868286d140"
     },
-    "observed_at": "2026-08-22T19:32:32Z",
+    "observed_at": "2026-08-23T04:45:02Z",
     "observed_warnings": [
       "Ada link steps reported a deployment-target override from 16.0 to the host target 26.0; every build, test, and bounded proof command still exited zero."
     ],
@@ -91,9 +91,9 @@
     "sha256": "8f62d762c30849ec6841b0fbde87004ced41365b456c98c79f6f1bf53c347ccc"
   },
   "repository": {
-    "branch": "production/boss-harness-completion",
-    "subject_commit": "28cf02c7361a3464b48f951cd5a52bcacc099b24",
-    "subject_tree": "74d6e7959d5fc1b3542a228f0c608815580fb11e"
+    "branch": "production/worker-petition",
+    "subject_commit": "fcf41f3ced5325f658d01bcc072dcc7e17f6b876",
+    "subject_tree": "3a390135ff927fd88412e64de37ca612ffa2dff0"
   },
   "residuals": [
     {
