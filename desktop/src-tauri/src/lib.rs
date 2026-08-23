@@ -1,6 +1,7 @@
 mod mission_runner;
 mod petition;
 mod production;
+mod provider_inference;
 pub mod rails;
 pub mod state_repo;
 
@@ -16,6 +17,10 @@ pub use petition::{
 pub use production::{
     CompiledMission, DesktopSettings, LocalHomeStatus, ProductionError, TextScale,
     compile_local_contract, initialize_local_home, load_settings, save_settings,
+};
+pub use provider_inference::{
+    InferenceProposal, InferenceProvider, ProviderState, provider_health,
+    resolve_inference_provider, run_inference,
 };
 use serde::{Deserialize, Serialize};
 use std::fs;
@@ -826,6 +831,60 @@ fn petition_agent(
     .map_err(CommandFailure::mission)
 }
 
+#[derive(Clone, Debug, Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ProviderStatusRow {
+    pub agent_id: String,
+    pub name: String,
+    pub provider_kind: String,
+    pub state: ProviderState,
+}
+
+/// Onboarding provider-status surface (ADR-0001 Option B). For every registered
+/// agent, report its typed provider state without ever labelling presence as
+/// function. Cloud/subscription CLIs are the opt-in inference lane; API kinds are
+/// network-denied in the action lane. No OAuth credential is read — only the CLI's
+/// own local auth/status output, redacted.
+#[tauri::command]
+fn provider_inference_states(
+    handle: tauri::AppHandle,
+) -> Result<Vec<ProviderStatusRow>, CommandFailure> {
+    let home = local_home(&handle)?;
+    state_repo::initialize_state_repo(&home).map_err(rails::RailError::from)?;
+    let entities =
+        state_repo::read_rail_entities(&home, "agents").map_err(rails::RailError::from)?;
+    let mut rows = Vec::new();
+    for entity in entities {
+        let name = entity
+            .value
+            .get("name")
+            .and_then(Value::as_str)
+            .unwrap_or("")
+            .to_owned();
+        let provider_kind = entity
+            .value
+            .get("providerKind")
+            .and_then(Value::as_str)
+            .unwrap_or("")
+            .to_owned();
+        let state = if provider_inference::API_KINDS.contains(&provider_kind.as_str()) {
+            ProviderState::UnavailableNetworkDenied
+        } else {
+            match resolve_inference_provider(&entity.value) {
+                Ok(provider) => provider_health(&provider),
+                Err(state) => state,
+            }
+        };
+        rows.push(ProviderStatusRow {
+            agent_id: entity.id,
+            name,
+            provider_kind,
+            state,
+        });
+    }
+    Ok(rows)
+}
+
 pub fn run() -> Result<(), tauri::Error> {
     tauri::Builder::default()
         .menu(tauri::menu::Menu::default)
@@ -848,7 +907,8 @@ pub fn run() -> Result<(), tauri::Error> {
             run_rail_test,
             dispatch_automation,
             execute_integration_plugin,
-            petition_agent
+            petition_agent,
+            provider_inference_states
         ])
         .run(tauri::generate_context!())
 }

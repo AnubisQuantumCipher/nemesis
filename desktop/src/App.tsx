@@ -338,7 +338,8 @@ export default function App() {
             <strong>CORE {system.core}</strong>
             <span>KERNEL {system.kernel}</span>
             <span>UPDATES DISABLED</span>
-            <span>NET DENY</span>
+            <span>AUTHORITY LANE: NET DENY</span>
+            <span>PROVIDER INFERENCE: USER-OWNED NETWORK / OPT-IN</span>
           </div>
         </header>
 

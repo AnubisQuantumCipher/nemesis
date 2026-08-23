@@ -1,9 +1,21 @@
 # ADR-0001 — Ordinary-user provider onboarding vs the NET DENY trust surface
 
-- Status: **PROPOSED — architect sign-off required** (`SIGNOFF_REQUIRED_PROVIDER_NETWORK_BOUNDARY`)
+- Status: **ACCEPTED — Option B (two-lane split), architect decision 2026-08-23**
 - Date: 2026-08-23
 - Mission: NEMESIS latest-system release (`/tmp/NEMESIS_LATEST_SYSTEM_RELEASE_OMP_2026-08-23.md`)
 - Baseline: `origin/main` = `9561dfa8b489c4db7c81c0145994c12ce80951bf` (PR #8 merged, tree `fcfd90bf…`, all required checks green)
+
+## Architect decision (2026-08-23)
+
+**Option B is AUTHORIZED.** Keep the action-executing governed worker lane at absolute `NET DENY` with the
+SPARK kernel, `capability_check`, `authorize_action`, and one-shot approval unchanged. Add a separate,
+explicit **opt-in** provider-inference lane that launches the user's own officially installed/authenticated
+Claude Code or Codex CLI **outside** the governed action lane. NEMESIS never reads, copies, prints, persists,
+refreshes, or proxies provider OAuth credentials. All provider output is an untrusted proposal that must
+still pass the unchanged kernel authority path before any action. The LOCAL-001 command-bar network status is
+re-expressed as `AUTHORITY LANE: NET DENY` + `PROVIDER INFERENCE: USER-OWNED NETWORK / OPT-IN`, preserving the
+locked visual design. Claude remains `AUTH_REQUIRED` until the user completes the official login; auth is
+never bypassed or copied. This decision unblocks the binding v0.4.0 release mission.
 
 ## Context
 
