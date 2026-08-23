@@ -210,24 +210,24 @@ fn looks_secret(word: &str) -> bool {
 /// Only a loopback endpoint may back a local-model lane; a non-loopback host is a
 /// disguised cloud egress and is refused.
 pub fn is_loopback_endpoint(url: &str) -> bool {
-    let host = url
-        .split("://")
-        .nth(1)
-        .unwrap_or(url)
-        .split('/')
+    // authority = between "://" and the first '/', '?', or '#'
+    let after_scheme = url.split_once("://").map(|(_, r)| r).unwrap_or(url);
+    let authority = after_scheme
+        .split(|c| c == '/' || c == '?' || c == '#')
         .next()
-        .unwrap_or("")
-        .rsplit_once(':')
-        .map(|(h, _)| h)
-        .unwrap_or_else(|| {
-            url.split("://")
-                .nth(1)
-                .unwrap_or(url)
-                .split('/')
-                .next()
-                .unwrap_or("")
-        });
-    matches!(host, "127.0.0.1" | "localhost" | "::1" | "[::1]")
+        .unwrap_or("");
+    // The real host is AFTER the last '@' — loopback userinfo cannot spoof a
+    // non-loopback host (e.g. `localhost:8080@evil.com` -> host `evil.com`).
+    let host_port = authority.rsplit('@').next().unwrap_or("");
+    let host = if let Some(rest) = host_port.strip_prefix('[') {
+        rest.split(']').next().unwrap_or("") // [::1]:port
+    } else {
+        host_port
+            .rsplit_once(':')
+            .map(|(h, _)| h)
+            .unwrap_or(host_port)
+    };
+    matches!(host, "127.0.0.1" | "localhost" | "::1")
 }
 
 /// Classify a subscription CLI's local login/auth check output into a typed state
@@ -574,6 +574,8 @@ mod tests {
         assert!(is_loopback_endpoint("http://localhost:8080"));
         assert!(!is_loopback_endpoint("http://api.openai.com/v1"));
         assert!(!is_loopback_endpoint("https://10.0.0.5:11434"));
+        assert!(!is_loopback_endpoint("http://localhost:8080@evil.com")); // userinfo spoof
+        assert!(is_loopback_endpoint("http://user@127.0.0.1:11434")); // legit userinfo
         // Wired into resolve: non-loopback local-model endpoint refused.
         assert!(matches!(
             resolve_inference_provider(&agent(
