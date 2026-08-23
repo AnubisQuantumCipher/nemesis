@@ -122,6 +122,16 @@ pub fn resolve_inference_provider(entity: &Value) -> Result<InferenceProvider, P
     if executable_path.is_empty() {
         return Err(ProviderState::MissingExecutable);
     }
+    // Control #10: a local-model provider may be a loopback HTTP endpoint or a
+    // CLI path. A non-loopback endpoint is a disguised cloud egress and is refused.
+    if kind == "local-model"
+        && executable_path.contains("://")
+        && !is_loopback_endpoint(executable_path)
+    {
+        return Err(ProviderState::BlockedProviderPolicy {
+            reason: "local-model endpoint must be loopback (127.0.0.1/localhost)".to_owned(),
+        });
+    }
     Ok(InferenceProvider {
         agent_id: agent_id.to_owned(),
         provider_kind: kind.to_owned(),
@@ -130,30 +140,69 @@ pub fn resolve_inference_provider(entity: &Value) -> Result<InferenceProvider, P
 }
 
 /// Redact secret-shaped bytes so a token can never reach a log, receipt, or the
-/// review surface. Applied to every captured provider byte before it is surfaced.
+/// review surface. Delimiter-agnostic: the text is split into token runs
+/// (secret-capable characters) and separator runs (whitespace, quotes, and JSON
+/// punctuation), so a token embedded in `{"access_token":"sk-ant-..."}`,
+/// `key=eyJ...`, or `Bearer <opaque>` is still isolated and redacted. Separators
+/// are preserved verbatim. Applied to every captured provider byte before it is
+/// surfaced.
 pub fn redact_secrets(text: &str) -> String {
+    fn is_token_char(c: char) -> bool {
+        c.is_ascii_alphanumeric() || matches!(c, '-' | '_' | '.' | '+' | '/')
+    }
+    const SENSITIVE_PRED: &[&str] = &[
+        "bearer",
+        "token",
+        "secret",
+        "password",
+        "apikey",
+        "api_key",
+        "authorization",
+        "auth",
+        "access_token",
+        "refresh_token",
+        "key",
+        "credential",
+        "session",
+    ];
     let mut out = String::with_capacity(text.len());
-    for token in text.split_inclusive(char::is_whitespace) {
-        let (word, trail) = match token.char_indices().rfind(|(_, c)| c.is_whitespace()) {
-            Some((idx, c)) if idx + c.len_utf8() == token.len() => (&token[..idx], &token[idx..]),
-            _ => (token, ""),
-        };
-        if looks_secret(word) {
-            out.push_str("[REDACTED]");
-        } else {
-            out.push_str(word);
+    let mut token = String::new();
+    let mut prev = String::new();
+    for c in text.chars() {
+        if is_token_char(c) {
+            token.push(c);
+            continue;
         }
-        out.push_str(trail);
+        if !token.is_empty() {
+            let ctx = SENSITIVE_PRED.contains(&prev.to_ascii_lowercase().as_str())
+                && token.len() >= 16
+                && token.bytes().any(|b| b.is_ascii_digit());
+            if looks_secret(&token) || ctx {
+                out.push_str("[REDACTED]");
+            } else {
+                out.push_str(&token);
+            }
+            prev = std::mem::take(&mut token);
+        }
+        out.push(c);
+    }
+    if !token.is_empty() {
+        let ctx = SENSITIVE_PRED.contains(&prev.to_ascii_lowercase().as_str())
+            && token.len() >= 16
+            && token.bytes().any(|b| b.is_ascii_digit());
+        out.push_str(if looks_secret(&token) || ctx {
+            "[REDACTED]"
+        } else {
+            token.as_str()
+        });
     }
     out
 }
 
 fn looks_secret(word: &str) -> bool {
-    let w = word.trim();
+    let w = word;
     w.starts_with("sk-")
-        || w.starts_with("sk-ant-")
-        || w.starts_with("Bearer")
-        || w.starts_with("eyJ") && w.len() > 20
+        || (w.starts_with("eyJ") && w.len() > 20)
         || w.to_ascii_lowercase().contains("oauth")
         || (w.len() >= 40 && w.bytes().all(|b| b.is_ascii_hexdigit()))
 }
@@ -355,6 +404,13 @@ pub fn run_inference(
     max_bytes: u64,
     timeout: Duration,
 ) -> Result<InferenceProposal, ProviderState> {
+    if provider.executable_path.contains("://") {
+        // A loopback local-model endpoint passed resolve, but HTTP-endpoint
+        // inference is deferred to a future lane; this slice spawns CLI paths only.
+        return Err(ProviderState::BlockedProviderPolicy {
+            reason: "HTTP endpoint inference is not implemented in this slice".to_owned(),
+        });
+    }
     let path = Path::new(&provider.executable_path);
     if !path.is_file() {
         return Err(ProviderState::MissingExecutable);
@@ -494,15 +550,51 @@ mod tests {
         assert!(!red.contains("sk-ant-abc123"), "{red}");
         assert!(red.contains("[REDACTED]"), "{red}");
         assert!(redact_secrets("normal safe output OK").contains("OK"));
+        // Embedded (non-whitespace-delimited) secrets in JSON / quoted / key=value.
+        for embedded in [
+            r#"{"access_token":"sk-ant-api03-SECRETvalue0000"}"#,
+            r#""token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9example""#,
+            "api_key=sk-live-0123456789abcdefABCDEF",
+            r#"Authorization: Bearer opaque-session-1234567890abcd"#,
+        ] {
+            let red = redact_secrets(embedded);
+            assert!(red.contains("[REDACTED]"), "embedded not redacted: {red}");
+            assert!(!red.contains("SECRETvalue"), "{red}");
+            assert!(!red.contains("sk-live-0123"), "{red}");
+            assert!(!red.contains("opaque-session-1234567890abcd"), "{red}");
+            assert!(!red.contains("eyJhbGciOiJIUzI1Ni"), "{red}");
+        }
     }
 
-    // RED negative control 10: local loopback endpoint refuses non-loopback hosts.
+    // RED negative control 10: a non-loopback local-model endpoint is refused at
+    // resolve; a loopback endpoint or a CLI path is accepted (guard is wired).
     #[test]
     fn loopback_only_for_local_model() {
         assert!(is_loopback_endpoint("http://127.0.0.1:11434/v1"));
         assert!(is_loopback_endpoint("http://localhost:8080"));
         assert!(!is_loopback_endpoint("http://api.openai.com/v1"));
         assert!(!is_loopback_endpoint("https://10.0.0.5:11434"));
+        // Wired into resolve: non-loopback local-model endpoint refused.
+        assert!(matches!(
+            resolve_inference_provider(&agent(
+                "local-model",
+                Some("https://api.openai.com/v1"),
+                "active"
+            )),
+            Err(ProviderState::BlockedProviderPolicy { .. })
+        ));
+        assert!(
+            resolve_inference_provider(&agent(
+                "local-model",
+                Some("http://127.0.0.1:11434"),
+                "active"
+            ))
+            .is_ok()
+        );
+        assert!(
+            resolve_inference_provider(&agent("local-model", Some("/usr/bin/true"), "active"))
+                .is_ok()
+        );
     }
 
     // Proposal digest equals the exact digest the unchanged kernel binds (so the
