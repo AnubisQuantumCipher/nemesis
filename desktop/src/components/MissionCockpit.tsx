@@ -12,6 +12,8 @@ import type {
   SystemStatus,
 } from "../lib/bridge";
 import { getReplay } from "../lib/bridge";
+import { eventLabel, stateLabel } from "../data/kernelCodes";
+import { EvidenceGraph } from "./EvidenceGraph";
 import { EvidencePanel } from "./EvidencePanel";
 import { ReplayPanel } from "./ReplayPanel";
 import { SettingsPanel } from "./SettingsPanel";
@@ -36,6 +38,8 @@ interface MissionCockpitProps {
   onReview: () => void;
   onCancel: () => void;
   onSaveSettings: (settings: DesktopSettings) => Promise<void>;
+  seedWorkspace?: string;
+  onSeedConsumed?: () => void;
 }
 
 function FailureNotice({ failure }: { failure: CommandFailure | null }) {
@@ -70,6 +74,8 @@ export function MissionCockpit({
   onReview,
   onCancel,
   onSaveSettings,
+  seedWorkspace = "",
+  onSeedConsumed,
 }: MissionCockpitProps) {
   const [draft, setDraft] = useState<MissionDraftRequest>({
     goal: "",
@@ -82,11 +88,28 @@ export function MissionCockpit({
     "activity",
   );
   const [kernelLog, setKernelLog] = useState<ReplayResult | null>(replay);
+  const [lastReplacement, setLastReplacement] = useState<string | null>(null);
   useEffect(() => {
     setKernelLog(replay);
   }, [replay]);
   useEffect(() => {
-    if (center !== "conversation") {
+    if (seedWorkspace.length === 0) {
+      return;
+    }
+    setCompose(true);
+    setDraft((current) => ({ ...current, workspace: seedWorkspace }));
+    onSeedConsumed?.();
+  }, [seedWorkspace]);
+  useEffect(() => {
+    // Committed kernel events come from the last-mission ledger and are only
+    // shown by the cockpit tabs (Home/Missions). Conversation always reads the
+    // ledger; Activity only once a mission has completed (result set). Other
+    // surfaces (Evidence/Replay/Settings) never load here, so a fresh cockpit
+    // issues no load and never double-fetches with the Replay surface.
+    const onCockpit = selected === "Home" || selected === "Missions";
+    const shouldLoadEvents =
+      onCockpit && (center === "conversation" || (center === "activity" && result !== null));
+    if (!shouldLoadEvents) {
       return;
     }
     let current = true;
@@ -104,9 +127,14 @@ export function MissionCockpit({
     return () => {
       current = false;
     };
-  }, [center, replay]);
+  }, [center, replay, result, selected]);
   if (selected === "Evidence") {
-    return <EvidencePanel result={result} />;
+    return (
+      <div className="evidence-surface">
+        <EvidenceGraph result={result} />
+        <EvidencePanel result={result} />
+      </div>
+    );
   }
   if (selected === "Replay") {
     return <ReplayPanel replay={replay} loading={replayLoading} />;
@@ -121,36 +149,73 @@ export function MissionCockpit({
     );
   }
   if ((selected === "Home" || selected === "Missions") && !compose) {
-    const activity = [
-      ["01", "CONTRACT", "Structured mission waits for exact authorization"],
-      ["02", "LANE", "Disposable Git worktree; worker authority attenuated"],
-      ["03", "VERIFY", "Final-source evidence required for every claim"],
-      ["04", "RECEIPT", "Canonical COSE receipt; independent verifier"],
-    ] as const;
     const running = runtime.running;
+    const claims = result?.claims ?? [];
+    const verifiedClaims = claims.filter((claim) => claim.status === "VERIFIED").length;
+    // nemesis.desktop-mission/v1 requires exactly two completion predicates —
+    // git_diff_check and content_match (production.rs::compile_local_contract).
+    const requiredPredicates = 2;
+    const predicateTotal = claims.length > 0 ? claims.length : requiredPredicates;
+    const completionPercent =
+      claims.length > 0 ? Math.round((verifiedClaims / claims.length) * 100) : 0;
+    const events = kernelLog?.events ?? [];
+    const sourceRevision = result?.sourceDigest ?? compiled?.baseRevision ?? null;
+    const missionState = result
+      ? "COMPLETE"
+      : running
+        ? runtime.phase
+        : compiled
+          ? "AWAITING AUTH"
+          : "NO CONTRACT";
+    const replacementByteLength =
+      lastReplacement === null ? null : new TextEncoder().encode(lastReplacement).length;
+    const replacementMatchesCompiled =
+      compiled !== null &&
+      replacementByteLength !== null &&
+      replacementByteLength === compiled.replacementBytes;
     return (
       <div className="cockpit-grid">
         <aside className="mission-rail" aria-label="Mission summary">
           <span className="section-index">MISSION / LOCAL-001</span>
           <h2>Witnessed local change</h2>
           <p className="mission-goal">
-            Modify one isolated fixture, verify final source, survive Core restart, and reject receipt
-            tampering.
+            {compiled?.goal ??
+              "Modify one isolated fixture, verify final source, survive Core restart, and reject receipt tampering."}
           </p>
           <dl className="mission-facts">
             <div>
               <dt>State</dt>
               <dd className={result ? "fact-verified" : running ? "fact-running" : ""}>
-                {result ? "COMPLETE" : running ? "RUNNING" : "AWAITING AUTH"}
+                {missionState}
+              </dd>
+            </div>
+            <div>
+              <dt>Completion</dt>
+              <dd className={completionPercent === 100 ? "fact-verified" : ""}>
+                {completionPercent}%
               </dd>
             </div>
             <div>
               <dt>Predicates</dt>
-              <dd>{result ? "2 / 2" : "0 / 2"}</dd>
+              <dd>
+                {verifiedClaims} / {predicateTotal}
+              </dd>
             </div>
             <div>
-              <dt>Worker lanes</dt>
-              <dd>1 isolated</dd>
+              <dt>Current phase</dt>
+              <dd>{runtime.phase}</dd>
+            </div>
+            <div>
+              <dt>Worker lane</dt>
+              <dd>{result ? "1 isolated" : "1 on start"}</dd>
+            </div>
+            <div>
+              <dt>Source revision</dt>
+              <dd>{sourceRevision ? `${sourceRevision.slice(0, 12)}…` : "Pending"}</dd>
+            </div>
+            <div>
+              <dt>Write budget</dt>
+              <dd>{compiled ? `${compiled.maxWriteBytes} B` : "4096 B max"}</dd>
             </div>
             <div>
               <dt>Network</dt>
@@ -221,69 +286,109 @@ export function MissionCockpit({
             ))}
           </div>
           {center === "activity" ? (
-            <div className="mission-graph" aria-label="Mission dependency graph">
-              {activity.map(([sequence, label, detail], index) => (
-                <article
-                  className={result || index === 0 ? "graph-node is-active" : "graph-node"}
-                  key={sequence}
-                >
-                  <span>{sequence}</span>
+            <div className="mission-graph" aria-label="Committed kernel activity">
+              {running ? (
+                <article className="graph-node is-active">
+                  <span>LIVE</span>
                   <div>
-                    <strong>{label}</strong>
-                    <p>{detail}</p>
+                    <strong>{runtime.phase}</strong>
+                    <p>{runtime.detail}</p>
                   </div>
                 </article>
-              ))}
+              ) : events.length > 0 ? (
+                events.map((event, index) => (
+                  <article
+                    className={index === events.length - 1 ? "graph-node is-active" : "graph-node"}
+                    key={event.sequence}
+                  >
+                    <span>{String(event.sequence).padStart(2, "0")}</span>
+                    <div>
+                      <strong>{eventLabel(event.kindCode)}</strong>
+                      <p>{stateLabel(event.stateCode)}</p>
+                      <code className="graph-hash">{event.eventHash}</code>
+                    </div>
+                  </article>
+                ))
+              ) : (
+                <p className="graph-empty">
+                  No committed kernel activity. Compile, review, and run a local contract to
+                  populate the authoritative ledger.
+                </p>
+              )}
             </div>
           ) : null}
           {center === "diff" ? (
             <div className="cockpit-pane" aria-label="Mission diff">
               {compiled ? (
-                <dl className="mission-facts">
-                  <div>
-                    <dt>Workspace / file</dt>
-                    <dd>{compiled.relativePath}</dd>
-                  </div>
-                  <div>
-                    <dt>Expected SHA-256</dt>
-                    <dd>{compiled.expectedSha256}</dd>
-                  </div>
-                  <div>
-                    <dt>Replacement bytes</dt>
-                    <dd>{compiled.replacementBytes}</dd>
-                  </div>
-                  <div>
-                    <dt>Final source</dt>
-                    <dd>{result?.sourceDigest ?? "Pending final source"}</dd>
-                  </div>
-                  <div>
-                    <dt>Lane</dt>
-                    <dd>{result?.lanePath ?? "No isolated lane yet"}</dd>
-                  </div>
-                </dl>
+                <>
+                  <dl className="mission-facts">
+                    <div>
+                      <dt>Workspace / file</dt>
+                      <dd>{compiled.relativePath}</dd>
+                    </div>
+                    <div>
+                      <dt>Action</dt>
+                      <dd>replace_utf8 · byte-exact</dd>
+                    </div>
+                    <div>
+                      <dt>Expected SHA-256 (before)</dt>
+                      <dd>{compiled.expectedSha256}</dd>
+                    </div>
+                    <div>
+                      <dt>Replacement bytes (after)</dt>
+                      <dd>{compiled.replacementBytes}</dd>
+                    </div>
+                    <div>
+                      <dt>Final source</dt>
+                      <dd>{result?.sourceDigest ?? "Pending final source"}</dd>
+                    </div>
+                    <div>
+                      <dt>Lane</dt>
+                      <dd>{result?.lanePath ?? "No isolated lane yet"}</dd>
+                    </div>
+                  </dl>
+                  {replacementMatchesCompiled && lastReplacement !== null ? (
+                    <div className="diff-content">
+                      <span className="section-index">
+                        REPLACEMENT CONTENT / BYTE-EXACT · THIS SESSION
+                      </span>
+                      <pre aria-label="Replacement content">{lastReplacement}</pre>
+                    </div>
+                  ) : (
+                    <p className="diff-note">
+                      Byte-exact content preview is shown for contracts drafted in this session;
+                      the change is otherwise bound only by the action digest above.
+                    </p>
+                  )}
+                </>
               ) : (
                 <p>No compiled contract. Diff is not inferred.</p>
               )}
             </div>
           ) : null}
-          {center === "evidence" ? <EvidencePanel result={result} /> : null}
+          {center === "evidence" ? (
+            <div className="cockpit-pane">
+              <EvidenceGraph result={result} />
+              <EvidencePanel result={result} />
+            </div>
+          ) : null}
           {center === "conversation" ? (
             <div className="cockpit-pane" aria-label="Kernel conversation">
               <p className="section-index">Kernel log, not model chat</p>
-              {(kernelLog?.events ?? []).map((event) => (
+              {events.map((event) => (
                 <article className="replay-event" key={event.sequence}>
                   <span className="replay-sequence">
                     EVENT {String(event.sequence).padStart(4, "0")}
                   </span>
                   <div>
                     <strong>
-                      Kind {event.kindCode} · State {event.stateCode}
+                      {eventLabel(event.kindCode)} · {stateLabel(event.stateCode)}
                     </strong>
                     <code>{event.eventHash}</code>
                   </div>
                 </article>
               ))}
-              {!replayLoading && !kernelLog ? (
+              {!replayLoading && events.length === 0 ? (
                 <p>No committed kernel events. Workers do not speak here.</p>
               ) : null}
             </div>
@@ -314,6 +419,19 @@ export function MissionCockpit({
             <code>{result?.sourceDigest ?? "Pending final source"}</code>
           </div>
           <div className="inspector-section">
+            <span>Durability</span>
+            <strong>Daemon-owned durable state</strong>
+            <p>
+              The Core daemon persists a durable event ledger and recovers exact committed state
+              across a full process restart — verified twice per run and reloaded on next launch.
+            </p>
+            <p className="inspector-gap">
+              Gap: the in-flight orchestrator runs in this window. A mission interrupted by window
+              close does not auto-resume; only committed state survives. Daemon-owned in-flight
+              orchestration is a named residual.
+            </p>
+          </div>
+          <div className="inspector-section">
             <span>Residuals</span>
             <p>Mobile, web, remote, packaging, and public release are DEFERRED.</p>
           </div>
@@ -341,6 +459,7 @@ export function MissionCockpit({
         className="contract-drafter"
         onSubmit={(event) => {
           event.preventDefault();
+          setLastReplacement(draft.replacement);
           void onDraft(draft);
         }}
       >

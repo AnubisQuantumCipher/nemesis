@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { AuthorityReview } from "./components/AuthorityReview";
+import { FirstLaunch } from "./components/FirstLaunch";
 import { MissionCockpit } from "./components/MissionCockpit";
 import { Sidebar } from "./components/Sidebar";
 import { AgentsPanel } from "./components/rails/AgentsPanel";
@@ -67,6 +68,7 @@ export default function App() {
   const [error, setError] = useState<CommandFailure | null>(null);
   const [railMission, setRailMission] = useState<RailName | null>(null);
   const [stateVersion, setStateVersion] = useState(0);
+  const [composerSeed, setComposerSeed] = useState("");
 
   useEffect(() => {
     let current = true;
@@ -342,29 +344,14 @@ export default function App() {
 
         <div className="workspace-content" id="workspace-content" tabIndex={-1}>
           {showFirstLaunch ? (
-            <section className="onboarding-panel" aria-labelledby="onboarding-heading">
-              <span className="section-index">LOCAL HOME / SCHEMA {system.schemaVersion}</span>
-              <h2 id="onboarding-heading">Local home initialized</h2>
-              <p>
-                NEMESIS created private mission, lane, receipt, log, support, and temporary-data
-                directories. No cloud account or telemetry endpoint was configured.
-              </p>
-              <code aria-label="NEMESIS local home path">{system.localHome}</code>
-              <div className="boundary-note">
-                <strong>Safe defaults</strong>
-                <span>Network denied, authenticated updates disabled, reduced motion enabled.</span>
-              </div>
-              <button
-                type="button"
-                className="primary-action"
-                onClick={() => {
-                  setFirstLaunchDismissed(true);
-                  setSelected("Missions");
-                }}
-              >
-                Continue to missions
-              </button>
-            </section>
+            <FirstLaunch
+              system={system}
+              onBegin={(workspace) => {
+                setFirstLaunchDismissed(true);
+                setComposerSeed(workspace);
+                setSelected("Missions");
+              }}
+            />
           ) : reviewing && compiled ? (
             <AuthorityReview
               compiled={compiled}
@@ -448,6 +435,8 @@ export default function App() {
               onReview={() => setReviewing(true)}
               onCancel={() => void cancelCurrentMission()}
               onSaveSettings={saveDesktopSettings}
+              seedWorkspace={composerSeed}
+              onSeedConsumed={() => setComposerSeed("")}
             />
           )}
         </div>
